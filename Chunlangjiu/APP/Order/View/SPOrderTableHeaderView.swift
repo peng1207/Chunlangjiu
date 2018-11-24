@@ -1,0 +1,115 @@
+//
+//  SPOrderTableHeaderView.swift
+//  Chunlangjiu
+//
+//  Created by 黄树鹏 on 2018/8/28.
+//  Copyright © 2018年 Chunlang. All rights reserved.
+//
+
+import Foundation
+import UIKit
+import SnapKit
+import UIKit
+import SnapKit
+typealias SPOrderHeaderComplete = (_ orderModel : SPOrderModel?)->Void
+class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
+    
+    fileprivate lazy var shopView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.white
+        return view
+    }()
+    fileprivate lazy var shopLogoImageView : UIImageView = {
+            let imageView = UIImageView()
+        imageView.sp_cornerRadius(cornerRadius: 15)
+        return imageView
+    }()
+    fileprivate lazy var shopNameLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 16)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        return label
+    }()
+    
+    lazy var orderStateLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 14)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        return label
+    }()
+    fileprivate var lineView : UIView = {
+        return sp_getLineView()
+    }()
+    var orderModel : SPOrderModel? {
+        didSet{
+            self.sp_setupData()
+        }
+    }
+    var clickBlock : SPOrderHeaderComplete?
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickAction))
+        self.addGestureRecognizer(tap)
+         self.sp_setupUI()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    /// 赋值
+    fileprivate func sp_setupData(){
+        self.shopLogoImageView.sp_cache(string: sp_getString(string: self.orderModel?.shop_logo), plImage:  sp_getLogoImg())
+        self.shopNameLabel.text = sp_getString(string: orderModel?.shopname)
+        self.orderStateLabel.text = sp_getString(string: orderModel?.status_desc)
+    }
+    /// 添加UI
+    fileprivate func sp_setupUI(){
+        self.contentView.addSubview(self.shopView)
+        self.shopView.addSubview(self.shopLogoImageView)
+        self.shopView.addSubview(self.shopNameLabel)
+        self.shopView.addSubview(self.orderStateLabel)
+        self.shopView.addSubview(self.lineView)
+        self.sp_addConstraint()
+    }
+    /// 添加约束
+    fileprivate func sp_addConstraint(){
+        self.shopView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.contentView).offset(0)
+            maker.bottom.equalTo(self.contentView).offset(0)
+            maker.height.equalTo(49)
+        }
+        self.shopLogoImageView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.shopView).offset(10)
+            maker.width.height.equalTo(30)
+            maker.centerY.equalTo(self.shopView.snp.centerY).offset(0)
+        }
+        self.shopNameLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.shopLogoImageView.snp.right).offset(14)
+            maker.top.bottom.equalTo(self.shopView).offset(0)
+            maker.right.lessThanOrEqualTo(self.orderStateLabel.snp.left).offset(-8)
+        }
+        self.orderStateLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
+        self.orderStateLabel.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.shopView).offset(-8)
+            maker.top.bottom.equalTo(self.shopView).offset(0)
+            maker.width.greaterThanOrEqualTo(0)
+        }
+        self.lineView.snp.makeConstraints { (maker) in
+            
+            maker.left.right.bottom.equalTo(self.shopView).offset(0)
+            maker.height.equalTo(sp_lineHeight)
+        }
+    }
+    deinit {
+        
+    }
+}
+extension SPOrderTableHeaderView {
+    @objc fileprivate func sp_clickAction(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block(self.orderModel)
+    }
+    
+}
