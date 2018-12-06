@@ -27,7 +27,7 @@ class SPMainVC: UITabBarController {
         self.sp_setTabBarLocationWithLevel(fontLevel: 0)
         self.sp_setupTabBarView()
         self.sp_setupVC()
-      
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

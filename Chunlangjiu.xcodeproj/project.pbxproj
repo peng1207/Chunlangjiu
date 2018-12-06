@@ -40,6 +40,8 @@
 		56C4D668215BB0FE00C30A2B /* SPAlcoholDegree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C4D667215BB0FE00C30A2B /* SPAlcoholDegree.swift */; };
 		56C4D66A215BB18B00C30A2B /* SPPriceRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C4D669215BB18B00C30A2B /* SPPriceRange.swift */; };
 		56CC68D4212EC6BE00C298B7 /* SPConfirmOrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CC68D3212EC6BE00C298B7 /* SPConfirmOrderModel.swift */; };
+		56E97B8121B8CBFE002E590C /* SPAdvertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E97B8021B8CBFE002E590C /* SPAdvertVC.swift */; };
+		56E97B8321B903CA002E590C /* SPTutorialPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E97B8221B903CA002E590C /* SPTutorialPageVC.swift */; };
 		56F8BBBF215B1D310051BCDC /* SPConditionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F8BBBE215B1D310051BCDC /* SPConditionFilterView.swift */; };
 		73F103654E80AAD8F741D7CC /* Pods_ChunlangjiuUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93A5B53E1C34490A9189360F /* Pods_ChunlangjiuUITests.framework */; };
 		83AAB0DA23070E867841AB71 /* Pods_ChunlangjiuTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4A6B27574A25B869FC4C76 /* Pods_ChunlangjiuTests.framework */; };
@@ -371,6 +373,8 @@
 		56C4D667215BB0FE00C30A2B /* SPAlcoholDegree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlcoholDegree.swift; sourceTree = "<group>"; };
 		56C4D669215BB18B00C30A2B /* SPPriceRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPriceRange.swift; sourceTree = "<group>"; };
 		56CC68D3212EC6BE00C298B7 /* SPConfirmOrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConfirmOrderModel.swift; sourceTree = "<group>"; };
+		56E97B8021B8CBFE002E590C /* SPAdvertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAdvertVC.swift; sourceTree = "<group>"; };
+		56E97B8221B903CA002E590C /* SPTutorialPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTutorialPageVC.swift; sourceTree = "<group>"; };
 		56F8BBBE215B1D310051BCDC /* SPConditionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConditionFilterView.swift; sourceTree = "<group>"; };
 		58EFB58E628E095C1539C1FC /* Pods-ChunlangjiuUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChunlangjiuUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChunlangjiuUITests/Pods-ChunlangjiuUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AD736CD3BA3485D51261BB3 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1163,6 +1167,8 @@
 				9E0C8B6D20E63FCE00BD9743 /* SPBaseNavVC.swift */,
 				9E129F412102402D00218A33 /* SPWebVC.swift */,
 				567F2A19215F40320025E9E9 /* SPLookPictureVC.swift */,
+				56E97B8021B8CBFE002E590C /* SPAdvertVC.swift */,
+				56E97B8221B903CA002E590C /* SPTutorialPageVC.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1954,6 +1960,7 @@
 				9E129F4E2103308400218A33 /* SPProductAddVC.swift in Sources */,
 				9EF4C72B20F75CD2007E9909 /* SPIndexSectionDHeaderView.swift in Sources */,
 				9E0C8B7020E6400300BD9743 /* SPBaseModel.swift in Sources */,
+				56E97B8321B903CA002E590C /* SPTutorialPageVC.swift in Sources */,
 				9E22EABE2131BFA000B196D5 /* SPConfirmOrderPrice.swift in Sources */,
 				9E12FDB7212032330040CAE1 /* SPFilterModel.swift in Sources */,
 				9EF4C67E20EC73D1007E9909 /* SPAuctionVC.swift in Sources */,
@@ -2035,6 +2042,7 @@
 				9EF4C6FE20F34EA2007E9909 /* SPIndexHeaderView.swift in Sources */,
 				9E7DAAC321399F6B0044C5FD /* SPOrderEvaluationView.swift in Sources */,
 				9EF4C6A220EDFE8E007E9909 /* SPNumView.swift in Sources */,
+				56E97B8121B8CBFE002E590C /* SPAdvertVC.swift in Sources */,
 				9EF4C69A20ECC1F8007E9909 /* SPSortView.swift in Sources */,
 				9E4AAED5214EC58C00336892 /* SPDatePicker.swift in Sources */,
 				9EF4C69620ECBC14007E9909 /* SPSortMainVC.swift in Sources */,
