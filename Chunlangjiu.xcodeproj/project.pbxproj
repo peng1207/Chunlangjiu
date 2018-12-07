@@ -40,6 +40,7 @@
 		56C4D668215BB0FE00C30A2B /* SPAlcoholDegree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C4D667215BB0FE00C30A2B /* SPAlcoholDegree.swift */; };
 		56C4D66A215BB18B00C30A2B /* SPPriceRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C4D669215BB18B00C30A2B /* SPPriceRange.swift */; };
 		56CC68D4212EC6BE00C298B7 /* SPConfirmOrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CC68D3212EC6BE00C298B7 /* SPConfirmOrderModel.swift */; };
+		56DB726421BA58F3007B6CB1 /* SPSetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DB726321BA58F3007B6CB1 /* SPSetModel.swift */; };
 		56E97B8121B8CBFE002E590C /* SPAdvertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E97B8021B8CBFE002E590C /* SPAdvertVC.swift */; };
 		56E97B8321B903CA002E590C /* SPTutorialPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E97B8221B903CA002E590C /* SPTutorialPageVC.swift */; };
 		56F8BBBF215B1D310051BCDC /* SPConditionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F8BBBE215B1D310051BCDC /* SPConditionFilterView.swift */; };
@@ -377,6 +378,7 @@
 		56C4D667215BB0FE00C30A2B /* SPAlcoholDegree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlcoholDegree.swift; sourceTree = "<group>"; };
 		56C4D669215BB18B00C30A2B /* SPPriceRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPriceRange.swift; sourceTree = "<group>"; };
 		56CC68D3212EC6BE00C298B7 /* SPConfirmOrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConfirmOrderModel.swift; sourceTree = "<group>"; };
+		56DB726321BA58F3007B6CB1 /* SPSetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSetModel.swift; sourceTree = "<group>"; };
 		56E97B8021B8CBFE002E590C /* SPAdvertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAdvertVC.swift; sourceTree = "<group>"; };
 		56E97B8221B903CA002E590C /* SPTutorialPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTutorialPageVC.swift; sourceTree = "<group>"; };
 		56F8BBBE215B1D310051BCDC /* SPConditionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConditionFilterView.swift; sourceTree = "<group>"; };
@@ -1472,6 +1474,7 @@
 		9E5F7AA821B9793E00A9EF35 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				56DB726321BA58F3007B6CB1 /* SPSetModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2167,6 +2170,7 @@
 				9E34F6D520FF1DE500D59ABD /* SPAddressFlexView.swift in Sources */,
 				9EF4C69E20ECC404007E9909 /* SPSortMainTableCell.swift in Sources */,
 				9E8140B12118A3600063A6E4 /* SPUserModel.swift in Sources */,
+				56DB726421BA58F3007B6CB1 /* SPSetModel.swift in Sources */,
 				9EC5141B21045733006869B3 /* SPProductAddSuccessVC.swift in Sources */,
 				9E2C6E3D211E02BD00091EF6 /* SPScrollView.swift in Sources */,
 				9EC51417210433BA006869B3 /* SPWineValuationVC.swift in Sources */,
