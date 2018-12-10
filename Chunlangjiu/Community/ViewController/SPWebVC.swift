@@ -183,7 +183,10 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
             }
             completionHandler(text)
         }))
-        self.present(alertController, animated: true, completion: nil)
+        sp_mainQueue { [weak self] in
+            self?.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     //确认框
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
@@ -194,7 +197,10 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
         alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action:UIAlertAction) in
             completionHandler(true)
         }))
-        self.present(alertController, animated: true, completion: nil)
+        sp_mainQueue { [weak self]in
+             self?.present(alertController, animated: true, completion: nil)
+        }
+       
     }
     // 警告框
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -202,7 +208,10 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
         alertController.addAction(UIAlertAction(title: "确认", style: UIAlertActionStyle.default, handler: { (action:UIAlertAction) in
             completionHandler()
         }))
-        self.present(alertController, animated: true, completion: nil)
+        sp_mainQueue { [weak self]in
+            self?.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     // 接收到html的回调
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -214,7 +223,10 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
                     let webVC = SPWebVC()
                     webVC.url = URL(string: urlString)
                     webVC.title = title
-                    self.navigationController?.pushViewController(webVC, animated: true)
+                    sp_mainQueue { [weak self]in
+                        self?.navigationController?.pushViewController(webVC, animated: true)
+                    }
+                    
                 }
             }
         }else if sp_getString(string: message.name) == logout{
@@ -222,7 +234,9 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
             SPAPPManager.instance().userModel = nil
             NotificationCenter.default.post(name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
               sp_remove()
-            self.navigationController?.popToRootViewController(animated: true)
+            sp_mainQueue { [weak self]in
+                self?.navigationController?.popToRootViewController(animated: true)
+            }
         }else if sp_getString(string: message.name) == closePage{
             if let vcArray = self.navigationController?.viewControllers {
                 if vcArray.count > 2 {
@@ -244,18 +258,26 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
                         let productModel = SPProductModel()
                         productModel.item_id = itemID
                         detaileVC.productModel = productModel
-                        self.navigationController?.pushViewController(detaileVC, animated: true)
+                        sp_mainQueue { [weak self]in
+                            self?.navigationController?.pushViewController(detaileVC, animated: true)
+                        }
                     }
                 }else if sp_getString(string: method) == "editGoodsDetail" {
                     let editVC = SPProductAddVC()
                     editVC.title = "编辑商品"
                     editVC.edit = true
                     editVC.item_id = sp_getString(string: dic["itemId"])
-                    self.navigationController?.pushViewController(editVC, animated: true)
+                    sp_mainQueue { [weak self]in
+                         self?.navigationController?.pushViewController(editVC, animated: true)
+                    }
+                   
                 }else if sp_getString(string: method) == "addGoods"{
                     let addVC = SPProductAddVC()
                     addVC.title = "添加商品"
-                    self.navigationController?.pushViewController(addVC, animated: true)
+                    sp_mainQueue { [weak self]in
+                         self?.navigationController?.pushViewController(addVC, animated: true)
+                    }
+                   
                 }else if sp_getString(string: method) == "login"{
                     SPAPPManager.sp_login()
                 }else if sp_getString(string: method) == "showStartTimeDialog"{

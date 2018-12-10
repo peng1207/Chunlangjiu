@@ -125,7 +125,10 @@ class SPIndexHande : NSObject {
                     alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
                         
                     }))
-                    viewController.present(alertController, animated: true, completion: nil)
+                    sp_mainQueue {
+                        viewController.present(alertController, animated: true, completion: nil)
+                    }
+                    
                 }
                 
                 

@@ -405,7 +405,10 @@ extension SPMineVC {
                 alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
                     
                 }))
-                self.present(alertController, animated: true, completion: nil)
+                sp_mainQueue { [weak self] in
+                    self?.present(alertController, animated: true, completion: nil)
+                }
+                
             }
         }
     }
@@ -427,7 +430,10 @@ extension SPMineVC {
             alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
                 
             }))
-            self.present(alertController, animated: true, completion: nil)
+            sp_mainQueue { [weak self]in
+                self?.present(alertController, animated: true, completion: nil)
+            }
+            
         }
     }
     fileprivate func sp_pushRealNameVC(){
@@ -446,7 +452,10 @@ extension SPMineVC {
             alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
                 
             }))
-            self.present(alertController, animated: true, completion: nil)
+            sp_mainQueue { [weak self]in
+                 self?.present(alertController, animated: true, completion: nil)
+            }
+           
         }else if sp_getString(string: model.status) == SP_STATUS_FAILING || sp_getString(string: model.status) ==  SP_STATUS_ACTIVE {
             if sp_getString(string: model.status) == SP_STATUS_FAILING {
                  sp_showTextAlert(tips: "您的认证被驳回，请重新提交资料审核")
