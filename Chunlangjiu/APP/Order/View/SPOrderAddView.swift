@@ -119,7 +119,10 @@ extension SPOrderAddView{
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)    
+        }
+        
     }
     fileprivate func sp_clickAddImage(){
         if sp_getArrayCount(array: self.selectImage) < self.maxCount {

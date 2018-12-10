@@ -183,7 +183,10 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
             }
             completionHandler(text)
         }))
-        self.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {[weak self] in
+             self?.present(alertController, animated: true, completion: nil)
+        }
+       
     }
     //确认框
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
@@ -194,7 +197,9 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
         alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action:UIAlertAction) in
             completionHandler(true)
         }))
-        self.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {[weak self] in
+            self?.present(alertController, animated: true, completion: nil)
+        }
     }
     // 警告框
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -202,7 +207,9 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
         alertController.addAction(UIAlertAction(title: "确认", style: UIAlertActionStyle.default, handler: { (action:UIAlertAction) in
             completionHandler()
         }))
-        self.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {[weak self] in
+            self?.present(alertController, animated: true, completion: nil)
+        }
     }
     // 接收到html的回调
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {

@@ -164,7 +164,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+       
     }
     class func sp_getCanceReason(orderModel : SPOrderModel,viewController: UIViewController,complete: SPOrderHandleComplete?){
         let request = SPRequestModel()
@@ -239,7 +242,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+             viewController.present(alertController, animated: true, completion: nil)
+        }
+       
     }
     /// 确认收货请求
     ///
@@ -379,7 +385,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 拒绝退货退款
     ///
@@ -445,7 +454,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 退款金额
     ///
@@ -482,7 +494,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 删除订单请求
     ///
@@ -580,7 +595,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 处理待发货申请退款的请求处理
     ///
