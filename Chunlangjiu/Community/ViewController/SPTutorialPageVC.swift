@@ -24,7 +24,7 @@ class SPTutorialPageVC : SPBaseVC{
         return btn
     }()
     fileprivate let tutorialPageCellID = "tutorialPageCellID"
-    fileprivate lazy var imgArray : [UIImage] = []()
+    fileprivate lazy var imgArray : [UIImage] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         sp_setupUI()
@@ -113,8 +113,12 @@ class SPTutorialPageCollectCell : UICollectionViewCell{
         sp_setupUI()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     /// 添加UI
-    override func sp_setupUI(){
+    func sp_setupUI(){
         self.contentView.addSubview(self.imageView)
         sp_addConstraint()
     }

@@ -294,23 +294,19 @@ func sp_showSelectImage(viewController : UIViewController,allowsEditing:Bool = t
     actionSheetVC.addAction(takePhoto)
     actionSheetVC.addAction(photoLib)
     actionSheetVC.addAction(cance)
-    sp_mainQueue {
-      viewController.present(actionSheetVC, animated: true, completion: nil)
-    }
+    viewController.present(actionSheetVC, animated: true, completion: nil)
 }
 
 func sp_showPhotLib(viewController : UIViewController,type:UIImagePickerControllerSourceType,allowsEditing:Bool = true,delegate:(UIImagePickerControllerDelegate & UINavigationControllerDelegate)?){
     if !UIImagePickerController.isSourceTypeAvailable(type) {
         return
     }
-    sp_mainQueue {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = delegate
-        imagePickerController.allowsEditing = allowsEditing
-        imagePickerController.sourceType = type
-        imagePickerController.navigationBar.tintColor = UIColor.white
-        viewController.present(imagePickerController, animated: true, completion: nil)
-    }
+    let imagePickerController = UIImagePickerController()
+    imagePickerController.delegate = delegate
+    imagePickerController.allowsEditing = allowsEditing
+    imagePickerController.sourceType = type
+    imagePickerController.navigationBar.tintColor = UIColor.white
+    viewController.present(imagePickerController, animated: true, completion: nil)
 }
 
 func sp_thrSelectImg(viewController : UIViewController,nav : UINavigationController?,compete:SPSelectImgComplete?){
@@ -342,10 +338,7 @@ func sp_thrSelectImg(viewController : UIViewController,nav : UINavigationControl
     actionSheetVC.addAction(takePhoto)
     actionSheetVC.addAction(photoLib)
     actionSheetVC.addAction(cance)
-    sp_mainQueue {
-         viewController.present(actionSheetVC, animated: true, completion: nil)
-    }
-   
+    viewController.present(actionSheetVC, animated: true, completion: nil)
 }
 func sp_takePhoto(type:UIImagePickerControllerSourceType,nav : UINavigationController?,complete:SPSelectImgComplete?){
     KiClipperHelper.sharedInstance.nav = nav
@@ -373,10 +366,7 @@ func sp_noCameraAuth(viewController : UIViewController){
     }
     alertController.addAction(cance)
     alertController.addAction(setAction)
-    sp_mainQueue {
-        viewController.present(alertController, animated: true, completion: nil)
-    }
-    
+    viewController.present(alertController, animated: true, completion: nil)
 }
 /// 没有相册的权限
 ///
@@ -391,10 +381,7 @@ func sp_noPhotoAuth(viewController : UIViewController){
     }
     alertController.addAction(cance)
     alertController.addAction(setAction)
-    sp_mainQueue {
-         viewController.present(alertController, animated: true, completion: nil)
-    }
-   
+    viewController.present(alertController, animated: true, completion: nil)
 }
 
 /// 跳到系统设置界面
@@ -490,10 +477,7 @@ func sp_showAlertClick(vc : UIViewController?,title:String?,msg:String?,cance:St
         }
         alertVC.addAction(doneAction)
     }
-    sp_mainQueue {
-        vc?.present(alertVC, animated: true, completion: nil)
-    }
-    
+    vc?.present(alertVC, animated: true, completion: nil)
     
     
 }
