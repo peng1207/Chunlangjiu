@@ -336,6 +336,9 @@ extension SPMineHeaderView : UICollectionViewDelegate,UICollectionViewDataSource
                 }else if model.type == .news {
                     cell.titleLabel.text = sp_getString(string: self.countModel?.information)
                 }
+                if sp_getString(string: cell.titleLabel.text).count == 0 {
+                    cell.titleLabel.text = "0"
+                }
             }
             
            
