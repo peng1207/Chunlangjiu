@@ -156,6 +156,8 @@
 		9E5F7AA521B9793300A9EF35 /* SPFundsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AA421B9793300A9EF35 /* SPFundsVC.swift */; };
 		9E5F7AAA21B9794700A9EF35 /* SPSetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AA921B9794700A9EF35 /* SPSetVC.swift */; };
 		9E5F7AAC21BD025B00A9EF35 /* SPInvitationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AAB21BD025B00A9EF35 /* SPInvitationCodeView.swift */; };
+		9E5F7AB221C009CF00A9EF35 /* SPBankCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AB121C009CF00A9EF35 /* SPBankCardVC.swift */; };
+		9E5F7AB421C009DE00A9EF35 /* SPAddBankCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AB321C009DE00A9EF35 /* SPAddBankCardVC.swift */; };
 		9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */; };
 		9E70D74F2155E51100CC6376 /* SPRealNameAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */; };
 		9E70D7512155E77700CC6376 /* SPMineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D7502155E77700CC6376 /* SPMineHeader.swift */; };
@@ -508,6 +510,8 @@
 		9E5F7AA421B9793300A9EF35 /* SPFundsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFundsVC.swift; sourceTree = "<group>"; };
 		9E5F7AA921B9794700A9EF35 /* SPSetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSetVC.swift; sourceTree = "<group>"; };
 		9E5F7AAB21BD025B00A9EF35 /* SPInvitationCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPInvitationCodeView.swift; sourceTree = "<group>"; };
+		9E5F7AB121C009CF00A9EF35 /* SPBankCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBankCardVC.swift; sourceTree = "<group>"; };
+		9E5F7AB321C009DE00A9EF35 /* SPAddBankCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAddBankCardVC.swift; sourceTree = "<group>"; };
 		9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCompanyAuth.swift; sourceTree = "<group>"; };
 		9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRealNameAuth.swift; sourceTree = "<group>"; };
 		9E70D7502155E77700CC6376 /* SPMineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeader.swift; sourceTree = "<group>"; };
@@ -977,6 +981,7 @@
 		9E0C8B5320E63F2E00BD9743 /* APP */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7AAD21C009C100A9EF35 /* BankCard */,
 				56E97B8C21B9131E002E590C /* Activity */,
 				56E97B9021B9131E002E590C /* Fans */,
 				56E97B8421B9131E002E590C /* FundsManager */,
@@ -1476,6 +1481,39 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		9E5F7AAD21C009C100A9EF35 /* BankCard */ = {
+			isa = PBXGroup;
+			children = (
+				9E5F7AAE21C009C100A9EF35 /* Controller */,
+				9E5F7AAF21C009C100A9EF35 /* Model */,
+				9E5F7AB021C009C100A9EF35 /* View */,
+			);
+			path = BankCard;
+			sourceTree = "<group>";
+		};
+		9E5F7AAE21C009C100A9EF35 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9E5F7AB121C009CF00A9EF35 /* SPBankCardVC.swift */,
+				9E5F7AB321C009DE00A9EF35 /* SPAddBankCardVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9E5F7AAF21C009C100A9EF35 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9E5F7AB021C009C100A9EF35 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		9EAE840A2194893E00847B82 /* KiClipperHelper */ = {
@@ -2174,6 +2212,7 @@
 				9EC5141B21045733006869B3 /* SPProductAddSuccessVC.swift in Sources */,
 				9E2C6E3D211E02BD00091EF6 /* SPScrollView.swift in Sources */,
 				9EC51417210433BA006869B3 /* SPWineValuationVC.swift in Sources */,
+				9E5F7AB421C009DE00A9EF35 /* SPAddBankCardVC.swift in Sources */,
 				9E4AAED3214E570100336892 /* SPMineHeadModel.swift in Sources */,
 				9EF4C71720F48FF3007E9909 /* SPProductView.swift in Sources */,
 				9E34F6AF20F9DA8500D59ABD /* SPMineSectionHeaderView.swift in Sources */,
@@ -2248,6 +2287,7 @@
 				9EAE840F2194893E00847B82 /* KiImageClipperViewController.swift in Sources */,
 				564A7D1E218AAF92009027DB /* SPUpdateView.swift in Sources */,
 				9E34F6DD2101CAA100D59ABD /* SPProductDetaileVC.swift in Sources */,
+				9E5F7AB221C009CF00A9EF35 /* SPBankCardVC.swift in Sources */,
 				9E22EAB82130667900B196D5 /* SPPayModel.swift in Sources */,
 				9EC514352108220E006869B3 /* SPPayView.swift in Sources */,
 				562C7164215CE0B80039EFD0 /* SPShopTypeView.swift in Sources */,
