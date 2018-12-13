@@ -36,6 +36,9 @@
 		568E39892133E4BD00EDDCFC /* SPShopCarCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568E39882133E4BD00EDDCFC /* SPShopCarCount.swift */; };
 		568E398B21340C6700EDDCFC /* SPIndexHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568E398A21340C6700EDDCFC /* SPIndexHeader.swift */; };
 		56B21AFF21493D5F00BBA82D /* SPForgetPWDVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B21AFE21493D5F00BBA82D /* SPForgetPWDVC.swift */; };
+		56BFC94421C2486100245708 /* SPSetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BFC94321C2486100245708 /* SPSetModel.swift */; };
+		56BFC94621C2488600245708 /* SPSetEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BFC94521C2488600245708 /* SPSetEnum.swift */; };
+		56BFC94821C24C3300245708 /* SPSetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BFC94721C24C3300245708 /* SPSetData.swift */; };
 		56C4D666215BACF200C30A2B /* SPConditionFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C4D665215BACF200C30A2B /* SPConditionFilterCell.swift */; };
 		56C4D668215BB0FE00C30A2B /* SPAlcoholDegree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C4D667215BB0FE00C30A2B /* SPAlcoholDegree.swift */; };
 		56C4D66A215BB18B00C30A2B /* SPPriceRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C4D669215BB18B00C30A2B /* SPPriceRange.swift */; };
@@ -376,6 +379,9 @@
 		568E39882133E4BD00EDDCFC /* SPShopCarCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopCarCount.swift; sourceTree = "<group>"; };
 		568E398A21340C6700EDDCFC /* SPIndexHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexHeader.swift; sourceTree = "<group>"; };
 		56B21AFE21493D5F00BBA82D /* SPForgetPWDVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPForgetPWDVC.swift; sourceTree = "<group>"; };
+		56BFC94321C2486100245708 /* SPSetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSetModel.swift; sourceTree = "<group>"; };
+		56BFC94521C2488600245708 /* SPSetEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSetEnum.swift; sourceTree = "<group>"; };
+		56BFC94721C24C3300245708 /* SPSetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSetData.swift; sourceTree = "<group>"; };
 		56C4D665215BACF200C30A2B /* SPConditionFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConditionFilterCell.swift; sourceTree = "<group>"; };
 		56C4D667215BB0FE00C30A2B /* SPAlcoholDegree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlcoholDegree.swift; sourceTree = "<group>"; };
 		56C4D669215BB18B00C30A2B /* SPPriceRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPriceRange.swift; sourceTree = "<group>"; };
@@ -808,6 +814,16 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		56BFC94221C2485600245708 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				56BFC94321C2486100245708 /* SPSetModel.swift */,
+				56BFC94521C2488600245708 /* SPSetEnum.swift */,
+				56BFC94721C24C3300245708 /* SPSetData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		56E97B8421B9131E002E590C /* FundsManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -821,8 +837,8 @@
 		56E97B8821B9131E002E590C /* Set */ = {
 			isa = PBXGroup;
 			children = (
+				56BFC94221C2485600245708 /* Model */,
 				9E5F7AA621B9793E00A9EF35 /* Controller */,
-				9E5F7AA821B9793E00A9EF35 /* Model */,
 				9E5F7AA721B9793E00A9EF35 /* View */,
 			);
 			path = Set;
@@ -1476,13 +1492,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		9E5F7AA821B9793E00A9EF35 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		9E5F7AAD21C009C100A9EF35 /* BankCard */ = {
 			isa = PBXGroup;
 			children = (
@@ -2108,6 +2117,7 @@
 				9EF4C6F220F23DBC007E9909 /* SPWineryDetaileVC.swift in Sources */,
 				9E7DAAC121399B080044C5FD /* SPProductEvaluationVC.swift in Sources */,
 				9E34F6CB20FDCFB800D59ABD /* SPAddAdressVC.swift in Sources */,
+				56BFC94821C24C3300245708 /* SPSetData.swift in Sources */,
 				9EF4C6D620EF7C10007E9909 /* APPUtitly.swift in Sources */,
 				9E324CFF217E1E7E00F9AB5F /* SPProductRuleView.swift in Sources */,
 				5610337F21380CBA009DB376 /* SPOrderPriceView.swift in Sources */,
@@ -2219,6 +2229,7 @@
 				9E129F442102CB3100218A33 /* SPProductDetailTopView.swift in Sources */,
 				9EF4C6C420EF4C9D007E9909 /* SPCitySectionHeadView.swift in Sources */,
 				9E70D75321565F6800CC6376 /* SPIndexGoods.swift in Sources */,
+				56BFC94621C2488600245708 /* SPSetEnum.swift in Sources */,
 				9E324CFD217C8EC700F9AB5F /* SPWinderGrade.swift in Sources */,
 				9EC5143F210C30C7006869B3 /* SPWineryDetaileBtnView.swift in Sources */,
 				568E39892133E4BD00EDDCFC /* SPShopCarCount.swift in Sources */,
@@ -2310,6 +2321,7 @@
 				9E0E17F5218B580E001B8E00 /* SPOrderInfoView.swift in Sources */,
 				9E12FDC1212072460040CAE1 /* SPFilterSectionHeaderView.swift in Sources */,
 				9E22EAF22135AE3000B196D5 /* SPOrderTool.swift in Sources */,
+				56BFC94421C2486100245708 /* SPSetModel.swift in Sources */,
 				9E12FDC32120934A0040CAE1 /* SPIndexTitleView.swift in Sources */,
 				9E0C8B6C20E63F9300BD9743 /* SPBaseVC.swift in Sources */,
 				9EF4C70420F352A8007E9909 /* SPIndexBrandView.swift in Sources */,
