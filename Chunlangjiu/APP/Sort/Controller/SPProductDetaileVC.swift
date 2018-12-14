@@ -222,7 +222,7 @@ extension SPProductDetaileVC {
 //        guard self.showDetaile == false else {
 //            return
 //        }
-        let aplha = self.navigationController?.navigationBar.sp_change(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), with: view, andValue: (SP_NAVGIT_HEIGHT + sp_getstatusBarHeight()))
+        let aplha = self.navigationController?.navigationBar.sp_change(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), with: view, andValue: (SP_NAVGIT_HEIGHT + sp_getstatusBarHeight()))
         if let a = aplha {
             self.sp_dealView(aplha: a)
         }
@@ -288,7 +288,7 @@ extension SPProductDetaileVC {
         if index == 0 {
             self.sp_didScrollComplete(view: self.detaileView.productScrollView)
         }else{
-            self.navigationController?.navigationBar.sp_backColor(color: SPColorForHexString(hex: SP_HexColor.color_000000.rawValue))
+            self.navigationController?.navigationBar.sp_backColor(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue))
             self.sp_dealView(aplha: 1)
         }
     }

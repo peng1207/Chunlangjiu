@@ -233,7 +233,7 @@ extension SPWebVC : WKUIDelegate,WKNavigationDelegate,UIScrollViewDelegate,WKScr
             sp_logout()
             SPAPPManager.instance().userModel = nil
             NotificationCenter.default.post(name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
-              sp_remove()
+            sp_remove()
             sp_mainQueue { [weak self]in
                 self?.navigationController?.popToRootViewController(animated: true)
             }

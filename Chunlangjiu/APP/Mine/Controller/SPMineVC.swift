@@ -565,7 +565,9 @@ extension SPMineVC {
     }
     @objc fileprivate func sp_clickSet(){
         if SPAPPManager.sp_isLogin(isPush: true){
-            sp_pushWebVC(url: "\(SP_GET_SETTING_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "设置")
+//            sp_pushWebVC(url: "\(SP_GET_SETTING_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "设置")
+            let setVC = SPSetVC()
+            self.navigationController?.pushViewController(setVC, animated: true)
         }
         self.pushVC = true
     }
