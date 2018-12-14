@@ -32,7 +32,7 @@ class SPQRCodeUtil {
         return resultImage
     }
     // 使图片放大也可以清晰
-    class func getClearImage(sourceImage: UIImage, center: UIImage) -> UIImage {
+    class func sp_getClearImage(sourceImage: UIImage, center: UIImage) -> UIImage {
         
         let size = sourceImage.size
         // 开启图形上下文
