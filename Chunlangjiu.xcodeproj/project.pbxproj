@@ -167,6 +167,34 @@
 		9E5F7AB821C2AEC000A9EF35 /* SPAboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AB721C2AEC000A9EF35 /* SPAboutVC.swift */; };
 		9E5F7ABA21C2AED000A9EF35 /* SPLoginPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AB921C2AED000A9EF35 /* SPLoginPwdVC.swift */; };
 		9E5F7ABC21C2AEDD00A9EF35 /* SPPayPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ABB21C2AEDD00A9EF35 /* SPPayPwdVC.swift */; };
+		9E5F7ABE21C3F76900A9EF35 /* SPFansListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ABD21C3F76900A9EF35 /* SPFansListVC.swift */; };
+		9E5F7AC021C3F82B00A9EF35 /* SPFansListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ABF21C3F82B00A9EF35 /* SPFansListTableCell.swift */; };
+		9E5F7AC221C3F9E800A9EF35 /* SPFansListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AC121C3F9E800A9EF35 /* SPFansListModel.swift */; };
+		9E5F7AC421C3FA9400A9EF35 /* SPFansListHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AC321C3FA9400A9EF35 /* SPFansListHeadView.swift */; };
+		9E5F7AC621C400A300A9EF35 /* SPFansListSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AC521C400A300A9EF35 /* SPFansListSectionView.swift */; };
+		9E5F7AC821C4090900A9EF35 /* SPCapitalDetList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AC721C4090900A9EF35 /* SPCapitalDetList.swift */; };
+		9E5F7ACC21C4093500A9EF35 /* SPCapitalDetDetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ACB21C4093500A9EF35 /* SPCapitalDetDetVC.swift */; };
+		9E5F7ACE21C4094300A9EF35 /* SPCapitalDetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ACD21C4094300A9EF35 /* SPCapitalDetVC.swift */; };
+		9E5F7AD021C4098F00A9EF35 /* SPCapitalDetListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ACF21C4098F00A9EF35 /* SPCapitalDetListTableCell.swift */; };
+		9E5F7AD221C4D21300A9EF35 /* SPCapitalDetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AD121C4D21300A9EF35 /* SPCapitalDetModel.swift */; };
+		9E5F7AD421C4D46400A9EF35 /* SPCapitalDetHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AD321C4D46400A9EF35 /* SPCapitalDetHeadView.swift */; };
+		9E5F7AD621C4E23800A9EF35 /* SPCapitalDetDetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AD521C4E23800A9EF35 /* SPCapitalDetDetHeaderView.swift */; };
+		9E5F7AD821C4E3B100A9EF35 /* SPCapitalDetDetTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AD721C4E3B100A9EF35 /* SPCapitalDetDetTableCell.swift */; };
+		9E5F7ADA21C4E74700A9EF35 /* SPBondVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AD921C4E74700A9EF35 /* SPBondVC.swift */; };
+		9E5F7ADC21C4ECAD00A9EF35 /* SPCashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ADB21C4ECAD00A9EF35 /* SPCashVC.swift */; };
+		9E5F7ADE21C4ECE000A9EF35 /* SPRechargeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ADD21C4ECE000A9EF35 /* SPRechargeVC.swift */; };
+		9E5F7AE021C4ECF400A9EF35 /* SPBalanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7ADF21C4ECF400A9EF35 /* SPBalanceVC.swift */; };
+		9E5F7AE221C5692700A9EF35 /* SPFundsHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AE121C5692700A9EF35 /* SPFundsHeadView.swift */; };
+		9E5F7AE421C6284000A9EF35 /* SPBankCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AE321C6284000A9EF35 /* SPBankCardModel.swift */; };
+		9E5F7AE621C628EB00A9EF35 /* SPBankCardTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AE521C628EB00A9EF35 /* SPBankCardTableCell.swift */; };
+		9E5F7AEC21C632F500A9EF35 /* SPPartnerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AEB21C632F500A9EF35 /* SPPartnerVC.swift */; };
+		9E5F7AEE21C6330300A9EF35 /* SPPartnerTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AED21C6330300A9EF35 /* SPPartnerTableCell.swift */; };
+		9E5F7AF021C6330F00A9EF35 /* SPPartnerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AEF21C6330F00A9EF35 /* SPPartnerModel.swift */; };
+		9E5F7AF221C69E9E00A9EF35 /* SPRechargeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AF121C69E9E00A9EF35 /* SPRechargeTableCell.swift */; };
+		9E5F7AF621C6A44400A9EF35 /* SPTextLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AF521C6A44400A9EF35 /* SPTextLabelView.swift */; };
+		9E5F7AF821C6A54400A9EF35 /* SPCustomerServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AF721C6A54400A9EF35 /* SPCustomerServiceVC.swift */; };
+		9E5F7AFA21C6AA8A00A9EF35 /* SPRechargeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AF921C6AA8A00A9EF35 /* SPRechargeHeaderView.swift */; };
+		9E5F7AFC21C6AB6600A9EF35 /* SPRechargeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFB21C6AB6600A9EF35 /* SPRechargeFooterView.swift */; };
 		9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */; };
 		9E70D74F2155E51100CC6376 /* SPRealNameAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */; };
 		9E70D7512155E77700CC6376 /* SPMineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D7502155E77700CC6376 /* SPMineHeader.swift */; };
@@ -530,6 +558,34 @@
 		9E5F7AB721C2AEC000A9EF35 /* SPAboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAboutVC.swift; sourceTree = "<group>"; };
 		9E5F7AB921C2AED000A9EF35 /* SPLoginPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLoginPwdVC.swift; sourceTree = "<group>"; };
 		9E5F7ABB21C2AEDD00A9EF35 /* SPPayPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPayPwdVC.swift; sourceTree = "<group>"; };
+		9E5F7ABD21C3F76900A9EF35 /* SPFansListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansListVC.swift; sourceTree = "<group>"; };
+		9E5F7ABF21C3F82B00A9EF35 /* SPFansListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansListTableCell.swift; sourceTree = "<group>"; };
+		9E5F7AC121C3F9E800A9EF35 /* SPFansListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansListModel.swift; sourceTree = "<group>"; };
+		9E5F7AC321C3FA9400A9EF35 /* SPFansListHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansListHeadView.swift; sourceTree = "<group>"; };
+		9E5F7AC521C400A300A9EF35 /* SPFansListSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansListSectionView.swift; sourceTree = "<group>"; };
+		9E5F7AC721C4090900A9EF35 /* SPCapitalDetList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetList.swift; sourceTree = "<group>"; };
+		9E5F7ACB21C4093500A9EF35 /* SPCapitalDetDetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetDetVC.swift; sourceTree = "<group>"; };
+		9E5F7ACD21C4094300A9EF35 /* SPCapitalDetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetVC.swift; sourceTree = "<group>"; };
+		9E5F7ACF21C4098F00A9EF35 /* SPCapitalDetListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetListTableCell.swift; sourceTree = "<group>"; };
+		9E5F7AD121C4D21300A9EF35 /* SPCapitalDetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetModel.swift; sourceTree = "<group>"; };
+		9E5F7AD321C4D46400A9EF35 /* SPCapitalDetHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetHeadView.swift; sourceTree = "<group>"; };
+		9E5F7AD521C4E23800A9EF35 /* SPCapitalDetDetHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetDetHeaderView.swift; sourceTree = "<group>"; };
+		9E5F7AD721C4E3B100A9EF35 /* SPCapitalDetDetTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetDetTableCell.swift; sourceTree = "<group>"; };
+		9E5F7AD921C4E74700A9EF35 /* SPBondVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBondVC.swift; sourceTree = "<group>"; };
+		9E5F7ADB21C4ECAD00A9EF35 /* SPCashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCashVC.swift; sourceTree = "<group>"; };
+		9E5F7ADD21C4ECE000A9EF35 /* SPRechargeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRechargeVC.swift; sourceTree = "<group>"; };
+		9E5F7ADF21C4ECF400A9EF35 /* SPBalanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBalanceVC.swift; sourceTree = "<group>"; };
+		9E5F7AE121C5692700A9EF35 /* SPFundsHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFundsHeadView.swift; sourceTree = "<group>"; };
+		9E5F7AE321C6284000A9EF35 /* SPBankCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBankCardModel.swift; sourceTree = "<group>"; };
+		9E5F7AE521C628EB00A9EF35 /* SPBankCardTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBankCardTableCell.swift; sourceTree = "<group>"; };
+		9E5F7AEB21C632F500A9EF35 /* SPPartnerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPartnerVC.swift; sourceTree = "<group>"; };
+		9E5F7AED21C6330300A9EF35 /* SPPartnerTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPartnerTableCell.swift; sourceTree = "<group>"; };
+		9E5F7AEF21C6330F00A9EF35 /* SPPartnerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPartnerModel.swift; sourceTree = "<group>"; };
+		9E5F7AF121C69E9E00A9EF35 /* SPRechargeTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRechargeTableCell.swift; sourceTree = "<group>"; };
+		9E5F7AF521C6A44400A9EF35 /* SPTextLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTextLabelView.swift; sourceTree = "<group>"; };
+		9E5F7AF721C6A54400A9EF35 /* SPCustomerServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCustomerServiceVC.swift; sourceTree = "<group>"; };
+		9E5F7AF921C6AA8A00A9EF35 /* SPRechargeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRechargeHeaderView.swift; sourceTree = "<group>"; };
+		9E5F7AFB21C6AB6600A9EF35 /* SPRechargeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRechargeFooterView.swift; sourceTree = "<group>"; };
 		9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCompanyAuth.swift; sourceTree = "<group>"; };
 		9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRealNameAuth.swift; sourceTree = "<group>"; };
 		9E70D7502155E77700CC6376 /* SPMineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeader.swift; sourceTree = "<group>"; };
@@ -902,6 +958,7 @@
 			isa = PBXGroup;
 			children = (
 				9E5F7AA021B9791E00A9EF35 /* SPFansVC.swift */,
+				9E5F7ABD21C3F76900A9EF35 /* SPFansListVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -909,6 +966,7 @@
 		56E97B9221B9131E002E590C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7AC121C3F9E800A9EF35 /* SPFansListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -916,6 +974,9 @@
 		56E97B9321B9131E002E590C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7ABF21C3F82B00A9EF35 /* SPFansListTableCell.swift */,
+				9E5F7AC321C3FA9400A9EF35 /* SPFansListHeadView.swift */,
+				9E5F7AC521C400A300A9EF35 /* SPFansListSectionView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1009,6 +1070,7 @@
 		9E0C8B5320E63F2E00BD9743 /* APP */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7AE721C632EB00A9EF35 /* Partner */,
 				9E5F7AAD21C009C100A9EF35 /* BankCard */,
 				56E97B8C21B9131E002E590C /* Activity */,
 				56E97B9021B9131E002E590C /* Fans */,
@@ -1205,6 +1267,7 @@
 			isa = PBXGroup;
 			children = (
 				9EF4C67520EC7391007E9909 /* SPMineVC.swift */,
+				9E5F7AF721C6A54400A9EF35 /* SPCustomerServiceVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1472,6 +1535,14 @@
 		9E5F7A9B21B978DD00A9EF35 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7ACF21C4098F00A9EF35 /* SPCapitalDetListTableCell.swift */,
+				9E5F7AD321C4D46400A9EF35 /* SPCapitalDetHeadView.swift */,
+				9E5F7AD521C4E23800A9EF35 /* SPCapitalDetDetHeaderView.swift */,
+				9E5F7AD721C4E3B100A9EF35 /* SPCapitalDetDetTableCell.swift */,
+				9E5F7AE121C5692700A9EF35 /* SPFundsHeadView.swift */,
+				9E5F7AF121C69E9E00A9EF35 /* SPRechargeTableCell.swift */,
+				9E5F7AF921C6AA8A00A9EF35 /* SPRechargeHeaderView.swift */,
+				9E5F7AFB21C6AB6600A9EF35 /* SPRechargeFooterView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1479,6 +1550,7 @@
 		9E5F7A9C21B978DD00A9EF35 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7AD121C4D21300A9EF35 /* SPCapitalDetModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1487,6 +1559,13 @@
 			isa = PBXGroup;
 			children = (
 				9E5F7AA421B9793300A9EF35 /* SPFundsVC.swift */,
+				9E5F7AC721C4090900A9EF35 /* SPCapitalDetList.swift */,
+				9E5F7ACB21C4093500A9EF35 /* SPCapitalDetDetVC.swift */,
+				9E5F7ACD21C4094300A9EF35 /* SPCapitalDetVC.swift */,
+				9E5F7AD921C4E74700A9EF35 /* SPBondVC.swift */,
+				9E5F7ADB21C4ECAD00A9EF35 /* SPCashVC.swift */,
+				9E5F7ADD21C4ECE000A9EF35 /* SPRechargeVC.swift */,
+				9E5F7ADF21C4ECF400A9EF35 /* SPBalanceVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1531,6 +1610,7 @@
 		9E5F7AAF21C009C100A9EF35 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7AE321C6284000A9EF35 /* SPBankCardModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1538,6 +1618,41 @@
 		9E5F7AB021C009C100A9EF35 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9E5F7AE521C628EB00A9EF35 /* SPBankCardTableCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9E5F7AE721C632EB00A9EF35 /* Partner */ = {
+			isa = PBXGroup;
+			children = (
+				9E5F7AE821C632EB00A9EF35 /* Controller */,
+				9E5F7AE921C632EB00A9EF35 /* Model */,
+				9E5F7AEA21C632EB00A9EF35 /* View */,
+			);
+			path = Partner;
+			sourceTree = "<group>";
+		};
+		9E5F7AE821C632EB00A9EF35 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9E5F7AEB21C632F500A9EF35 /* SPPartnerVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9E5F7AE921C632EB00A9EF35 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9E5F7AEF21C6330F00A9EF35 /* SPPartnerModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9E5F7AEA21C632EB00A9EF35 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9E5F7AED21C6330300A9EF35 /* SPPartnerTableCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1690,6 +1805,7 @@
 				9E7DAADC214033BE0044C5FD /* SPPickerView.swift */,
 				564A7D1D218AAF92009027DB /* SPUpdateView.swift */,
 				9E5F7AAB21BD025B00A9EF35 /* SPInvitationCodeView.swift */,
+				9E5F7AF521C6A44400A9EF35 /* SPTextLabelView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2060,13 +2176,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E5F7AC221C3F9E800A9EF35 /* SPFansListModel.swift in Sources */,
 				9E8140AD211746340063A6E4 /* SPAPPRequestComplete.swift in Sources */,
 				9EC51451210CB128006869B3 /* SPNavigationBar.swift in Sources */,
 				9E34F6B920FB33F700D59ABD /* SPProductSearchCollectCell.swift in Sources */,
 				9E7DAAC9213B93170044C5FD /* SPOrderApplyRefundVC.swift in Sources */,
+				9E5F7AF821C6A54400A9EF35 /* SPCustomerServiceVC.swift in Sources */,
 				9EF4C70620F35364007E9909 /* SPIndexBrandCollectCell.swift in Sources */,
 				9E7A1FB02144D39900C9BFD2 /* SPAddPriceView.swift in Sources */,
 				9EF4C67A20EC73AD007E9909 /* SPSortVC.swift in Sources */,
+				9E5F7AEC21C632F500A9EF35 /* SPPartnerVC.swift in Sources */,
 				9E22EAC02132432600B196D5 /* SPOrderPayModel.swift in Sources */,
 				9EF4C70A20F35E5B007E9909 /* SPEvaluateTableCell.swift in Sources */,
 				9E0C8B7220E640BF00BD9743 /* SPRequestManager.swift in Sources */,
@@ -2086,6 +2205,7 @@
 				9EF4C6A620EE0B04007E9909 /* SPShopCartBtnView.swift in Sources */,
 				9E129F54210332BD00218A33 /* SPProductPriceView.swift in Sources */,
 				568E398B21340C6700EDDCFC /* SPIndexHeader.swift in Sources */,
+				9E5F7AC621C400A300A9EF35 /* SPFansListSectionView.swift in Sources */,
 				9EC51447210C59A1006869B3 /* SPWineryScoreTableCell.swift in Sources */,
 				9EF4C6D420EF7A2C007E9909 /* SPConfrimTableCell.swift in Sources */,
 				9E0C8B6E20E63FCE00BD9743 /* SPBaseNavVC.swift in Sources */,
@@ -2107,6 +2227,7 @@
 				9E0E17F7218B5C38001B8E00 /* SPOrderHeaderView.swift in Sources */,
 				9EF4C6E620F1EFEC007E9909 /* SPAuctionView.swift in Sources */,
 				9EC5144D210C5FFB006869B3 /* SPWineryPictureView.swift in Sources */,
+				9E5F7ADA21C4E74700A9EF35 /* SPBondVC.swift in Sources */,
 				9EF4C71F20F4A972007E9909 /* SPRecommendProductCollectCell.swift in Sources */,
 				56107EF121C3B16F0012CFB9 /* SPTableDataSource.swift in Sources */,
 				9EC5143D210AE770006869B3 /* SPWineryListHeaderView.swift in Sources */,
@@ -2116,6 +2237,7 @@
 				9E22EAE62135998800B196D5 /* SPOrderModel.swift in Sources */,
 				9E34F6AB20F9B4B000D59ABD /* SPMineCollectCell.swift in Sources */,
 				9E8140A9211737910063A6E4 /* SPProductModel.swift in Sources */,
+				9E5F7ACC21C4093500A9EF35 /* SPCapitalDetDetVC.swift in Sources */,
 				9EC5144F210C609A006869B3 /* SPWineryPictureTableCell.swift in Sources */,
 				9EF4C72720F73D8B007E9909 /* SPIndexDTableCell.swift in Sources */,
 				567ECD5E213E825700F254E4 /* SPShopBrandView.swift in Sources */,
@@ -2124,18 +2246,24 @@
 				9E22EAEA21359EFF00B196D5 /* SPOrderTableHeaderView.swift in Sources */,
 				56691F73212AD2DF008768E2 /* SPDelegate.swift in Sources */,
 				9EF4C6E820F1F27B007E9909 /* SPLabelView.swift in Sources */,
+				9E5F7AC021C3F82B00A9EF35 /* SPFansListTableCell.swift in Sources */,
 				9EF4C72320F4B3B4007E9909 /* SPProductDetaileView.swift in Sources */,
 				9E22EAFC2136EC4300B196D5 /* SPOrderRequest.swift in Sources */,
 				9E4AAECF214E2D9C00336892 /* SPRefuseView.swift in Sources */,
 				9E5F7ABA21C2AED000A9EF35 /* SPLoginPwdVC.swift in Sources */,
+				9E5F7AEE21C6330300A9EF35 /* SPPartnerTableCell.swift in Sources */,
 				9E22EABC2131A76E00B196D5 /* SPProductNumView.swift in Sources */,
 				9E12FDBD21206F0B0040CAE1 /* SPFilterHeaderModel.swift in Sources */,
+				9E5F7AD821C4E3B100A9EF35 /* SPCapitalDetDetTableCell.swift in Sources */,
+				9E5F7ADC21C4ECAD00A9EF35 /* SPCashVC.swift in Sources */,
 				9EF4C72120F4AED8007E9909 /* SPProductEvaluateView.swift in Sources */,
+				9E5F7AE021C4ECF400A9EF35 /* SPBalanceVC.swift in Sources */,
 				9E5F7A9F21B9791300A9EF35 /* SPActivityVC.swift in Sources */,
 				9E22EAE821359B0D00B196D5 /* SPOrderTableCell.swift in Sources */,
 				562C7165215CE0B80039EFD0 /* SPShopAlcoholView.swift in Sources */,
 				9EF4C6AA20EE2493007E9909 /* SPProductListVC.swift in Sources */,
 				9E89F0F82129441C000539A4 /* SPStarView.swift in Sources */,
+				9E5F7AD421C4D46400A9EF35 /* SPCapitalDetHeadView.swift in Sources */,
 				9EF4C6F220F23DBC007E9909 /* SPWineryDetaileVC.swift in Sources */,
 				9E7DAAC121399B080044C5FD /* SPProductEvaluationVC.swift in Sources */,
 				9E34F6CB20FDCFB800D59ABD /* SPAddAdressVC.swift in Sources */,
@@ -2169,10 +2297,12 @@
 				9EC5142B21049702006869B3 /* SPTabBar.swift in Sources */,
 				9E7DAADD214033BE0044C5FD /* SPPickerView.swift in Sources */,
 				9E05AC89210DA78700A78001 /* SPThridManager.swift in Sources */,
+				9E5F7AE621C628EB00A9EF35 /* SPBankCardTableCell.swift in Sources */,
 				9E12FDB9212036F70040CAE1 /* SPFilterCollectionCell.swift in Sources */,
 				9E34F6C520FDC49300D59ABD /* SPAddressVC.swift in Sources */,
 				9E7DAAD9213D9F620044C5FD /* SPProductRequest.swift in Sources */,
 				9E22EAF62135B39000B196D5 /* SPOrderToolModel.swift in Sources */,
+				9E5F7ABE21C3F76900A9EF35 /* SPFansListVC.swift in Sources */,
 				9E129F4E2103308400218A33 /* SPProductAddVC.swift in Sources */,
 				9EF4C72B20F75CD2007E9909 /* SPIndexSectionDHeaderView.swift in Sources */,
 				9E0C8B7020E6400300BD9743 /* SPBaseModel.swift in Sources */,
@@ -2180,6 +2310,7 @@
 				9E22EABE2131BFA000B196D5 /* SPConfirmOrderPrice.swift in Sources */,
 				9E12FDB7212032330040CAE1 /* SPFilterModel.swift in Sources */,
 				9EF4C67E20EC73D1007E9909 /* SPAuctionVC.swift in Sources */,
+				9E5F7AE421C6284000A9EF35 /* SPBankCardModel.swift in Sources */,
 				9E0C8B2420E637BF00BD9743 /* AppDelegate.swift in Sources */,
 				9E34F6B520FAF0A500D59ABD /* SPCityHeaderHeadView.swift in Sources */,
 				9E7DAAD1213C23110044C5FD /* SPOrderPayManager.swift in Sources */,
@@ -2202,12 +2333,15 @@
 				9E7A1FAE2144329C00C9BFD2 /* SPAuctionPrice.swift in Sources */,
 				9EF4C6AC20EE24C8007E9909 /* SPProductListView.swift in Sources */,
 				9EC514332105CAFD006869B3 /* SPMineSectionModel.swift in Sources */,
+				9E5F7AFA21C6AA8A00A9EF35 /* SPRechargeHeaderView.swift in Sources */,
 				9E020E1B2114BF340028ED50 /* SPAppRequest.swift in Sources */,
 				9EF4C6D820EFBAEF007E9909 /* SPConfrimSectionHeadView.swift in Sources */,
 				9EF4C6D020EF6E40007E9909 /* SPConfirmOrderVC.swift in Sources */,
 				9EF4C6E020EFD3AD007E9909 /* SPAuctionTableCell.swift in Sources */,
 				56256FC2215A56BF005242B0 /* SPPlaceModel.swift in Sources */,
 				9E7A1FAC2143EC3B00C9BFD2 /* SPOrderLogisticsView.swift in Sources */,
+				9E5F7AD221C4D21300A9EF35 /* SPCapitalDetModel.swift in Sources */,
+				9E5F7AC821C4090900A9EF35 /* SPCapitalDetList.swift in Sources */,
 				9EF4C67820EC73A2007E9909 /* SPShopCartVC.swift in Sources */,
 				9E34F6D120FF14AD00D59ABD /* SPTextFiled.swift in Sources */,
 				9E34F6CF20FF139D00D59ABD /* SPAddressEditView.swift in Sources */,
@@ -2218,12 +2352,14 @@
 				9E58EDBC2145E75700DFC3F2 /* SPLogisticsModel.swift in Sources */,
 				9EF4C68420EC7E76007E9909 /* SPHexColorValue.swift in Sources */,
 				9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */,
+				9E5F7ADE21C4ECE000A9EF35 /* SPRechargeVC.swift in Sources */,
 				9E22EABA2131A0C600B196D5 /* SPBalanceView.swift in Sources */,
 				9E22EAF42135B25000B196D5 /* SPOrderVC.swift in Sources */,
 				56256FBE215A413F005242B0 /* SPConditionSortView.swift in Sources */,
 				9E2C6E37211C9BA000091EF6 /* SPWinerModel.swift in Sources */,
 				9EF4C6E420EFD672007E9909 /* SPCountdownView.swift in Sources */,
 				9EFC5977217B33C00002B4BE /* SPEventHeader.swift in Sources */,
+				9E5F7AF221C69E9E00A9EF35 /* SPRechargeTableCell.swift in Sources */,
 				9EF4C70020F34F10007E9909 /* SPIndexIconView.swift in Sources */,
 				9E5F7AAC21BD025B00A9EF35 /* SPInvitationCodeView.swift in Sources */,
 				9EFC5975217B11CF0002B4BE /* SPOrderLogicView.swift in Sources */,
@@ -2231,7 +2367,9 @@
 				564A7D1C218AAEBB009027DB /* SPUpdateModel.swift in Sources */,
 				9E34F6C620FDC49300D59ABD /* SPAddressModel.swift in Sources */,
 				9E58EDBA21457C8100DFC3F2 /* SPAuctionPriceList.swift in Sources */,
+				9E5F7AD621C4E23800A9EF35 /* SPCapitalDetDetHeaderView.swift in Sources */,
 				56B21AFF21493D5F00BBA82D /* SPForgetPWDVC.swift in Sources */,
+				9E5F7AF621C6A44400A9EF35 /* SPTextLabelView.swift in Sources */,
 				9E89F0FE2129BE97000539A4 /* SPCityHistoryModel.swift in Sources */,
 				9EC5143921098138006869B3 /* SPCompanyAuthenticationVC.swift in Sources */,
 				9EC51445210C5812006869B3 /* SPWineryDetaileInfoView.swift in Sources */,
@@ -2247,6 +2385,8 @@
 				9EC51417210433BA006869B3 /* SPWineValuationVC.swift in Sources */,
 				9E5F7AB421C009DE00A9EF35 /* SPAddBankCardVC.swift in Sources */,
 				9E4AAED3214E570100336892 /* SPMineHeadModel.swift in Sources */,
+				9E5F7AC421C3FA9400A9EF35 /* SPFansListHeadView.swift in Sources */,
+				9E5F7AD021C4098F00A9EF35 /* SPCapitalDetListTableCell.swift in Sources */,
 				9EF4C71720F48FF3007E9909 /* SPProductView.swift in Sources */,
 				9E34F6AF20F9DA8500D59ABD /* SPMineSectionHeaderView.swift in Sources */,
 				9E129F442102CB3100218A33 /* SPProductDetailTopView.swift in Sources */,
@@ -2262,6 +2402,7 @@
 				9EF4C6FE20F34EA2007E9909 /* SPIndexHeaderView.swift in Sources */,
 				9E7DAAC321399F6B0044C5FD /* SPOrderEvaluationView.swift in Sources */,
 				9EF4C6A220EDFE8E007E9909 /* SPNumView.swift in Sources */,
+				9E5F7ACE21C4094300A9EF35 /* SPCapitalDetVC.swift in Sources */,
 				56E97B8121B8CBFE002E590C /* SPAdvertVC.swift in Sources */,
 				9EF4C69A20ECC1F8007E9909 /* SPSortView.swift in Sources */,
 				9E4AAED5214EC58C00336892 /* SPDatePicker.swift in Sources */,
@@ -2280,6 +2421,7 @@
 				9E34F6CD20FDD17500D59ABD /* SPTextView.swift in Sources */,
 				9E7DAAC7213B78D60044C5FD /* SPProductEvaluationListTableCell.swift in Sources */,
 				9E324D01217E243000F9AB5F /* SPShowRule.swift in Sources */,
+				9E5F7AFC21C6AB6600A9EF35 /* SPRechargeFooterView.swift in Sources */,
 				9E70D74F2155E51100CC6376 /* SPRealNameAuth.swift in Sources */,
 				9E7DAACD213BF66B0044C5FD /* SPOrderHandle.swift in Sources */,
 				56F8BBBF215B1D310051BCDC /* SPConditionFilterView.swift in Sources */,
@@ -2308,6 +2450,7 @@
 				56204CE821251A6800E47444 /* SPProductAddImgContentView.swift in Sources */,
 				9E12FDBB212049750040CAE1 /* SPIntervalView.swift in Sources */,
 				9EF4C6F620F2475F007E9909 /* SPWineryTableCell.swift in Sources */,
+				9E5F7AE221C5692700A9EF35 /* SPFundsHeadView.swift in Sources */,
 				56256FC4215A56CB005242B0 /* SPTypeModel.swift in Sources */,
 				9EF4C6F020F23DA9007E9909 /* SPWineryListVC.swift in Sources */,
 				9ECB7C4C2121F038009E843B /* WEIPageControl.swift in Sources */,
@@ -2325,6 +2468,7 @@
 				9E22EAB82130667900B196D5 /* SPPayModel.swift in Sources */,
 				9EC514352108220E006869B3 /* SPPayView.swift in Sources */,
 				562C7164215CE0B80039EFD0 /* SPShopTypeView.swift in Sources */,
+				9E5F7AF021C6330F00A9EF35 /* SPPartnerModel.swift in Sources */,
 				9E5F7AB621C2AE8B00A9EF35 /* SPAuthHomeVC.swift in Sources */,
 				9E129F422102402D00218A33 /* SPWebVC.swift in Sources */,
 				5610338321380CDF009DB376 /* SPOrderFooterView.swift in Sources */,

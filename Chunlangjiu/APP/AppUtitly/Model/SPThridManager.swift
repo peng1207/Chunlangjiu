@@ -58,7 +58,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         SPThridManager.instance().sp_addNotification()
         UMSocialGlobal.shareInstance()?.isUsingHttpsWhenShareContent = false
         UMConfigure.initWithAppkey(SP_UM_APPKEY, channel: nil)
-        MobClick.setCrashReportEnabled(true)
+        MobClick.setCrashReportEnabled(false)
     }
     
     class func sp_startLocation(){

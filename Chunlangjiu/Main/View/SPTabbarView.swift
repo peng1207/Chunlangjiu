@@ -140,9 +140,11 @@ class SPTabbarView:  UIView{
         if SP_ISSHOW_AUCTION {
             self.auctionBtn.snp.makeConstraints { (maker) in
                 maker.left.equalTo(self.sortBtn.snp.right).offset(0)
-                maker.bottom.equalTo(self.snp.bottom).offset(-8)
-                maker.height.equalTo((SP_TABBAR_HEIGHT + 2))
-                maker.width.equalTo(self.auctionBtn.snp.height).offset(0)
+                maker.bottom.equalTo(self.snp.bottom).offset(0)
+                maker.top.equalTo(self.snp.top).offset(0)
+                maker.width.equalTo(self.shopCartBtn.snp.width).offset(0)
+//                maker.height.equalTo((SP_TABBAR_HEIGHT + 2))
+//                maker.width.equalTo(self.auctionBtn.snp.height).offset(0)
             }
         }
         

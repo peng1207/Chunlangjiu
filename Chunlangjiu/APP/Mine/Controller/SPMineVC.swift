@@ -328,7 +328,8 @@ extension SPMineVC: UICollectionViewDelegate ,UICollectionViewDataSource,UIColle
                              sp_pushWebVC(url: "\(SP_GET_USER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
                         }
                     case .funds?:
-                         sp_pushWebVC(url: "\(SP_GET_CAPITAL_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "资金管理")
+                        sp_pushFundsVC()
+//                         sp_pushWebVC(url: "\(SP_GET_CAPITAL_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "资金管理")
                     case .collect?:
                         sp_pushWebVC(url: "\(SP_GET_COLLECT_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "我的收藏")
                     case .bank_card?:
@@ -562,6 +563,10 @@ extension SPMineVC {
         webVC.url = URL(string: url)
         webVC.title = title
         self.navigationController?.pushViewController(webVC, animated: true)
+    }
+    fileprivate func sp_pushFundsVC(){
+        let fundsVC = SPFundsVC()
+        self.navigationController?.pushViewController(fundsVC, animated: true)
     }
     @objc fileprivate func sp_clickSet(){
         if SPAPPManager.sp_isLogin(isPush: true){
