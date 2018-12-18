@@ -20,6 +20,7 @@ class SPSetVC: SPBaseVC {
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.addTarget(self, action: #selector(sp_logout), for: UIControlEvents.touchUpInside)
         return btn
     }()
     

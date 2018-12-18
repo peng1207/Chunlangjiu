@@ -98,9 +98,15 @@ extension SPBankCardVC : UITableViewDelegate,UITableViewDataSource {
             cell = SPBankCardTableCell(style: UITableViewCellStyle.default, reuseIdentifier: bankCardCellID)
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
-            
+            cell?.model = self.dataArray?[indexPath.row]
         }
         return cell!
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 160
+        }
+        return 155
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         

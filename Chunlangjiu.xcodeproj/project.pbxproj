@@ -195,6 +195,8 @@
 		9E5F7AF821C6A54400A9EF35 /* SPCustomerServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AF721C6A54400A9EF35 /* SPCustomerServiceVC.swift */; };
 		9E5F7AFA21C6AA8A00A9EF35 /* SPRechargeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AF921C6AA8A00A9EF35 /* SPRechargeHeaderView.swift */; };
 		9E5F7AFC21C6AB6600A9EF35 /* SPRechargeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFB21C6AB6600A9EF35 /* SPRechargeFooterView.swift */; };
+		9E5F7AFE21C7F79300A9EF35 /* SPAuthHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */; };
+		9E5F7B0021C7F8A500A9EF35 /* SPAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */; };
 		9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */; };
 		9E70D74F2155E51100CC6376 /* SPRealNameAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */; };
 		9E70D7512155E77700CC6376 /* SPMineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D7502155E77700CC6376 /* SPMineHeader.swift */; };
@@ -586,6 +588,8 @@
 		9E5F7AF721C6A54400A9EF35 /* SPCustomerServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCustomerServiceVC.swift; sourceTree = "<group>"; };
 		9E5F7AF921C6AA8A00A9EF35 /* SPRechargeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRechargeHeaderView.swift; sourceTree = "<group>"; };
 		9E5F7AFB21C6AB6600A9EF35 /* SPRechargeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRechargeFooterView.swift; sourceTree = "<group>"; };
+		9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthHeaderView.swift; sourceTree = "<group>"; };
+		9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthView.swift; sourceTree = "<group>"; };
 		9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCompanyAuth.swift; sourceTree = "<group>"; };
 		9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRealNameAuth.swift; sourceTree = "<group>"; };
 		9E70D7502155E77700CC6376 /* SPMineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeader.swift; sourceTree = "<group>"; };
@@ -1700,6 +1704,8 @@
 			isa = PBXGroup;
 			children = (
 				9EC51424210460C7006869B3 /* SPAddImageView.swift */,
+				9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */,
+				9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2271,6 +2277,7 @@
 				9EF4C6D620EF7C10007E9909 /* APPUtitly.swift in Sources */,
 				9E324CFF217E1E7E00F9AB5F /* SPProductRuleView.swift in Sources */,
 				5610337F21380CBA009DB376 /* SPOrderPriceView.swift in Sources */,
+				9E5F7B0021C7F8A500A9EF35 /* SPAuthView.swift in Sources */,
 				9EF4C6D220EF7384007E9909 /* SPConfrimAddressView.swift in Sources */,
 				9EC51419210435B0006869B3 /* SPWineValuationView.swift in Sources */,
 				568E39782133961800EDDCFC /* SPIndexModel.swift in Sources */,
@@ -2354,6 +2361,7 @@
 				9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */,
 				9E5F7ADE21C4ECE000A9EF35 /* SPRechargeVC.swift in Sources */,
 				9E22EABA2131A0C600B196D5 /* SPBalanceView.swift in Sources */,
+				9E5F7AFE21C7F79300A9EF35 /* SPAuthHeaderView.swift in Sources */,
 				9E22EAF42135B25000B196D5 /* SPOrderVC.swift in Sources */,
 				56256FBE215A413F005242B0 /* SPConditionSortView.swift in Sources */,
 				9E2C6E37211C9BA000091EF6 /* SPWinerModel.swift in Sources */,
