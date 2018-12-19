@@ -41,4 +41,5 @@ enum SP_HexColor : String {
     case color_f7f7f7   = "#f7f7f7"
     case color_eee000   = "#eee000"
     case color_189cdd   = "#189cdd"
+    case color_1599da   = "#1599da"
 }

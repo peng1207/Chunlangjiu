@@ -14,11 +14,49 @@ class SPRealNameAuthenticationVC: SPBaseVC {
         let view = UIScrollView()
         return view
     }()
+    fileprivate lazy var titleLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 15)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textAlignment = .left
+        let mAtt = NSMutableAttributedString()
+        mAtt.append(NSAttributedString(string: "实名认证", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
+        mAtt.append(NSAttributedString(string: "（请上传真实的个人信息，认证通过后将无法修改）", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+        label.attributedText = mAtt
+        label.numberOfLines = 0
+        return label
+    }()
+    fileprivate lazy var phoneTipLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 12)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textAlignment = .right
+        label.text = "请填写有效电话，工作人员将会致电核实"
+        return label
+    }()
+    fileprivate lazy var confirmTipLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 12)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textAlignment = .center
+        label.text = "请确认以上信息准确无误"
+        return label
+    }()
+    fileprivate lazy var infoLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 10)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.text = "认证说明：\n1、实名认证后，用户可发布酒类商品进行销售(最大数量为3件)；\n2、订单成交成功后，平台将抽取交易总额的3%作为平台佣金。\n3、升级成为星级卖家及城市合伙人，将获得更多的权益及优惠。"
+        return label
+    }()
     fileprivate lazy var nameView : SPAddressEditView = {
         let view = SPAddressEditView()
         view.titleLabel.text = "姓名"
-        view.textFiled.placeholder = "请输入"
+        view.textFiled.placeholder = "请输入真实的姓名"
         view.backgroundColor = UIColor.white
+        view.sp_updateTitleLeft(left: 20)
         return view
     }()
     fileprivate lazy var typeView : SPAddressSelectView = {
@@ -26,49 +64,61 @@ class SPRealNameAuthenticationVC: SPBaseVC {
         view.titleLabel.text = "证件类型"
         view.placeholder = "请选择"
         view.content = "身份证"
-        view.nextImageView.isHidden = true
+        view.sp_updateTitleLeft(left: 20)
+        view.nextImageView.isHidden = false
         view.backgroundColor = UIColor.white
         return view
     }()
     fileprivate lazy var numView : SPAddressEditView = {
         let view = SPAddressEditView()
-        view.titleLabel.text = "证件号码"
-        view.textFiled.placeholder = "请输入"
+        view.titleLabel.text = "身份证账号"
+        view.textFiled.placeholder = "请输入身份证账号"
+        view.backgroundColor = UIColor.white
+        view.lineView.isHidden = false
+        view.textFiled.keyboardType = .asciiCapable
+        view.sp_updateTitleLeft(left: 20)
+        return view
+    }()
+    fileprivate lazy var phoneView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.titleLabel.text = "手机号"
+        view.textFiled.placeholder = "请输入有效电话"
         view.backgroundColor = UIColor.white
         view.lineView.isHidden = true
         view.textFiled.keyboardType = .asciiCapable
+         view.sp_updateTitleLeft(left: 20)
         return view
     }()
     /// 正面证件
-    fileprivate lazy var positiveView : SPAddImageView = {
-        let view = SPAddImageView()
-        view.showDelete = true
-        view.showImageView.titleLabel.text = "上传身份证正面"
-        view.showImageView.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
-        view.clickAddBlock = { [weak self](addImageView) in
-            self?.sp_dealClickImageAction(addView: addImageView)
+    fileprivate lazy var positiveView : SPAuthAddImgView = {
+        let view = SPAuthAddImgView()
+        view.titleLabel.text = "身份证正面照"
+        view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.submitBtn.setTitle("上传正面照", for: UIControlState.normal)
+        view.clickAddBlock = { [weak self](addView)in
+             self?.sp_dealClickImageAction(addView: addView)
         }
         return view
     }()
     ///  反面证件
-    fileprivate lazy var oppositeView : SPAddImageView = {
-        let view = SPAddImageView()
-        view.showDelete = true
-        view.showImageView.titleLabel.text = "上传身份证反面"
-        view.showImageView.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
-        view.clickAddBlock = { [weak self](addImageView) in
-            self?.sp_dealClickImageAction(addView: addImageView)
+    fileprivate lazy var oppositeView : SPAuthAddImgView = {
+        let view = SPAuthAddImgView()
+        view.titleLabel.text = "身份证反面照"
+        view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.submitBtn.setTitle("上传反面照", for: UIControlState.normal)
+        view.clickAddBlock = { [weak self](addView)in
+            self?.sp_dealClickImageAction(addView: addView)
         }
         return view
     }()
     /// 手持证件
-    fileprivate lazy var holdView : SPAddImageView = {
-        let view = SPAddImageView()
-        view.showDelete = true
-        view.showImageView.titleLabel.text = "手持本人身份证"
-        view.showImageView.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
-        view.clickAddBlock = { [weak self](addImageView) in
-            self?.sp_dealClickImageAction(addView: addImageView)
+    fileprivate lazy var holdView : SPAuthAddImgView = {
+        let view = SPAuthAddImgView()
+        view.titleLabel.text = "手持身份证照"
+        view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.submitBtn.setTitle("上传手持身份证照", for: UIControlState.normal)
+        view.clickAddBlock = { [weak self](addView)in
+            self?.sp_dealClickImageAction(addView: addView)
         }
         return view
     }()
@@ -76,18 +126,19 @@ class SPRealNameAuthenticationVC: SPBaseVC {
         let btn = UIButton()
         btn.setTitle("提交审核", for: UIControlState.normal)
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 18)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.addTarget(self, action: #selector(sp_clickSubmit), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
-    fileprivate var tempAddImageView : SPAddImageView?
+    fileprivate var tempAddImageView : SPAuthAddImgView?
     fileprivate var positiveUrl : String?
     fileprivate var oppositeUrl : String?
     fileprivate var holdUrl : String?
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "实名认证"
+        self.navigationItem.title = "个人认证信息"
         self.sp_setupUI()
         sp_addNotification()
     }
@@ -102,28 +153,32 @@ class SPRealNameAuthenticationVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
     }
     /// 创建UI
     override func sp_setupUI() {
         self.view.addSubview(self.scrollView)
-        self.view.addSubview(self.submitBtn)
+//        self.view.addSubview(self.submitBtn)
+        self.scrollView.addSubview(self.titleLabel)
+        self.scrollView.addSubview(self.phoneTipLabel)
         self.scrollView.addSubview(self.nameView)
-        self.scrollView.addSubview(self.typeView)
+//        self.scrollView.addSubview(self.typeView)
         self.scrollView.addSubview(self.numView)
+        self.scrollView.addSubview(self.phoneView)
         self.scrollView.addSubview(self.positiveView)
         self.scrollView.addSubview(self.oppositeView)
         self.scrollView.addSubview(self.holdView)
+        self.scrollView.addSubview(self.confirmTipLabel)
+        self.scrollView.addSubview(self.infoLabel)
+        self.scrollView.addSubview(self.submitBtn)
+        
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.scrollView.snp.makeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.submitBtn.snp.top).offset(0)
-        }
-        self.submitBtn.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.view).offset(0)
-            maker.height.equalTo(49)
+//            maker.bottom.equalTo(self.submitBtn.snp.top).offset(0)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {
@@ -131,35 +186,80 @@ class SPRealNameAuthenticationVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
+//        self.submitBtn.snp.makeConstraints { (maker) in
+//            maker.left.right.equalTo(self.view).offset(0)
+//            maker.height.equalTo(49)
+//            if #available(iOS 11.0, *) {
+//                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+//            } else {
+//                // Fallback on earlier versions
+//                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+//            }
+//        }
+        self.titleLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(10)
+            maker.right.equalTo(self.scrollView).offset(-10)
+            maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.top.equalTo(self.scrollView).offset(18)
+        }
         self.nameView.snp.makeConstraints { (maker) in
-            maker.left.top.right.equalTo(self.scrollView).offset(0)
-            maker.height.equalTo(44)
+            maker.left.right.equalTo(self.scrollView).offset(0)
+            maker.top.equalTo(self.titleLabel.snp.bottom).offset(19)
+            maker.height.equalTo(50)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
         }
-        self.typeView.snp.makeConstraints { (maker) in
+//        self.typeView.snp.makeConstraints { (maker) in
+//            maker.left.right.height.equalTo(self.nameView).offset(0)
+//            maker.top.equalTo(self.nameView.snp.bottom).offset(0)
+//        }
+        self.numView.snp.makeConstraints { (maker) in
             maker.left.right.height.equalTo(self.nameView).offset(0)
             maker.top.equalTo(self.nameView.snp.bottom).offset(0)
         }
-        self.numView.snp.makeConstraints { (maker) in
-            maker.left.right.height.equalTo(self.typeView).offset(0)
-            maker.top.equalTo(self.typeView.snp.bottom).offset(0)
+        self.phoneView.snp.makeConstraints { (maker) in
+            maker.left.right.height.equalTo(self.numView).offset(0)
+            maker.top.equalTo(self.numView.snp.bottom).offset(0)
+        }
+        self.phoneTipLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(10)
+            maker.right.equalTo(self.scrollView).offset(-10)
+            maker.top.equalTo(self.phoneView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
         }
         self.positiveView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.scrollView.snp.left).offset(10)
-            maker.top.equalTo(self.numView.snp.bottom).offset(10)
-            maker.width.equalTo(self.oppositeView.snp.width).offset(0)
-            maker.height.equalTo(self.positiveView.snp.width).multipliedBy(0.64)
+            maker.left.right.equalTo(self.scrollView).offset(0)
+            maker.top.equalTo(self.phoneTipLabel.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
         }
         self.oppositeView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.positiveView.snp.right).offset(10)
-            maker.right.equalTo(self.scrollView.snp.right).offset(-10)
-            maker.top.equalTo(self.positiveView.snp.top).offset(0)
-            maker.height.equalTo(self.positiveView.snp.height).offset(0)
+            maker.left.right.equalTo(self.scrollView).offset(0)
+            maker.top.equalTo(self.positiveView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
         }
         self.holdView.snp.makeConstraints { (maker) in
-            maker.left.right.height.equalTo(self.positiveView).offset(0)
-            maker.top.equalTo(self.positiveView.snp.bottom).offset(10)
-            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-10)
+            maker.left.right.equalTo(self.scrollView).offset(0)
+            maker.top.equalTo(self.oppositeView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
+        }
+        self.confirmTipLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(10)
+            maker.right.equalTo(self.scrollView).offset(-10)
+            maker.top.equalTo(self.holdView.snp.bottom).offset(20)
+            maker.height.greaterThanOrEqualTo(0)
+        }
+        self.infoLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(33)
+            maker.right.equalTo(self.scrollView.snp.right).offset(-33)
+            maker.top.equalTo(self.confirmTipLabel.snp.bottom).offset(45)
+            maker.height.greaterThanOrEqualTo(0)
+        }
+        self.submitBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(10)
+            maker.right.equalTo(self.scrollView).offset(-10)
+            maker.height.equalTo(40)
+            maker.top.equalTo(self.infoLabel.snp.bottom).offset(43)
+            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-17)
         }
     }
     deinit {
@@ -167,7 +267,7 @@ class SPRealNameAuthenticationVC: SPBaseVC {
     }
 }
 extension SPRealNameAuthenticationVC {
-    fileprivate func sp_dealClickImageAction(addView : SPAddImageView?){
+    fileprivate func sp_dealClickImageAction(addView : SPAuthAddImgView?){
         self.tempAddImageView = addView
         sp_showSelectImage(viewController: self, allowsEditing: false,delegate: self)
     }
@@ -187,7 +287,6 @@ extension SPRealNameAuthenticationVC :UIImagePickerControllerDelegate,UINavigati
             }else if view == self.holdView {
                 self.holdUrl = nil
             }
-            
             view.sp_update(image: image)
         }
         picker.dismiss(animated: true, completion: nil)
@@ -223,15 +322,15 @@ extension SPRealNameAuthenticationVC{
             sp_showTextAlert(tips: "请输入您的身份证号码")
             return
         }
-        guard self.positiveView.imageView.image != nil else {
+        guard self.positiveView.imgView.image != nil else {
             sp_showTextAlert(tips: "请上传身份证正面")
             return
         }
-        guard self.oppositeView.imageView.image != nil else {
+        guard self.oppositeView.imgView.image != nil else {
             sp_showTextAlert(tips: "请上传身份证反面")
             return
         }
-        guard self.holdView.imageView.image != nil else {
+        guard self.holdView.imgView.image != nil else {
             sp_showTextAlert(tips: "请上传手持本人身份证")
             return
         }
@@ -249,7 +348,7 @@ extension SPRealNameAuthenticationVC{
             let group = DispatchGroup()
             
             if sp_getString(string: self.positiveUrl).count == 0{
-                let uploadImage = sp_fixOrientation(aImage: self.positiveView.imageView.image!)
+                let uploadImage = sp_fixOrientation(aImage: self.positiveView.imgView.image!)
                 let data = UIImageJPEGRepresentation(uploadImage, 0.5)
                 
                 if let d = data {
@@ -273,7 +372,7 @@ extension SPRealNameAuthenticationVC{
                 }
             }
             if sp_getString(string: self.oppositeUrl).count == 0{
-                let uploadImage1 = sp_fixOrientation(aImage: self.oppositeView.imageView.image!)
+                let uploadImage1 = sp_fixOrientation(aImage: self.oppositeView.imgView.image!)
                 let data1 = UIImageJPEGRepresentation(uploadImage1, 0.5)
                 
                 if let d1 = data1 {
@@ -297,7 +396,7 @@ extension SPRealNameAuthenticationVC{
                 }
             }
             if sp_getString(string: self.holdUrl).count == 0{
-                let uploadImage2 = sp_fixOrientation(aImage: self.holdView.imageView.image!)
+                let uploadImage2 = sp_fixOrientation(aImage: self.holdView.imgView.image!)
                 let data2 = UIImageJPEGRepresentation(uploadImage2, 0.5)
                
                 if let d2 = data2 {

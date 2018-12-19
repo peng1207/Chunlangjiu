@@ -52,7 +52,7 @@ extension UINavigationBar {
     func sp_reset() {
         let shadowImg = sp_findNavLineImageViewOn(view: self)
         shadowImg?.isHidden = false
-        self.setBackgroundImage(nil,for: .default)
+        self.setBackgroundImage(UIImage.sp_getImageWithColor(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)),for: .default)
     }
     
     

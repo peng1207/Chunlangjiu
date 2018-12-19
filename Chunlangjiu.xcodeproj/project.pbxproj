@@ -197,6 +197,7 @@
 		9E5F7AFC21C6AB6600A9EF35 /* SPRechargeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFB21C6AB6600A9EF35 /* SPRechargeFooterView.swift */; };
 		9E5F7AFE21C7F79300A9EF35 /* SPAuthHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */; };
 		9E5F7B0021C7F8A500A9EF35 /* SPAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */; };
+		9E5F7B0221C93F1B00A9EF35 /* SPAuthAddImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7B0121C93F1B00A9EF35 /* SPAuthAddImgView.swift */; };
 		9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */; };
 		9E70D74F2155E51100CC6376 /* SPRealNameAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */; };
 		9E70D7512155E77700CC6376 /* SPMineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D7502155E77700CC6376 /* SPMineHeader.swift */; };
@@ -590,6 +591,7 @@
 		9E5F7AFB21C6AB6600A9EF35 /* SPRechargeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRechargeFooterView.swift; sourceTree = "<group>"; };
 		9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthHeaderView.swift; sourceTree = "<group>"; };
 		9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthView.swift; sourceTree = "<group>"; };
+		9E5F7B0121C93F1B00A9EF35 /* SPAuthAddImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthAddImgView.swift; sourceTree = "<group>"; };
 		9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCompanyAuth.swift; sourceTree = "<group>"; };
 		9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRealNameAuth.swift; sourceTree = "<group>"; };
 		9E70D7502155E77700CC6376 /* SPMineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeader.swift; sourceTree = "<group>"; };
@@ -1706,6 +1708,7 @@
 				9EC51424210460C7006869B3 /* SPAddImageView.swift */,
 				9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */,
 				9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */,
+				9E5F7B0121C93F1B00A9EF35 /* SPAuthAddImgView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2449,6 +2452,7 @@
 				9EF4C70220F350B0007E9909 /* SPIndexIconCollectCell.swift in Sources */,
 				9EC51443210C394B006869B3 /* SPWineryDetaileView.swift in Sources */,
 				9E34F6B120FA081D00D59ABD /* SPIndexShowCityView.swift in Sources */,
+				9E5F7B0221C93F1B00A9EF35 /* SPAuthAddImgView.swift in Sources */,
 				9EC514152103421B006869B3 /* SPProductAddImageView.swift in Sources */,
 				9EF4C68820EC8284007E9909 /* SPUnitily.swift in Sources */,
 				9E34F6D720FF2A5700D59ABD /* SPAddressAreaView.swift in Sources */,
