@@ -44,6 +44,7 @@ class SPLabelView:  UIView{
                 label?.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
                 label?.textAlignment = NSTextAlignment.center
                 label?.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue).withAlphaComponent(0.8)
+                 
                 self.addSubview(label!)
                 label?.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
                 label?.snp.makeConstraints({ (maker) in

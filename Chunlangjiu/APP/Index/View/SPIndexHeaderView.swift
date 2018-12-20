@@ -19,11 +19,13 @@ class SPIndexHeaderView:  UIView{
     lazy var iconView : SPIndexIconView = {
         let view = SPIndexIconView()
         view.isHidden = true
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     lazy var brandView : SPIndexBrandView = {
         let view = SPIndexBrandView()
         view.isHidden = true
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     var indexModel : SPIndexModel? {
@@ -92,15 +94,15 @@ class SPIndexHeaderView:  UIView{
         self.iconView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.snp.left).offset(10)
             maker.right.equalTo(self.snp.right).offset(-10)
-            maker.top.equalTo(self.bannerView.snp.bottom).offset(-20)
+            maker.top.equalTo(self.bannerView.snp.bottom).offset(10)
             self.iconHeight = maker.height.equalTo(0).constraint
         }
         self.brandView.setNeedsLayout()
         self.brandView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self).offset(0)
+            maker.left.right.equalTo(self.iconView).offset(0)
             self.brandTop = maker.top.equalTo(self.iconView.snp.bottom).offset(0).constraint
             self.brandHeight =  maker.height.equalTo(0).constraint
-            maker.bottom.equalTo(self.snp.bottom).offset(-10)
+            maker.bottom.equalTo(self.snp.bottom).offset(0)
         }
         
     }

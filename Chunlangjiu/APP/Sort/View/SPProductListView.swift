@@ -17,6 +17,17 @@ class SPProductContentView:  UIView{
         let imageView = UIImageView()
         return imageView
     }()
+    lazy var signImgView : UIImageView = {
+        let view = UIImageView()
+        return view
+    }()
+    fileprivate lazy var shopNameLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 11)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textAlignment = .left
+        return label
+    }()
     lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 14)
@@ -26,8 +37,8 @@ class SPProductContentView:  UIView{
     }()
     lazy var salePriceLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_c11f2f.rawValue)
+        label.font = sp_getFontSize(size: 18)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return label
     }()
     lazy var originPriceLabel : UILabel = {
@@ -46,8 +57,8 @@ class SPProductContentView:  UIView{
     }()
     lazy var tipsLabel :UILabel = {
         let label = UILabel()
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-        label.font = sp_getFontSize(size: 12)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        label.font = sp_getFontSize(size: 10)
         return label
     }()
     lazy var maxPriceLabel : UILabel = {
@@ -66,6 +77,15 @@ class SPProductContentView:  UIView{
         imageView.image = UIImage(named: "public_auction")
         imageView.isHidden = true
         return imageView
+    }()
+    fileprivate lazy var entShopBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("进店 >", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
+        btn.titleLabel?.font = sp_getFontSize(size: 11)
+//        btn.addTarget(self, action: #selector(<#des#>), for: UIControlEvents.touchUpInside)
+        return btn
     }()
     lazy var lineView : UIView = {
         let view = sp_getLineView()
@@ -111,6 +131,7 @@ class SPProductContentView:  UIView{
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.productImageView)
+        self.addSubview(self.signImgView)
         self.addSubview(self.titleLabel)
         self.addSubview(self.labelView)
         self.addSubview(self.salePriceLabel)
@@ -118,6 +139,8 @@ class SPProductContentView:  UIView{
         self.addSubview(self.shopCartBtn)
         self.addSubview(self.tipsLabel)
         self.addSubview(self.maxPriceLabel)
+        self.addSubview(self.shopNameLabel)
+        self.addSubview(self.entShopBtn)
         self.addSubview(self.auctionImageView)
         self.addSubview(self.lineView)
         self.sp_addConstraint()
@@ -136,10 +159,17 @@ class SPProductContentView:  UIView{
             maker.right.equalTo(self).offset(-15)
             maker.bottom.equalTo(self).offset(-14)
         }
+        self.signImgView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.titleLabel.snp.left).offset(0)
+            maker.bottom.equalTo(self.snp.bottom).offset(-6)
+            maker.width.equalTo(60)
+            maker.height.equalTo(15)
+        }
+        
         self.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
             maker.right.equalTo(self.shopCartBtn.snp.left).offset(-8)
-            maker.bottom.equalTo(self.snp.bottom).offset(-13)
+            maker.bottom.equalTo(self.signImgView.snp.top).offset(-7)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.labelView.snp.makeConstraints { (maker) in

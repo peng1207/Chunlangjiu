@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-let SPIndexSectionDHeaderView_Title_Height : CGFloat = 39
+let SPIndexSectionDHeaderView_Title_Height : CGFloat = 54
 
 class SPIndexSectionDHeaderView:  UITableViewHeaderFooterView{
     lazy var imageView : UIImageView = {
@@ -19,14 +19,14 @@ class SPIndexSectionDHeaderView:  UITableViewHeaderFooterView{
     }()
     lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.white
-        if SP_ISSHOW_AUCTION {
-             label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_97a959.rawValue)
-        }else{
-             label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
-        }
-        label.textAlignment = NSTextAlignment.center
-        label.font = sp_getFontSize(size: 18)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+//        if SP_ISSHOW_AUCTION {
+//             label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_97a959.rawValue)
+//        }else{
+//             label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+//        }
+        label.textAlignment = .center
+        label.font = sp_getFontSize(size: 15)
         return label
     }()
     

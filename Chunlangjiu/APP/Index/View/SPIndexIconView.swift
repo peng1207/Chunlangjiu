@@ -39,7 +39,7 @@ class SPIndexIconView:  UIView{
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        self.collectionView.backgroundColor = UIColor.white
+        self.collectionView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         self.collectionView.register(SPIndexIconCollectCell.self, forCellWithReuseIdentifier: indexIconCellID)
         self.addSubview(self.collectionView)
         self.sp_addConstraint()

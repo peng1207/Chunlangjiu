@@ -91,7 +91,8 @@ class SPIndexDTableCell: UITableViewCell {
         }
         self.productView.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
-            maker.bottom.equalTo(self.productView.productImageView.snp.bottom).offset(0)
+//            maker.bottom.equalTo(self.productView.productImageView.snp.bottom).offset(0)
+            maker.bottom.equalTo(self.productView.signImgView.snp.top).offset(-7)
             maker.height.greaterThanOrEqualTo(0)
             maker.right.equalTo(self.productView.titleLabel.snp.right).offset(0)
         }
