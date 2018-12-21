@@ -258,6 +258,8 @@ class SPProductListHCell: UICollectionViewCell {
         
         self.productView.lineView.isHidden = false
         self.sp_addConstraint()
+        self.productView.layoutIfNeeded()
+        self.productView.sp_setCornerRadius(corner: 5)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -296,6 +298,7 @@ class SPProductListVCell: UICollectionViewCell {
        
         self.productView.lineView.isHidden = true
         self.sp_addConstraint()
+        self.contentView.sp_setCornerRadius(corner: 5)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){

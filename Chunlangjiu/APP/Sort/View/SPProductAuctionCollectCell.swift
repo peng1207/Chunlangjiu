@@ -26,6 +26,8 @@ class SPProductAuctionCollectCell: UICollectionViewCell {
     fileprivate func sp_setupUI(){
         self.contentView.addSubview(self.auctionView)
         self.sp_addConstraint()
+       self.auctionView.layoutIfNeeded()
+        self.auctionView.sp_setCornerRadius(corner: 5)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){

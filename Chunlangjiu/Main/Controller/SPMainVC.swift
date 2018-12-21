@@ -80,7 +80,7 @@ class SPMainVC: UITabBarController {
         let indexNavVC = SPBaseNavVC(rootViewController: indexVC)
         self.addChildViewController(indexNavVC)
     
-        let sortVC = SPProductListVC()
+        let sortVC = SPSortVC()
         let sortNavVC = SPBaseNavVC(rootViewController: sortVC)
         self.addChildViewController(sortNavVC)
         if SP_ISSHOW_AUCTION {

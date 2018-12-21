@@ -108,7 +108,7 @@ class SPProductListVC: SPBaseVC {
 //            self.sp_sendRequestFilter()
         }
         self.sp_sendRequestSort()
-            sp_addNotification()
+          sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
