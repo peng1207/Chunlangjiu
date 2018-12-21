@@ -71,6 +71,7 @@ class SPProductListVC: SPBaseVC {
     fileprivate  var dataArray : Array<SPProductModel>?
     fileprivate let collectHCellID = "collectHCellID"
     fileprivate let collectVCellID = "collectVCellID"
+    fileprivate let collectHAuctionCellID = "collectHAuctionCellID"
     fileprivate var currentPage : Int = 1
     fileprivate var btnType : SPConditionBtnType = SPConditionBtnType.comprehensive
     fileprivate var topConstraint : Constraint!
@@ -142,6 +143,7 @@ class SPProductListVC: SPBaseVC {
         self.collectionView.backgroundColor = self.view.backgroundColor
         self.collectionView.register(SPProductListHCell.self, forCellWithReuseIdentifier: collectHCellID)
         self.collectionView.register(SPProductListVCell.self, forCellWithReuseIdentifier: collectVCellID)
+        self.collectionView.register(SPProductAuctionCollectCell.self, forCellWithReuseIdentifier: collectHAuctionCellID)
         self.collectionView.showsVerticalScrollIndicator = false
 
         self.collectionView.sp_headerRefesh { [weak self] in
@@ -228,14 +230,25 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if isH {
-            let cell : SPProductListHCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHCellID, for: indexPath) as! SPProductListHCell
+            var productModel : SPProductModel?
             if indexPath.row < sp_getArrayCount(array: self.dataArray) {
-                cell.productView.productModel = self.dataArray?[indexPath.row]
+                productModel = self.dataArray?[indexPath.row]
             }
-            cell.productView.addComplete = { [weak self](model) in
-                self?.sp_sendAddRequest(model: model)
+            
+            if let m = productModel, m.isAuction == true{
+                let cell : SPProductAuctionCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHAuctionCellID, for: indexPath) as! SPProductAuctionCollectCell
+                cell.contentView.backgroundColor = self.view.backgroundColor
+                cell.auctionView.productModel = m
+                return cell
+            }else{
+                let cell : SPProductListHCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHCellID, for: indexPath) as! SPProductListHCell
+                cell.contentView.backgroundColor = self.view.backgroundColor
+                   cell.productView.productModel = productModel
+                cell.productView.addComplete = { [weak self](model) in
+                    self?.sp_sendAddRequest(model: model)
+                }
+                return cell
             }
-            return cell
         }else{
             let cell : SPProductListVCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectVCellID, for: indexPath) as! SPProductListVCell
             if indexPath.row < sp_getArrayCount(array: self.dataArray) {
@@ -249,16 +262,26 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if isH {
-            return  CGSize(width: collectionView.frame.size.width, height: (SP_PRODUCT_H_WIDTH * SP_PRODUCT_SCALE) + 17  )
+            var height : CGFloat = 150.00
+            if indexPath.row < sp_getArrayCount(array: self.dataArray){
+                let model = self.dataArray?[indexPath.row]
+                if let m = model ,m.isAuction == true{
+                    height = 175.00
+                }
+            }
+            return  CGSize(width: collectionView.frame.size.width, height: indexPath.row == 0 ? height + 10 : height + 5)
         }else{
-            let width =  NSInteger((collectionView.frame.size.width - 5) / 2.0)
-            return  CGSize(width: CGFloat(width), height:  (CGFloat(width - 38) * SP_PRODUCT_SCALE ) + 155 )
+            let width =  NSInteger((collectionView.frame.size.width - 25) / 2.0)
+            return  CGSize(width: CGFloat(width), height:  (CGFloat(width) * SP_PRODUCT_SCALE ) + 115 )
         }
     }
     // 返回cell 上下左右的间距
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        return  UIEdgeInsets(top: 0, left: 0, bottom: self.isH ? 0 : 5, right: 0)
+        if self.isH {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+        sp_log(message: "section is \(section)")
+        return  UIEdgeInsets(top: 5, left:0, bottom: 0, right: 0)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if self.isH {
@@ -271,7 +294,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
         if self.isH {
             return 0
         }else{
-            return 5
+            return 10
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

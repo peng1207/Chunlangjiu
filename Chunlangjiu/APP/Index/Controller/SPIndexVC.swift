@@ -37,7 +37,7 @@ class SPIndexVC: SPBaseVC {
         }
         return view
     }()
-     fileprivate var pushVC : Bool = false
+    fileprivate var pushVC : Bool = false
     fileprivate  var tableView : UITableView!
     fileprivate var dataArray : [SPIndexGoods]! = [SPIndexGoods]()
     fileprivate var currentPage : Int = 1

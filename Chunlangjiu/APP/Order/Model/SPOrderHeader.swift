@@ -109,7 +109,8 @@ let SP_AUCTION_2  = "2"
 let SP_AUCTION_3  = "3"
 /// 订单类型 竞拍
 let SP_AUCTION = "auction"
-
+/// 顶部
+let SP_HEADER   = "header"
 /// 是否展示取消原因或申请售后的原因
 ///
 /// - Parameter statue: 订单状态

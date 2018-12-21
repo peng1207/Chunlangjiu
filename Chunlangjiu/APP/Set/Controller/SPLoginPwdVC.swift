@@ -13,80 +13,45 @@ class SPLoginPwdVC: SPBaseVC {
         let view = UIScrollView()
         return view
     }()
+    fileprivate lazy var oldPwdView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.titleLabel.text = "原密码"
+        view.textFiled.placeholder = "请输入原密码"
+        view.sp_updateTitleLeft(left: 13)
+        view.textFiled.isSecureTextEntry = true
+        return view
+    }()
+    fileprivate lazy var newPwdView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.titleLabel.text = "新密码"
+        view.textFiled.placeholder = "请输入新密码"
+        view.sp_updateTitleLeft(left: 13)
+        view.textFiled.isSecureTextEntry = true
+        return view
+    }()
+    fileprivate lazy var confirmPwdView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.titleLabel.text = "确认新密码"
+        view.textFiled.placeholder = "请输入确认新密码"
+        view.sp_updateTitleLeft(left: 13)
+        view.lineView.isHidden = true
+        view.textFiled.isSecureTextEntry = true
+        return view
+    }()
     
-    fileprivate lazy var codeTextFiled : SPTextFiled = {
-        let textFiled = SPTextFiled()
-        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
-        textFiled.placeholder = "请输入验证码"
-        textFiled.sp_cornerRadius(cornerRadius: 22.5)
-        let leftView = UIView()
-        leftView.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "login_code")
-        imageView.frame = CGRect(x: 18, y: 14, width: 18, height: 20)
-        leftView.addSubview(imageView)
-        
-        textFiled.leftView = leftView
-        textFiled.leftViewMode = UITextFieldViewMode.always
-        let rigthView = UIView()
-        rigthView.frame = CGRect(x: 0, y: 0, width: 110, height: textFiledHeight)
-        rigthView.addSubview(self.sendCodeBtn)
-        textFiled.rightView = rigthView
-        textFiled.rightViewMode = UITextFieldViewMode.always
-        textFiled.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
-            
-        }, doneBlock: {
-            
-        })
-        return textFiled
-    }()
-    fileprivate lazy var sendCodeBtn : UIButton = {
-        let btn = UIButton()
-        btn.sp_cornerRadius(cornerRadius: 13.5)
-        btn.frame = CGRect(x: 10, y: 9, width: 90, height: 27)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
-        btn.setTitle("获取验证码", for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 14)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickSendCodeAction), for: UIControlEvents.touchUpInside)
-        return btn
-    }()
-    fileprivate lazy var pwdextFiled : SPTextFiled = {
-        let textFiled = SPTextFiled()
-        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
-        textFiled.placeholder = "请输入密码"
-        textFiled.font = sp_getFontSize(size: 14)
-        textFiled.sp_cornerRadius(cornerRadius: 22.5)
-        textFiled.isSecureTextEntry = true
-        let leftView = UIView()
-        leftView.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "login_code")
-        imageView.frame = CGRect(x: 18, y: 14, width: 18, height: 20)
-        leftView.addSubview(imageView)
-        
-        textFiled.leftView = leftView
-        textFiled.leftViewMode = UITextFieldViewMode.always
-        textFiled.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
-            
-        }, doneBlock: {
-            
-        })
-        return textFiled
-    }()
     fileprivate lazy var doneBtn : UIButton = {
         let btn = UIButton()
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
         btn.setTitle("完成", for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 18)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
-        btn.sp_cornerRadius(cornerRadius: 22.5)
+        btn.sp_cornerRadius(cornerRadius: 5)
         btn.addTarget(self, action: #selector(sp_clickDoneAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
-     fileprivate let textFiledHeight : CGFloat = 45
-    fileprivate var timer : Timer?
-    fileprivate var timeOut : Int = 60
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -99,17 +64,19 @@ class SPLoginPwdVC: SPBaseVC {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        sp_stopTimer()
+        
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.view.backgroundColor = UIColor.white
+        self.navigationItem.title = "修改登录密码"
+      
         self.view.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.codeTextFiled)
-        self.scrollView.addSubview(self.pwdextFiled)
+        self.scrollView.addSubview(self.oldPwdView)
+        self.scrollView.addSubview(self.newPwdView)
+        self.scrollView.addSubview(self.confirmPwdView)
         self.scrollView.addSubview(self.doneBtn)
         self.sp_addConstraint()
     }
@@ -128,20 +95,24 @@ class SPLoginPwdVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-        self.codeTextFiled.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.scrollView.snp.left).offset(30)
-            maker.width.equalTo(self.scrollView.snp.width).offset(-60)
-            maker.height.equalTo(self.textFiledHeight)
+        self.oldPwdView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.scrollView).offset(0)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
-            maker.top.equalTo(self.scrollView).offset(60)
+            maker.top.equalTo(self.scrollView).offset(10)
+            maker.height.equalTo(50)
         }
-        self.pwdextFiled.snp.makeConstraints { (maker) in
-            maker.left.right.height.equalTo(self.codeTextFiled).offset(0)
-            maker.top.equalTo(self.codeTextFiled.snp.bottom).offset(20)
+        self.newPwdView.snp.makeConstraints { (maker) in
+            maker.left.right.height.equalTo(self.oldPwdView).offset(0)
+            maker.top.equalTo(self.oldPwdView.snp.bottom).offset(0)
+        }
+        self.confirmPwdView.snp.makeConstraints { (maker) in
+            maker.left.right.height.equalTo(self.newPwdView).offset(0)
+            maker.top.equalTo(self.newPwdView.snp.bottom).offset(0)
         }
         self.doneBtn.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.codeTextFiled).offset(0)
-            maker.top.equalTo(self.pwdextFiled.snp.bottom).offset(20)
+            maker.left.equalTo(self.scrollView).offset(10)
+            maker.right.equalTo(self.scrollView.snp.right).offset(-10)
+            maker.top.equalTo(self.confirmPwdView.snp.bottom).offset(100)
             maker.height.equalTo(45)
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-20)
         }
@@ -152,46 +123,23 @@ class SPLoginPwdVC: SPBaseVC {
 }
 extension SPLoginPwdVC {
     @objc fileprivate func sp_clickDoneAction(){
-        guard sp_getString(string: self.codeTextFiled.text).count > 0 else {
-            sp_showTextAlert(tips: "请输入验证码")
+        guard sp_getString(string: self.oldPwdView.textFiled.text).count > 0 else {
+            sp_showTextAlert(tips: "请输入原密码")
             return
         }
-        guard sp_getString(string: self.pwdextFiled.text).count >= 6 else {
-            sp_showTextAlert(tips: "请输入密码,至少6位")
+        guard sp_getString(string: self.newPwdView.textFiled.text).count > 0 else {
+            sp_showTextAlert(tips: "请输入新密码")
+            return
+        }
+        guard sp_getString(string: self.confirmPwdView.textFiled.text).count > 0 else {
+            sp_showTextAlert(tips: "请输入确认新密码")
+            return
+        }
+        guard sp_getString(string: self.newPwdView.textFiled.text) == sp_getString(string: self.confirmPwdView.textFiled.text) else {
+            sp_showTextAlert(tips: "输入新密码与确认密码不一致")
             return
         }
     }
-    @objc fileprivate func sp_clickSendCodeAction(){
-        
-    }
-    /// 开始定时器
-    fileprivate func sp_startTimer(){
-        if let _ = self.timer {
-            return
-        }
-        self.timeOut = 60
-        self.timer = Timer(timeInterval: 1, target: self, selector: #selector(sp_timeRun), userInfo: nil, repeats: true)
-        RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)
-        
-    }
-    /// 定时器执行中
-    @objc fileprivate func sp_timeRun(){
-        self.timeOut = self.timeOut - 1
-        if self.timeOut <= 0 {
-            self.sp_stopTimer()
-        }else{
-            self.sendCodeBtn.setTitle("\(self.timeOut)s", for: UIControlState.normal)
-        }
-    }
-    /// 停止定时器
-    fileprivate func sp_stopTimer(){
-        if let t = self.timer {
-            if t.isValid {
-                t.invalidate()
-            }
-            self.timer = nil
-        }
-        self.sendCodeBtn.setTitle("重新发送", for: UIControlState.normal)
-        self.sendCodeBtn.isEnabled = true
-    }
+   
+    
 }

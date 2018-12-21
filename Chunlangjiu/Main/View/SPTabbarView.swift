@@ -56,8 +56,8 @@ class SPTabbarView:  UIView{
     }()
     fileprivate lazy var auctionBtn : UIButton = {
         let btn = self.sp_setupBtn(title: "竞拍", image: UIImage(named: "tabbar_auction"),selectImg: UIImage(named: "tabbar_auction_select"))
-        btn.sp_cornerRadius(cornerRadius: 31)
-        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue), width: sp_lineHeight)
+//        btn.sp_cornerRadius(cornerRadius: 31)
+//        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue), width: sp_lineHeight)
         btn.addTarget(self, action: #selector(sp_clickAuctionAction), for: UIControlEvents.touchUpInside)
         btn.backgroundColor = UIColor.white
         return btn

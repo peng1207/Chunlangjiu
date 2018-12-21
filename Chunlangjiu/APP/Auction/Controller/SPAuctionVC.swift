@@ -91,8 +91,7 @@ class SPAuctionVC: SPBaseVC {
         self.tableView.separatorStyle = .none
         self.tableView.estimatedSectionHeaderHeight = 0
         self.tableView.estimatedSectionFooterHeight = 0
-        self.tableView.estimatedRowHeight = 0
-        self.tableView.rowHeight = SP_AUCTION_PRODUCT_WIDTH * SP_PRODUCT_SCALE + 26
+        self.tableView.backgroundColor = self.view.backgroundColor
         self.view.addSubview(self.tableView)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.searchBtn)
         self.view.addSubview(self.topBtn)
@@ -156,6 +155,7 @@ extension SPAuctionVC : UITableViewDelegate ,UITableViewDataSource {
         var cell : SPAuctionTableCell? = tableView.dequeueReusableCell(withIdentifier: auctionCellID) as? SPAuctionTableCell
         if cell == nil {
             cell = SPAuctionTableCell(style: UITableViewCellStyle.default, reuseIdentifier: auctionCellID)
+            cell?.contentView.backgroundColor = self.view.backgroundColor
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray){
             let productModel = self.dataArray?[indexPath.row]
@@ -169,6 +169,12 @@ extension SPAuctionVC : UITableViewDelegate ,UITableViewDataSource {
             detaileVC.productModel = self.dataArray?[indexPath.row]
             self.navigationController?.pushViewController(detaileVC, animated: true)
         }
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 185
+        }
+        return 180
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.isScroll = true

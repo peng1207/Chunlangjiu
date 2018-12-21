@@ -17,6 +17,8 @@ class SPIndexGoods : SPBaseModel {
         model.type = type
         if sp_getString(string: type) == SP_AUCTION{
             model.name = "疯狂竞拍"
+        }else if sp_getString(string: type) == SP_HEADER{
+            model.name = "头部"
         }else{
             model.name = "好酒推荐"
         }

@@ -40,12 +40,7 @@ class SPIndexATableCell: UITableViewCell {
         self.auctionView.snp.makeConstraints { (maker) in
             maker.left.top.right.bottom.equalTo(self.contentView).offset(0)
         }
-        self.auctionView.productImageView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.auctionView.snp.left).offset(10)
-            maker.top.equalTo(self.auctionView.snp.top).offset(15)
-            maker.width.equalTo(SPIndexATableCell_Product_Width)
-            maker.height.equalTo(self.auctionView.productImageView.snp.width).multipliedBy(SP_PRODUCT_SCALE)
-        }
+        
     }
     deinit {
         

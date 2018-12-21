@@ -277,6 +277,7 @@
 		9ECB7C4C2121F038009E843B /* WEIPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4B2121F037009E843B /* WEIPageControl.swift */; };
 		9ECB7C4E2123498D009E843B /* SPSearchRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4D2123498D009E843B /* SPSearchRecord.swift */; };
 		9ECB7C5021248C54009E843B /* SPDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4F21248C54009E843B /* SPDataBase.swift */; };
+		9ED254AC21CBE70400A3166A /* SPProductAuctionCollectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254AB21CBE70400A3166A /* SPProductAuctionCollectCell.swift */; };
 		9EF4C67420EC7385007E9909 /* SPIndexVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67320EC7385007E9909 /* SPIndexVC.swift */; };
 		9EF4C67620EC7391007E9909 /* SPMineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67520EC7391007E9909 /* SPMineVC.swift */; };
 		9EF4C67820EC73A2007E9909 /* SPShopCartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */; };
@@ -671,6 +672,7 @@
 		9ECB7C4B2121F037009E843B /* WEIPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEIPageControl.swift; sourceTree = "<group>"; };
 		9ECB7C4D2123498D009E843B /* SPSearchRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSearchRecord.swift; sourceTree = "<group>"; };
 		9ECB7C4F21248C54009E843B /* SPDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDataBase.swift; sourceTree = "<group>"; };
+		9ED254AB21CBE70400A3166A /* SPProductAuctionCollectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductAuctionCollectCell.swift; sourceTree = "<group>"; };
 		9EF4C67320EC7385007E9909 /* SPIndexVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexVC.swift; sourceTree = "<group>"; };
 		9EF4C67520EC7391007E9909 /* SPMineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineVC.swift; sourceTree = "<group>"; };
 		9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopCartVC.swift; sourceTree = "<group>"; };
@@ -1218,6 +1220,7 @@
 				9E58EDB921457C8100DFC3F2 /* SPAuctionPriceList.swift */,
 				9E324CFE217E1E7E00F9AB5F /* SPProductRuleView.swift */,
 				9E324D00217E243000F9AB5F /* SPShowRule.swift */,
+				9ED254AB21CBE70400A3166A /* SPProductAuctionCollectCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2209,6 +2212,7 @@
 				9EF4C6DA20EFBFD5007E9909 /* SPConfrimSectionFootView.swift in Sources */,
 				9E89F0FA21295395000539A4 /* SPKeyboardTopView.swift in Sources */,
 				9E129F52210332A900218A33 /* SPProductExplainView.swift in Sources */,
+				9ED254AC21CBE70400A3166A /* SPProductAuctionCollectCell.swift in Sources */,
 				9E5F7AB821C2AEC000A9EF35 /* SPAboutVC.swift in Sources */,
 				9EF4C70820F35CEC007E9909 /* SPEvaluateListVC.swift in Sources */,
 				9EF4C6A620EE0B04007E9909 /* SPShopCartBtnView.swift in Sources */,
