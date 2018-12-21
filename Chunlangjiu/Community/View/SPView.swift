@@ -27,7 +27,7 @@ extension UIView{
     /// - Parameter corner: 圆角半径
     func sp_setCornerRadius(corner : CGFloat){
         sp_log(message: "\(self.bounds)")
-        let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.topRight], cornerRadii: CGSize(width: corner, height: corner))
+        let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: [UIRectCorner.allCorners], cornerRadii: CGSize(width: corner, height: corner))
         let maskLayer = CAShapeLayer()
         maskLayer.frame = self.bounds
         maskLayer.path = maskPath.cgPath

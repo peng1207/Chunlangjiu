@@ -466,7 +466,7 @@ extension SPIndexVC{
             }else{
                 self.defaultGood.dataArray = list
             }
-         
+            
         }
         sp_dealDataArray()
         sp_mainQueue {

@@ -101,7 +101,6 @@ class SPProductListVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "全部商品"
-//        self.view.backgroundColor = UIColor.white
         self.sp_setupUI()
         self.conditionView.selectBrand = self.brandModel 
         if self.canRequest {
@@ -251,6 +250,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
             }
         }else{
             let cell : SPProductListVCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectVCellID, for: indexPath) as! SPProductListVCell
+            cell.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
             if indexPath.row < sp_getArrayCount(array: self.dataArray) {
                 cell.productView.productModel = self.dataArray?[indexPath.row]
             }
@@ -280,8 +280,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
         if self.isH {
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
-        sp_log(message: "section is \(section)")
-        return  UIEdgeInsets(top: 5, left:0, bottom: 0, right: 0)
+        return  UIEdgeInsets(top: 5, left:10, bottom: 0, right: 10)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if self.isH {
@@ -294,7 +293,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
         if self.isH {
             return 0
         }else{
-            return 10
+            return 0
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
