@@ -109,6 +109,7 @@ class SPIndexVC: SPBaseVC {
         self.collectionView.register(SPIndexHeadHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: collectionHeadHeaderID)
         self.collectionView.register(SPIndexCollectHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
         self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.alwaysBounceVertical = true
         self.view.addSubview(self.collectionView)
       
         self.collectionView.sp_headerRefesh { [weak self]() in

@@ -16,24 +16,27 @@ class SPProductOfShopView:  UIView{
         imageView.sp_cornerRadius(cornerRadius: 20)
         return imageView
     }()
+    fileprivate lazy var typeImgView : UIImageView = {
+        let view = UIImageView()
+        return view
+    }()
     lazy var nameLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 16)
+        label.font = sp_getFontSize(size: 14)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         return label
     }()
     lazy var contentLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 12)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.font = sp_getFontSize(size: 11)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         return label
     }()
     lazy var filletView : SPFilletView = {
         let view = SPFilletView()
-        view.sp_cornerRadius(cornerRadius: 10)
-        view.textLabel.text = "查看全部商品"
-        view.textLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_ff9600.rawValue)
-        view.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_ff9600.rawValue), width: sp_lineHeight)
+        view.textLabel.text = "进店 >"
+        view.textLabel.font = sp_getFontSize(size: 11)
+        view.textLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         return view
     }()
     var shopModel : SPShopModel?{
@@ -52,12 +55,13 @@ class SPProductOfShopView:  UIView{
     fileprivate func sp_setupData(){
         self.iconImageView.sp_cache(string: self.shopModel?.shop_logo, plImage: sp_getLogoImg())
         self.nameLabel.text = sp_getString(string: self.shopModel?.shop_name)
-        self.contentLabel.text = sp_getString(string: self.shopModel?.shop_descript)
+        self.contentLabel.text = "店铺简介:\(sp_getString(string: self.shopModel?.shop_descript))"
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.iconImageView)
         self.addSubview(self.nameLabel)
+        self.addSubview(self.typeImgView)
         self.addSubview(self.contentLabel)
         self.addSubview(self.filletView)
         self.sp_addConstraint()
@@ -76,6 +80,13 @@ class SPProductOfShopView:  UIView{
             maker.top.equalTo(self.iconImageView.snp.top).offset(0)
             maker.right.lessThanOrEqualTo(self.filletView.snp.left).offset(-8)
             maker.height.greaterThanOrEqualTo(0)
+        }
+        self.typeImgView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.nameLabel.snp.right).offset(5)
+            maker.width.equalTo(60)
+            maker.height.equalTo(15)
+            maker.centerY.equalTo(self.nameLabel.snp.centerY).offset(0)
+            maker.right.lessThanOrEqualTo(self.filletView.snp.left).offset(-5)
         }
         self.contentLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.nameLabel.snp.left).offset(0)

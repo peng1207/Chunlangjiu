@@ -14,12 +14,12 @@ class SPProductView:  UIView{
     lazy var priceLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 18)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_c11f2f.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return label
     }()
     lazy var nameLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 16)
+        label.font = sp_getFontSize(size: 14)
         label.numberOfLines = 0
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         return label
@@ -35,6 +35,7 @@ class SPProductView:  UIView{
     }()
     lazy var countDownView : SPCountdownView = {
         let view = SPCountdownView()
+        view.titleLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         view.isHidden = true
         return view
     }()
@@ -42,10 +43,9 @@ class SPProductView:  UIView{
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("查看竞拍出价", for: UIControlState.normal)
         btn.setTitle("保密出价", for: UIControlState.disabled)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ff9600.rawValue), for: UIControlState.normal)
-        btn.sp_cornerRadius(cornerRadius: 10)
-        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_ff9600.rawValue), width: sp_lineHeight)
-        btn.titleLabel?.font = sp_getFontSize(size: 12)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.titleLabel?.font = sp_getFontSize(size: 8)
         btn.isHidden = true
         return btn
     }()
@@ -54,7 +54,7 @@ class SPProductView:  UIView{
         let label = UILabel()
         label.font = sp_getFontSize(size: 12)
         label.text = "竞拍方式:"
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.isHidden = true
         label.textAlignment = .right
         return label
@@ -67,6 +67,8 @@ class SPProductView:  UIView{
     }
     fileprivate var timeTop : Constraint!
     fileprivate var timeHeight : Constraint!
+    fileprivate var lookDetTop : Constraint!
+    fileprivate var typeTop : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -109,28 +111,28 @@ class SPProductView:  UIView{
             maker.left.equalTo(self.nameLabel.snp.left).offset(0)
             maker.right.equalTo(self.nameLabel.snp.right).offset(0)
             maker.height.greaterThanOrEqualTo(16)
-            maker.top.equalTo(self.countDownView.snp.bottom).offset(5)
-            maker.bottom.equalTo(self.snp.bottom).offset(-8)
+            maker.top.equalTo(self.specLabel.snp.bottom).offset(5)
+//            maker.bottom.equalTo(self.snp.bottom).offset(-8)
         }
         self.countDownView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.nameLabel.snp.left).offset(0)
-            self.timeTop =  maker.top.equalTo(self.specLabel.snp.bottom).offset(5).constraint
+            self.timeTop =  maker.top.equalTo(self.labelView.snp.bottom).offset(5).constraint
             maker.width.greaterThanOrEqualTo(0)
-            self.timeHeight = maker.height.equalTo(18).constraint
+            self.timeHeight = maker.height.equalTo(12).constraint
  
         }
         self.lookDetaile.snp.makeConstraints { (maker) in
             maker.right.lessThanOrEqualTo(self.snp.right).offset(-10)
-            maker.top.equalTo(self.labelView.snp.top).offset(0)
-            maker.height.equalTo(20)
-            maker.width.greaterThanOrEqualTo(110)
+           self.lookDetTop = maker.top.equalTo(self.countDownView.snp.bottom).offset(8).constraint
+            maker.height.equalTo(15)
+            maker.width.greaterThanOrEqualTo(60)
             maker.left.equalTo(self.typeLabel.snp.right).offset(10)
         }
         self.typeLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.nameLabel.snp.left).offset(0)
-//            maker.right.equalTo(self.lookDetaile.snp.left).offset(-10)
-            maker.top.equalTo(self.labelView.snp.top).offset(0)
-            maker.height.equalTo(self.countDownView.snp.height).offset(0)
+           self.typeTop = maker.top.equalTo(self.countDownView.snp.bottom).offset(10).constraint
+            maker.height.greaterThanOrEqualTo(0)
+            maker.bottom.equalTo(self.snp.bottom).offset(-8)
         }
     }
     deinit {
@@ -153,7 +155,6 @@ extension SPProductView {
         self.specLabel.text = sp_getString(string: productModel?.sub_title)
         self.labelView.listArray = self.productModel?.sp_getLabel()
         if let model = self.productModel,model.isAuction{
-            self.labelView.isHidden = true
             self.countDownView.isHidden = false
             self.lookDetaile.isHidden = false
             self.typeLabel.isHidden = false
@@ -184,14 +185,17 @@ extension SPProductView {
                 self.countDownView.secondLabel.text = sp_getString(string: date.second)
             }
             self.timeTop.update(offset: 5)
-            self.timeHeight.update(offset: 18)
+            self.timeHeight.update(offset: 12)
+            self.lookDetTop.update(offset: 8)
+            self.typeTop.update(offset: 10)
         }else{
-            self.labelView.isHidden = false
             self.countDownView.isHidden = true
             self.lookDetaile.isHidden = true
             self.typeLabel.isHidden = true
             self.timeHeight.update(offset: 0)
             self.timeTop.update(offset: 0)
+            self.lookDetTop.update(offset: 0)
+            self.typeTop.update(offset: 0)
         }
         
     }
