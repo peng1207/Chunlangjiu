@@ -15,6 +15,7 @@ class SPAuctionTableCell: UITableViewCell {
     lazy var auctionView : SPAuctionView = {
         let view = SPAuctionView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -32,6 +33,7 @@ class SPAuctionTableCell: UITableViewCell {
     fileprivate func sp_setupUI(){
         self.contentView.addSubview(self.auctionView)
         self.sp_addConstraint()
+        
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -43,6 +45,7 @@ class SPAuctionTableCell: UITableViewCell {
         }
         
     }
+    
     deinit {
         
     }

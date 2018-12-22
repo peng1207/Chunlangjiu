@@ -13,7 +13,7 @@ import SnapKit
 typealias SPDetaileScrollViewDidScrollBlock = (_ scrollView : UIScrollView) -> Void
 
 class SPProductDetaileView:  UIView {
-    fileprivate let SP_KVO_KEY_CONTENTSIZE = "contentSize"
+    
     fileprivate let SP_KVO_KEY_FRAME = "center"
     lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
@@ -68,6 +68,12 @@ class SPProductDetaileView:  UIView {
         view.backgroundColor = UIColor.white
         return view
     }()
+    lazy var detView : SPDetView = {
+        let view = SPDetView()
+        view.isHidden = true
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
     lazy var evaluateView : SPProductEvaluateView = {
         let view = SPProductEvaluateView()
         view.isHidden = true
@@ -76,7 +82,7 @@ class SPProductDetaileView:  UIView {
     }()
     lazy var recommendView : SPRecommendProductView = {
         let view = SPRecommendProductView()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor =  SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         view.isHidden = true
         return view
     }()
@@ -119,6 +125,7 @@ class SPProductDetaileView:  UIView {
         self.productScrollView.addSubview(self.ruleView)
         self.productScrollView.addSubview(self.tipsView)
         self.productScrollView.addSubview(self.shopView)
+        self.productScrollView.addSubview(self.detView)
         self.productScrollView.addSubview(self.evaluateView)
         self.productScrollView.addSubview(self.recommendView)
         self.productScrollView.addSubview(self.pullUpRefreshView)
@@ -167,17 +174,21 @@ class SPProductDetaileView:  UIView {
             maker.top.equalTo(self.evaluateView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
-    
+        self.detView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.productScrollView).offset(0)
+            maker.top.equalTo(self.shopView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
+        }
         self.recommendView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
-            self.recommendTop = maker.top.equalTo(self.shopView.snp.bottom).offset(10).constraint
+            self.recommendTop = maker.top.equalTo(self.detView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
         }
         self.pullUpRefreshView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
             maker.top.equalTo(self.recommendView.snp.bottom).offset(0)
-            maker.height.equalTo(refresher_heright)
-            maker.bottom.equalTo(self.productScrollView.snp.bottom).offset(0)
+            maker.height.equalTo(0)
+            maker.bottom.equalTo(self.productScrollView.snp.bottom).offset(-10)
         }
         
     }
@@ -254,6 +265,8 @@ extension SPProductDetaileView : UIScrollViewDelegate {
         self.productView.productModel = self.detaileModel?.item
         self.shopView.shopModel = self.detaileModel?.shop
         self.tipsView.content = sp_getString(string: self.detaileModel?.item?.explain)
+        self.detView.productModel = self.detaileModel?.item
+        self.detView.isHidden = false
         self.shopView.isHidden = false
         self.pullUpRefreshView.isHidden = false
         self.ruleView.content = sp_getString(string: self.detaileModel?.item?.rule)

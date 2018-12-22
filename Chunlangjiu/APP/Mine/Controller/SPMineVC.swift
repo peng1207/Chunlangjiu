@@ -266,7 +266,7 @@ extension SPMineVC: UICollectionViewDelegate ,UICollectionViewDataSource,UIColle
  
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 {
-            sp_log(message: "sp_getstatusBarHeight is \(sp_getstatusBarHeight())")
+             
             return CGSize(width: collectionView.frame.size.width, height: (sp_getstatusBarHeight() + SP_NAVGIT_HEIGHT + 170))
         }
         return CGSize(width: collectionView.frame.size.width, height: 44)
@@ -284,69 +284,7 @@ extension SPMineVC: UICollectionViewDelegate ,UICollectionViewDataSource,UIColle
                 if indexPath.row < sp_getArrayCount(array: sectionModel.dataArray){
                     self.pushVC = true
                     let model : SPMineModel = sectionModel.dataArray![indexPath.row]
-                
-                    
-                    switch model.mintType {
-                    case .address?:
-                        self.sp_pushAddressVC()
-                    case .addProduct?:
-                        self.sp_pushAddProduct()
-                    case .share?:
-                        self.sp_clickShare()
-                    case .pend_pay?:
-                        self.sp_pushOrderVC(orderState: SPOrderStatus.pendPay)
-                    case .pend_receipt?:
-                        self.sp_pushOrderVC(orderState: SPOrderStatus.receipt)
-                    case .evaluated?:
-                       sp_pushEvaluateVC()
-                    case .after_sale?:
-                        sp_pushAfterSaleVC(orderState: SPOrderStatus.all)
-                    case .all_order? :
-                        sp_pushOrderVC(orderState: SPOrderStatus.all)
-                    case .paydown? :
-                        sp_pushAuctionVC(orderState: SPOrderStatus.paydown)
-                    case .auction_ing?:
-                        sp_pushAuctionVC(orderState: SPOrderStatus.auction_ing)
-                    case .winning_bid?:
-                        sp_pushAuctionVC(orderState: SPOrderStatus.winning_bid)
-                    case .falling_mark? :
-                        sp_pushAuctionVC(orderState: SPOrderStatus.falling_mark)
-                    case .auction_receipt?:
-                        sp_pushAuctionVC(orderState: SPOrderStatus.auction_receipt)
-                    case .auction_all?:
-                        sp_pushAuctionVC(orderState: SPOrderStatus.all)
-                    case .deliver?:
-                        sp_pushOrderVC(orderState: SPOrderStatus.deliver)
-                    case .saleProduct?:
-                        sp_pushWebVC(url: "\(SP_GET_ONSALE_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "在售商品管理")
-                    case .warehouseProduct?:
-                        sp_pushWebVC(url: "\(SP_GET_INSTOCK_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "仓库商品管理")
-                    case .member?:
-                        if SPAPPManager.sp_isBusiness() {
-                             sp_pushWebVC(url: "\(SP_GER_SELLERINFO_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
-                        }else{
-                             sp_pushWebVC(url: "\(SP_GET_USER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
-                        }
-                    case .funds?:
-                        sp_pushFundsVC()
-//                         sp_pushWebVC(url: "\(SP_GET_CAPITAL_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "资金管理")
-                    case .collect?:
-                        sp_pushWebVC(url: "\(SP_GET_COLLECT_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "我的收藏")
-                    case .bank_card?:
-                         sp_pushWebVC(url: "\(SP_GET_BANK_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "银行卡管理")
-                    case .auctionProduct?:
-                         sp_pushWebVC(url: "\(SP_GET_AUCTION_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "竞拍商品管理")
-                    case .reviewProduct?:
-                        sp_pushWebVC(url: "\(SP_GET_PEND_WEB_UEL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "审核商品管理")
-                    case .cance?:
-                        sp_clickCanceOrder()
-                    case .valuation?:
-                           sp_pushWebVC(url: "\(SP_GET_EVALUATE_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "我的估值")
-                    case .none:
-                        sp_log(message: "none")
-                    case .some(_):
-                         sp_log(message: "some")
-                    }
+                    self.sp_dealSelect(mineModel: model)
                 }
             }
         }else{
@@ -364,6 +302,83 @@ extension SPMineVC: UICollectionViewDelegate ,UICollectionViewDataSource,UIColle
 }
 // MARK: - action push
 extension SPMineVC {
+    
+    fileprivate func sp_dealSelect(mineModel : SPMineModel?){
+        
+        guard SPAPPManager.sp_isLogin(isPush: true) else {
+            self.pushVC = true
+            return
+        }
+        
+        guard let model = mineModel else {
+            return
+        }
+        self.pushVC = true
+        switch model.mintType {
+        case .address?:
+            self.sp_pushAddressVC()
+        case .addProduct?:
+            self.sp_pushAddProduct()
+        case .share?:
+            self.sp_clickShare()
+        case .pend_pay?:
+            self.sp_pushOrderVC(orderState: SPOrderStatus.pendPay)
+        case .pend_receipt?:
+            self.sp_pushOrderVC(orderState: SPOrderStatus.receipt)
+        case .evaluated?:
+            sp_pushEvaluateVC()
+        case .after_sale?:
+            sp_pushAfterSaleVC(orderState: SPOrderStatus.all)
+        case .all_order? :
+            sp_pushOrderVC(orderState: SPOrderStatus.all)
+        case .paydown? :
+            sp_pushAuctionVC(orderState: SPOrderStatus.paydown)
+        case .auction_ing?:
+            sp_pushAuctionVC(orderState: SPOrderStatus.auction_ing)
+        case .winning_bid?:
+            sp_pushAuctionVC(orderState: SPOrderStatus.winning_bid)
+        case .falling_mark? :
+            sp_pushAuctionVC(orderState: SPOrderStatus.falling_mark)
+        case .auction_receipt?:
+            sp_pushAuctionVC(orderState: SPOrderStatus.auction_receipt)
+        case .auction_all?:
+            sp_pushAuctionVC(orderState: SPOrderStatus.all)
+        case .deliver?:
+            sp_pushOrderVC(orderState: SPOrderStatus.deliver)
+        case .saleProduct?:
+            sp_pushWebVC(url: "\(SP_GET_ONSALE_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "在售商品管理")
+        case .warehouseProduct?:
+            sp_pushWebVC(url: "\(SP_GET_INSTOCK_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "仓库商品管理")
+        case .member?:
+            if SPAPPManager.sp_isBusiness() {
+                sp_pushWebVC(url: "\(SP_GER_SELLERINFO_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
+            }else{
+                sp_pushWebVC(url: "\(SP_GET_USER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
+            }
+        case .funds?:
+            sp_pushFundsVC()
+        //                         sp_pushWebVC(url: "\(SP_GET_CAPITAL_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "资金管理")
+        case .collect?:
+            sp_pushWebVC(url: "\(SP_GET_COLLECT_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "我的收藏")
+        case .bank_card?:
+            sp_pushWebVC(url: "\(SP_GET_BANK_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "银行卡管理")
+        case .auctionProduct?:
+            sp_pushWebVC(url: "\(SP_GET_AUCTION_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "竞拍商品管理")
+        case .reviewProduct?:
+            sp_pushWebVC(url: "\(SP_GET_PEND_WEB_UEL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "审核商品管理")
+        case .cance?:
+            sp_clickCanceOrder()
+        case .valuation?:
+            sp_pushWebVC(url: "\(SP_GET_EVALUATE_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "我的估值")
+        case .none:
+            sp_log(message: "none")
+        case .some(_):
+            sp_log(message: "some")
+        }
+    
+    }
+    
+    
     fileprivate func sp_pushAddressVC(){
         let addressVC = SPAddressVC()
         addressVC.title = "地址列表"
@@ -382,8 +397,7 @@ extension SPMineVC {
             sp_pushRealNameVC()
             return
         }
-        
-        
+ 
         if sp_getString(string: realModel.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH{
            
             if sp_getString(string: userModel.identity) == SP_IS_ENTERPRISE {
@@ -394,6 +408,7 @@ extension SPMineVC {
                 
             }
            sp_changeIdent()
+           sp_transitionAnimation()
         }else{
             if  sp_getString(string: realModel.status) == SP_STATUS_ACTIVE || sp_getString(string: realModel.status) == SP_STATUS_FAILING{
                 if sp_getString(string: realModel.status) == SP_STATUS_ACTIVE  {
@@ -503,6 +518,11 @@ extension SPMineVC {
             
         }
     }
+    /// 点击银行卡
+    fileprivate func sp_clickBankCard(){
+        let bankCardVC = SPBankCardVC()
+        self.navigationController?.pushViewController(bankCardVC, animated: true)
+    }
     
     fileprivate func sp_getData(){
          self.dataArray = SPMineData.sp_getMineAllData()
@@ -586,6 +606,13 @@ extension SPMineVC {
         orderListVC.toolModel = toolModel
         orderListVC.title = "取消订单"
         self.navigationController?.pushViewController(orderListVC, animated: true)
+    }
+    fileprivate func sp_transitionAnimation(){
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationCurve(UIViewAnimationCurve.easeInOut)
+        UIView.setAnimationDuration(1.0)
+        UIView.setAnimationTransition(UIViewAnimationTransition.flipFromLeft, for: self.view, cache: true)
+        UIView.commitAnimations()
     }
 }
 

@@ -16,6 +16,8 @@
 		5610338321380CDF009DB376 /* SPOrderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5610338221380CDF009DB376 /* SPOrderFooterView.swift */; };
 		56107EEF21C3AD550012CFB9 /* SPQRCodeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56107EEE21C3AD550012CFB9 /* SPQRCodeUtil.swift */; };
 		56107EF121C3B16F0012CFB9 /* SPTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56107EF021C3B16F0012CFB9 /* SPTableDataSource.swift */; };
+		561C74E921CE1F5700132D88 /* SPMineTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561C74E821CE1F5700132D88 /* SPMineTableCell.swift */; };
+		561C74EB21CE2B1800132D88 /* SPOrderImgeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561C74EA21CE2B1800132D88 /* SPOrderImgeTableCell.swift */; };
 		56204CE821251A6800E47444 /* SPProductAddImgContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56204CE721251A6800E47444 /* SPProductAddImgContentView.swift */; };
 		56256FBE215A413F005242B0 /* SPConditionSortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56256FBD215A413F005242B0 /* SPConditionSortView.swift */; };
 		56256FC2215A56BF005242B0 /* SPPlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56256FC1215A56BF005242B0 /* SPPlaceModel.swift */; };
@@ -400,6 +402,8 @@
 		5610338221380CDF009DB376 /* SPOrderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderFooterView.swift; sourceTree = "<group>"; };
 		56107EEE21C3AD550012CFB9 /* SPQRCodeUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPQRCodeUtil.swift; sourceTree = "<group>"; };
 		56107EF021C3B16F0012CFB9 /* SPTableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTableDataSource.swift; sourceTree = "<group>"; };
+		561C74E821CE1F5700132D88 /* SPMineTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineTableCell.swift; sourceTree = "<group>"; };
+		561C74EA21CE2B1800132D88 /* SPOrderImgeTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderImgeTableCell.swift; sourceTree = "<group>"; };
 		56204CE721251A6800E47444 /* SPProductAddImgContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductAddImgContentView.swift; sourceTree = "<group>"; };
 		56256FBD215A413F005242B0 /* SPConditionSortView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConditionSortView.swift; sourceTree = "<group>"; };
 		56256FC1215A56BF005242B0 /* SPPlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPlaceModel.swift; sourceTree = "<group>"; };
@@ -894,6 +898,7 @@
 				9EFC5974217B11CF0002B4BE /* SPOrderLogicView.swift */,
 				9E0E17F4218B580E001B8E00 /* SPOrderInfoView.swift */,
 				9E0E17F6218B5C38001B8E00 /* SPOrderHeaderView.swift */,
+				561C74EA21CE2B1800132D88 /* SPOrderImgeTableCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1313,6 +1318,7 @@
 				9E34F6AA20F9B4B000D59ABD /* SPMineCollectCell.swift */,
 				9E34F6AE20F9DA8500D59ABD /* SPMineSectionHeaderView.swift */,
 				9E324D02217F836600F9AB5F /* SPMineEditView.swift */,
+				561C74E821CE1F5700132D88 /* SPMineTableCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2345,6 +2351,7 @@
 				9E020E1D2114C09D0028ED50 /* SPNetWorkManager.swift in Sources */,
 				9E34F6BB20FB3EF500D59ABD /* SPProductSearchHeaderView.swift in Sources */,
 				9EF4C6DE20EFCAD5007E9909 /* SPConfrimBtnView.swift in Sources */,
+				561C74EB21CE2B1800132D88 /* SPOrderImgeTableCell.swift in Sources */,
 				9EF4C69220ECB3A1007E9909 /* SPLoginVC.swift in Sources */,
 				9E5F7AAA21B9794700A9EF35 /* SPSetVC.swift in Sources */,
 				9E8140AF211757A50063A6E4 /* SPEvaluateModel.swift in Sources */,
@@ -2364,6 +2371,7 @@
 				9E020E1B2114BF340028ED50 /* SPAppRequest.swift in Sources */,
 				9EF4C6D820EFBAEF007E9909 /* SPConfrimSectionHeadView.swift in Sources */,
 				9EF4C6D020EF6E40007E9909 /* SPConfirmOrderVC.swift in Sources */,
+				561C74E921CE1F5700132D88 /* SPMineTableCell.swift in Sources */,
 				9EF4C6E020EFD3AD007E9909 /* SPAuctionTableCell.swift in Sources */,
 				56256FC2215A56BF005242B0 /* SPPlaceModel.swift in Sources */,
 				9E7A1FAC2143EC3B00C9BFD2 /* SPOrderLogisticsView.swift in Sources */,

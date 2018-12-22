@@ -119,7 +119,12 @@ class SPIndexVC: SPBaseVC {
         }
         self.collectionView.sp_footerRefresh { [weak self]() in
             if let page = self?.currentPage {
-                self?.currentPage = page + 1
+                if sp_getArrayCount(array: self?.defaultGood.dataArray) > 0 {
+                     self?.currentPage = page + 1
+                }else{
+                    self?.currentPage = 1
+                }
+               
                 self?.sp_sendGoodRequest()
             }
         }
@@ -560,9 +565,9 @@ extension SPIndexVC{
                         }
                     }
                     self.auctionGood.dataArray = list
-                    if self.isScroll == false {
+//                    if self.isScroll == false {
                         sp_dealDataArray(all: false)
-                    }
+//                    }
                 }
             }
         }

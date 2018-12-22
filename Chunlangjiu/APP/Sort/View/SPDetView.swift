@@ -25,7 +25,7 @@ class SPDetView:  UIView{
         }
     }
     fileprivate var dataArray : [[String : Any]]?
-    
+    fileprivate var heightConstraint : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -41,13 +41,15 @@ class SPDetView:  UIView{
         let jsonArray : [[String : Any]]? = sp_stringValueArr(sp_getString(string: self.productModel?.parameter)) as? [[String : Any]]
         if sp_getArrayCount(array: jsonArray) > 0 , let list : [[String : Any]] = jsonArray {
             for data in list {
-                
+                let value = sp_getString(string: data["value"])
+                if sp_getString(string: value).count > 0 {
+                    array.append(data)
+                }
             }
-            
-            
         }
-        
-        
+        self.dataArray = array
+        self.heightConstraint.update(offset: sp_getArrayCount(array: self.dataArray) * 30)
+        self.tableView.reloadData()
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -57,7 +59,7 @@ class SPDetView:  UIView{
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
         self.tableView.rowHeight = 30
-        
+        self.tableView.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), width: sp_lineHeight)
         self.addSubview(self.tableView)
         self.sp_addConstraint()
     }
@@ -71,8 +73,8 @@ class SPDetView:  UIView{
             maker.left.equalTo(self).offset(19)
             maker.right.equalTo(self).offset(-12)
             maker.top.equalTo(self.titleLabel.snp.bottom).offset(20)
-            maker.height.equalTo(40)
-            maker.bottom.equalTo(self.snp.bottom).offset(0)
+            self.heightConstraint = maker.height.equalTo(30).constraint
+            maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }
     }
     deinit {
@@ -97,7 +99,7 @@ extension SPDetView : UITableViewDelegate,UITableViewDataSource {
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             let dic : [String : Any]? = self.dataArray?[indexPath.row]
             if let d = dic {
-                cell?.titleLabel.text = sp_getString(string: d["title"])
+                cell?.titleLabel.text = "\(sp_getString(string: d["title"])):"
                 cell?.contentLabel.text = sp_getString(string: d["value"])
             }
             cell?.lineView.isHidden = sp_getArrayCount(array: self.dataArray) - 1 == indexPath.row ? true : false
@@ -128,10 +130,14 @@ class SPDetViewTableCell: UITableViewCell {
         return label
     }()
      lazy var lineView : UIView = {
-        return sp_getLineView()
+        let view = sp_getLineView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        return view
     }()
     fileprivate lazy var vlineView : UIView = {
-        return sp_getLineView()
+        let view = sp_getLineView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        return view
     }()
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -146,6 +152,7 @@ class SPDetViewTableCell: UITableViewCell {
     fileprivate func sp_setupUI(){
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.contentLabel)
+        self.contentView.addSubview(self.vlineView)
         self.contentView.addSubview(self.lineView)
         self.sp_addConstraint()
     }
@@ -157,11 +164,11 @@ class SPDetViewTableCell: UITableViewCell {
         }
         self.vlineView.snp.makeConstraints { (maker) in
             maker.top.bottom.equalTo(self.contentView).offset(0)
-            maker.left.equalTo(self.titleLabel.snp.right).offset(0)
+            maker.left.equalTo(self.titleLabel.snp.right).offset(2)
             maker.width.equalTo(sp_lineHeight)
         }
         self.contentLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.vlineView.snp.right).offset(1)
+            maker.left.equalTo(self.vlineView.snp.right).offset(2)
             maker.top.bottom.equalTo(self.contentView).offset(0)
             maker.right.equalTo(self.contentView.snp.right).offset(-5)
         }

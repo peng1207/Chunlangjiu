@@ -107,15 +107,16 @@ class SPProductDetaileVC: SPBaseVC {
     override func sp_setupUI() {
         self.navigationItem.title = "商品详情"
      
-        self.view.addSubview(self.scrollView)
+        self.view.addSubview(self.detaileView)
         self.view.addSubview(self.bottomView)
-        self.scrollView.addSubview(self.detaileView)
+//        self.scrollView.addSubview(self.detaileView)
+       
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
      
-        self.scrollView.snp.makeConstraints { (maker) in
+        self.detaileView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
             maker.top.equalTo(self.view).offset(0)
             maker.bottom.equalTo(self.bottomView.snp.top).offset(0)
@@ -129,16 +130,16 @@ class SPProductDetaileVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-        self.detaileView.snp.makeConstraints { (maker) in
-            maker.left.top.bottom.equalTo(self.scrollView).offset(0)
-            maker.width.equalTo(self.scrollView.snp.width).offset(0)
-            maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
-        }
+//        self.detaileView.snp.makeConstraints { (maker) in
+//            maker.left.top.bottom.equalTo(self.scrollView).offset(0)
+//            maker.width.equalTo(self.scrollView.snp.width).offset(0)
+//            maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
+//        }
         
         
     }
     deinit {
-        self.scrollView.delegate = nil
+//        self.scrollView.delegate = nil
         
     }
 }
@@ -184,8 +185,8 @@ extension SPProductDetaileVC {
     }
     
     fileprivate func sp_dealTopBtnClick(index : Int){
-        self.scrollView.contentOffset = CGPoint(x: self.scrollView.frame.size.width * CGFloat(integerLiteral: index), y: 0)
-        self.sp_dealTopView(index: index)
+//        self.scrollView.contentOffset = CGPoint(x: self.scrollView.frame.size.width * CGFloat(integerLiteral: index), y: 0)
+//        self.sp_dealTopView(index: index)
     }
     fileprivate func sp_dealTopView(index : Int){
         if index == 0 {

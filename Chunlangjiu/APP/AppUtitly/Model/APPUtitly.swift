@@ -16,7 +16,7 @@ let SP_BANNER_SCALE : CGFloat  = 1
 let SP_IS_ENTERPRISE  = "1"
 /// 是否显示竞拍的功能
 let SP_ISSHOW_AUCTION = true
-
+let SP_KVO_KEY_CONTENTSIZE = "contentSize"
 /// 获取默认的图片
 ///
 /// - Returns: 图片

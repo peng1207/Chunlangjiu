@@ -242,6 +242,7 @@ class SPAppRequest {
                                         p.pledge = sp_getString(string: auction?["pledge"])
                                         p.is_pay = sp_getString(string: auction?["is_pay"])
                                         p.original_bid = sp_getString(string: auction?["original_bid"])
+                                        p.sp_getSecond()
                                     }
                                 }
                                 if SP_ISSHOW_AUCTION {

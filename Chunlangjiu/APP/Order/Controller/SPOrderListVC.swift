@@ -40,6 +40,7 @@ class SPOrderListVC: SPBaseVC {
         self.tableView.separatorStyle = .none
         self.tableView.rowHeight = 70
         self.tableView.showsVerticalScrollIndicator = false
+        self.tableView.backgroundColor = self.view.backgroundColor
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.noData);
         self.tableView.sp_headerRefesh {[weak self] () in
@@ -90,15 +91,31 @@ extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section < sp_getArrayCount(array: self.dataArray) {
             let orderModel  = self.dataArray?[section]
-            return sp_getArrayCount(array: orderModel?.order)
+            return sp_getArrayCount(array: orderModel?.order) > 0 ? 1 : 0
         }
         return 0
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var model : SPOrderModel?
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+            model = self.dataArray?[indexPath.section]
+        }
+        
+        if sp_getArrayCount(array: model?.order) > 1 {
+            let orderImgCellID = "orderImgCellID"
+            var imgCell : SPOrderImgeTableCell? = tableView.dequeueReusableCell(withIdentifier: orderImgCellID) as? SPOrderImgeTableCell
+            if imgCell == nil {
+                imgCell = SPOrderImgeTableCell(style: UITableViewCellStyle.default, reuseIdentifier: orderImgCellID)
+            }
+            imgCell?.model = model
+            return imgCell!
+        }
+        
         let orderCellID = "orderCellID"
         var cell : SPOrderTableCell? = tableView.dequeueReusableCell(withIdentifier: orderCellID) as? SPOrderTableCell
         if cell == nil {
             cell = SPOrderTableCell(style: UITableViewCellStyle.default, reuseIdentifier: orderCellID)
+            cell?.contentView.backgroundColor = self.view.backgroundColor
         }
         if indexPath.section < sp_getArrayCount(array: self.dataArray) {
               let orderModel  = self.dataArray?[indexPath.section]
