@@ -10,20 +10,19 @@ import Foundation
 
 import SnapKit
 class SPMineVC: SPBaseVC {
-    fileprivate var collectionView : UICollectionView!
-    fileprivate var dataArray : Array<SPMineSectionModel>?
-    fileprivate let SPMineHeaderViewID = "SPMineHeaderViewID"
-    fileprivate let SPMineCollectCellID = "SPMineCollectCellID"
-    fileprivate let SPMineSectionHeaderViewID = "SPMineSectionHeaderViewID"
-    fileprivate let SPMineSectionFooterViewID = "SPMineSectionFooterViewID"
-    fileprivate var pushVC : Bool = false
-    fileprivate lazy var setBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "mine_setting"), for: UIControlState.normal)
-          btn.setImage(UIImage(named: "mine_setting"), for: UIControlState.highlighted)
-        btn.addTarget(self, action: #selector(sp_clickSet), for: UIControlEvents.touchUpInside)
-        return btn
+    fileprivate var tableView : UITableView!
+    fileprivate lazy var headerView : SPMineHeaderView = {
+        let view = SPMineHeaderView(frame:  CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getstatusBarHeight() + SP_NAVGIT_HEIGHT + 125 + 18))
+    
+        view.clickIdent = { [weak self] in
+            self?.sp_clickIdentAction()
+        }
+        return view
     }()
+    fileprivate var dataArray : [SPMineSectionModel]?
+  
+    fileprivate var pushVC : Bool = false
+     
     private var countModel : SPMineCountModel?
     private var memberInfo : SPMemberModel?
     /// 企业认证状态
@@ -54,32 +53,26 @@ class SPMineVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.collectionView.backgroundColor = UIColor.white
-        self.collectionView.bounces = false
-//        self.collectionView.backgroundColor = self.view.backgroundColor
-        self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.register(SPMineCollectCell.self, forCellWithReuseIdentifier: SPMineCollectCellID)
-        self.collectionView.register(SPMineHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: SPMineHeaderViewID)
-        self.collectionView.register(SPMineSectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: SPMineSectionHeaderViewID)
-        self.collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: SPMineSectionFooterViewID)
-        self.view.addSubview(self.collectionView)
-        self.view.addSubview(self.setBtn)
+        self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.separatorStyle = .none
+        self.tableView.estimatedRowHeight = 120
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.backgroundColor = self.view.backgroundColor
+        self.tableView.tableHeaderView = self.headerView
+        self.view.addSubview(self.tableView)
         if #available(iOS 11.0, *) {
-            self.collectionView.contentInsetAdjustmentBehavior = .never
+            self.tableView.contentInsetAdjustmentBehavior = .never
         } else {
             // Fallback on earlier versions
         }
+
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.collectionView.snp.makeConstraints { (maker) in
+        self.tableView.snp.makeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
@@ -87,208 +80,46 @@ class SPMineVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-        self.setBtn.snp.makeConstraints { (maker) in
-            maker.width.equalTo(23)
-            maker.height.equalTo(23)
-            maker.right.equalTo(self.view.snp.right).offset(-10)
-            maker.top.equalTo(sp_getstatusBarHeight() + 12)
-        }
+        
     }
     deinit {
         
     }
 }
 // MARK: - delegate
-extension SPMineVC: UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+extension SPMineVC: UITableViewDelegate ,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sp_getArrayCount(array: self.dataArray) > 0 ? 1 : 0
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sp_getArrayCount(array: self.dataArray)
     }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {
-            return 0
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let mineTableCellID = "mineTableCellID"
+        var cell : SPMineTableCell? = tableView.dequeueReusableCell(withIdentifier: mineTableCellID) as? SPMineTableCell
+        if cell == nil {
+            cell = SPMineTableCell(style: UITableViewCellStyle.default, reuseIdentifier: mineTableCellID)
+            cell?.contentView.backgroundColor = self.view.backgroundColor
         }
-        if section <   sp_getArrayCount(array: self.dataArray) {
-            let sectionModel : SPMineSectionModel = self.dataArray![section]
-            return sp_getArrayCount(array: sectionModel.dataArray)
-        }
-        return 0
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell : SPMineCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: SPMineCollectCellID, for: indexPath) as! SPMineCollectCell
-      
-        if indexPath.section <   sp_getArrayCount(array: self.dataArray) {
-            let sectionModel : SPMineSectionModel = self.dataArray![indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: sectionModel.dataArray){
-                let mode = sectionModel.dataArray![indexPath.row]
-                mode.num = SPMineData.sp_getItemCount(mineModel: mode, countModel: self.countModel)
-                cell.model = mode
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            cell?.sectionModel = self.dataArray?[indexPath.row]
+            cell?.selectBlock = { [weak self] (model) in
+                self?.sp_dealSelect(mineModel: model)
             }
         }
-        return cell
+        return cell!
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = Int(collectionView.frame.size.width / 5.0)
-        return CGSize(width: width, height: width)
-    }
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var reusableview:UICollectionReusableView!
-        if kind == UICollectionElementKindSectionHeader {
-            if indexPath.section == 0 {
-                reusableview = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: SPMineHeaderViewID, for: indexPath)
-                let view : SPMineHeaderView = reusableview as! SPMineHeaderView
-                view.loginBlock = {[weak self ]in
-                    self?.sp_pushLogin()
-                }
-                view.authBlock = {[weak self ]in
-                    self?.sp_clickAuthAction()
-                }
-                view.iconBlock = {[weak self ]in
-                    self?.sp_clickIconAction()
-                }
-                view.identityBlock = {[weak self ]in
-                    self?.sp_clickIdentAction()
-                }
-                view.compleBlock = {[weak self ]in
-                    self?.sp_clickCompany()
-                }
-                view.editBlock = { [weak self ]in
-                    self?.sp_clickEdit()
-                }
-                var isAuth = false
-                var isShowReal = true
-                if sp_getString(string: self.companyAuth?.status) == SP_STATUS_LOCKED{
-                    view.componBtn.isSelected = true
-                    view.componBtn.isEnabled = true
-                    view.componBtn.isHidden = false
-                }else if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH{
-                    view.componBtn.isSelected = false
-                    view.componBtn.isEnabled = false
-                    view.componBtn.isHidden = true
-                    isShowReal = false
-                    isAuth = true
-                }else{
-                    view.componBtn.isSelected = false
-                    view.componBtn.isEnabled = true
-                    view.componBtn.isHidden = false
-                }
-                if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_LOCKED{
-                    view.authBtn.isEnabled = true
-                    view.authBtn.isSelected = true
-                }else if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH{
-                    view.authBtn.isEnabled = false
-                    view.authBtn.isHidden = true
-                    isAuth = true
-                    isShowReal = false
-                }else{
-                    view.authBtn.isSelected = false
-                    view.authBtn.isEnabled = true
-                }
-                view.sp_show(realName: isShowReal)
-                view.authResultBtn.isSelected = isAuth ? true : false
-                view.memberModel = self.memberInfo
-                view.countModel = self.countModel
-                if SPAPPManager.sp_isBusiness(){
-                    if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH {
-                        view.identityBtn.setTitle(" 企业卖家", for: UIControlState.normal)
-                        view.identityBtn.setImage(UIImage(named: "public_company"), for: UIControlState.normal)
-                    }else{
-                         view.identityBtn.setTitle(" 个人卖家", for: UIControlState.normal)
-                          view.identityBtn.setImage(UIImage(named: "public_people"), for: UIControlState.normal)
-                    }
-                    if sp_getString(string: self.memberInfo?.shop_name).count > 0 {
-                        view.nameLabel.text = sp_getString(string: self.memberInfo?.shop_name)
-                    }else{
-                        if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH{
-                            view.nameLabel.text = sp_getString(string: self.memberInfo?.company_name)
-                        }else if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH{
-                            view.nameLabel.text = sp_getString(string: self.memberInfo?.name)
-                        }
-                        if sp_getString(string: view.nameLabel.text).count == 0 {
-                            view.nameLabel.text = sp_getString(string: self.memberInfo?.username)
-                        }
-                    }
-                    
-                }else{
-                    if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH {
-                        view.identityBtn.setTitle(" 企业买家", for: UIControlState.normal)
-                          view.identityBtn.setImage(UIImage(named: "public_company"), for: UIControlState.normal)
-                    }else{
-                        view.identityBtn.setTitle(" 个人买家", for: UIControlState.normal)
-                         view.identityBtn.setImage(UIImage(named: "public_people"), for: UIControlState.normal)
-                    }
-                    view.nameLabel.text = sp_getString(string: self.memberInfo?.username)
-                }
-                if sp_getString(string: view.nameLabel.text).count == 0 {
-                    view.nameLabel.text = sp_getString(string: self.memberInfo?.login_account)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            let sectionModel = self.dataArray?[indexPath.row]
+            if let model = sectionModel {
+                if model.type == .orderManager{
+                    sp_pushOrderVC()
+                }else if model.type == .productManager{
+                    sp_pushProductManager()
                 }
                 
-                let isLogin = SPAPPManager.sp_isLogin(isPush: false)
-                if isLogin  == false {
-                    view.authBtn.isHidden = true
-                    view.componBtn.isHidden = true
-                }
-                
-                
-            }else{
-                reusableview = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: SPMineSectionHeaderViewID, for: indexPath)
-                reusableview.backgroundColor = UIColor.white
-                if indexPath.section <   sp_getArrayCount(array: self.dataArray) {
-                      let sectionModel : SPMineSectionModel = self.dataArray![indexPath.section]
-                    let view : SPMineSectionHeaderView = reusableview as! SPMineSectionHeaderView
-                    view.titleLabel.text = sp_getString(string: sectionModel.title)
-                    if sectionModel.type == .orderManager || sectionModel.type == .auctionOrder || sectionModel.type == .productManager{
-                        view.nextImageView.isHidden = false
-                    }else{
-                        view.nextImageView.isHidden = true
-                    }
-                    view.clickBlock = {[weak self ]in
-                        if SPAPPManager.sp_isLogin(isPush: true){
-                            self?.pushVC = true
-                            if sectionModel.type == .orderManager {
-                                self?.sp_pushOrderVC(orderState: .all)
-                            }else if  sectionModel.type == .auctionOrder {
-                                self?.sp_pushAuctionVC()
-                            }else if sectionModel.type == .productManager{
-                                self?.sp_pushProductManager()
-                            }
-                        }else{
-                            self?.pushVC = true
-                        }
-                    }
-                }
             }
-        }else if (kind == UICollectionElementKindSectionFooter){
-            reusableview = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: SPMineSectionFooterViewID, for: indexPath)
-            reusableview.backgroundColor = self.view.backgroundColor
-        }
-        return reusableview
-    }
- 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if section == 0 {
-             
-            return CGSize(width: collectionView.frame.size.width, height: (sp_getstatusBarHeight() + SP_NAVGIT_HEIGHT + 170))
-        }
-        return CGSize(width: collectionView.frame.size.width, height: 44)
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if section == 0 {
-            return CGSize(width: collectionView.frame.size.width, height: 0)
-        }
-        return CGSize(width: collectionView.frame.size.width, height: 10)
-    }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if SPAPPManager.sp_isLogin() {
-            if indexPath.section <   sp_getArrayCount(array: self.dataArray) {
-                let sectionModel : SPMineSectionModel = self.dataArray![indexPath.section]
-                if indexPath.row < sp_getArrayCount(array: sectionModel.dataArray){
-                    self.pushVC = true
-                    let model : SPMineModel = sectionModel.dataArray![indexPath.row]
-                    self.sp_dealSelect(mineModel: model)
-                }
-            }
-        }else{
-            self.pushVC = true
         }
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -370,6 +201,12 @@ extension SPMineVC {
             sp_clickCanceOrder()
         case .valuation?:
             sp_pushWebVC(url: "\(SP_GET_EVALUATE_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "我的估值")
+        case .set?:
+            sp_clickSet()
+        case .customServer?:
+            sp_pushCustomServer()
+        case .fans?:
+            sp_pushFans()
         case .none:
             sp_log(message: "none")
         case .some(_):
@@ -377,7 +214,14 @@ extension SPMineVC {
         }
     
     }
-    
+    fileprivate func sp_pushFans(){
+        let fansVC = SPFansVC()
+        self.navigationController?.pushViewController(fansVC, animated: true)
+    }
+    fileprivate func sp_pushCustomServer(){
+        let serverVC = SPCustomerServiceVC()
+        self.navigationController?.pushViewController(serverVC, animated: true)
+    }
     
     fileprivate func sp_pushAddressVC(){
         let addressVC = SPAddressVC()
@@ -408,6 +252,7 @@ extension SPMineVC {
                 
             }
            sp_changeIdent()
+           self.headerView.sp_setupData()
            sp_transitionAnimation()
         }else{
             if  sp_getString(string: realModel.status) == SP_STATUS_ACTIVE || sp_getString(string: realModel.status) == SP_STATUS_FAILING{
@@ -526,7 +371,7 @@ extension SPMineVC {
     
     fileprivate func sp_getData(){
          self.dataArray = SPMineData.sp_getMineAllData()
-        self.collectionView.reloadData()
+        self.tableView.reloadData()
     }
     
     fileprivate func sp_pushOrderVC(orderState : SPOrderStatus = .all){
@@ -659,7 +504,7 @@ extension SPMineVC{
             if code == SP_Request_Code_Success {
                 if let model = self?.memberInfo {
                     model.head_portrait = imgUrl
-                    self?.collectionView.reloadData()
+                    self?.tableView.reloadData()
                 }
             }
             
@@ -698,7 +543,7 @@ extension SPMineVC{
     private func sp_dealCountRequest(code : String,model:SPMineCountModel?,errorModel : SPRequestError?){
         if code == SP_Request_Code_Success {
             self.countModel = model
-            self.collectionView.reloadData()
+            self.tableView.reloadData()
         }
     }
     /// 获取会员信息请求
@@ -711,7 +556,7 @@ extension SPMineVC{
     private func sp_dealMemberInfoRequest(code:String,memberModel:SPMemberModel?,errorModel:SPRequestError?){
             if code == SP_Request_Code_Success {
                 self.memberInfo = memberModel;
-                self.collectionView.reloadData()
+                self.headerView.memberModel = self.memberInfo
             }
     }
     fileprivate func sp_sendCompanyAuthStatus(){
@@ -719,7 +564,7 @@ extension SPMineVC{
         SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in
             if code == SP_Request_Code_Success{
                 self?.companyAuth = model
-                self?.collectionView.reloadData()
+                self?.tableView.reloadData()
             }
         }
     }
@@ -728,7 +573,7 @@ extension SPMineVC{
         SPAppRequest.sp_getRealNameAuth(requestModel: request) { [weak self](code , model , errorModel) in
             if code == SP_Request_Code_Success{
                 self?.realNameAuth = model
-                self?.collectionView.reloadData()
+                self?.tableView.reloadData()
             }
         }
     }
@@ -744,7 +589,7 @@ extension SPMineVC{
                 if let model = self?.memberInfo {
                     model.shop_name = name
                 }
-                self?.collectionView.reloadData()
+                self?.tableView.reloadData()
                 sp_showTextAlert(tips: sp_getString(string: msg).count >  0 ? sp_getString(string: msg) : "更改成功")
             }else{
                 sp_showTextAlert(tips: msg)

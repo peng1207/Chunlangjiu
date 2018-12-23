@@ -56,11 +56,13 @@ class SPRecommendProductCollectCell: UICollectionViewCell {
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
+        self.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         self.contentView.addSubview(self.productImageView)
         self.contentView.addSubview(self.nameLabel)
         self.contentView.addSubview(self.priceLabel)
         self.productImageView.addSubview(self.auctionImageView)
         self.sp_addConstraint()
+        self.contentView.sp_setCornerRadius(corner: 5)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -70,12 +72,12 @@ class SPRecommendProductCollectCell: UICollectionViewCell {
         }
         self.nameLabel.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.contentView).offset(0)
-            maker.top.equalTo(self.productImageView.snp.bottom).offset(0)
+            maker.top.equalTo(self.productImageView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.priceLabel.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.contentView).offset(0)
-            maker.bottom.equalTo(self.contentView).offset(0)
+            maker.bottom.equalTo(self.contentView).offset(-14)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.auctionImageView.snp.makeConstraints { (maker) in

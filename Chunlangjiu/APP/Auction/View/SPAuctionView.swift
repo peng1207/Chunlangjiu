@@ -21,9 +21,9 @@ class SPAuctionView:  UIView{
     }()
     lazy var numLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 12)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-        label.textAlignment = NSTextAlignment.right
+        label.font = sp_getFontSize(size: 10)
+        label.textAlignment = .center
+        label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return label
     }()
     
@@ -51,11 +51,12 @@ class SPAuctionView:  UIView{
             self.countDownView.secondLabel.text = sp_getString(string: date.second)
         }
         let numAtt = NSMutableAttributedString()
-        let numTitleAtt = NSAttributedString(string: "出价人数", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)])
-        numAtt.append(numTitleAtt)
-        let numNumAtt =  NSAttributedString(string: sp_getString(string: self.productModel?.auction_number), attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)])
+        let numNumAtt =  NSAttributedString(string: " \(sp_getString(string: self.productModel?.auction_number))", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 10),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)])
         numAtt.append(numNumAtt)
-        
+        let numTitleAtt = NSAttributedString(string: "次出价 ", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 8),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)])
+        numAtt.append(numTitleAtt)
+       
+        self.numLabel.attributedText = numAtt
         self.productView.productModel = self.productModel
     }
     

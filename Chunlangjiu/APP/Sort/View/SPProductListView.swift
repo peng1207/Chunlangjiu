@@ -21,7 +21,7 @@ class SPProductContentView:  UIView{
         let view = UIImageView()
         return view
     }()
-    fileprivate lazy var shopNameLabel : UILabel = {
+    lazy var shopNameLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 11)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
@@ -73,7 +73,7 @@ class SPProductContentView:  UIView{
         imageView.isHidden = true
         return imageView
     }()
-    fileprivate lazy var entShopBtn : UIButton = {
+    lazy var entShopBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("进店 >", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)

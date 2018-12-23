@@ -81,7 +81,7 @@ class SPRecommendProductView:  UIView{
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         self.collectionView.showsHorizontalScrollIndicator = false
-        self.collectionView.register(SPProductListVCell.self, forCellWithReuseIdentifier: SP_RecommendProductCellID)
+        self.collectionView.register(SPRecommendProductCollectCell.self, forCellWithReuseIdentifier: SP_RecommendProductCellID)
         self.collectionView.addObserver(self, forKeyPath: SP_KVO_KEY_CONTENTSIZE, options: NSKeyValueObservingOptions.new, context: nil)
         self.addSubview(self.collectionView)
  
@@ -118,9 +118,9 @@ extension SPRecommendProductView : UICollectionViewDelegate,UICollectionViewData
         return sp_getArrayCount(array: self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell : SPProductListVCell = collectionView.dequeueReusableCell(withReuseIdentifier: SP_RecommendProductCellID, for: indexPath) as! SPProductListVCell
+        let cell : SPRecommendProductCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: SP_RecommendProductCellID, for: indexPath) as! SPRecommendProductCollectCell
         if  indexPath.row < sp_getArrayCount(array: self.dataArray) {
-             cell.productView.productModel = self.dataArray?[indexPath.row]
+             cell.productModel = self.dataArray?[indexPath.row]
         }
         
         return cell
@@ -128,7 +128,7 @@ extension SPRecommendProductView : UICollectionViewDelegate,UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width =  NSInteger((collectionView.frame.size.width - 25) / 2.0)
-        return  CGSize(width: CGFloat(width), height:  (CGFloat(width) * SP_PRODUCT_SCALE ) + 115 )
+        return  CGSize(width: CGFloat(width), height:  (CGFloat(width) * SP_PRODUCT_SCALE ) + 85 )
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5, left: 10, bottom: 0, right: 10)

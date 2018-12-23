@@ -55,6 +55,10 @@ class SPCustomerServiceVC: SPBaseVC {
     }
     /// 处理有没数据
     override func sp_dealNoData(){
+      
+    }
+    /// 添加约束
+    fileprivate func sp_addConstraint(){
         self.phoneView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
             maker.top.equalTo(self.view).offset(10)
@@ -70,10 +74,6 @@ class SPCustomerServiceVC: SPBaseVC {
             maker.height.equalTo(self.wxView.snp.height).offset(0)
             maker.top.equalTo(self.wxView.snp.bottom).offset(0)
         }
-    }
-    /// 添加约束
-    fileprivate func sp_addConstraint(){
-        
     }
     deinit {
         

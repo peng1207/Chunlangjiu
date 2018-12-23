@@ -42,21 +42,24 @@ enum SPMineType : Int {
     case auction_all      = 30          // 竞拍订单 全部订单
     case cance            = 31          // 取消订单
     case valuation        = 32          // 我的估值
+    case customServer     = 33          // 我的客服
+    case fans             = 34          // 粉丝推荐
+    case set              = 35          // 设置
 }
 
 class SPMineData {
     
     class func sp_getMineAllData() -> Array<SPMineSectionModel>{
         var array : Array<SPMineSectionModel> = Array()
-        array.append(sp_getInfo())
+//        array.append(sp_getInfo())
         array.append(sp_getOrderManager())
        
         if SPAPPManager.sp_isBusiness() {
             array.append(sp_getProductManager())
         }else{
-            if SP_ISSHOW_AUCTION{
-                 array.append(sp_getAuctionOrder())
-            }
+//            if SP_ISSHOW_AUCTION{
+//                 array.append(sp_getAuctionOrder())
+//            }
             
         }
         array.append(sp_getMineManager())
@@ -89,11 +92,15 @@ class SPMineData {
 //        if sp_getString(string: SPAPPManager.instance().userModel?.identity) != SP_IS_ENTERPRISE {
 //              array.append(self.sp_get_evaluatedModel())
 //        }
-        array.append(self.sp_get_after_saleModel())
+       
         if SPAPPManager.sp_isBusiness() {
             array.append(sp_get_cance())
+             array.append(self.sp_get_after_saleModel())
+            model.rowCount = 5
         }else{
-            array.append(self.sp_get_all_order())
+            array.append(self.sp_get_after_saleModel())
+            model.rowCount = 4
+//            array.append(self.sp_get_all_order())
         }
         
         model.dataArray = array
@@ -126,12 +133,13 @@ class SPMineData {
             array.append(self.sp_get_bank_card())
         }else{
              array.append(self.sp_get_collect())
-            array.append(sp_get_share())
-            array.append(sp_get_member())
-            array.append(sp_get_address())
-            array.append(sp_get_bank_card())
+             array.append(sp_get_valuation())
+            array.append(sp_get_customServer())
+            array.append(sp_get_fans())
+            array.append(sp_get_set())
+            model.rowCount = 3
         }
-        array.append(sp_get_valuation())
+       
         model.dataArray = array
         return model
     }
@@ -141,12 +149,17 @@ class SPMineData {
         model.type = SPMineType.productManager
         var array : Array<SPMineModel> = Array()
         array.append(self.sp_get_addProduct())
+        array.append(self.sp_get_reviewProduct())
+        array.append(self.sp_get_warehouseProduct())
         array.append(self.sp_get_saleProductt())
         if SP_ISSHOW_AUCTION {
             array.append(self.sp_get_auctionProduct())
+            model.rowCount = 5
+        }else{
+            model.rowCount = 4
         }
-        array.append(self.sp_get_warehouseProduct())
-        array.append(self.sp_get_reviewProduct())
+        
+        
         model.dataArray = array
         return model
     }
@@ -161,7 +174,7 @@ class SPMineData {
         let model = SPMineModel()
         model.title = "待发货"
         model.mintType = SPMineType.deliver
-        model.image = UIImage(named: "mine_pend_receipt")
+        model.image = UIImage(named: "mine_pend_deliver")
         return model
     }
     fileprivate class func sp_get_pend_receiptModel() -> SPMineModel{
@@ -278,7 +291,7 @@ class SPMineData {
     }
     fileprivate class func sp_get_addProduct() -> SPMineModel {
         let model  = SPMineModel()
-        model.title = "添加商品"
+        model.title = "上传商品"
         model.image = UIImage(named: "mine_addProduct")
         model.mintType = SPMineType.addProduct
         return model
@@ -314,7 +327,7 @@ class SPMineData {
     fileprivate class func sp_get_cance()-> SPMineModel{
         let model  = SPMineModel()
         model.title = "取消订单"
-        model.image = UIImage(named: "mine_all_order")
+        model.image = UIImage(named: "mine_cance")
         model.mintType = SPMineType.cance
         return model
     }
@@ -323,6 +336,27 @@ class SPMineData {
         model.title = "我的估值"
         model.image = UIImage(named: "public_valuation")
         model.mintType = .valuation
+        return model
+    }
+    fileprivate class func sp_get_customServer()->SPMineModel {
+        let model = SPMineModel()
+        model.title = "我的客服"
+        model.image = UIImage(named: "mine_customserver")
+        model.mintType = .customServer
+        return model
+    }
+    fileprivate class func sp_get_fans()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "粉丝推荐"
+        model.image = UIImage(named: "mine_fans")
+        model.mintType = .fans
+        return model
+    }
+    fileprivate class func sp_get_set()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "设置"
+        model.image = UIImage(named: "mine_setting")
+        model.mintType = .set
         return model
     }
     class func sp_getItemCount(mineModel:SPMineModel?,countModel:SPMineCountModel?) -> String{
