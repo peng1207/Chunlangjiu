@@ -103,7 +103,7 @@ class SPMineTableCell : UITableViewCell {
             maker.right.equalTo(self.contentView).offset(-10)
             maker.top.equalTo(self.contentView).offset(10)
             maker.height.greaterThanOrEqualTo(0)
-            maker.bottom.equalTo(self.contentView).offset(0)
+            maker.bottom.equalTo(self.contentView.snp.bottom).offset(0)
         }
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.cellView).offset(11)
@@ -175,6 +175,7 @@ extension SPMineTableCell : UICollectionViewDelegate,UICollectionViewDataSource,
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if sp_getString(string: keyPath) == SP_KVO_KEY_CONTENTSIZE {
             self.collectionHeight.update(offset: self.collectionView.contentSize.height)
+            self.cellView.layoutIfNeeded()
         }
     }
 }

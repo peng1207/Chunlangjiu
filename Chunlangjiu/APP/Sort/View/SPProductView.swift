@@ -68,7 +68,11 @@ class SPProductView:  UIView{
     fileprivate var timeTop : Constraint!
     fileprivate var timeHeight : Constraint!
     fileprivate var lookDetTop : Constraint!
+ 
     fileprivate var typeTop : Constraint!
+    fileprivate var specTop : Constraint!
+    fileprivate var labelViewTop : Constraint!
+    fileprivate var labelViewHeight : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -104,14 +108,14 @@ class SPProductView:  UIView{
         self.specLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.nameLabel.snp.left).offset(0)
             maker.right.equalTo(self.nameLabel.snp.right).offset(0)
-            maker.top.equalTo(self.nameLabel.snp.bottom).offset(5)
+           self.specTop = maker.top.equalTo(self.nameLabel.snp.bottom).offset(0).constraint
             maker.height.greaterThanOrEqualTo(0)
         }
         self.labelView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.nameLabel.snp.left).offset(0)
             maker.right.equalTo(self.nameLabel.snp.right).offset(0)
-            maker.height.greaterThanOrEqualTo(16)
-            maker.top.equalTo(self.specLabel.snp.bottom).offset(5)
+           self.labelViewHeight = maker.height.equalTo(16).constraint
+           self.labelViewTop = maker.top.equalTo(self.specLabel.snp.bottom).offset(5).constraint
 //            maker.bottom.equalTo(self.snp.bottom).offset(-8)
         }
         self.countDownView.snp.makeConstraints { (maker) in
@@ -153,7 +157,15 @@ extension SPProductView {
       
         self.nameLabel.attributedText = productModel?.sp_getTitleAtt()
         self.specLabel.text = sp_getString(string: productModel?.sub_title)
+        self.specTop.update(offset: sp_getString(string: self.specLabel.text).count > 0 ? 5 : 0)
         self.labelView.listArray = self.productModel?.sp_getLabel()
+        if sp_getArrayCount(array: self.labelView.listArray) > 0 {
+            self.labelViewTop.update(offset: 5)
+            self.labelViewHeight.update(offset: 16)
+        }else{
+            self.labelViewTop.update(offset: 0)
+            self.labelViewHeight.update(offset: 0)
+        }
         if let model = self.productModel,model.isAuction{
             self.countDownView.isHidden = false
             self.lookDetaile.isHidden = false
@@ -189,6 +201,8 @@ extension SPProductView {
             self.lookDetTop.update(offset: 8)
             self.typeTop.update(offset: 10)
         }else{
+            self.typeLabel.attributedText = nil
+            self.typeLabel.text = ""
             self.countDownView.isHidden = true
             self.lookDetaile.isHidden = true
             self.typeLabel.isHidden = true

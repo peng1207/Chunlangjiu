@@ -155,7 +155,7 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         if headerView == nil {
             headerView = SPOrderTableHeaderView(reuseIdentifier: orderHeaderID)
 //            headerView?.sp_leftRightZero()
-           headerView?.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+//           headerView?.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         }
         if let detaile = self.orderDetaileModel {
             headerView?.orderModel = detaile

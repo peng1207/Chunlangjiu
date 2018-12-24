@@ -15,7 +15,7 @@ class SPNetWorkManager : NSObject {
     private static let reachManager = SPNetWorkManager()
     private var netWorkStatus : NetworkReachabilityManager.NetworkReachabilityStatus = .reachable(NetworkReachabilityManager.ConnectionType.ethernetOrWiFi)
     private var domainNameDic : [String : String] = [String : String]()
-    
+    private var reachManager : NetworkReachabilityManager!
     class func instance() -> SPNetWorkManager{
         return reachManager
     }
@@ -32,6 +32,7 @@ class SPNetWorkManager : NSObject {
         }
         // 开始监听网络状态变化
         manager?.startListening()
+        self.reachManager = manager
     }
     /// 发送网络发生变化通知
     private func sp_sendNetWorckChange(){
@@ -46,6 +47,19 @@ class SPNetWorkManager : NSObject {
         }
         return false
     }
+    /// 是否是wifi网络
+    ///
+    /// - Returns: true wifi 网络 false 不是wifi网络
+    class func sp_isWifi() -> Bool{
+        return instance().reachManager.isReachableOnEthernetOrWiFi
+    }
+    /// 是否移动网络
+    ///
+    /// - Returns: true 移动网 false 不是移动网络
+    class func sp_isWwan() -> Bool{
+         return instance().reachManager.isReachableOnWWAN
+    }
+    
     /// 设置域名
     ///
     /// - Parameters:

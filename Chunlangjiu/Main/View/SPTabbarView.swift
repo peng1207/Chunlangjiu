@@ -59,7 +59,7 @@ class SPTabbarView:  UIView{
 //        btn.sp_cornerRadius(cornerRadius: 31)
 //        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue), width: sp_lineHeight)
         btn.addTarget(self, action: #selector(sp_clickAuctionAction), for: UIControlEvents.touchUpInside)
-        btn.backgroundColor = UIColor.white
+//        btn.backgroundColor = UIColor.white
         return btn
     }()
     

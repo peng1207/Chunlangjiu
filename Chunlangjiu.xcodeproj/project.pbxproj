@@ -52,6 +52,8 @@
 		56D6813C21CCD39E003E49AB /* SPSortCollectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D6813B21CCD39E003E49AB /* SPSortCollectCell.swift */; };
 		56E97B8121B8CBFE002E590C /* SPAdvertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E97B8021B8CBFE002E590C /* SPAdvertVC.swift */; };
 		56E97B8321B903CA002E590C /* SPTutorialPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E97B8221B903CA002E590C /* SPTutorialPageVC.swift */; };
+		56F47F3421D0E5F500613BBA /* SPOrderHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F47F3321D0E5F500613BBA /* SPOrderHomeVC.swift */; };
+		56F47F3621D0E65300613BBA /* SPOrderHomeHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F47F3521D0E65300613BBA /* SPOrderHomeHeadView.swift */; };
 		56F8BBBF215B1D310051BCDC /* SPConditionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F8BBBE215B1D310051BCDC /* SPConditionFilterView.swift */; };
 		73F103654E80AAD8F741D7CC /* Pods_ChunlangjiuUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93A5B53E1C34490A9189360F /* Pods_ChunlangjiuUITests.framework */; };
 		83AAB0DA23070E867841AB71 /* Pods_ChunlangjiuTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4A6B27574A25B869FC4C76 /* Pods_ChunlangjiuTests.framework */; };
@@ -448,6 +450,8 @@
 		56D6813B21CCD39E003E49AB /* SPSortCollectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSortCollectCell.swift; sourceTree = "<group>"; };
 		56E97B8021B8CBFE002E590C /* SPAdvertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAdvertVC.swift; sourceTree = "<group>"; };
 		56E97B8221B903CA002E590C /* SPTutorialPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTutorialPageVC.swift; sourceTree = "<group>"; };
+		56F47F3321D0E5F500613BBA /* SPOrderHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderHomeVC.swift; sourceTree = "<group>"; };
+		56F47F3521D0E65300613BBA /* SPOrderHomeHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderHomeHeadView.swift; sourceTree = "<group>"; };
 		56F8BBBE215B1D310051BCDC /* SPConditionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConditionFilterView.swift; sourceTree = "<group>"; };
 		58EFB58E628E095C1539C1FC /* Pods-ChunlangjiuUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChunlangjiuUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChunlangjiuUITests/Pods-ChunlangjiuUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5AD736CD3BA3485D51261BB3 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
@@ -884,6 +888,7 @@
 				9E7DAAC021399B080044C5FD /* SPProductEvaluationVC.swift */,
 				9E7DAAC4213B76E50044C5FD /* SPProductEvaluationListVC.swift */,
 				9E7DAAC8213B93170044C5FD /* SPOrderApplyRefundVC.swift */,
+				56F47F3321D0E5F500613BBA /* SPOrderHomeVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -917,6 +922,7 @@
 				9E0E17F4218B580E001B8E00 /* SPOrderInfoView.swift */,
 				9E0E17F6218B5C38001B8E00 /* SPOrderHeaderView.swift */,
 				561C74EA21CE2B1800132D88 /* SPOrderImgeTableCell.swift */,
+				56F47F3521D0E65300613BBA /* SPOrderHomeHeadView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2320,6 +2326,7 @@
 				9E5F7AE021C4ECF400A9EF35 /* SPBalanceVC.swift in Sources */,
 				9E5F7A9F21B9791300A9EF35 /* SPActivityVC.swift in Sources */,
 				9E22EAE821359B0D00B196D5 /* SPOrderTableCell.swift in Sources */,
+				56F47F3621D0E65300613BBA /* SPOrderHomeHeadView.swift in Sources */,
 				562C7165215CE0B80039EFD0 /* SPShopAlcoholView.swift in Sources */,
 				9EF4C6AA20EE2493007E9909 /* SPProductListVC.swift in Sources */,
 				9E89F0F82129441C000539A4 /* SPStarView.swift in Sources */,
@@ -2433,6 +2440,7 @@
 				9E5F7AAC21BD025B00A9EF35 /* SPInvitationCodeView.swift in Sources */,
 				9EFC5975217B11CF0002B4BE /* SPOrderLogicView.swift in Sources */,
 				56C4D666215BACF200C30A2B /* SPConditionFilterCell.swift in Sources */,
+				56F47F3421D0E5F500613BBA /* SPOrderHomeVC.swift in Sources */,
 				564A7D1C218AAEBB009027DB /* SPUpdateModel.swift in Sources */,
 				9E34F6C620FDC49300D59ABD /* SPAddressModel.swift in Sources */,
 				9E58EDBA21457C8100DFC3F2 /* SPAuctionPriceList.swift in Sources */,

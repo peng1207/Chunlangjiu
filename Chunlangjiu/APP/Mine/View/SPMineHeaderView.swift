@@ -52,7 +52,18 @@ class SPMineHeaderView:  UICollectionReusableView{
         let view = UIImageView()
         return view
     }()
+    fileprivate lazy var noLoginBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("登录", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.sp_cornerRadius(cornerRadius: 15)
+        btn.addTarget(self, action: #selector(sp_clickLogin), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     var clickIdent : SPBtnClickBlock?
+    var clickLogin : SPBtnClickBlock?
     var memberModel : SPMemberModel?{
         didSet{
             sp_setupData()
@@ -85,6 +96,7 @@ class SPMineHeaderView:  UICollectionReusableView{
         self.contentView.addSubview(self.logoImgView)
         self.contentView.addSubview(self.nameLabel)
         self.contentView.addSubview(self.authImgView)
+        self.contentView.addSubview(self.noLoginBtn)
         self.sp_addConstraint()
         self.logoImgView.layoutIfNeeded()
         self.logoImgView.sp_setCornerRadius(corner: 25)
@@ -123,6 +135,12 @@ class SPMineHeaderView:  UICollectionReusableView{
             maker.height.equalTo(15)
             maker.top.equalTo(self.nameLabel.snp.bottom).offset(17)
         }
+        self.noLoginBtn.snp.makeConstraints { (maker) in
+            maker.width.equalTo(80)
+            maker.height.equalTo(30)
+            maker.centerX.equalTo(self.contentView).offset(0)
+            maker.centerY.equalTo(self.contentView).offset(0)
+        }
     }
     deinit {
         
@@ -136,5 +154,19 @@ extension SPMineHeaderView {
             return
         }
         block()
+    }
+    @objc fileprivate func sp_clickLogin(){
+        guard let block = self.clickLogin else {
+            return
+        }
+        block()
+    }
+    func sp_checkLogin(){
+        let isLogin = SPAPPManager.sp_isLogin(isPush: false)
+        self.noLoginBtn.isHidden = isLogin
+        self.logoImgView.isHidden = !isLogin
+        self.titleLabel.isHidden = !isLogin
+        self.nameLabel.isHidden = !isLogin
+        self.authImgView.isHidden = isLogin
     }
 }

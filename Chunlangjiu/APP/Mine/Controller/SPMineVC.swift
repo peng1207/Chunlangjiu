@@ -13,7 +13,9 @@ class SPMineVC: SPBaseVC {
     fileprivate var tableView : UITableView!
     fileprivate lazy var headerView : SPMineHeaderView = {
         let view = SPMineHeaderView(frame:  CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getstatusBarHeight() + SP_NAVGIT_HEIGHT + 125 + 18))
-    
+        view.clickLogin = { [weak self] in
+            self?.sp_pushLogin()
+        }
         view.clickIdent = { [weak self] in
             self?.sp_clickIdentAction()
         }
@@ -39,6 +41,7 @@ class SPMineVC: SPBaseVC {
         sp_log(message: "isStatusBarHidden is \(UIApplication.shared.isStatusBarHidden)")
         self.navigationController?.setNavigationBarHidden(true, animated: self.pushVC ? true : false)
         self.sp_sendAllRequest()
+        self.headerView.sp_checkLogin()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -111,6 +114,10 @@ extension SPMineVC: UITableViewDelegate ,UITableViewDataSource,UIImagePickerCont
         return cell!
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard SPAPPManager.sp_isLogin(isPush: true) else {
+            return
+        }
+        
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             let sectionModel = self.dataArray?[indexPath.row]
             if let model = sectionModel {
@@ -236,6 +243,7 @@ extension SPMineVC {
     /// 点击切换身份事件
     fileprivate func sp_clickIdentAction(){
         guard let userModel = SPAPPManager.instance().userModel else {
+            sp_pushLogin()
             return
         }
         guard let realModel = self.realNameAuth else {
@@ -376,14 +384,25 @@ extension SPMineVC {
     }
     
     fileprivate func sp_pushOrderVC(orderState : SPOrderStatus = .all){
-        let orderVC = SPOrderVC()
-        orderVC.orderState = orderState
-        if sp_getString(string: SPAPPManager.instance().userModel?.identity) == SP_IS_ENTERPRISE {
-            orderVC.orderType = .shopType
+        
+        if SPAPPManager.sp_isBusiness() {
+            let orderVC = SPOrderVC()
+            orderVC.orderState = orderState
+            if sp_getString(string: SPAPPManager.instance().userModel?.identity) == SP_IS_ENTERPRISE {
+                orderVC.orderType = .shopType
+            }else{
+                orderVC.orderType = .defaultType
+            }
+            self.navigationController?.pushViewController(orderVC, animated: true)
         }else{
+            let orderVC = SPOrderHomeVC()
+            orderVC.orderState = orderState
             orderVC.orderType = .defaultType
+            self.navigationController?.pushViewController(orderVC, animated: true)
         }
-        self.navigationController?.pushViewController(orderVC, animated: true)
+        
+        
+      
     }
     fileprivate func sp_pushAfterSaleVC(orderState : SPOrderStatus = .all){
         let orderVC = SPOrderVC()
@@ -513,6 +532,9 @@ extension SPMineVC{
     }
     fileprivate func sp_sendAllRequest(){
         guard SPAPPManager.instance().userModel != nil else {
+            sp_asyncAfter(time: 0.1) {
+                self.tableView.reloadData()
+            }
             return
         }
         self.sp_sendCountRequest()
