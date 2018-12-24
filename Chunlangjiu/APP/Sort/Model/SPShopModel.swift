@@ -18,6 +18,7 @@ class SPShopModel : HandyJSON {
     var shoptype : String?
     var mobile : String?
     var remark : String?
+    var shop_addr : String? 
     var confrim_auction_price : String?
     var confrim_max_price : String?
     var confirm_start_price : String? 

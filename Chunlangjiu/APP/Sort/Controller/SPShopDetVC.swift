@@ -43,6 +43,7 @@ class SPShopDetVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_setupData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,6 +56,12 @@ class SPShopDetVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    /// 赋值
+    fileprivate func sp_setupData(){
+        self.headerView.shopModel = self.shopModel
+        self.addressView.addressLabel.text = sp_getString(string: self.shopModel?.shop_addr)
+        self.infoView.infoLabel.text = sp_getString(string: self.shopModel?.shop_descript)
     }
     /// 创建UI
     override func sp_setupUI() {

@@ -12,14 +12,14 @@ import SnapKit
 class SPOrderContentView:  UIView{
     lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.font = sp_getFontSize(size: 15)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
         return label
     }()
     lazy var contentLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.font = sp_getFontSize(size: 15)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
         label.preferredMaxLayoutWidth = sp_getScreenWidth()
         return label
     }()
@@ -41,7 +41,7 @@ class SPOrderContentView:  UIView{
     fileprivate func sp_addConstraint(){
         self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.titleLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(11)
+            maker.left.equalTo(self).offset(22)
             maker.top.equalTo(self).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.width.greaterThanOrEqualTo(0)

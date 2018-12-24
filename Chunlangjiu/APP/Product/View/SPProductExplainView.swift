@@ -20,13 +20,14 @@ class SPProductExplainView:  UIView{
     }()
     lazy var textView : SPTextView = {
         let view = SPTextView()
-        view.placeholderLabel.text = "请输入产品的销售说明"
+        view.placeholderLabel.text = "例：正品保障专家级品酒师鉴定。\n商品来源保证，海关检测证书正品，年产量少，适合珍藏送礼。\n该商品不支持退换货；支持货到查验。\n1855列级名庄拉菲庄园正牌拉菲。"
         view.textView.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
             
         }, doneBlock: {
             
         })
         view.textView.font = sp_getFontSize(size: 16)
+//        view.minHeight = 84
         return view
     }()
     
@@ -55,7 +56,7 @@ class SPProductExplainView:  UIView{
         self.textView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.right).offset(16)
             maker.top.equalTo(self.titleLabel.snp.top).offset(-5)
-            maker.height.equalTo(58)
+            maker.height.equalTo(84)
             maker.right.equalTo(self.snp.right).offset(-10)
             maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }

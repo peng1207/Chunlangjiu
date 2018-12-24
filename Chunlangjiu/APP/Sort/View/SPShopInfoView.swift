@@ -18,7 +18,7 @@ class SPShopInfoView:  UIView{
         label.text = "店铺简介"
         return label
     }()
-    fileprivate lazy var infoLabel : UILabel = {
+    lazy var infoLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
@@ -33,7 +33,7 @@ class SPShopInfoView:  UIView{
         label.text = "开店时间"
         return label
     }()
-    fileprivate lazy var timeLabel : UILabel = {
+    lazy var timeLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)

@@ -38,7 +38,7 @@ class SPOrderListVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
-        self.tableView.rowHeight = 70
+        self.tableView.rowHeight = 125
         self.tableView.showsVerticalScrollIndicator = false
         self.tableView.backgroundColor = self.view.backgroundColor
         self.view.addSubview(self.tableView)
@@ -132,10 +132,17 @@ extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
         return cell!
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 59
+        return 60
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 49
+        if section < sp_getArrayCount(array: self.dataArray) {
+            let model = self.dataArray?[section]
+            let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: model)
+            return 50.0 + (bottomIsHidden ? 0.0 : 50.0)
+        }
+        
+        
+        return 100
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let orderHeaderID = "orderHeaderID"

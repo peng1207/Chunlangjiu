@@ -61,7 +61,8 @@ class SPAuctionVC: SPBaseVC {
         self.navigationItem.title = "竞拍专区"
         self.sp_setupUI()
         self.sp_sendRequest()
-        self.sp_sendRequestSort()
+        self.conditionView.sp_sendReqest()
+//        self.sp_sendRequestSort()
         //        self.sp_sendRequestFilter()
         sp_addNotificaton()
     }

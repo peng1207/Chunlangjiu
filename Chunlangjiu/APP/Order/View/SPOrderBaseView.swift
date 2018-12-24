@@ -59,12 +59,12 @@ class SPOrderBaseView:  UIView{
         if sp_getString(string: detaileModel?.type) == SP_AUCTION {
             if sp_getString(string: detaileModel?.status) == SP_AUCTION_2{
                 self.auctionView.titleLabel.text = "中标时间："
-                self.auctionTop.update(offset: 10)
+                self.auctionTop.update(offset: 26)
                 self.auctionView.contentLabel.text = sp_getString(string: detaileModel?.modified_time)
                 self.auctionView.isHidden = false
             }else if sp_getString(string: detaileModel?.status) == SP_AUCTION_3{
                 self.auctionView.titleLabel.text = "竞拍结束："
-                 self.auctionTop.update(offset: 10)
+                 self.auctionTop.update(offset: 26)
                  self.auctionView.contentLabel.text = sp_getString(string: detaileModel?.modified_time)
                  self.auctionView.isHidden = false
             }else{
@@ -92,7 +92,7 @@ class SPOrderBaseView:  UIView{
     fileprivate func sp_addConstraint(){
         self.codeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.top.equalTo(self).offset(14)
+            maker.top.equalTo(self).offset(13)
            maker.height.greaterThanOrEqualTo(0)
         }
         self.copyBtn.snp.makeConstraints { (maker) in
@@ -103,7 +103,7 @@ class SPOrderBaseView:  UIView{
         }
         self.orderTimeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.codeView).offset(0)
-            maker.top.equalTo(self.codeView.snp.bottom).offset(10)
+            maker.top.equalTo(self.codeView.snp.bottom).offset(26)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.auctionView.snp.makeConstraints { (maker) in

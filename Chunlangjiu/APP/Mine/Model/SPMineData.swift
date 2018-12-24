@@ -126,20 +126,25 @@ class SPMineData {
         var array : Array<SPMineModel> = Array()
         array.append(self.sp_get_funds())
         
-        if SPAPPManager.sp_isBusiness() {
-             array.append(self.sp_get_share())
-            array.append(self.sp_get_member())
-            array.append(self.sp_get_address())
-            array.append(self.sp_get_bank_card())
-        }else{
-             array.append(self.sp_get_collect())
-             array.append(sp_get_valuation())
-            array.append(sp_get_customServer())
-            array.append(sp_get_fans())
-            array.append(sp_get_set())
-            model.rowCount = 3
-        }
-       
+//        if SPAPPManager.sp_isBusiness() {
+//             array.append(self.sp_get_share())
+//            array.append(self.sp_get_member())
+//            array.append(self.sp_get_address())
+//            array.append(self.sp_get_bank_card())
+//        }else{
+//             array.append(self.sp_get_collect())
+//             array.append(sp_get_valuation())
+//            array.append(sp_get_customServer())
+//            array.append(sp_get_fans())
+//            array.append(sp_get_set())
+//            model.rowCount = 3
+//        }
+        array.append(self.sp_get_collect())
+        array.append(sp_get_valuation())
+        array.append(sp_get_customServer())
+        array.append(sp_get_fans())
+        array.append(sp_get_set())
+        model.rowCount = 3
         model.dataArray = array
         return model
     }

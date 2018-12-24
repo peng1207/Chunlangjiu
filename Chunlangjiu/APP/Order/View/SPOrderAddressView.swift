@@ -10,6 +10,14 @@ import Foundation
 import UIKit
 import SnapKit
 class SPOrderAddressView:  UIView{
+    fileprivate lazy var titleLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 15)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textAlignment = .right
+        label.text = "地址:"
+        return label
+    }()
     lazy var nameLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 16)
@@ -50,6 +58,7 @@ class SPOrderAddressView:  UIView{
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
+        self.addSubview(self.titleLabel)
         self.addSubview(self.nameLabel)
         self.addSubview(self.phoneLabel)
         self.addSubview(self.addressLabel)
@@ -57,10 +66,16 @@ class SPOrderAddressView:  UIView{
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
+        self.titleLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self).offset(0)
+            maker.top.equalTo(self).offset(13)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.width.equalTo(57)
+        }
         self.nameLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.nameLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.snp.left).offset(12)
-            maker.top.equalTo(self.snp.top).offset(12)
+            maker.left.equalTo(self.snp.left).offset(67)
+            maker.top.equalTo(self.snp.top).offset(13)
             maker.height.greaterThanOrEqualTo(0)
             maker.width.greaterThanOrEqualTo(0)
         }
@@ -71,7 +86,7 @@ class SPOrderAddressView:  UIView{
             maker.right.equalTo(self.snp.right).offset(-8)
         }
         self.addressLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.snp.left).offset(12)
+            maker.left.equalTo(self.nameLabel.snp.left).offset(0)
             maker.right.equalTo(self.snp.right).offset(-8)
             maker.top.equalTo(self.nameLabel.snp.bottom).offset(3)
             maker.height.greaterThanOrEqualTo(0)

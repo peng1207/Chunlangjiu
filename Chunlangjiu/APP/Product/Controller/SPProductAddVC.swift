@@ -26,9 +26,9 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         view.typeView.selectBlock = { [weak self]() in
             self?.sp_clickType()
         }
-        view.alcoholDegreeView.selectBlock = {  [weak self]() in
-            self?.sp_clickAlcohol()
-        }
+//        view.alcoholDegreeView.selectBlock = {  [weak self]() in
+//            self?.sp_clickAlcohol()
+//        }
         return view
     }()
     fileprivate lazy var priceView : SPProductPriceView = {
@@ -43,6 +43,22 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }
         return view
     }()
+   fileprivate lazy var titleView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.titleLabel.text = "商品标题"
+        view.textFiled.placeholder = "请填写"
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
+   fileprivate lazy var labelView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.titleLabel.text = "商品标签"
+        view.textFiled.placeholder = "例：产地，品牌，年份"
+        view.lineView.isHidden = true
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
+    
     fileprivate lazy var explainView : SPProductExplainView = {
         let view = SPProductExplainView()
         view.backgroundColor = UIColor.white
@@ -55,9 +71,9 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     }()
     fileprivate lazy var saveBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("保存并发送", for: UIControlState.normal)
+        btn.setTitle("保存并提交审核", for: UIControlState.normal)
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 18)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.addTarget(self, action: #selector(sp_clickSaveAction), for: UIControlEvents.touchUpInside)
         return btn
@@ -146,10 +162,12 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     /// 创建UI
     override func sp_setupUI() {
         self.view.addSubview(self.scrollView)
-        self.view.addSubview(self.saveBtn)
+        self.scrollView.addSubview(self.saveBtn)
         self.scrollView.addSubview(self.baseView)
         self.scrollView.addSubview(self.priceView)
         self.scrollView.addSubview(self.showImageView)
+        self.scrollView.addSubview(self.titleView)
+        self.scrollView.addSubview(self.labelView)
         self.scrollView.addSubview(self.explainView)
         self.scrollView.addSubview(self.parmView)
         self.view.addSubview(self.brandView)
@@ -163,17 +181,21 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     fileprivate func sp_addConstraint(){
         self.scrollView.snp.makeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.saveBtn.snp.top).offset(0)
-        }
-        self.saveBtn.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.view).offset(0)
-            maker.height.equalTo(48)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
+//        self.saveBtn.snp.makeConstraints { (maker) in
+//            maker.left.right.equalTo(self.view).offset(0)
+//            maker.height.equalTo(48)
+//            if #available(iOS 11.0, *) {
+//                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+//            } else {
+//                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+//            }
+//        }
         self.baseView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.scrollView).offset(0)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
@@ -181,24 +203,39 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }
         self.priceView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
-            maker.top.equalTo(self.baseView.snp.bottom).offset(10)
+            maker.top.equalTo(self.labelView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.showImageView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
             maker.height.greaterThanOrEqualTo(0)
-            maker.top.equalTo(self.priceView.snp.bottom).offset(10)
+            maker.top.equalTo(self.baseView.snp.bottom).offset(10)
+        }
+        self.titleView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.scrollView).offset(0)
+            maker.height.equalTo(40)
+            maker.top.equalTo(self.showImageView.snp.bottom).offset(10)
+        }
+        self.labelView.snp.makeConstraints { (maker) in
+            maker.left.right.height.equalTo(self.titleView).offset(0)
+            maker.top.equalTo(self.titleView.snp.bottom).offset(0)
         }
         self.explainView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
-            maker.top.equalTo(self.showImageView.snp.bottom).offset(10)
+            maker.top.equalTo(self.priceView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.parmView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
             maker.top.equalTo(self.explainView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
-            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-20)
+        }
+        self.saveBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(10)
+            maker.right.equalTo(self.scrollView).offset(-10)
+            maker.height.equalTo(40)
+            maker.top.equalTo(self.parmView.snp.bottom).offset(10)
+             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-10)
         }
         self.sortView.snp.makeConstraints { (maker ) in
             maker.left.right.equalTo(self.view).offset(0)
@@ -242,7 +279,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }
         self.alcoholView.snp.makeConstraints { (maker ) in
             maker.left.right.equalTo(self.view).offset(0)
-            maker.top.equalTo(self.baseView.alcoholDegreeView.snp.bottom).offset(0)
+//            maker.top.equalTo(self.baseView.alcoholDegreeView.snp.bottom).offset(0)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {
@@ -267,7 +304,7 @@ extension SPProductAddVC {
             return
         }
         
-        guard sp_getString(string: self.baseView.titleView.textFiled.text).count > 0  else {
+        guard sp_getString(string: self.titleView.textFiled.text).count > 0  else {
             sp_showTextAlert(tips: "请输入商品标题")
             return
         }
@@ -501,16 +538,16 @@ extension SPProductAddVC {
     }
     fileprivate func sp_dealAlcohol(model: SPAlcoholDegree?){
         self.alcoholModel = model
-        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
+//        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
     }
     /// 赋值
     fileprivate func sp_setupData(){
         
-        self.baseView.titleView.textFiled.text = sp_getString(string: self.productModel?.title)
-        self.baseView.subTitleView.textFiled.text = sp_getString(string: self.productModel?.sub_title)
+        self.titleView.textFiled.text = sp_getString(string: self.productModel?.title)
+//        self.baseView.subTitleView.textFiled.text = sp_getString(string: self.productModel?.sub_title)
         self.priceView.priceView.textFiled.text = sp_getString(string: self.productModel?.price)
         self.priceView.stockView.textFiled.text = sp_getString(string: self.productModel?.store)
-        self.baseView.labelView.textFiled.text = sp_getString(string: self.productModel?.label)
+        self.labelView.textFiled.text = sp_getString(string: self.productModel?.label)
         if sp_getArrayCount(array: self.sortArray) > 0  {
             for lv3Model in self.sortArray! {
                 if let cat_id = Int(sp_getString(string: self.productModel?.cat_id)),let lv3Id = lv3Model.cat_id{
@@ -565,7 +602,7 @@ extension SPProductAddVC {
         self.baseView.brandView.content = sp_getString(string: self.brandModel?.brand_name)
         self.baseView.placeView.content = sp_getString(string: self.placeModel?.area_name)
         self.baseView.typeView.content = sp_getString(string: self.typeModel?.odor_name)
-        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
+//        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
         self.showImageView.sp_setImage(paths: self.productModel?.images)
         self.explainView.textView.content = sp_getString(string: self.productModel?.explain)
         if let parmArray : [Any] = sp_stringValueArr(sp_getString(string: self.productModel?.parameter)){
@@ -638,8 +675,8 @@ extension SPProductAddVC{
         }
         
         parm.updateValue(self.selectSort?.cat_id ?? 0, forKey: "cat_id")
-        parm.updateValue(sp_getString(string: self.baseView.titleView.textFiled.text), forKey: "title")
-        parm.updateValue(sp_getString(string: self.baseView.subTitleView.textFiled.text), forKey: "sub_title")
+        parm.updateValue(sp_getString(string: self.titleView.textFiled.text), forKey: "title")
+//        parm.updateValue(sp_getString(string: self.baseView.subTitleView.textFiled.text), forKey: "sub_title")
         //        let label = self.baseView.labelView.textFiled.text
         parm.updateValue(sp_getString(string: self.priceView.priceView.textFiled.text), forKey: "price")
         parm.updateValue(sp_getString(string: self.priceView.stockView.textFiled.text), forKey: "store")
@@ -662,7 +699,7 @@ extension SPProductAddVC{
         }
         
         //        parm.updateValue(self.shopNextCategory?.cat_id ?? 0, forKey: "shop_cat_id")
-        parm.updateValue(sp_getString(string: self.baseView.labelView.textFiled.text), forKey: "label")
+        parm.updateValue(sp_getString(string: self.labelView.textFiled.text), forKey: "label")
         parm.updateValue(sp_getString(string: self.explainView.textView.textView.text), forKey: "explain")
         var list = [[String : Any]]()
         //        list.append(["title":"类型","value":sp_getString(string: self.parmView.typeView.textFiled.text)])
@@ -867,7 +904,11 @@ extension SPProductAddVC {
     @objc private func sp_keyBoardWillHidden(){
         self.scrollView.snp.remakeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.saveBtn.snp.top).offset(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
         }
     }
     

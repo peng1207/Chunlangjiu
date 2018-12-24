@@ -14,6 +14,8 @@ class SPShopHomeVC: SPBaseVC {
         let view = SPShopHomeView()
         view.backgroundColor = UIColor.white
         view.shopModel = shopModel
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickShopDetVC))
+        view.addGestureRecognizer(tap)
         return view
     }()
     fileprivate lazy var listBtn  : UIButton = {
@@ -174,6 +176,11 @@ extension SPShopHomeVC {
     /// 赋值
     fileprivate func sp_setupData(){
         self.shopHomeView.shopModel = self.shopModel
+    }
+    @objc fileprivate func sp_clickShopDetVC(){
+        let detVC = SPShopDetVC()
+        detVC.shopModel = self.shopModel
+        self.navigationController?.pushViewController(detVC, animated: true)
     }
 }
 extension SPShopHomeVC {

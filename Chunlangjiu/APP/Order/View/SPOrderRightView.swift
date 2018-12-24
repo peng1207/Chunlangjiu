@@ -51,7 +51,7 @@ class SPOrderRightView:  UIView{
     fileprivate func sp_addConstraint(){
         self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.titleLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(11)
+            maker.left.equalTo(self).offset(22)
             maker.top.bottom.equalTo(self).offset(0)
             maker.width.greaterThanOrEqualTo(0)
         }

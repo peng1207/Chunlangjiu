@@ -41,7 +41,7 @@ class SPConditionView:  UIView{
     }()
     var sortArray : [SPSortLv3Model]? {
         didSet{
-            self.sortCollectionView.reloadData()
+//            self.sortCollectionView.reloadData()
         }
     }
     var selectComplete : SPSortViewSelectComplete?
@@ -134,7 +134,7 @@ class SPConditionView:  UIView{
     fileprivate let collectionHeight : CGFloat = 40
     var selectSortModel : SPSortLv3Model?{
         didSet{
-            self.sortCollectionView.reloadData()
+//            self.sortCollectionView.reloadData()
             self.sp_sendReqest()
         }
     }
@@ -220,15 +220,15 @@ class SPConditionView:  UIView{
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.estimatedItemSize = CGSize(width: sp_getScreenWidth(), height: collectionHeight)
-        self.sortCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        self.sortCollectionView.delegate = self
-        self.sortCollectionView.dataSource = self
-        self.sortCollectionView.register(SPConditionSortView.self, forCellWithReuseIdentifier: conditionSortCellID)
-        self.sortCollectionView.backgroundColor = UIColor.white
-        self.addSubview(self.sortCollectionView)
+//        let layout = UICollectionViewFlowLayout()
+//        layout.scrollDirection = .horizontal
+//        layout.estimatedItemSize = CGSize(width: sp_getScreenWidth(), height: collectionHeight)
+//        self.sortCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+//        self.sortCollectionView.delegate = self
+//        self.sortCollectionView.dataSource = self
+//        self.sortCollectionView.register(SPConditionSortView.self, forCellWithReuseIdentifier: conditionSortCellID)
+//        self.sortCollectionView.backgroundColor = UIColor.white
+//        self.addSubview(self.sortCollectionView)
         self.addSubview(self.sortLineView)
         self.addSubview(self.brandBtn)
         self.addSubview(self.placeBtn)
@@ -246,13 +246,13 @@ class SPConditionView:  UIView{
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.sortCollectionView.snp.makeConstraints { (maker) in
-            maker.left.top.right.equalTo(self).offset(0)
-            maker.height.equalTo(collectionHeight)
-        }
+//        self.sortCollectionView.snp.makeConstraints { (maker) in
+//            maker.left.top.right.equalTo(self).offset(0)
+//            maker.height.equalTo(collectionHeight)
+//        }
         self.sortLineView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.top.equalTo(self.sortCollectionView.snp.bottom).offset(0)
+            maker.top.equalTo(self.snp.top).offset(0)
             maker.height.equalTo(sp_lineHeight)
         }
         self.brandBtn.snp.makeConstraints { (maker) in

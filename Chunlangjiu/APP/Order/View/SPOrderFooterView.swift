@@ -48,6 +48,7 @@ class SPOrderFooterView:  UIView{
         }
     }
     fileprivate var refundTop : Constraint!
+    fileprivate var payTop : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -69,10 +70,12 @@ class SPOrderFooterView:  UIView{
             self.refundView.isHidden = false
             isRefund = true
             self.addressView.isHidden = true
+            self.payTop.update(offset: 0)
         }else{
             self.refundView.isHidden = true
             self.payView.isHidden = false
             self.addressView.isHidden = false
+            self.payTop.update(offset: 10)
         }
         var isLogic = false
         if self.detaileModel?.logi != nil {
@@ -122,7 +125,7 @@ class SPOrderFooterView:  UIView{
         }
         self.payView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.top.equalTo(self.codeView.snp.bottom).offset(0)
+            self.payTop = maker.top.equalTo(self.codeView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
         }
         self.refundView.snp.makeConstraints { (maker) in

@@ -13,6 +13,7 @@ class  SPShopHomeView:  UIView{
     
     fileprivate lazy var shopIconImageView : UIImageView = {
         let imageView =  UIImageView()
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     fileprivate lazy var nameLabel : UILabel = {
@@ -23,6 +24,7 @@ class  SPShopHomeView:  UIView{
     }()
     fileprivate lazy var typeImgView : UIImageView = {
         let view = UIImageView()
+        view.isUserInteractionEnabled = true
         return view
     }()
     fileprivate lazy var authLabel : UILabel = {

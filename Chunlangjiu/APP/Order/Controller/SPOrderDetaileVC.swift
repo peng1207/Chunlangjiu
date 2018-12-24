@@ -68,7 +68,7 @@ class SPOrderDetaileVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
-        self.tableView.rowHeight = 70
+        self.tableView.rowHeight = 125
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
         self.tableView.showsVerticalScrollIndicator = false
@@ -130,6 +130,7 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         if cell == nil {
             cell = SPOrderTableCell(style: UITableViewCellStyle.default, reuseIdentifier: orderCellID)
             cell?.showAfterSales = true
+            cell?.contentView.backgroundColor = self.view.backgroundColor
         }
         if let detaile = self.orderDetaileModel {
             if indexPath.row < sp_getArrayCount(array: detaile.orders){
@@ -146,13 +147,15 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         return 59
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 10
+        return 50
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let orderHeaderID = "orderHeaderID"
         var headerView : SPOrderTableHeaderView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: orderHeaderID) as? SPOrderTableHeaderView
         if headerView == nil {
             headerView = SPOrderTableHeaderView(reuseIdentifier: orderHeaderID)
+//            headerView?.sp_leftRightZero()
+           headerView?.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         }
         if let detaile = self.orderDetaileModel {
             headerView?.orderModel = detaile
@@ -161,7 +164,27 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         return headerView
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
+        let orderFooterID = "orderFooterID"
+        var footerView : SPOrderTableFooterView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: orderFooterID) as? SPOrderTableFooterView
+        if footerView == nil{
+            footerView = SPOrderTableFooterView(reuseIdentifier: orderFooterID)
+            footerView?.sp_leftRightZero()
+           
+        }
+        if let detaile = self.orderDetaileModel {
+            footerView?.orderModel = detaile
+            footerView?.sp_hiddenBtn()
+//            footerView?.clickBlock = { [weak self ](model,btnIndex) in
+//                SPOrderHandle.sp_dealOrder(orderModel: model, btnIndex: btnIndex, viewController: self, complete: { (isSuccess) in
+//                    if isSuccess {
+//                        self?.currentPage = 1
+//                        self?.sp_request()
+//                    }
+//                })
+//            }
+        }
+     
+        return footerView
     }
 }
 extension SPOrderDetaileVC{

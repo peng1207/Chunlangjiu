@@ -61,6 +61,7 @@ class SPMineVC: SPBaseVC {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.backgroundColor = self.view.backgroundColor
         self.tableView.tableHeaderView = self.headerView
+        self.tableView.bounces = false
         self.view.addSubview(self.tableView)
         if #available(iOS 11.0, *) {
             self.tableView.contentInsetAdjustmentBehavior = .never

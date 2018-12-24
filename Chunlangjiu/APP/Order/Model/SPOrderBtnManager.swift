@@ -214,7 +214,7 @@ class SPOrderBtnManager {
     ///
     /// - Parameter orderModel: 订单数据
     /// - Returns: 是否隐藏
-    class func sp_dealDetBtn(orderModel : SPOrderDetaileModel?)-> Bool {
+    class func sp_dealDetBtn(orderModel : SPOrderModel?)-> Bool {
         var isHidden = false
         
         switch sp_getString(string: orderModel?.status) {

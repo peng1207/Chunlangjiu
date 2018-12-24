@@ -16,9 +16,10 @@ class SPShopAddressView:  UIView{
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
+        label.text = "地址"
         return label
     }()
-    fileprivate lazy var addressLabel : UILabel = {
+    lazy var addressLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)

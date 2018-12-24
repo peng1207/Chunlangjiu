@@ -14,6 +14,8 @@ import SnapKit
 typealias SPOrderHeaderComplete = (_ orderModel : SPOrderModel?)->Void
 class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     
+    
+    
     fileprivate lazy var shopView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
@@ -33,8 +35,8 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     
     lazy var orderStateLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.font = sp_getFontSize(size: 13)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return label
     }()
     fileprivate var lineView : UIView = {
@@ -46,7 +48,8 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
         }
     }
     var clickBlock : SPOrderHeaderComplete?
-    
+    fileprivate var leftConstraint : Constraint!
+    fileprivate var rightConstraint : Constraint!
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickAction))
@@ -56,10 +59,14 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    func sp_leftRightZero(){
+        self.leftConstraint.update(offset: 0)
+        self.rightConstraint.update(offset: 0)
+    }
     /// 赋值
     fileprivate func sp_setupData(){
         self.shopLogoImageView.sp_cache(string: sp_getString(string: self.orderModel?.shop_logo), plImage:  sp_getLogoImg())
-        self.shopNameLabel.text = sp_getString(string: orderModel?.shopname)
+        self.shopNameLabel.text = "\(sp_getString(string: orderModel?.shopname)) >"
         self.orderStateLabel.text = sp_getString(string: orderModel?.status_desc)
     }
     /// 添加UI
@@ -74,9 +81,10 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.shopView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.contentView).offset(0)
+           self.leftConstraint = maker.left.equalTo(self.contentView).offset(10).constraint
+           self.rightConstraint = maker.right.equalTo(self.contentView).offset(-10).constraint
             maker.bottom.equalTo(self.contentView).offset(0)
-            maker.height.equalTo(49)
+            maker.height.equalTo(50)
         }
         self.shopLogoImageView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.shopView).offset(10)

@@ -83,7 +83,7 @@ class SPOrderPriceView:  UIView{
             }
             
             let payAtt = NSMutableAttributedString()
-            let payTitle = NSAttributedString(string: isPay ? "已付定金：" :"应付定金：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)])
+            let payTitle = NSAttributedString(string: isPay ? "已付定金：" :"应付定金：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)])
             payAtt.append(payTitle)
             let payValue = NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
             payAtt.append(payValue)
@@ -122,7 +122,7 @@ class SPOrderPriceView:  UIView{
             self.freeView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.post_fee))"
             
             let payAtt = NSMutableAttributedString()
-            let payTitle = NSAttributedString(string: isAs ? "退款金额：" :"实付金额：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)])
+            let payTitle = NSAttributedString(string: isAs ? "退款金额：" :"实付金额：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)])
             payAtt.append(payTitle)
             let payValue = NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.payment))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
             payAtt.append(payValue)
@@ -167,8 +167,7 @@ class SPOrderPriceView:  UIView{
              maker.right.equalTo(self).offset(-10)
             maker.top.equalTo(self.lineView.snp.bottom).offset(0)
             self.payMementHeight = maker.height.equalTo(44).constraint
-            maker.width.greaterThanOrEqualTo(0)
-            maker.left.greaterThanOrEqualTo(self.snp.left).offset(11)
+            maker.left.equalTo(self.snp.left).offset(22)
             maker.bottom.equalTo(self).offset(0)
         }
     }

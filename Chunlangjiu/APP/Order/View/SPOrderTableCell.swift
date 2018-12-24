@@ -198,19 +198,20 @@ class SPOrderProductView  :  UIView{
         self.addSubview(self.numLabel)
         self.addSubview(self.afterSaleBtn)
         self.addSubview(self.lineView)
+        self.lineView.isHidden = true
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.productImageView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(8)
-            maker.top.equalTo(self).offset(5)
-            maker.bottom.equalTo(self).offset(-5)
+            maker.left.equalTo(self).offset(22)
+            maker.top.equalTo(self).offset(13)
+            maker.bottom.equalTo(self).offset(-13)
             maker.width.equalTo(self.productImageView.snp.height).offset(0)
         }
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.productImageView.snp.right).offset(7)
-            maker.top.equalTo(self).offset(8)
+            maker.top.equalTo(self).offset(12)
             maker.right.equalTo(self).offset(-19)
             maker.height.greaterThanOrEqualTo(0)
         }
@@ -236,7 +237,7 @@ class SPOrderProductView  :  UIView{
         self.numLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.numLabel.snp.makeConstraints { (maker) in
             maker.width.greaterThanOrEqualTo(0)
-            maker.right.equalTo(self.snp.right).offset(-8)
+            maker.right.equalTo(self.snp.right).offset(-18)
             maker.bottom.equalTo(self.snp.bottom).offset(-8)
             maker.height.greaterThanOrEqualTo(0)
         }
