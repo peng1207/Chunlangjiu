@@ -28,6 +28,7 @@ class SPAuthHomeVC: SPBaseVC {
         let view = SPAuthView()
         view.titleLabel.text = "个人实名认证"
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.imgView.image = UIImage(named: "public_realAuth")
         view.clickBlock = { [weak self]in
             self?.sp_clickReal()
         }
@@ -37,6 +38,7 @@ class SPAuthHomeVC: SPBaseVC {
         let view = SPAuthView()
         view.titleLabel.text = "企业实名认证"
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.imgView.image = UIImage(named: "public_companyAuth")
         view.clickBlock = { [weak self]in
             self?.sp_clickCompany()
         }
@@ -45,6 +47,7 @@ class SPAuthHomeVC: SPBaseVC {
     
     fileprivate lazy var imgView : UIImageView = {
         let view = UIImageView()
+        view.image = UIImage(named: "public_authDiff")
         return view
     }()
     
@@ -66,6 +69,7 @@ class SPAuthHomeVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = "实名认证"
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.headerView)
         self.scrollView.addSubview(self.titleView)

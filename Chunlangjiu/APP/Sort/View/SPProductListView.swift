@@ -19,6 +19,7 @@ class SPProductContentView:  UIView{
     }()
     lazy var signImgView : UIImageView = {
         let view = UIImageView()
+        view.image = sp_getDefaultUserImg()
         return view
     }()
     lazy var shopNameLabel : UILabel = {
@@ -79,7 +80,7 @@ class SPProductContentView:  UIView{
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: 11)
-//        btn.addTarget(self, action: #selector(<#des#>), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickShop), for: UIControlEvents.touchUpInside)
         return btn
     }()
     lazy var lineView : UIView = {
@@ -93,6 +94,7 @@ class SPProductContentView:  UIView{
         }
     }
     var addComplete : SPAddProductComplete?
+    var shopBlock : SPAddProductComplete?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
@@ -228,6 +230,12 @@ extension SPProductContentView {
     
     @objc fileprivate func sp_clickShopCartAction(){
         guard let block = self.addComplete else {
+            return
+        }
+        block(self.productModel)
+    }
+    @objc fileprivate func sp_clickShop(){
+        guard let block = self.shopBlock else {
             return
         }
         block(self.productModel)

@@ -161,6 +161,9 @@ extension SPAuctionVC : UITableViewDelegate ,UITableViewDataSource {
         if indexPath.row < sp_getArrayCount(array: self.dataArray){
             let productModel = self.dataArray?[indexPath.row]
             cell?.auctionView.productModel = productModel
+            cell?.auctionView.productView.shopBlock = { [weak self](model) in
+                self?.sp_clickShop(model: model)
+            }
         }
         return cell!
     }
@@ -231,7 +234,15 @@ extension SPAuctionVC {
         self.currentPage = 1
         self.sp_sendRequest()
     }
-  
+    fileprivate func sp_clickShop(model : SPProductModel?){
+        guard let product = model else {
+            return
+        }
+        let shopModel = SPShopModel()
+        let shopVC = SPShopHomeVC()
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
+    }
 }
 extension SPAuctionVC{
     fileprivate func sp_sendRequest(){

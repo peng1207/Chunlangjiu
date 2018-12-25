@@ -25,6 +25,7 @@ class  SPShopHomeView:  UIView{
     fileprivate lazy var typeImgView : UIImageView = {
         let view = UIImageView()
         view.isUserInteractionEnabled = true
+        view.image = sp_getDefaultUserImg()
         return view
     }()
     fileprivate lazy var authLabel : UILabel = {
@@ -74,7 +75,7 @@ class  SPShopHomeView:  UIView{
         self.nameLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.shopIconImageView.snp.right).offset(20)
             maker.top.equalTo(self).offset(29)
-            maker.height.greaterThanOrEqualTo(0)
+            maker.height.greaterThanOrEqualTo(15)
             maker.width.greaterThanOrEqualTo(0)
         }
         self.typeImgView.snp.makeConstraints { (maker) in

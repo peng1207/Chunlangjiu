@@ -50,6 +50,7 @@ class SPMineHeaderView:  UICollectionReusableView{
     }()
     fileprivate lazy var authImgView : UIImageView = {
         let view = UIImageView()
+        view.image = UIImage(named: "public_unAuth")
         return view
     }()
     fileprivate lazy var noLoginBtn : UIButton = {
@@ -167,6 +168,6 @@ extension SPMineHeaderView {
         self.logoImgView.isHidden = !isLogin
         self.titleLabel.isHidden = !isLogin
         self.nameLabel.isHidden = !isLogin
-        self.authImgView.isHidden = isLogin
+        self.authImgView.isHidden = !isLogin
     }
 }

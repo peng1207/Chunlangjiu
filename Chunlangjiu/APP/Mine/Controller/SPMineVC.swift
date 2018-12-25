@@ -384,7 +384,7 @@ extension SPMineVC {
     }
     
     fileprivate func sp_pushOrderVC(orderState : SPOrderStatus = .all){
-        
+        self.pushVC = true
         if SPAPPManager.sp_isBusiness() {
             let orderVC = SPOrderVC()
             orderVC.orderState = orderState

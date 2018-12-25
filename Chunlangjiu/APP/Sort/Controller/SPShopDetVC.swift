@@ -65,6 +65,7 @@ class SPShopDetVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = "店铺详情"
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.headerView)
         self.scrollView.addSubview(self.addressView)

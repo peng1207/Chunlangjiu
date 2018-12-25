@@ -238,6 +238,9 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
                 let cell : SPProductAuctionCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHAuctionCellID, for: indexPath) as! SPProductAuctionCollectCell
                 cell.contentView.backgroundColor = self.view.backgroundColor
                 cell.auctionView.productModel = m
+                cell.auctionView.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
+                }
                 return cell
             }else{
                 let cell : SPProductListHCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHCellID, for: indexPath) as! SPProductListHCell
@@ -245,6 +248,9 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
                    cell.productView.productModel = productModel
                 cell.productView.addComplete = { [weak self](model) in
                     self?.sp_sendAddRequest(model: model)
+                }
+                cell.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
                 }
                 return cell
             }
@@ -256,6 +262,9 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
             }
             cell.productView.addComplete = { [weak self](model) in
                 self?.sp_sendAddRequest(model: model)
+            }
+            cell.productView.shopBlock = { [weak self](model) in
+                self?.sp_clickShop(model: model)
             }
             return cell
         }
@@ -373,6 +382,15 @@ extension SPProductListVC {
             self.topConstraint.update(offset: 0)
         }
         self.isHiddenNav = false
+    }
+    fileprivate func sp_clickShop(model : SPProductModel?){
+        guard let product = model else {
+            return
+        }
+        let shopModel = SPShopModel()
+        let shopVC = SPShopHomeVC()
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
     }
    
 }

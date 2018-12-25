@@ -80,7 +80,7 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     func sp_dealDelete(){
         let isShow = SPOrderBtnManager.sp_showDelete(orderModel: orderModel)
         self.deleteBtn.isHidden = isShow ? false : true
-        self.deleteRight.update(offset: isShow ? -5 : 22)
+        self.deleteRight.update(offset: isShow ? -5 : 18)
         
     }
     /// 添加UI
@@ -118,9 +118,9 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
             maker.width.greaterThanOrEqualTo(0)
         }
         self.deleteBtn.snp.makeConstraints { (maker) in
-            self.deleteRight = maker.right.equalTo(self.shopView).offset(22).constraint
-            maker.width.equalTo(22)
-            maker.height.equalTo(24)
+            self.deleteRight = maker.right.equalTo(self.shopView).offset(18).constraint
+            maker.width.equalTo(18)
+            maker.height.equalTo(17)
             maker.centerY.equalTo(self.shopView).offset(0)
         }
         self.lineView.snp.makeConstraints { (maker) in

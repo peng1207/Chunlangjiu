@@ -29,7 +29,7 @@ class SPShopHomeVC: SPBaseVC {
     }()
     fileprivate lazy var searchView : SPSearchView = {
         var view = SPSearchView(frame:  CGRect(x: 0, y: 0, width: sp_getScreenWidth() - 120, height: 30))
-        view.searchBlock = {  [weak self](text) in
+        view.searchBlock = { [weak self](text) in
             self?.sp_dealSearch(text: text)
         }
         return view
@@ -70,6 +70,7 @@ class SPShopHomeVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = "店铺首页"
         self.view.addSubview(self.shopHomeView)
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5

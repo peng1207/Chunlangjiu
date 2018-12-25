@@ -18,6 +18,7 @@ class SPProductOfShopView:  UIView{
     }()
     fileprivate lazy var typeImgView : UIImageView = {
         let view = UIImageView()
+        view.image = sp_getDefaultUserImg()
         return view
     }()
     lazy var nameLabel : UILabel = {

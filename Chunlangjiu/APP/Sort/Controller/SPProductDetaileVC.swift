@@ -309,23 +309,27 @@ extension SPProductDetaileVC {
     }
     /// 查看出价详细
     @objc fileprivate func sp_lookAuction(){
-        let request = SPRequestModel()
-        var parm = [String : Any]()
-        parm.updateValue(sp_getString(string: self.detaileModel?.item?.auctionitem_id), forKey: "auctionitem_id")
-        request.parm = parm
-        sp_showAnimation(view: self.view, title: nil)
-        SPAppRequest.sp_getAuctionPriceList(requestModel: request) { [weak self](code , list, errorModel, total) in
-            sp_hideAnimation(view: self?.view)
-            if code == SP_Request_Code_Success {
-                if sp_getArrayCount(array: list) > 0 {
-                    SPAuctionPriceList.sp_show(list: list as? [SPAuctionPrice])
-                }else{
-                    sp_showTextAlert(tips: "还没有人出价哦!")
-                }
-            }else{
-                sp_showTextAlert(tips: "获取列表数据失败")
-            }
-        }
+        let lookVC = SPLookAuctionVC()
+        lookVC.auctionitem_id = self.detaileModel?.item?.auctionitem_id
+        self.navigationController?.pushViewController(lookVC, animated: true)
+        
+//        let request = SPRequestModel()
+//        var parm = [String : Any]()
+//        parm.updateValue(sp_getString(string: self.detaileModel?.item?.auctionitem_id), forKey: "auctionitem_id")
+//        request.parm = parm
+//        sp_showAnimation(view: self.view, title: nil)
+//        SPAppRequest.sp_getAuctionPriceList(requestModel: request) { [weak self](code , list, errorModel, total) in
+//            sp_hideAnimation(view: self?.view)
+//            if code == SP_Request_Code_Success {
+//                if sp_getArrayCount(array: list) > 0 {
+//                    SPAuctionPriceList.sp_show(list: list as? [SPAuctionPrice])
+//                }else{
+//                    sp_showTextAlert(tips: "还没有人出价哦!")
+//                }
+//            }else{
+//                sp_showTextAlert(tips: "获取列表数据失败")
+//            }
+//        }
     }
     fileprivate func sp_clickBraner(index : Int){
         sp_log(message: "index \(index)")

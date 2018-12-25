@@ -176,6 +176,9 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
             let cell : SPProductAuctionCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHAuctionCellID, for: indexPath) as! SPProductAuctionCollectCell
             if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray) {
                 cell.auctionView.productModel = indexModel?.dataArray?[indexPath.row]
+                cell.auctionView.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
+                }
             }
             return cell
            
@@ -184,6 +187,9 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
             
             if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray){
                 cell.productView.productModel = indexModel?.dataArray?[indexPath.row]
+                cell.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
+                }
             }
             return cell
         }
@@ -532,6 +538,15 @@ extension SPIndexVC{
             sp_dealPush(lineType: sp_getString(string: bannerModel.linktype))
         }
         
+    }
+    fileprivate func sp_clickShop(model : SPProductModel?){
+        guard let product = model else {
+            return
+        }
+        let shopModel = SPShopModel()
+        let shopVC = SPShopHomeVC()
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
     }
 }
 // MARK: - notification

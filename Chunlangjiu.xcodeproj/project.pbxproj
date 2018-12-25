@@ -295,6 +295,9 @@
 		9ED254BE21CF1FBA00A3166A /* SPShopInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254BD21CF1FBA00A3166A /* SPShopInfoView.swift */; };
 		9ED254C021CF215400A3166A /* SPShopDetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254BF21CF215400A3166A /* SPShopDetVC.swift */; };
 		9ED254C421CF24FE00A3166A /* SPShopProductCollectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254C321CF24FE00A3166A /* SPShopProductCollectCell.swift */; };
+		9ED254C621D27D4800A3166A /* SPAppImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254C521D27D4800A3166A /* SPAppImg.swift */; };
+		9ED254C821D2886C00A3166A /* SPLookAuctionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254C721D2886C00A3166A /* SPLookAuctionVC.swift */; };
+		9ED254CA21D288AF00A3166A /* SPLookAuctionTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254C921D288AF00A3166A /* SPLookAuctionTableCell.swift */; };
 		9EF4C67420EC7385007E9909 /* SPIndexVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67320EC7385007E9909 /* SPIndexVC.swift */; };
 		9EF4C67620EC7391007E9909 /* SPMineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67520EC7391007E9909 /* SPMineVC.swift */; };
 		9EF4C67820EC73A2007E9909 /* SPShopCartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */; };
@@ -707,6 +710,9 @@
 		9ED254BD21CF1FBA00A3166A /* SPShopInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopInfoView.swift; sourceTree = "<group>"; };
 		9ED254BF21CF215400A3166A /* SPShopDetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopDetVC.swift; sourceTree = "<group>"; };
 		9ED254C321CF24FE00A3166A /* SPShopProductCollectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopProductCollectCell.swift; sourceTree = "<group>"; };
+		9ED254C521D27D4800A3166A /* SPAppImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAppImg.swift; sourceTree = "<group>"; };
+		9ED254C721D2886C00A3166A /* SPLookAuctionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLookAuctionVC.swift; sourceTree = "<group>"; };
+		9ED254C921D288AF00A3166A /* SPLookAuctionTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLookAuctionTableCell.swift; sourceTree = "<group>"; };
 		9EF4C67320EC7385007E9909 /* SPIndexVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexVC.swift; sourceTree = "<group>"; };
 		9EF4C67520EC7391007E9909 /* SPMineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineVC.swift; sourceTree = "<group>"; };
 		9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopCartVC.swift; sourceTree = "<group>"; };
@@ -1156,6 +1162,7 @@
 			isa = PBXGroup;
 			children = (
 				9EF4C67D20EC73D1007E9909 /* SPAuctionVC.swift */,
+				9ED254C721D2886C00A3166A /* SPLookAuctionVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1175,6 +1182,7 @@
 				9EF4C6E320EFD672007E9909 /* SPCountdownView.swift */,
 				9EF4C6E520F1EFEC007E9909 /* SPAuctionView.swift */,
 				9EF4C6E720F1F27B007E9909 /* SPLabelView.swift */,
+				9ED254C921D288AF00A3166A /* SPLookAuctionTableCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1854,6 +1862,7 @@
 				567ECD59213E795900F254E4 /* SPUploadImage.swift */,
 				9EFC5976217B33C00002B4BE /* SPEventHeader.swift */,
 				564A7D1B218AAEBB009027DB /* SPUpdateModel.swift */,
+				9ED254C521D27D4800A3166A /* SPAppImg.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2451,6 +2460,7 @@
 				9EC5143921098138006869B3 /* SPCompanyAuthenticationVC.swift in Sources */,
 				9EC51445210C5812006869B3 /* SPWineryDetaileInfoView.swift in Sources */,
 				9EF4C6BE20EF48FA007E9909 /* SPCityTableCell.swift in Sources */,
+				9ED254C821D2886C00A3166A /* SPLookAuctionVC.swift in Sources */,
 				5610337D21380CA5009DB376 /* SPOrderPayView.swift in Sources */,
 				9E2C6EFF21201B5000091EF6 /* SPSearchCityView.swift in Sources */,
 				9E22EAF02135AC6F00B196D5 /* SPOrderDetaileVC.swift in Sources */,
@@ -2489,6 +2499,7 @@
 				9E34F6DF2101D9C800D59ABD /* SPProductDetaileWebVC.swift in Sources */,
 				9E8140B7211B52880063A6E4 /* SPMineCountModel.swift in Sources */,
 				9E020E192114BF0F0028ED50 /* SPHttpUrl.swift in Sources */,
+				9ED254C621D27D4800A3166A /* SPAppImg.swift in Sources */,
 				9EF4C72520F73D76007E9909 /* SPIndexATableCell.swift in Sources */,
 				9EF4C71920F49006007E9909 /* SPProductOfShopView.swift in Sources */,
 				9EC5144B210C5D85006869B3 /* SPWineryScoreView.swift in Sources */,
@@ -2580,6 +2591,7 @@
 				9EF4C68620EC7F9D007E9909 /* SPEnum.swift in Sources */,
 				9E8140AB2117402A0063A6E4 /* SPProductDetailModel.swift in Sources */,
 				9EF4C72920F75CBE007E9909 /* SPIndexSectionAHeaderView.swift in Sources */,
+				9ED254CA21D288AF00A3166A /* SPLookAuctionTableCell.swift in Sources */,
 				9E34F6C920FDC4FE00D59ABD /* SPAddressFooterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
