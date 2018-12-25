@@ -137,11 +137,9 @@ extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section < sp_getArrayCount(array: self.dataArray) {
             let model = self.dataArray?[section]
-            let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: model)
+            let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: model,showDelete: false)
             return 50.0 + (bottomIsHidden ? 0.0 : 50.0)
         }
-        
-        
         return 100
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -153,9 +151,20 @@ extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
         if section < sp_getArrayCount(array: self.dataArray) {
              let orderModel  = self.dataArray?[section]
             headerView?.orderModel = orderModel
+            headerView?.sp_dealDelete()
         }
         headerView?.clickBlock = { [weak self](model) in
             self?.sp_clickHeader(orderModel: model)
+        }
+        headerView?.clickDeleteBlock = { [weak self](model) in
+            if let vc = self , let m = model{
+                SPOrderHandle.sp_delete(order: m, viewController: vc, complete: { (isSuccess) in
+                    if isSuccess {
+                        self?.currentPage = 1
+                        self?.sp_request()
+                    }
+                })
+            }
         }
         return headerView
     }

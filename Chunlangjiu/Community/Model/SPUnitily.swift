@@ -780,4 +780,20 @@ func sp_change(second : Int) ->(String,String,String,String){
     secondStr =  String(format: "%02ld", second % 60)
     return (dayStr,hourStr,minuStr,secondStr)
 }
- 
+/// 复制功能
+///
+/// - Parameter text: 复制内容
+func sp_copy(text :String?)->Void{
+    //就这两句话就实现了
+    let paste = UIPasteboard.general
+    paste.string = sp_getString(string: text)
+    sp_showTextAlert(tips: "复制成功")
+}
+/// 拨打电话
+///
+/// - Parameter text: 号码
+func sp_openTel(text:String?)->Void{
+    if let url = URL(string: "tel://\(sp_getString(string: text))") {
+        UIApplication.shared.openURL(url)
+    }
+}

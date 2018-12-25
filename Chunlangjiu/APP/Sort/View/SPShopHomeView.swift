@@ -31,7 +31,7 @@ class  SPShopHomeView:  UIView{
         let label = UILabel()
         label.font = sp_getFontSize(size: 11)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.text = " 个人认证 "
         label.sp_cornerRadius(cornerRadius: 7.5)
         label.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue), width: sp_lineHeight)

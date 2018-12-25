@@ -14,18 +14,27 @@ class SPCustomerServiceVC: SPBaseVC {
         let view = SPTextLabelView()
         view.titleLabel.text = "全国热线"
         view.contentLabel.text = "400-788-9550"
+        view.clickBlock = {
+           sp_openTel(text: "400-788-9550")
+        }
         return view
     }()
     fileprivate lazy var wxView : SPTextLabelView = {
         let view = SPTextLabelView()
         view.titleLabel.text = "醇狼微信"
         view.contentLabel.text = "chunlang9"
+        view.clickBlock = {
+             sp_copy(text: "chunlang9")
+        }
         return view
     }()
     fileprivate lazy var qqView : SPTextLabelView = {
         let view = SPTextLabelView()
         view.titleLabel.text = "醇狼QQ"
         view.contentLabel.text = "3076783805"
+        view.clickBlock = {
+             sp_copy(text: "chunlang9")
+        }
         return view
     }()
     

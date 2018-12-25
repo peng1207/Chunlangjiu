@@ -24,6 +24,12 @@ class SPTextLabelView:  UIView{
         label.textAlignment = .left
         return label
     }()
+    var tap : UITapGestureRecognizer?
+    var clickBlock : SPBtnClickBlock?{
+        didSet{
+            sp_addTap()
+        }
+    }
     lazy var lineView : UIView = {
         return sp_getLineView()
     }()
@@ -37,6 +43,18 @@ class SPTextLabelView:  UIView{
     }
     func sp_updateLeft(left : CGFloat){
         self.conentLeft.update(offset: left)
+    }
+    fileprivate func sp_addTap(){
+        if self.tap == nil {
+            self.tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickTap))
+            self.addGestureRecognizer(self.tap!)
+        }
+    }
+    @objc fileprivate func sp_clickTap(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block()
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

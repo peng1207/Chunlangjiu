@@ -81,8 +81,8 @@ class SPOrderTableFooterView:  UITableViewHeaderFooterView{
     /// 赋值
     fileprivate func sp_setupData(){
         self.priceLabel.text = "共\(sp_getString(string: orderModel?.totalItem))件商品  合计：\(SP_CHINE_MONEY)\(sp_getString(string: orderModel?.payment))"
-        let cance : (canceIsHidden : Bool,canceText : String) = SPOrderBtnManager.sp_dealCanceState(orderModel: self.orderModel)
-        let done : (doneIsHidden : Bool, doneText: String) = SPOrderBtnManager.sp_dealDoneState(orderModel: self.orderModel)
+        let cance : (canceIsHidden : Bool,canceText : String) = SPOrderBtnManager.sp_dealCanceState(orderModel: self.orderModel,showDelete: false)
+        let done : (doneIsHidden : Bool, doneText: String) = SPOrderBtnManager.sp_dealDoneState(orderModel: self.orderModel,showDelete: false)
         self.canceBtn.isHidden = cance.canceIsHidden
         self.canceBtn.setTitle(sp_getString(string: cance.canceText), for: UIControlState.normal)
         self.doneBtn.isHidden = done.doneIsHidden

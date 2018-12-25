@@ -59,8 +59,8 @@ class SPOrderHomeVC: SPBaseVC {
         self.orderVC.orderType = self.orderType
         self.orderVC.orderState = self.orderState
         self.auctionOrderVC = SPOrderVC()
-        self.auctionOrderVC.orderType = self.orderType
-        self.auctionOrderVC.orderState = .paydown
+        self.auctionOrderVC.orderType = .auctionType
+        self.auctionOrderVC.orderState = .all
         self.addChildViewController(self.orderVC)
         self.addChildViewController(self.auctionOrderVC)
         self.scrollView.addSubview(self.orderVC.view)

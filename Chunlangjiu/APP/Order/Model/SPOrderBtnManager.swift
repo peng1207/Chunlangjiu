@@ -9,7 +9,7 @@
 import Foundation
 class SPOrderBtnManager {
     
-    class func sp_dealCanceState(orderModel : SPOrderModel?) ->(Bool,String){
+    class func sp_dealCanceState(orderModel : SPOrderModel?,showDelete : Bool = true) ->(Bool,String){
         var isHidden = false
         var canceText = ""
         switch sp_getString(string: orderModel?.status) {
@@ -45,7 +45,12 @@ class SPOrderBtnManager {
                 if let isRate = Bool(sp_getString(string: orderModel?.is_buyer_rate)),isRate == true {
                     isHidden = true
                 }else{
-                    canceText = "删除订单"
+                    if showDelete {
+                        canceText = "删除订单"
+                    }else {
+                        isHidden = true
+                    }
+                    
                 }
                 
                 
@@ -95,7 +100,7 @@ class SPOrderBtnManager {
         }
         return (isHidden,canceText)
     }
-    class func sp_dealDoneState(orderModel : SPOrderModel?) ->(Bool,String){
+    class func sp_dealDoneState(orderModel : SPOrderModel?,showDelete : Bool = true) ->(Bool,String){
         var isHidden = false
         var donetext = ""
         switch sp_getString(string: orderModel?.status) {
@@ -130,7 +135,12 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-                 donetext = "删除订单"
+                if showDelete {
+                    donetext = "删除订单"
+                }else{
+                    isHidden = true
+                }
+                
             }
         case SP_WAIT_BUYER_CONFIRM_GOODS :
             if SPAPPManager.sp_isBusiness() {
@@ -143,7 +153,12 @@ class SPOrderBtnManager {
                 isHidden = true
             }else{
                 if let isRate = Bool(sp_getString(string: orderModel?.is_buyer_rate)),isRate == true {
-                    donetext = "删除订单"
+                    if showDelete {
+                         donetext = "删除订单"
+                    }else{
+                        isHidden = true
+                    }
+                   
                 }else{
                      donetext = "评价"
                 }
@@ -214,7 +229,7 @@ class SPOrderBtnManager {
     ///
     /// - Parameter orderModel: 订单数据
     /// - Returns: 是否隐藏
-    class func sp_dealDetBtn(orderModel : SPOrderModel?)-> Bool {
+    class func sp_dealDetBtn(orderModel : SPOrderModel?,showDelete : Bool = true)-> Bool {
         var isHidden = false
         
         switch sp_getString(string: orderModel?.status) {
@@ -241,7 +256,9 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-                
+                if showDelete == false {
+                    isHidden = true
+                }
             }
         case SP_WAIT_BUYER_CONFIRM_GOODS :
             if SPAPPManager.sp_isBusiness() {
@@ -253,7 +270,11 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-               
+               if let isRate = Bool(sp_getString(string: orderModel?.is_buyer_rate)),isRate == true {
+                    if showDelete == false {
+                        isHidden = true
+                    }
+                }
             }
         case SP_WAIT_SELLER_AGREE:
             if SPAPPManager.sp_isBusiness(){
@@ -292,6 +313,30 @@ class SPOrderBtnManager {
         }
         return isHidden
     }
-    
+    /// 是否显示删除按钮
+    ///
+    /// - Parameter orderModel: 订单数据
+    /// - Returns: 是否显示
+    class func sp_showDelete(orderModel : SPOrderModel?) -> Bool {
+        var show : Bool = false
+        switch sp_getString(string: orderModel?.status) {
+        case SP_TRADE_FINISHED:
+            if SPAPPManager.sp_isBusiness(){
+                
+            }else{
+                  show = true
+            }
+        case  SP_TRADE_CLOSED_BY_SYSTEM :
+            if SPAPPManager.sp_isBusiness(){
+                
+            }else{
+                show = true
+            }
+        default:
+            show = false
+        }
+        
+        return show
+    }
 }
 
