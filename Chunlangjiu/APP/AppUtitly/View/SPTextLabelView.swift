@@ -27,12 +27,16 @@ class SPTextLabelView:  UIView{
     lazy var lineView : UIView = {
         return sp_getLineView()
     }()
+    fileprivate var conentLeft : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    func sp_updateLeft(left : CGFloat){
+        self.conentLeft.update(offset: left)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -50,7 +54,7 @@ class SPTextLabelView:  UIView{
             maker.right.lessThanOrEqualTo(self.contentLabel.snp.left).offset(-10)
         }
         self.contentLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(105)
+            self.conentLeft = maker.left.equalTo(self).offset(105).constraint
             maker.top.bottom.equalTo(self).offset(0)
             maker.right.equalTo(self).offset(-11)
         }

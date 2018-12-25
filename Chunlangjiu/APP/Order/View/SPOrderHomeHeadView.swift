@@ -86,6 +86,9 @@ class SPOrderHomeHeadView: UIView {
     }
 }
 extension SPOrderHomeHeadView{
+    func sp_getWhich()-> Int{
+        return self.orderBtn.isSelected ? 0 : 1
+    }
     @objc fileprivate func sp_clickOrder(){
         sp_updateLineLayout()
         sp_dealBtnDefault()

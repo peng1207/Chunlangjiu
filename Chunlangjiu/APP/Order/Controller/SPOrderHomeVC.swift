@@ -27,6 +27,7 @@ class SPOrderHomeVC: SPBaseVC {
     fileprivate var auctionOrderVC : SPOrderVC!
     var orderType : SPOrderType = .defaultType
     var orderState : SPOrderStatus = .all
+     fileprivate var isFristCome : Bool = true
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -34,6 +35,10 @@ class SPOrderHomeVC: SPBaseVC {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if self.isFristCome == false {
+            self.sp_dealClick(index: self.headerView.sp_getWhich())
+        }
+        self.isFristCome = false
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -54,8 +59,8 @@ class SPOrderHomeVC: SPBaseVC {
         self.orderVC.orderType = self.orderType
         self.orderVC.orderState = self.orderState
         self.auctionOrderVC = SPOrderVC()
-        self.orderVC.orderType = self.orderType
-        self.orderVC.orderState = .paydown
+        self.auctionOrderVC.orderType = self.orderType
+        self.auctionOrderVC.orderState = .paydown
         self.addChildViewController(self.orderVC)
         self.addChildViewController(self.auctionOrderVC)
         self.scrollView.addSubview(self.orderVC.view)
