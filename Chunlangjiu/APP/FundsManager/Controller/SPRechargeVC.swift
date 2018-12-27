@@ -40,7 +40,7 @@ class SPRechargeVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.navigationItem.title = "充值"
+        
         self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
         self.tableView.delegate = self
         self.tableView.dataSource = self

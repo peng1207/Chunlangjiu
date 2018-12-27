@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+typealias SPFundsHeadComplete = (_ index : Int)->Void
 class SPFundsHeadView:  UIView{
     fileprivate lazy var lineView : UIView = {
         let view = sp_getLineView()
@@ -33,7 +34,7 @@ class SPFundsHeadView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickBond), for: UIControlEvents.touchUpInside)
         return btn
     }()
-    
+    var clickBlock : SPFundsHeadComplete?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -60,11 +61,19 @@ class SPFundsHeadView:  UIView{
             maker.top.bottom.equalTo(self).offset(0)
             maker.right.equalTo(self.snp.right).offset(0)
         }
-        self.lineView.snp.makeConstraints { (maker) in
+        sp_updateLine(isFrist: true)
+    }
+    fileprivate func sp_updateLine(isFrist : Bool = true){
+        self.lineView.snp.remakeConstraints { (maker) in
             maker.width.equalTo(40)
             maker.height.equalTo(sp_lineHeight)
             maker.bottom.equalTo(self.snp.bottom).offset(0)
-            maker.centerX.equalTo(self.balabceBtn.snp.centerX).offset(0)
+            if isFrist{
+                  maker.centerX.equalTo(self.balabceBtn.snp.centerX).offset(0)
+            }else{
+                 maker.centerX.equalTo(self.bondBtn.snp.centerX).offset(0)
+            }
+          
         }
     }
     deinit {
@@ -75,13 +84,27 @@ extension SPFundsHeadView{
     @objc fileprivate func sp_clickBalance(){
         sp_setDefault()
         self.balabceBtn.isSelected = true
+        sp_dealComplete()
+        sp_updateLine(isFrist: true)
     }
     @objc fileprivate func sp_clickBond(){
         sp_setDefault()
         self.bondBtn.isSelected = true
+        sp_dealComplete()
+        sp_updateLine(isFrist: false)
     }
     fileprivate func sp_setDefault(){
         self.balabceBtn.isSelected = false
         self.bondBtn.isSelected = false
     }
+    func sp_getIndex()->Int{
+        return self.balabceBtn.isSelected ? 0 : 1
+    }
+    fileprivate func sp_dealComplete(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block(sp_getIndex())
+    }
+    
 }

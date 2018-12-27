@@ -12,6 +12,9 @@ class SPFundsVC: SPBaseVC {
     fileprivate lazy var headerView : SPFundsHeadView = {
         let view = SPFundsHeadView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.clickBlock = { [weak self](index) in
+            self?.sp_dealIndex(index: index)
+        }
         return view
     }()
     
@@ -45,6 +48,7 @@ class SPFundsVC: SPBaseVC {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        sp_dealIndex(index: self.headerView.sp_getIndex())
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -104,5 +108,8 @@ extension SPFundsVC {
     @objc fileprivate func sp_clickDet(){
         let capitalVC = SPCapitalDetVC()
         self.navigationController?.pushViewController(capitalVC, animated: true)
+    }
+    fileprivate func sp_dealIndex(index :Int){
+        self.scrollView.setContentOffset(CGPoint(x: self.scrollView.frame.size.width * CGFloat(index), y: 0), animated: true)
     }
 }

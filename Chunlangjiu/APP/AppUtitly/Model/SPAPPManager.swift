@@ -25,6 +25,7 @@ class SPAPPManager : NSObject{
             sp_saveUserData()
         }
     }
+    var memberModel : SPMemberModel? 
     //  获取省市区的回调
     private var areaComplete : SPGetListComplete?
     // 省市区数据

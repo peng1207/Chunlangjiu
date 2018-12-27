@@ -49,6 +49,7 @@ class SPMineTableCell : UITableViewCell {
             sp_setupData()
         }
     }
+    var countModel : SPMineCountModel?
     var selectBlock : SPMineSelectBlock?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -92,7 +93,7 @@ class SPMineTableCell : UITableViewCell {
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = self.cellView.backgroundColor
         self.collectionView.register(SPMineCollectCell.self, forCellWithReuseIdentifier: collectionCellID)
-        self.collectionView.addObserver(self, forKeyPath: SP_KVO_KEY_CONTENTSIZE, options: NSKeyValueObservingOptions.new, context: nil)
+//        self.collectionView.addObserver(self, forKeyPath: SP_KVO_KEY_CONTENTSIZE, options: NSKeyValueObservingOptions.new, context: nil)
         self.cellView.addSubview(self.collectionView)
         self.sp_addConstraint()
     }
@@ -102,7 +103,7 @@ class SPMineTableCell : UITableViewCell {
             maker.left.equalTo(self.contentView).offset(10)
             maker.right.equalTo(self.contentView).offset(-10)
             maker.top.equalTo(self.contentView).offset(10)
-            maker.height.greaterThanOrEqualTo(0)
+//            maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.contentView.snp.bottom).offset(0)
         }
         self.titleLabel.snp.makeConstraints { (maker) in
@@ -131,7 +132,7 @@ class SPMineTableCell : UITableViewCell {
         self.collectionView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.cellView).offset(0)
             maker.top.equalTo(self.lineView.snp.bottom).offset(0)
-            self.collectionHeight = maker.height.equalTo(0).constraint
+//            self.collectionHeight = maker.height.equalTo(0).constraint
             maker.bottom.equalTo(self.cellView.snp.bottom).offset(0)
         }
     }
@@ -149,7 +150,9 @@ extension SPMineTableCell : UICollectionViewDelegate,UICollectionViewDataSource,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPMineCollectCell  = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellID, for: indexPath) as! SPMineCollectCell
         if indexPath.row < sp_getArrayCount(array: self.sectionModel?.dataArray) {
-            cell.model = self.sectionModel?.dataArray?[indexPath.row]
+            let model = self.sectionModel?.dataArray?[indexPath.row]
+            model?.num = SPMineData.sp_getItemCount(mineModel: model, countModel: self.countModel)
+            cell.model = model
         }
         return cell
     }

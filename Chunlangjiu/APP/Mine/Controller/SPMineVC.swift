@@ -26,10 +26,18 @@ class SPMineVC: SPBaseVC {
     fileprivate var pushVC : Bool = false
      
     private var countModel : SPMineCountModel?
-    private var memberInfo : SPMemberModel?
+    
     /// 企业认证状态
-    private var companyAuth : SPCompanyAuth?
-    private var realNameAuth : SPRealNameAuth?
+    private var companyAuth : SPCompanyAuth?{
+        didSet{
+            sp_dealHeaderView()
+        }
+    }
+    private var realNameAuth : SPRealNameAuth?{
+        didSet{
+            sp_dealHeaderView()
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -60,8 +68,8 @@ class SPMineVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
-        self.tableView.estimatedRowHeight = 120
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+//        self.tableView.estimatedRowHeight = 120
+//        self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.backgroundColor = self.view.backgroundColor
         self.tableView.tableHeaderView = self.headerView
         self.tableView.bounces = false
@@ -106,12 +114,23 @@ extension SPMineVC: UITableViewDelegate ,UITableViewDataSource,UIImagePickerCont
             cell?.contentView.backgroundColor = self.view.backgroundColor
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            cell?.countModel = self.countModel
             cell?.sectionModel = self.dataArray?[indexPath.row]
             cell?.selectBlock = { [weak self] (model) in
                 self?.sp_dealSelect(mineModel: model)
             }
+            
         }
         return cell!
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            let sectionModel = self.dataArray?[indexPath.row]
+            if let model = sectionModel {
+                return 40 + sp_lineHeight + 10 + CGFloat((sp_getArrayCount(array: model.dataArray) / model.rowCount + (sp_getArrayCount(array: model.dataArray) % model.rowCount  > 0 ? 1 : 0) ) * 81)
+            }
+        }
+        return 0
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard SPAPPManager.sp_isLogin(isPush: true) else {
@@ -479,6 +498,14 @@ extension SPMineVC {
         UIView.setAnimationTransition(UIViewAnimationTransition.flipFromLeft, for: self.view, cache: true)
         UIView.commitAnimations()
     }
+    fileprivate func sp_dealHeaderView(){
+        
+        if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH {
+            self.headerView.sp_isAuth(isAuth: true)
+        }else{
+            self.headerView.sp_isAuth(isAuth: false)
+        }
+    }
 }
 
 // MARK: - 请求 数据
@@ -522,7 +549,7 @@ extension SPMineVC{
         SPAppRequest.sp_getUserImgSet(requestModel: request) { [weak self](code, msg, errorModel) in
             sp_hideAnimation(view: nil)
             if code == SP_Request_Code_Success {
-                if let model = self?.memberInfo {
+                if let model = SPAPPManager.instance().memberModel {
                     model.head_portrait = imgUrl
                     self?.tableView.reloadData()
                 }
@@ -578,8 +605,8 @@ extension SPMineVC{
     }
     private func sp_dealMemberInfoRequest(code:String,memberModel:SPMemberModel?,errorModel:SPRequestError?){
             if code == SP_Request_Code_Success {
-                self.memberInfo = memberModel;
-                self.headerView.memberModel = self.memberInfo
+                SPAPPManager.instance().memberModel = memberModel;
+                self.headerView.memberModel = SPAPPManager.instance().memberModel
             }
     }
     fileprivate func sp_sendCompanyAuthStatus(){
@@ -587,7 +614,7 @@ extension SPMineVC{
         SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in
             if code == SP_Request_Code_Success{
                 self?.companyAuth = model
-                self?.tableView.reloadData()
+                
             }
         }
     }
@@ -596,7 +623,7 @@ extension SPMineVC{
         SPAppRequest.sp_getRealNameAuth(requestModel: request) { [weak self](code , model , errorModel) in
             if code == SP_Request_Code_Success{
                 self?.realNameAuth = model
-                self?.tableView.reloadData()
+              
             }
         }
     }
@@ -609,7 +636,7 @@ extension SPMineVC{
         SPAppRequest.sp_getUpdateShop(requestModel: request) { [weak self](code, msg, errorModel) in
             sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
-                if let model = self?.memberInfo {
+                if let model = SPAPPManager.instance().memberModel {
                     model.shop_name = name
                 }
                 self?.tableView.reloadData()
@@ -633,7 +660,8 @@ extension SPMineVC{
         self.companyAuth = nil
         self.realNameAuth = nil
         self.countModel = nil
-        self.memberInfo = nil
+        SPAPPManager.instance().memberModel = nil
+        self.headerView.sp_isAuth(isAuth: false)
         sp_getData()
     }
     @objc fileprivate func sp_changeIdent(){

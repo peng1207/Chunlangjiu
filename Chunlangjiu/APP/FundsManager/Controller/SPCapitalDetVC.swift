@@ -13,6 +13,9 @@ class SPCapitalDetVC: SPBaseVC {
     fileprivate lazy var headerView : SPCapitalDetHeadView = {
         let view = SPCapitalDetHeadView()
         view.backgroundColor = UIColor.white
+        view.clickBlock = { [weak self] (index) in
+            self?.sp_dealHeader(index: index)
+        }
         return view
     }()
     fileprivate lazy var recordVC : SPCapitalDetList = {
@@ -42,6 +45,7 @@ class SPCapitalDetVC: SPBaseVC {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        sp_dealHeader(index: self.headerView.sp_getIndex())
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -99,5 +103,10 @@ class SPCapitalDetVC: SPBaseVC {
     }
     deinit {
         
+    }
+}
+extension SPCapitalDetVC {
+    fileprivate func sp_dealHeader(index : Int){
+        self.scrollView.setContentOffset(CGPoint(x: self.scrollView.frame.size.width * CGFloat(index), y: 0), animated: true)
     }
 }

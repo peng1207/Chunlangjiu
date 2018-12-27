@@ -164,6 +164,7 @@ extension SPBalanceVC {
     }
     @objc fileprivate func sp_clickRecharge(){
         let rechargeVC = SPRechargeVC()
+        rechargeVC.navigationItem.title = "充值"
         self.navigationController?.pushViewController(rechargeVC, animated: true)
     }
     

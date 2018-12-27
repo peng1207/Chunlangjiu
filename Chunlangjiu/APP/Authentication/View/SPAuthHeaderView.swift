@@ -31,7 +31,11 @@ class SPAuthHeaderView:  UIView{
         label.text = "立即实名认证享受更多特权服务"
         return label
     }()
-    
+    var memberModel : SPMemberModel?{
+        didSet{
+            sp_setupData()
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,6 +43,10 @@ class SPAuthHeaderView:  UIView{
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    fileprivate func sp_setupData(){
+        self.logoImgView.sp_cache(string: sp_getString(string: self.memberModel?.head_portrait), plImage: sp_getLogoImg())
+        self.nameLabel.text = sp_getString(string: self.memberModel?.shop_name)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

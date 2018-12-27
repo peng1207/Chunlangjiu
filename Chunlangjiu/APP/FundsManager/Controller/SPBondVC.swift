@@ -30,6 +30,8 @@ class SPBondVC: SPBaseVC {
         btn.setTitle("撤销保证金", for: UIControlState.selected)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.selected)
+        btn.setBackgroundImage(UIImage.sp_getImageWithColor(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)), for: UIControlState.normal)
+        btn.setBackgroundImage(UIImage.sp_getImageWithColor(color: SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickSubmit), for: UIControlEvents.touchUpInside)
         btn.sp_cornerRadius(cornerRadius: 5)
@@ -53,7 +55,7 @@ class SPBondVC: SPBaseVC {
         let label = UILabel()
         label.font = sp_getFontSize(size: 11)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.text = "保证金交纳说明：\n1、保证金交纳成功后，用户即可成为星级卖家，尊享海量特权。\n2、卖家升级为星级卖家，可无限发布商品，发布的商品享有优先排序功能。\n3、此操作成功后，需要短信提示。"
         label.numberOfLines = 0
         return label
@@ -142,7 +144,14 @@ class SPBondVC: SPBaseVC {
 extension SPBondVC {
     
     @objc fileprivate func sp_clickSubmit(){
-        
+        if self.submitBtn.isSelected {
+            
+        }else{
+            let rechargeVC = SPRechargeVC()
+            rechargeVC.navigationItem.title = "缴纳保证金"
+            self.navigationController?.pushViewController(rechargeVC, animated: true)
+        }
+       
     }
     
 }

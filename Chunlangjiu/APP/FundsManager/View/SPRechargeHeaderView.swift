@@ -36,7 +36,7 @@ class SPRechargeHeaderView:  UIView{
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.priceView)
-    self.addSubview(self.titleView)
+        self.addSubview(self.titleView)
         self.addSubview(self.lineView)
         self.sp_addConstraint()
     }

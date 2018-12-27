@@ -21,10 +21,13 @@ class SPAuthView:  UIView{
         label.textAlignment = .center
         return label
     }()
-    fileprivate lazy var applyBtn : UIButton = {
+    lazy var applyBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("申请", for: UIControlState.normal)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)
+        btn.setTitle("已认证", for: UIControlState.disabled)
+  
+        btn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.normal)
+         btn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
         btn.sp_cornerRadius(cornerRadius: 5)
         btn.titleLabel?.font = sp_getFontSize(size: 14)

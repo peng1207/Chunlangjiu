@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 import SnapKit
+
+typealias SPCapitalComplete = (_ index : Int) -> Void
+
 class SPCapitalDetHeadView:  UIView{
   
     fileprivate lazy var recordBtn : UIButton = {
@@ -18,6 +21,7 @@ class SPCapitalDetHeadView:  UIView{
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickRecord), for: UIControlEvents.touchUpInside)
+        btn.isSelected = true
         return btn
     }()
     fileprivate lazy var rechargeBtn : UIButton = {
@@ -38,6 +42,7 @@ class SPCapitalDetHeadView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickCash), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    var clickBlock : SPCapitalComplete?
     fileprivate lazy var lineView : UIView = {
         return sp_getLineView()
     }()
@@ -81,19 +86,31 @@ extension SPCapitalDetHeadView {
     @objc fileprivate func sp_clickRecord(){
         sp_setBtnDefault()
         self.recordBtn.isSelected = true
+        sp_dealComplete()
     }
     @objc fileprivate func sp_clickRecharge(){
         sp_setBtnDefault()
         self.rechargeBtn.isSelected = true
+        sp_dealComplete()
     }
     @objc fileprivate func sp_clickCash(){
         sp_setBtnDefault()
         self.cashBtn.isSelected = true
+        sp_dealComplete()
     }
     fileprivate func sp_setBtnDefault(){
         self.rechargeBtn.isSelected = false
         self.recordBtn.isSelected = false
         self.cashBtn.isSelected = false
+    }
+    func sp_getIndex()->Int{
+        return self.recordBtn.isSelected ? 0 : self.rechargeBtn.isSelected ? 1 : 2
+    }
+    fileprivate func sp_dealComplete(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block(sp_getIndex())
     }
     
 }

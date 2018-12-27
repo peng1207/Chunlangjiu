@@ -39,7 +39,7 @@ class SPAuthHomeVC: SPBaseVC {
         view.titleLabel.text = "企业实名认证"
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.imgView.image = UIImage(named: "public_companyAuth")
-        view.clickBlock = { [weak self]in
+        view.clickBlock = { [weak self] in
             self?.sp_clickCompany()
         }
         return view
@@ -50,10 +50,31 @@ class SPAuthHomeVC: SPBaseVC {
         view.image = UIImage(named: "public_authDiff")
         return view
     }()
-    
+    /// 企业认证状态
+    private var companyAuth : SPCompanyAuth?{
+        didSet{
+            if sp_getString(string: companyAuth?.status) == SP_STATUS_FINISH {
+                companyView.applyBtn.isEnabled = false
+            }else{
+                companyView.applyBtn.isEnabled = true
+            }
+        }
+    }
+    private var realNameAuth : SPRealNameAuth?{
+        didSet{
+            if sp_getString(string: realNameAuth?.status) == SP_STATUS_FINISH {
+                realNameView.applyBtn.isEnabled = false
+            }else{
+                realNameView.applyBtn.isEnabled = true
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_setupData()
+        sp_sendRealNameAuth()
+        sp_sendCompanyAuthStatus()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -66,6 +87,9 @@ class SPAuthHomeVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    fileprivate func sp_setupData(){
+        self.headerView.memberModel = SPAPPManager.instance().memberModel
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -119,7 +143,7 @@ class SPAuthHomeVC: SPBaseVC {
             maker.left.equalTo(self.scrollView.snp.left).offset(18)
             maker.right.equalTo(self.scrollView.snp.right).offset(-18)
             maker.top.equalTo(self.realNameView.snp.bottom).offset(15)
-            maker.height.equalTo(93)
+            maker.height.equalTo(self.imgView.snp.width).multipliedBy(0.27)
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-10)
         }
     }
@@ -135,5 +159,25 @@ extension SPAuthHomeVC {
     fileprivate func sp_clickCompany(){
         let companyVC = SPCompanyAuthenticationVC()
         self.navigationController?.pushViewController(companyVC, animated: true)
+    }
+}
+extension SPAuthHomeVC {
+    fileprivate func sp_sendCompanyAuthStatus(){
+        let request = SPRequestModel()
+        SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in
+            if code == SP_Request_Code_Success{
+                self?.companyAuth = model
+                
+            }
+        }
+    }
+    fileprivate func sp_sendRealNameAuth(){
+        let request = SPRequestModel()
+        SPAppRequest.sp_getRealNameAuth(requestModel: request) { [weak self](code , model , errorModel) in
+            if code == SP_Request_Code_Success{
+                self?.realNameAuth = model
+                
+            }
+        }
     }
 }

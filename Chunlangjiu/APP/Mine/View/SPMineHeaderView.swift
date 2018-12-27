@@ -170,4 +170,12 @@ extension SPMineHeaderView {
         self.nameLabel.isHidden = !isLogin
         self.authImgView.isHidden = !isLogin
     }
+    func sp_isAuth(isAuth :Bool) {
+        if isAuth {
+              self.authImgView.image = UIImage(named: "public_haveAuth")
+        }else{
+            self.authImgView.image = UIImage(named: "public_unAuth")
+        }
+        
+    }
 }
