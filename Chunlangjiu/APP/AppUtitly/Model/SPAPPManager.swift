@@ -14,6 +14,8 @@ private let SP_SAVE_LOCATIONCITY_KEY = "SP_SAVE_LOCATIONCITY_KEY"
 private let SP_SAVE_SHOWCITY_KEY = "SP_SAVE_SHOWCITY_KEY"
 private let SP_SAVE_LATITUDE_KEY = "SP_SAVE_LATITUDE_KEY"
 private let SP_SAVE_LONGITUDE_KEY = "SP_SAVE_LONGITUDE_KEY"
+/// 保存教程页
+private let SP_SAVE_TUTORIALPAGE_KEY = "SP_SAVE_TUTORIALPAGE_KEY"
 //let SP_SHOP_ACCESSTOKEN = "35b5a32db3a7a1c22243c699b8e59aff18c7f4532875d76012ac3e8e4238abcf"
 let SP_SHOP_ACCESSTOKEN = ""
 
@@ -338,6 +340,47 @@ extension SPAPPManager{
         }
         self.timer = nil
     }
-    
+    /// 是否展示教程页
+    ///
+    /// - Returns: true 展示 false 不展示
+   class func sp_isShowTutorialPage()->Bool {
+        var isShow = false
+        let version = sp_getString(string: sp_getUser(key: SP_SAVE_TUTORIALPAGE_KEY))
+        let newVersion = sp_getVersionCode()
+        if sp_getString(string: version).count == 0 {
+            isShow = true
+        }else if sp_getString(string: newVersion).compare(sp_getString(string: version)) ==   ComparisonResult.orderedDescending  {
+            isShow = true
+        }
+        if isShow {
+            sp_saveUser(data: newVersion, key: SP_SAVE_TUTORIALPAGE_KEY)
+        }
+        return isShow
+    }
+    /// 获取升级code
+    ///
+    /// - Returns: code
+   class func sp_getVersionCode()->String{
+        let infoDic : [String : Any]?  = Bundle.main.infoDictionary
+        if let dic = infoDic {
+            let versionCode = dic["versionCode"]
+            return sp_getString(string:versionCode)
+        }else{
+            return ""
+        }
+    }
+    ///  展示主页面
+    class func sp_showMainVC(){
+        let appDelete : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        if let window = appDelete.window {
+            window.rootViewController = SPMainVC()
+        }
+    }
+    class func sp_showTutorialPageVC(){
+        let appDelete : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        if let window = appDelete.window {
+            window.rootViewController = SPTutorialPageVC()
+        }
+    }
 }
 

@@ -47,6 +47,20 @@ class SPTutorialPageVC : SPBaseVC{
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
+    /// 赋值
+    fileprivate func sp_setupData(){
+       
+        if let img =  UIImage(named: "public_tutorialPage_1")  {
+            imgArray.append(img)
+        }
+        if let img = UIImage(named: "public_tutorialPage_2") {
+            imgArray.append(img)
+        }
+        if let img = UIImage(named: "public_tutorialPage_3") {
+            imgArray.append(img)
+        }
+        self.collectionView.reloadData()
+    }
     /// 添加UI
     override func sp_setupUI(){
         let layout = UICollectionViewFlowLayout()
@@ -58,9 +72,10 @@ class SPTutorialPageVC : SPBaseVC{
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = UIColor.white
+        self.collectionView.isPagingEnabled = true
         self.collectionView.register(SPTutorialPageCollectCell.self, forCellWithReuseIdentifier: tutorialPageCellID)
         self.view.addSubview(self.collectionView)
-        self.view.addSubview(self.skipBtn)
+//        self.view.addSubview(self.skipBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -68,21 +83,18 @@ class SPTutorialPageVC : SPBaseVC{
         self.collectionView.snp.makeConstraints { (maker) in
             maker.left.right.top.bottom.equalTo(self.view).offset(0)
         }
-        self.skipBtn.snp.makeConstraints { (maker) in
-            maker.height.equalTo(30)
-            maker.width.equalTo(60)
-            maker.right.equalTo(self.view.snp.right).offset(-20)
-            maker.top.equalTo(self.view.snp.top).offset(sp_getstatusBarHeight() + 20)
-        }
+//        self.skipBtn.snp.makeConstraints { (maker) in
+//            maker.height.equalTo(30)
+//            maker.width.equalTo(60)
+//            maker.right.equalTo(self.view.snp.right).offset(-20)
+//            maker.top.equalTo(self.view.snp.top).offset(sp_getstatusBarHeight() + 20)
+//        }
     }
-    /// 处理数据
-    fileprivate func sp_setupData(){
-        
-    }
+    
 }
 extension SPTutorialPageVC {
     @objc fileprivate func sp_clickAdvert(){
-        
+        SPAPPManager.sp_showMainVC()
     }
 }
 extension SPTutorialPageVC : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
@@ -99,7 +111,12 @@ extension SPTutorialPageVC : UICollectionViewDelegate,UICollectionViewDataSource
         }
         return cell
     }
-    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return collectionView.frame.size
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        sp_clickAdvert()
+    }
 }
 
 

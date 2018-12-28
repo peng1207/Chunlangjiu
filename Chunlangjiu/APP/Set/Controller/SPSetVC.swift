@@ -171,14 +171,21 @@ extension SPSetVC {
         self.navigationController?.pushViewController(bankCard, animated: true)
     }
     fileprivate func sp_pushInfo(){
-        
+        let webVC = SPWebVC()
+        webVC.url = URL(string: "\(SP_GET_USER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))")
+        webVC.title = "会员资料"
+        self.navigationController?.pushViewController(webVC, animated: true)
     }
+    
     fileprivate func sp_pushAuth(){
         let authVC = SPAuthHomeVC()
         self.navigationController?.pushViewController(authVC, animated: true)
     }
     fileprivate func sp_pushAgreement(){
-        
+        let webVC = SPWebVC()
+        webVC.url = URL(string: SP_GET_USER_WEB_URL)
+        webVC.title = "用户协议"
+        self.navigationController?.pushViewController(webVC, animated: true)
     }
     fileprivate func sp_pushAbout(){
         let aboutVC = SPAboutVC()

@@ -49,6 +49,7 @@ class SPBondVC: SPBaseVC {
         label.font = sp_getFontSize(size: 12)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .center
+        label.text = "保证金金额"
         return label
     }()
     fileprivate lazy var tipsLabel : UILabel = {

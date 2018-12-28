@@ -31,11 +31,12 @@ class SPLookAuctionTableCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-    fileprivate lazy var statusLabel : UILabel = {
+    lazy var statusLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.textAlignment = .left
+        label.text = "领先"
         return label
     }()
     fileprivate lazy var lineView : UIView = {
@@ -74,7 +75,7 @@ class SPLookAuctionTableCell: UITableViewCell {
         self.phoneLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.phoneLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.contentView).offset(19)
-            maker.top.equalTo(self.contentView).offset(28)
+            maker.top.equalTo(self.contentView).offset(18)
             maker.width.greaterThanOrEqualTo(0)
             maker.height.greaterThanOrEqualTo(0)
         }

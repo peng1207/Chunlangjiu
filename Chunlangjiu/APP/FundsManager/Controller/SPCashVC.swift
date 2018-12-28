@@ -14,6 +14,9 @@ class SPCashVC: SPBaseVC {
         let view = SPAddressSelectView()
         view.titleLabel.text = "银行卡"
         view.placeholder = "请选择银行卡"
+        view.selectBlock = { [weak self] in
+            self?.sp_clickBankCard()
+        }
         return view
     }()
     fileprivate lazy var priceView : SPAddressEditView = {
@@ -47,6 +50,7 @@ class SPCashVC: SPBaseVC {
         let view = UIScrollView()
         return view
     }()
+    fileprivate var bandkCardModel : SPBankCardModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -119,5 +123,15 @@ extension SPCashVC {
     @objc fileprivate func sp_clickSubmit(){
         
     }
-    
+    fileprivate func sp_clickBankCard(){
+        let bankCardVC = SPBankCardVC()
+        bankCardVC.selectBlock = { [weak self] (model) in
+            self?.sp_dealSelect(model:model)
+        }
+        self.navigationController?.pushViewController(bankCardVC, animated: true)
+    }
+    fileprivate func sp_dealSelect(model : SPBankCardModel?){
+        self.bandkCardModel = model
+//        self.bankCardView.content = sp_getString(string: self.bandkCardModel.)
+    }
 }

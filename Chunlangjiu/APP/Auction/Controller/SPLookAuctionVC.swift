@@ -11,10 +11,12 @@ import SnapKit
 class SPLookAuctionVC: SPBaseVC {
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPAuctionPrice]?
-    var auctionitem_id : String? 
+    var auctionitem_id : String?
+    fileprivate var currentPage : Int = 1
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_sendRequest()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -42,7 +44,12 @@ class SPLookAuctionVC: SPBaseVC {
     }
     /// 处理有没数据
     override func sp_dealNoData(){
-        
+        if sp_getArrayCount(array: self.dataArray) > 0 {
+            self.noData.isHidden = true
+        }else{
+            self.noData.isHidden = false
+            self.noData.text = "还没有人出价哦"
+        }
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -81,6 +88,45 @@ extension SPLookAuctionVC : UITableViewDelegate,UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+    }
+    
+}
+extension SPLookAuctionVC{
+    fileprivate func sp_sendRequest(){
+        let request = SPRequestModel()
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: auctionitem_id), forKey: "auctionitem_id")
+        
+        request.parm = parm
+        
+        SPAppRequest.sp_getAuctionPriceList(requestModel: request) { [weak self](code , list, errorModel, total) in
+            
+            if code == SP_Request_Code_Success {
+                self?.sp_dealRequest(list: list)
+            }else{
+                self?.sp_dealNoData()
+            }
+        }
+    }
+    fileprivate func sp_dealRequest(list:Any?){
+        if self.currentPage == 1 {
+            self.dataArray?.removeAll()
+        }
+        if let array :  Array<SPAuctionPrice> = self.dataArray ,let l : [SPAuctionPrice] = list as? [SPAuctionPrice]{
+            self.dataArray = array + l
+            if self.currentPage > 1 && sp_getArrayCount(array: l) <= 0 {
+                self.currentPage = self.currentPage - 1
+                if self.currentPage < 1 {
+                    self.currentPage = 1
+                }
+            }
+        }else{
+            self.dataArray = list as? Array<SPAuctionPrice>
+        }
+        sp_mainQueue {
+            self.tableView.reloadData()
+        }
+        self.sp_dealNoData()
     }
     
 }

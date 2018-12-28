@@ -8,6 +8,7 @@
 
 import Foundation
 import SnapKit
+typealias SPSelectBandCardComplete = (_ model : SPBankCardModel?)->Void
 class SPBankCardVC: SPBaseVC {
     
     fileprivate lazy var addBtn : UIButton = {
@@ -22,6 +23,7 @@ class SPBankCardVC: SPBaseVC {
     }()
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPBankCardModel]?
+    var selectBlock : SPSelectBandCardComplete?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -109,7 +111,12 @@ extension SPBankCardVC : UITableViewDelegate,UITableViewDataSource {
         return 155
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        guard let block = self.selectBlock  else {
+            return
+        }
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            block(self.dataArray?[indexPath.row])
+        }
     }
     
 }

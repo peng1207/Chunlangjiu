@@ -17,7 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds);
         self.window?.backgroundColor = UIColor.white;
-        self.window?.rootViewController = SPMainVC();
+        if SPAPPManager.sp_isShowTutorialPage() {
+            SPAPPManager.sp_showTutorialPageVC()
+        }else{
+            SPAPPManager.sp_showMainVC()
+        }
+       
+    
         SPAPPManager.instance()
          SPAPPManager.sp_registerApp()
         SPRealmTool.configRealm()
