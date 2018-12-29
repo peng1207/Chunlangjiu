@@ -19,12 +19,13 @@ class SPRechargeVC: SPBaseVC {
     }()
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPPayModel]?
-    
+    fileprivate var selectPay : SPPayModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
         self.tableView.sp_layoutHeaderView()
         self.tableView.sp_layoutFooterView()
+        sp_setupData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -37,6 +38,23 @@ class SPRechargeVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    /// 赋值
+    fileprivate func sp_setupData(){
+        var data = [SPPayModel]()
+        if SPThridManager.sp_isInstallWX() {
+             let wxModel = SPPayModel()
+            wxModel.app_display_name = "微信"
+            wxModel.app_rpc_id = SPPayType.wxPay.rawValue
+            data.append(wxModel)
+        }
+       
+        let aliPayModel = SPPayModel()
+        aliPayModel.app_display_name = "支付宝"
+        aliPayModel.app_rpc_id = SPPayType.aliPay.rawValue
+        data.append(aliPayModel)
+        self.dataArray = data
+        self.tableView.reloadData()
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -85,7 +103,20 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
             cell = SPRechargeTableCell(style: UITableViewCellStyle.default, reuseIdentifier: rechargeCellID)
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
-            
+            cell?.model = self.dataArray?[indexPath.row]
+            if let pay = self.selectPay , let model = cell?.model{
+                if sp_getString(string: pay.app_rpc_id) == sp_getString(string:  model.app_rpc_id) {
+                    cell?.sp_isSelect(select: true)
+                }else{
+                    cell?.sp_isSelect(select: false)
+                }
+            }else{
+                 cell?.sp_isSelect(select: false)
+            }
+            cell?.clickBlock = { [weak self] (model) in
+                self?.selectPay = model
+                self?.tableView.reloadData()
+            }
         }
         return cell!
     }
@@ -93,7 +124,10 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
         return 50
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            self.selectPay = self.dataArray?[indexPath.row]
+            tableView.reloadData()
+        }
     }
     
 }

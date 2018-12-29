@@ -14,6 +14,7 @@ class SPRechargeHeaderView:  UIView{
         let view = SPAddressEditView()
         view.titleLabel.text = "金额"
         view.textFiled.placeholder = "单笔金额不高于50000"
+        view.textFiled.keyboardType = UIKeyboardType.decimalPad
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()
@@ -53,8 +54,10 @@ class SPRechargeHeaderView:  UIView{
             maker.height.equalTo(50)
         }
         self.lineView.snp.makeConstraints { (maker) in
-            maker.left.right.bottom.equalTo(self).offset(0)
+            maker.left.right.equalTo(self).offset(0)
             maker.height.equalTo(sp_lineHeight)
+            maker.top.equalTo(self.titleView.snp.bottom).offset(0)
+            maker.bottom.equalTo(self).offset(0)
         }
     }
     deinit {

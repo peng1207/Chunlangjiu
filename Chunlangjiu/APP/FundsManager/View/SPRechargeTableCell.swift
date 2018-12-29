@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import SnapKit
+typealias SPRechargeComplete = (_ model : SPPayModel?)->Void
+
 class SPRechargeTableCell: UITableViewCell {
     
     fileprivate lazy var typeImgView : UIImageView = {
@@ -17,8 +19,8 @@ class SPRechargeTableCell: UITableViewCell {
     }()
     fileprivate lazy var selectBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: ""), for: UIControlState.normal)
-        btn.setImage(UIImage(named: ""), for: UIControlState.selected)
+        btn.setImage(UIImage(named: "public_unselect_gray"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_select_red_cor"), for: UIControlState.selected)
         btn.addTarget(self, action: #selector(sp_clickSelect), for: UIControlEvents.touchUpInside)
         return btn
     }()
@@ -32,6 +34,12 @@ class SPRechargeTableCell: UITableViewCell {
     fileprivate lazy var lineView : UIView = {
         return sp_getLineView()
     }()
+    var model : SPPayModel?{
+        didSet{
+            sp_setupData()
+        }
+    }
+    var clickBlock : SPRechargeComplete?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -41,14 +49,42 @@ class SPRechargeTableCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    /// 赋值
+    fileprivate func sp_setupData(){
+        self.titleLabel.text = sp_getString(string: model?.app_display_name)
+        if sp_getString(string: model?.app_rpc_id) == SPPayType.wxPay.rawValue {
+            self.typeImgView.image = UIImage(named: "public_pay_wx")
+        }else{
+            self.typeImgView.image = UIImage(named: "public_pay_ailpy")
+        }
+    }
     /// 添加UI
     fileprivate func sp_setupUI(){
-        
+        self.contentView.addSubview(self.typeImgView)
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.selectBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        
+        self.typeImgView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.contentView).offset(21)
+            maker.top.equalTo(self.contentView).offset(6)
+            maker.width.equalTo(30)
+            maker.height.equalTo(29)
+        }
+        self.titleLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.typeImgView.snp.right).offset(9)
+            maker.top.bottom.equalTo(self.contentView).offset(0)
+            maker.right.equalTo(self.selectBtn.snp.left).offset(-9)
+        }
+        self.selectBtn.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.contentView).offset(-15)
+            maker.width.equalTo(20)
+            maker.height.equalTo(20)
+            maker.centerY.equalTo(self.contentView).offset(0)
+        }
     }
     deinit {
         
@@ -56,6 +92,13 @@ class SPRechargeTableCell: UITableViewCell {
 }
 extension SPRechargeTableCell {
     @objc fileprivate func sp_clickSelect(){
-        self.selectBtn.isSelected = true
+        guard let block = self.clickBlock else {
+            return
+        }
+        block(self.model)
+    }
+    func sp_isSelect(select:Bool){
+        self.selectBtn.isSelected = select
     }
 }
+
