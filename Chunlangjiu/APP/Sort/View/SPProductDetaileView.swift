@@ -86,6 +86,13 @@ class SPProductDetaileView:  UIView {
         view.isHidden = true
         return view
     }()
+    lazy var auctionInfoView : SPAuctionInfoView = {
+        let view = SPAuctionInfoView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.isHidden = true
+        return view
+    }()
+    
     lazy var pullUpRefreshView : UIView = {
         let view = UIView()
         view.isHidden = true
@@ -104,6 +111,8 @@ class SPProductDetaileView:  UIView {
     fileprivate var evaluateTop : Constraint!
     fileprivate var recommendTop : Constraint!
     fileprivate var ruleTop : Constraint!
+    fileprivate var auctionInfoTop : Constraint!
+    fileprivate var auctionInfoHeight : Constraint!
     fileprivate var isLoading :  Bool = false
     fileprivate var isDragging : Bool  = false
     fileprivate var hasMore : Bool = true
@@ -127,6 +136,7 @@ class SPProductDetaileView:  UIView {
         self.productScrollView.addSubview(self.shopView)
         self.productScrollView.addSubview(self.detView)
         self.productScrollView.addSubview(self.evaluateView)
+        self.productScrollView.addSubview(self.auctionInfoView)
         self.productScrollView.addSubview(self.recommendView)
         self.productScrollView.addSubview(self.pullUpRefreshView)
         
@@ -179,9 +189,15 @@ class SPProductDetaileView:  UIView {
             maker.top.equalTo(self.shopView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
+        self.auctionInfoView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.productScrollView).offset(0)
+            self.auctionInfoHeight = maker.height.equalTo(0).constraint
+            self.auctionInfoTop = maker.top.equalTo(self.detView.snp.bottom).offset(0).constraint
+        }
+        
         self.recommendView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
-            self.recommendTop = maker.top.equalTo(self.detView.snp.bottom).offset(10).constraint
+            self.recommendTop = maker.top.equalTo(self.auctionInfoView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
         }
         self.pullUpRefreshView.snp.makeConstraints { (maker) in
@@ -287,6 +303,13 @@ extension SPProductDetaileView : UIScrollViewDelegate {
         sp_removeTime()
         if let isAuction = self.detaileModel?.item?.isAuction, isAuction == true{
             sp_addTime()
+            self.auctionInfoView.isHidden = false
+            self.auctionInfoTop.update(offset: 10)
+            self.auctionInfoHeight.update(offset: 140.0 + sp_lineHeight)
+        }else{
+            self.auctionInfoView.isHidden = true
+            self.auctionInfoTop.update(offset: 0)
+            self.auctionInfoHeight.update(offset:0)
         }
       
 //        self.webVC.url = URL(string: sp_getString(string: self.detaileModel?.item?.desc))

@@ -63,8 +63,8 @@ class SPConditionView:  UIView{
         btn.setTitle("品牌", for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.addTarget(self, action: #selector(sp_clickDefaultAction), for: UIControlEvents.touchUpInside)
         self.sp_setBtnEdge(btn: btn)
         return btn
@@ -75,9 +75,9 @@ class SPConditionView:  UIView{
         btn.setTitle("产地", for: UIControlState.normal)
           btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickNewAction), for: UIControlEvents.touchUpInside)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
           self.sp_setBtnEdge(btn: btn)
         return btn
     }()
@@ -86,20 +86,20 @@ class SPConditionView:  UIView{
             let title = "类型"
         btn.setTitle(title, for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.addTarget(self, action: #selector(sp_clickPriceAction), for: UIControlEvents.touchUpInside)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
           self.sp_setBtnEdge(btn: btn)
         return btn;
     }()
-    fileprivate lazy var alcoholDegreeBtn : UIButton = {
+    fileprivate lazy var defultBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        let title = "酒精度"
+        let title = "综合"
         btn.setTitle(title, for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.addTarget(self, action: #selector(sp_clickSortAction), for: UIControlEvents.touchUpInside)
           self.sp_setBtnEdge(btn: btn)
@@ -110,8 +110,8 @@ class SPConditionView:  UIView{
         let title = "价格区间"
         btn.setTitle(title, for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.addTarget(self, action: #selector(sp_clickFilterAction), for: UIControlEvents.touchUpInside)
           self.sp_setBtnEdge(btn: btn)
@@ -172,13 +172,19 @@ class SPConditionView:  UIView{
     var alcoholDegree : SPAlcoholDegree?{
         didSet{
             if let alcoholId = alcoholDegree?.alcohol_id, alcoholId > 0 {
-                  self.alcoholDegreeBtn.setTitle(sp_getString(string:alcoholDegree?.alcohol_name).count > 0  ? sp_getString(string: alcoholDegree?.alcohol_name) : "酒精度", for: UIControlState.normal)
+                  self.defultBtn.setTitle(sp_getString(string:alcoholDegree?.alcohol_name).count > 0  ? sp_getString(string: alcoholDegree?.alcohol_name) : "综合", for: UIControlState.normal)
             }else{
-                self.alcoholDegreeBtn.setTitle("酒精度", for: UIControlState.normal)
+                self.defultBtn.setTitle("综合", for: UIControlState.normal)
             }
-           self.sp_setBtnEdge(btn: alcoholDegreeBtn)
+           self.sp_setBtnEdge(btn: defultBtn)
         }
     }
+    var isDefault : Bool! = false {
+        didSet{
+            self.defultBtn.isSelected = isDefault
+        }
+    }
+    
     var selectprice : SPPriceRange?{
         didSet{
             if let type = selectprice?.type , type != SPPirceRangeType.all {
@@ -233,7 +239,7 @@ class SPConditionView:  UIView{
         self.addSubview(self.brandBtn)
         self.addSubview(self.placeBtn)
         self.addSubview(self.typeBtn)
-        self.addSubview(self.alcoholDegreeBtn)
+        self.addSubview(self.defultBtn)
         self.addSubview(self.priceBtn)
         self.addSubview(self.lineView)
         self.sp_addConstraint()
@@ -255,10 +261,17 @@ class SPConditionView:  UIView{
             maker.top.equalTo(self.snp.top).offset(0)
             maker.height.equalTo(sp_lineHeight)
         }
-        self.brandBtn.snp.makeConstraints { (maker) in
+        self.defultBtn.snp.makeConstraints { (maker) in
             maker.top.equalTo(self.sortLineView.snp.bottom).offset(0)
             maker.left.equalTo(self).offset(0)
-            maker.height.equalTo(40)
+             maker.height.equalTo(40)
+            maker.width.equalTo(self.brandBtn.snp.width).offset(0)
+        }
+        
+        self.brandBtn.snp.makeConstraints { (maker) in
+            
+            maker.left.equalTo(self.defultBtn.snp.right).offset(0)
+            maker.top.bottom.equalTo(self.defultBtn).offset(0)
             maker.width.equalTo(self.placeBtn.snp.width).offset(0)
         }
         self.placeBtn.snp.makeConstraints { (maker) in
@@ -269,16 +282,12 @@ class SPConditionView:  UIView{
         self.typeBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.placeBtn.snp.right).offset(0)
             maker.top.bottom.equalTo(self.placeBtn).offset(0)
-            maker.width.equalTo(self.alcoholDegreeBtn.snp.width).offset(0)
-        }
-        self.alcoholDegreeBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.typeBtn.snp.right).offset(0)
-            maker.top.bottom.equalTo(self.typeBtn).offset(0)
             maker.width.equalTo(self.priceBtn.snp.width).offset(0)
         }
+       
         self.priceBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.alcoholDegreeBtn.snp.right).offset(0)
-            maker.top.bottom.equalTo(self.alcoholDegreeBtn).offset(0)
+            maker.left.equalTo(self.typeBtn.snp.right).offset(0)
+            maker.top.bottom.equalTo(self.defultBtn).offset(0)
             maker.right.equalTo(self.snp.right).offset(0)
         }
         
@@ -311,9 +320,10 @@ extension SPConditionView {
     }
     @objc fileprivate func sp_clickSortAction(){
          sp_setDefaultSelect()
-        self.alcoholDegreeBtn.isSelected = true
-        
-        sp_show(selectModel: self.alcoholDegree, list: self.alcoholDegreeArray)
+//        self.defultBtn.isSelected = true
+        self.isDefault = true
+         sp_dealDefaultBlock()
+//        sp_show(selectModel: self.alcoholDegree, list: self.alcoholDegreeArray)
     }
     @objc fileprivate func sp_clickFilterAction(){
         sp_setDefaultSelect()
@@ -342,7 +352,8 @@ extension SPConditionView {
         self.brandBtn.isSelected = false
         self.placeBtn.isSelected = false
         self.typeBtn.isSelected = false
-        self.alcoholDegreeBtn.isSelected = false
+//        self.defultBtn.isSelected = false
+        self.isDefault = false
         self.priceBtn.isSelected = false
     }
     fileprivate func sp_removeSortView(){
@@ -359,7 +370,7 @@ extension SPConditionView {
         }else if self.typeBtn.isSelected {
             self.selectType = model as? SPTypeModel
             SPThridManager.sp_search(eventId: SP_EventID.searchType.rawValue, name: self.selectType?.odor_name)
-        }else if self.alcoholDegreeBtn.isSelected {
+        }else if self.defultBtn.isSelected {
             self.alcoholDegree = model as? SPAlcoholDegree
             SPThridManager.sp_search(eventId: SP_EventID.searchAlcoholDegree.rawValue, name: self.alcoholDegree?.alcohol_name)
         }else if self.priceBtn.isSelected {

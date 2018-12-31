@@ -112,7 +112,7 @@ extension SPFansVC {
         
     }
     fileprivate func sp_setupData(){
-        self.imageView.image = SPQRCodeUtil.sp_getClearImage(sourceImage: SPQRCodeUtil.sp_setQRCode(qrCode: "100"), center:  UIImage(named: "public_logo")!)
+        self.imageView.image = SPQRCodeUtil.sp_getClearImage(sourceImage: SPQRCodeUtil.sp_setQRCode(qrCode: "100"), center:   sp_getAppIcon())
     }
     @objc fileprivate func sp_clickList(){
         let listVC = SPFansListVC()

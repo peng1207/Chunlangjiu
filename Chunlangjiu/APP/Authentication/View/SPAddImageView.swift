@@ -11,7 +11,7 @@ import UIKit
 import SnapKit
 
 typealias SPClickAddImageBlock = (_ addImageView : SPAddImageView)-> Void
-
+typealias SPDeleteAddImgBlock = (_ addImageView : SPAddImageView)-> Void
 class SPAddImageView:  UIView{
     
     lazy var imageView : UIImageView = {
@@ -33,6 +33,7 @@ class SPAddImageView:  UIView{
         return btn
     }()
     var clickAddBlock : SPClickAddImageBlock?
+    var clickDeletBlock : SPDeleteAddImgBlock?
     var showDelete : Bool = false
     var imagePath : String?{
         didSet{
@@ -90,11 +91,18 @@ class SPAddImageView:  UIView{
         }
         block(self)
     }
+    @objc fileprivate func sp_dealDeleteComplete(){
+        guard let block = self.clickDeletBlock else {
+            return
+        }
+        block(self)
+    }
     @objc fileprivate func sp_clickDelete(){
         self.imageView.image = nil
         self.deleteBtn.isHidden = true
         self.showImageView.isHidden = false
         self.imagePath = nil
+        sp_dealDeleteComplete()
     }
     
     /// 添加UI

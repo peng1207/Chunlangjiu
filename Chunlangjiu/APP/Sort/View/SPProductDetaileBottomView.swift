@@ -25,7 +25,7 @@ class SPProductDetaileBottomView:  UIView{
     
     fileprivate lazy var msgBtn : UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "public_msg_black"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_callphone"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickMsgAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
@@ -40,6 +40,7 @@ class SPProductDetaileBottomView:  UIView{
         let btn = UIButton()
         btn.setImage(UIImage(named: "public_shopcart_black"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickShopCartAction), for: UIControlEvents.touchUpInside)
+        btn.isHidden = true
         return btn
     }()
     fileprivate lazy var intoShopCartBtn : UIButton = {
@@ -58,6 +59,7 @@ class SPProductDetaileBottomView:  UIView{
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickBuyAction), for: UIControlEvents.touchUpInside)
+       
         return btn
     }()
     fileprivate lazy var countLabel : UILabel = {
@@ -132,6 +134,7 @@ class SPProductDetaileBottomView:  UIView{
                 self.buyBtn.isHidden = true
                 self.editPriceBtn.isHidden = false
                 self.auctionLabel.isHidden = false
+                self.shopCartBtn.isHidden = true
                 if let isCheck : Bool = Bool(sp_getString(string: self.detaileModel?.item?.check)), isCheck == true{
                     
 //                   self.editPriceBtn.isSelected = true
@@ -147,6 +150,8 @@ class SPProductDetaileBottomView:  UIView{
 //                    self.editPriceBtn.isSelected = false
                     self.auctionLabel.text = "应付定金\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))"
                 }
+            }else{
+                self.shopCartBtn.isHidden = false
             }
            
             if let isCollect : Bool = Bool(sp_getString(string: model.item?.is_collect)), isCollect == true {

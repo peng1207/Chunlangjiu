@@ -36,9 +36,16 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         view.backgroundColor = UIColor.white
         return view
     }()
-    fileprivate lazy var showImageView : SPProductAddImgContentView = {
-        let view = SPProductAddImgContentView()
-        view.clickAddComplete = { [weak self](addView) in
+//    fileprivate lazy var showImageView : SPProductAddImgContentView = {
+//        let view = SPProductAddImgContentView()
+//        view.clickAddComplete = { [weak self](addView) in
+//            self?.sp_clickAddView(addView: addView)
+//        }
+//        return view
+//    }()
+    fileprivate lazy var addImgView : SPProductAddImgView = {
+        let view = SPProductAddImgView()
+        view.clickAddBlock = { [weak self] (addView) in
             self?.sp_clickAddView(addView: addView)
         }
         return view
@@ -126,7 +133,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     fileprivate var typeModel : SPTypeModel?
     fileprivate var alcoholModel : SPAlcoholDegree?
     fileprivate var sortArray : [SPSortLv3Model]?
-    fileprivate var tempAddView : SPProductAddImageView?
+    fileprivate var tempAddView : SPAddImageView?
     fileprivate var selectSort : SPSortRootModel?
     fileprivate var brandArray : [SPBrandModel]?
     fileprivate var shopCategoryArray : [SPShopCategory]?
@@ -165,7 +172,8 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         self.scrollView.addSubview(self.saveBtn)
         self.scrollView.addSubview(self.baseView)
         self.scrollView.addSubview(self.priceView)
-        self.scrollView.addSubview(self.showImageView)
+//        self.scrollView.addSubview(self.showImageView)
+        self.scrollView.addSubview(self.addImgView)
         self.scrollView.addSubview(self.titleView)
         self.scrollView.addSubview(self.labelView)
         self.scrollView.addSubview(self.explainView)
@@ -206,7 +214,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
             maker.top.equalTo(self.labelView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
-        self.showImageView.snp.makeConstraints { (maker) in
+        self.addImgView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.top.equalTo(self.baseView.snp.bottom).offset(10)
@@ -214,7 +222,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         self.titleView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
             maker.height.equalTo(40)
-            maker.top.equalTo(self.showImageView.snp.bottom).offset(10)
+            maker.top.equalTo(self.addImgView.snp.bottom).offset(10)
         }
         self.labelView.snp.makeConstraints { (maker) in
             maker.left.right.height.equalTo(self.titleView).offset(0)
@@ -338,11 +346,11 @@ extension SPProductAddVC {
         }
         
         
-        let imageArray = self.showImageView.sp_getImage()
-        if sp_getArrayCount(array: imageArray) >= 5 {
+        let imageArray = self.addImgView.sp_getImgs()
+        if sp_getArrayCount(array: imageArray) >= 6 {
             sp_getSelectImage(imageArray: imageArray)
         }else{
-            sp_showTextAlert(tips: "请添加商品图片,至少5张")
+            sp_showTextAlert(tips: "请添加商品图片,至少6张")
         }
     }
     fileprivate func sp_getSelectImage(imageArray : [UIImage]){
@@ -351,7 +359,7 @@ extension SPProductAddVC {
         var i = 0
         var selectImage = [String]()
         if self.edit {
-            selectImage = self.showImageView.sp_getImgPath()
+            selectImage = self.addImgView.sp_getImgPath()
         }else{
             for _  in imageArray{
                 selectImage.append("")
@@ -437,11 +445,12 @@ extension SPProductAddVC {
     ///  点击添加图片事件
     ///
     /// - Parameter addView: 添加对象view
-    fileprivate func sp_clickAddView(addView : SPProductAddImageView){
+    fileprivate func sp_clickAddView(addView : SPAddImageView){
         tempAddView = addView
         sp_thrSelectImg(viewController: self, nav: self.navigationController) { [weak self](img) in
             if let view = self?.tempAddView {
-                self?.showImageView.sp_update(image: img, addImageView: view)
+//                self?.showImageView.sp_update(image: img, addImageView: view)
+                self?.addImgView.sp_update(view: view, img: img)
             }
         }
         //        sp_showSelectImage(viewController: self, delegate: self)
@@ -603,7 +612,8 @@ extension SPProductAddVC {
         self.baseView.placeView.content = sp_getString(string: self.placeModel?.area_name)
         self.baseView.typeView.content = sp_getString(string: self.typeModel?.odor_name)
 //        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
-        self.showImageView.sp_setImage(paths: self.productModel?.images)
+        self.addImgView.sp_setimg(paths: self.productModel?.images)
+    
         self.explainView.textView.content = sp_getString(string: self.productModel?.explain)
         if let parmArray : [Any] = sp_stringValueArr(sp_getString(string: self.productModel?.parameter)){
             var index = 0
@@ -883,7 +893,8 @@ extension SPProductAddVC {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[ UIImagePickerControllerEditedImage] as? UIImage
         if let view = self.tempAddView {
-            self.showImageView.sp_update(image: image, addImageView: view)
+//            self.showImageView.sp_update(image: image, addImageView: view)
+            self.addImgView.sp_update(view: view, img: image)
         }
         picker.dismiss(animated: true, completion: nil)
     }

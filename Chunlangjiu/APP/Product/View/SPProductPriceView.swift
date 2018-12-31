@@ -15,12 +15,14 @@ class SPProductPriceView:  UIView{
         let view = SPAddressEditView()
         view.titleLabel.text = "商品价格"
         view.textFiled.keyboardType = UIKeyboardType.decimalPad
+        view.textFiled.placeholder = "请填写"
         return view
     }()
     lazy var stockView : SPAddressEditView = {
         let view = SPAddressEditView()
         view.titleLabel.text = "商品库存"
         view.textFiled.keyboardType = UIKeyboardType.numberPad
+        view.textFiled.placeholder = "请填写"
         return view
     }()
     

@@ -15,6 +15,7 @@ class  SPAboutVC: SPBaseVC {
     }()
     fileprivate lazy var logoImgView : UIImageView = {
         let view = UIImageView()
+        view.image = sp_getAppIcon()
         return view
     }()
     fileprivate lazy var versionLabel : UILabel = {

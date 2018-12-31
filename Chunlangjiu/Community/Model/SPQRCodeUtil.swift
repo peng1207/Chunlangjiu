@@ -32,7 +32,7 @@ class SPQRCodeUtil {
         return resultImage
     }
     // 使图片放大也可以清晰
-    class func sp_getClearImage(sourceImage: UIImage, center: UIImage) -> UIImage {
+    class func sp_getClearImage(sourceImage: UIImage, center: UIImage?) -> UIImage {
         
         let size = sourceImage.size
         // 开启图形上下文
@@ -46,8 +46,9 @@ class SPQRCodeUtil {
         let height: CGFloat = 80
         let x: CGFloat = (size.width - width) * 0.5
         let y: CGFloat = (size.height - height) * 0.5
-        center.draw(in: CGRect(x: x, y: y, width: width, height: height))
-        
+        if let centerImg = center {
+             centerImg.draw(in: CGRect(x: x, y: y, width: width, height: height))
+        }
         // 取出结果图片
         let resultImage = UIGraphicsGetImageFromCurrentImageContext()
         

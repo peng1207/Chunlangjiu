@@ -18,6 +18,12 @@ class SPShopHomeVC: SPBaseVC {
         view.addGestureRecognizer(tap)
         return view
     }()
+    fileprivate lazy var conditionView : SPShopConditionView = {
+        let view = SPShopConditionView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.sp_cornerRadius(cornerRadius: 5)
+        return view
+    }()
     fileprivate lazy var listBtn  : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setImage(UIImage(named: "public_list"), for: UIControlState.normal)
@@ -72,6 +78,7 @@ class SPShopHomeVC: SPBaseVC {
     override func sp_setupUI() {
         self.navigationItem.title = "店铺首页"
         self.view.addSubview(self.shopHomeView)
+        self.view.addSubview(self.conditionView)
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
@@ -108,10 +115,16 @@ class SPShopHomeVC: SPBaseVC {
             maker.right.equalTo(self.view).offset(-5)
             maker.height.equalTo(100)
         }
+        self.conditionView.snp.makeConstraints { (maker) in
+           maker.left.right.equalTo(self.shopHomeView).offset(0)
+            maker.top.equalTo(self.shopHomeView.snp.bottom).offset(10)
+            maker.height.equalTo(50)
+            
+        }
         self.collectionView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.view).offset(0)
             maker.right.equalTo(self.view).offset(0)
-            maker.top.equalTo(self.shopHomeView.snp.bottom).offset(0)
+            maker.top.equalTo(self.conditionView.snp.bottom).offset(0)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {

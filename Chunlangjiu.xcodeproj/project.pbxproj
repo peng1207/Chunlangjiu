@@ -129,6 +129,7 @@
 		9E2C6E3B211C9ECE00091EF6 /* SPWinerHeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C6E3A211C9ECE00091EF6 /* SPWinerHeaderModel.swift */; };
 		9E2C6E3D211E02BD00091EF6 /* SPScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C6E3C211E02BD00091EF6 /* SPScrollView.swift */; };
 		9E2C6EFF21201B5000091EF6 /* SPSearchCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C6EFE21201B5000091EF6 /* SPSearchCityView.swift */; };
+		9E2F808C21DA11B500348311 /* SPProductAddImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2F808B21DA11B500348311 /* SPProductAddImgView.swift */; };
 		9E324CFD217C8EC700F9AB5F /* SPWinderGrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E324CFC217C8EC700F9AB5F /* SPWinderGrade.swift */; };
 		9E324CFF217E1E7E00F9AB5F /* SPProductRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E324CFE217E1E7E00F9AB5F /* SPProductRuleView.swift */; };
 		9E324D01217E243000F9AB5F /* SPShowRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E324D00217E243000F9AB5F /* SPShowRule.swift */; };
@@ -298,6 +299,9 @@
 		9ED254C621D27D4800A3166A /* SPAppImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254C521D27D4800A3166A /* SPAppImg.swift */; };
 		9ED254C821D2886C00A3166A /* SPLookAuctionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254C721D2886C00A3166A /* SPLookAuctionVC.swift */; };
 		9ED254CA21D288AF00A3166A /* SPLookAuctionTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254C921D288AF00A3166A /* SPLookAuctionTableCell.swift */; };
+		9ED254CC21D7CA7B00A3166A /* SPAuctionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254CB21D7CA7B00A3166A /* SPAuctionInfoView.swift */; };
+		9ED254CE21D89D4F00A3166A /* SPShopConditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254CD21D89D4F00A3166A /* SPShopConditionView.swift */; };
+		9ED254D021D8A3E600A3166A /* SPProductTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254CF21D8A3E600A3166A /* SPProductTipView.swift */; };
 		9EF4C67420EC7385007E9909 /* SPIndexVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67320EC7385007E9909 /* SPIndexVC.swift */; };
 		9EF4C67620EC7391007E9909 /* SPMineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67520EC7391007E9909 /* SPMineVC.swift */; };
 		9EF4C67820EC73A2007E9909 /* SPShopCartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */; };
@@ -544,6 +548,7 @@
 		9E2C6E3A211C9ECE00091EF6 /* SPWinerHeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPWinerHeaderModel.swift; sourceTree = "<group>"; };
 		9E2C6E3C211E02BD00091EF6 /* SPScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPScrollView.swift; sourceTree = "<group>"; };
 		9E2C6EFE21201B5000091EF6 /* SPSearchCityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSearchCityView.swift; sourceTree = "<group>"; };
+		9E2F808B21DA11B500348311 /* SPProductAddImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductAddImgView.swift; sourceTree = "<group>"; };
 		9E324CFC217C8EC700F9AB5F /* SPWinderGrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPWinderGrade.swift; sourceTree = "<group>"; };
 		9E324CFE217E1E7E00F9AB5F /* SPProductRuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductRuleView.swift; sourceTree = "<group>"; };
 		9E324D00217E243000F9AB5F /* SPShowRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShowRule.swift; sourceTree = "<group>"; };
@@ -713,6 +718,9 @@
 		9ED254C521D27D4800A3166A /* SPAppImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAppImg.swift; sourceTree = "<group>"; };
 		9ED254C721D2886C00A3166A /* SPLookAuctionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLookAuctionVC.swift; sourceTree = "<group>"; };
 		9ED254C921D288AF00A3166A /* SPLookAuctionTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLookAuctionTableCell.swift; sourceTree = "<group>"; };
+		9ED254CB21D7CA7B00A3166A /* SPAuctionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuctionInfoView.swift; sourceTree = "<group>"; };
+		9ED254CD21D89D4F00A3166A /* SPShopConditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopConditionView.swift; sourceTree = "<group>"; };
+		9ED254CF21D8A3E600A3166A /* SPProductTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductTipView.swift; sourceTree = "<group>"; };
 		9EF4C67320EC7385007E9909 /* SPIndexVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexVC.swift; sourceTree = "<group>"; };
 		9EF4C67520EC7391007E9909 /* SPMineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineVC.swift; sourceTree = "<group>"; };
 		9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopCartVC.swift; sourceTree = "<group>"; };
@@ -1277,6 +1285,8 @@
 				9ED254BB21CF1E8700A3166A /* SPShopAddressView.swift */,
 				9ED254BD21CF1FBA00A3166A /* SPShopInfoView.swift */,
 				9ED254C321CF24FE00A3166A /* SPShopProductCollectCell.swift */,
+				9ED254CB21D7CA7B00A3166A /* SPAuctionInfoView.swift */,
+				9ED254CD21D89D4F00A3166A /* SPShopConditionView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1526,6 +1536,8 @@
 				9E89F100212DC919000539A4 /* SPShowSortView.swift */,
 				567ECD5B213E824A00F254E4 /* SPShopCategoryView.swift */,
 				567ECD5D213E825700F254E4 /* SPShopBrandView.swift */,
+				9ED254CF21D8A3E600A3166A /* SPProductTipView.swift */,
+				9E2F808B21DA11B500348311 /* SPProductAddImgView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2327,6 +2339,7 @@
 				9E4AAECF214E2D9C00336892 /* SPRefuseView.swift in Sources */,
 				9E5F7ABA21C2AED000A9EF35 /* SPLoginPwdVC.swift in Sources */,
 				9E5F7AEE21C6330300A9EF35 /* SPPartnerTableCell.swift in Sources */,
+				9ED254CE21D89D4F00A3166A /* SPShopConditionView.swift in Sources */,
 				9E22EABC2131A76E00B196D5 /* SPProductNumView.swift in Sources */,
 				9E12FDBD21206F0B0040CAE1 /* SPFilterHeaderModel.swift in Sources */,
 				9E5F7AD821C4E3B100A9EF35 /* SPCapitalDetDetTableCell.swift in Sources */,
@@ -2497,6 +2510,7 @@
 				9EF4C69620ECBC14007E9909 /* SPSortMainVC.swift in Sources */,
 				9E2C6E35211C9B8200091EF6 /* SPWinerSortModel.swift in Sources */,
 				9E34F6DF2101D9C800D59ABD /* SPProductDetaileWebVC.swift in Sources */,
+				9ED254CC21D7CA7B00A3166A /* SPAuctionInfoView.swift in Sources */,
 				9E8140B7211B52880063A6E4 /* SPMineCountModel.swift in Sources */,
 				9E020E192114BF0F0028ED50 /* SPHttpUrl.swift in Sources */,
 				9ED254C621D27D4800A3166A /* SPAppImg.swift in Sources */,
@@ -2507,6 +2521,7 @@
 				567F2A1A215F40320025E9E9 /* SPLookPictureVC.swift in Sources */,
 				56D6813A21CC95E4003E49AB /* SPIndexCollectHeaderView.swift in Sources */,
 				9E22EAFA2135B61500B196D5 /* SPOrderHeader.swift in Sources */,
+				9E2F808C21DA11B500348311 /* SPProductAddImgView.swift in Sources */,
 				9EF4C6FC20F26D84007E9909 /* SPBannerCollectCell.swift in Sources */,
 				9E34F6CD20FDD17500D59ABD /* SPTextView.swift in Sources */,
 				9E7DAAC7213B78D60044C5FD /* SPProductEvaluationListTableCell.swift in Sources */,
@@ -2551,6 +2566,7 @@
 				567ECD5C213E824A00F254E4 /* SPShopCategoryView.swift in Sources */,
 				9E34F6D92101913300D59ABD /* SPShopHomeVC.swift in Sources */,
 				9E70D7512155E77700CC6376 /* SPMineHeader.swift in Sources */,
+				9ED254D021D8A3E600A3166A /* SPProductTipView.swift in Sources */,
 				9E2C6E39211C9BBD00091EF6 /* SPWinerDetaileModel.swift in Sources */,
 				567ECD56213E718000F254E4 /* SPBrandModel.swift in Sources */,
 				9EAE840F2194893E00847B82 /* KiImageClipperViewController.swift in Sources */,

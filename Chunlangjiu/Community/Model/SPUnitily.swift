@@ -797,3 +797,23 @@ func sp_openTel(text:String?)->Void{
         UIApplication.shared.openURL(url)
     }
 }
+
+func sp_getAppIcon()->UIImage?{
+    let infoPlist = Bundle.main.infoDictionary
+    if let dic = infoPlist {
+        let icons : [String :Any]?   = dic["CFBundleIcons"] as? [String : Any]
+        if let iconDic : [String : Any] = icons {
+            let primaryIcon : [String : Any]? = iconDic["CFBundlePrimaryIcon"] as? [String : Any]
+            if let primaryIconDic = primaryIcon {
+                let files : [String]?  = primaryIconDic["CFBundleIconFiles"] as? [String]
+                if sp_getArrayCount(array: files) > 0 {
+                     return UIImage(named: sp_getString(string: files?.last))
+                }
+            }
+        }
+        
+        //            let icons = dic["CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles"]
+        
+    }
+    return nil
+}

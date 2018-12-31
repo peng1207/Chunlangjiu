@@ -73,7 +73,7 @@ class SPProductDetaileVC: SPBaseVC {
    
     fileprivate let topViewHeight : CGFloat = 44
     fileprivate var showDetaile : Bool = false
-    fileprivate var topViewTopConstat : Constraint?
+   
     var productModel : SPProductModel?
     var detaileModel : SPProductDetailModel?
     var countModel : SPShopCarCount?
@@ -110,7 +110,7 @@ class SPProductDetaileVC: SPBaseVC {
         self.view.addSubview(self.detaileView)
         self.view.addSubview(self.bottomView)
 //        self.scrollView.addSubview(self.detaileView)
-       
+//       self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.shareBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
