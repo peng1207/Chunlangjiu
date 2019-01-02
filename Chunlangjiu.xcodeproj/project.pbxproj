@@ -91,6 +91,10 @@
 		9E12FDBF212071D00040CAE1 /* SPFilterIntervalHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E12FDBE212071D00040CAE1 /* SPFilterIntervalHeaderView.swift */; };
 		9E12FDC1212072460040CAE1 /* SPFilterSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E12FDC0212072460040CAE1 /* SPFilterSectionHeaderView.swift */; };
 		9E12FDC32120934A0040CAE1 /* SPIndexTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E12FDC22120934A0040CAE1 /* SPIndexTitleView.swift */; };
+		9E194D6921DBC2D10080B72D /* SPCommissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E194D6821DBC2D10080B72D /* SPCommissionView.swift */; };
+		9E194D6B21DC63B40080B72D /* SPNotNetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E194D6A21DC63B40080B72D /* SPNotNetView.swift */; };
+		9E194D6E21DC68590080B72D /* Image.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9E194D6D21DC68590080B72D /* Image.bundle */; };
+		9E194D7021DC69100080B72D /* SPBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E194D6F21DC69100080B72D /* SPBundle.swift */; };
 		9E22EAB82130667900B196D5 /* SPPayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E22EAB72130667900B196D5 /* SPPayModel.swift */; };
 		9E22EABA2131A0C600B196D5 /* SPBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E22EAB92131A0C600B196D5 /* SPBalanceView.swift */; };
 		9E22EABC2131A76E00B196D5 /* SPProductNumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E22EABB2131A76E00B196D5 /* SPProductNumView.swift */; };
@@ -507,6 +511,10 @@
 		9E12FDBE212071D00040CAE1 /* SPFilterIntervalHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterIntervalHeaderView.swift; sourceTree = "<group>"; };
 		9E12FDC0212072460040CAE1 /* SPFilterSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterSectionHeaderView.swift; sourceTree = "<group>"; };
 		9E12FDC22120934A0040CAE1 /* SPIndexTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexTitleView.swift; sourceTree = "<group>"; };
+		9E194D6821DBC2D10080B72D /* SPCommissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCommissionView.swift; sourceTree = "<group>"; };
+		9E194D6A21DC63B40080B72D /* SPNotNetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNotNetView.swift; sourceTree = "<group>"; };
+		9E194D6D21DC68590080B72D /* Image.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Image.bundle; sourceTree = "<group>"; };
+		9E194D6F21DC69100080B72D /* SPBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBundle.swift; sourceTree = "<group>"; };
 		9E22EAB72130667900B196D5 /* SPPayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPayModel.swift; sourceTree = "<group>"; };
 		9E22EAB92131A0C600B196D5 /* SPBalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBalanceView.swift; sourceTree = "<group>"; };
 		9E22EABB2131A76E00B196D5 /* SPProductNumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductNumView.swift; sourceTree = "<group>"; };
@@ -937,6 +945,7 @@
 				9E0E17F6218B5C38001B8E00 /* SPOrderHeaderView.swift */,
 				561C74EA21CE2B1800132D88 /* SPOrderImgeTableCell.swift */,
 				56F47F3521D0E65300613BBA /* SPOrderHomeHeadView.swift */,
+				9E194D6821DBC2D10080B72D /* SPCommissionView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1133,6 +1142,7 @@
 		9E0C8B5320E63F2E00BD9743 /* APP */ = {
 			isa = PBXGroup;
 			children = (
+				9E194D6C21DC68330080B72D /* Resources */,
 				9E5F7AE721C632EB00A9EF35 /* Partner */,
 				9E5F7AAD21C009C100A9EF35 /* BankCard */,
 				56E97B8C21B9131E002E590C /* Activity */,
@@ -1542,6 +1552,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		9E194D6C21DC68330080B72D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9E194D6D21DC68590080B72D /* Image.bundle */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		9E22EAC12132D87D00B196D5 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
@@ -1875,6 +1893,7 @@
 				9EFC5976217B33C00002B4BE /* SPEventHeader.swift */,
 				564A7D1B218AAEBB009027DB /* SPUpdateModel.swift */,
 				9ED254C521D27D4800A3166A /* SPAppImg.swift */,
+				9E194D6F21DC69100080B72D /* SPBundle.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1890,6 +1909,7 @@
 				564A7D1D218AAF92009027DB /* SPUpdateView.swift */,
 				9E5F7AAB21BD025B00A9EF35 /* SPInvitationCodeView.swift */,
 				9E5F7AF521C6A44400A9EF35 /* SPTextLabelView.swift */,
+				9E194D6A21DC63B40080B72D /* SPNotNetView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2125,6 +2145,7 @@
 				9E22EAC52132D87D00B196D5 /* AlipaySDK.bundle in Resources */,
 				9E22EAE32132F08C00B196D5 /* README.txt in Resources */,
 				9E0C8B2B20E637C000BD9743 /* Assets.xcassets in Resources */,
+				9E194D6E21DC68590080B72D /* Image.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2177,6 +2198,7 @@
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
@@ -2190,6 +2212,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
@@ -2286,6 +2309,7 @@
 				9EF4C6DA20EFBFD5007E9909 /* SPConfrimSectionFootView.swift in Sources */,
 				9E89F0FA21295395000539A4 /* SPKeyboardTopView.swift in Sources */,
 				9E129F52210332A900218A33 /* SPProductExplainView.swift in Sources */,
+				9E194D6921DBC2D10080B72D /* SPCommissionView.swift in Sources */,
 				9ED254AC21CBE70400A3166A /* SPProductAuctionCollectCell.swift in Sources */,
 				9E5F7AB821C2AEC000A9EF35 /* SPAboutVC.swift in Sources */,
 				9EF4C70820F35CEC007E9909 /* SPEvaluateListVC.swift in Sources */,
@@ -2347,6 +2371,7 @@
 				9EF4C72120F4AED8007E9909 /* SPProductEvaluateView.swift in Sources */,
 				9E5F7AE021C4ECF400A9EF35 /* SPBalanceVC.swift in Sources */,
 				9E5F7A9F21B9791300A9EF35 /* SPActivityVC.swift in Sources */,
+				9E194D6B21DC63B40080B72D /* SPNotNetView.swift in Sources */,
 				9E22EAE821359B0D00B196D5 /* SPOrderTableCell.swift in Sources */,
 				56F47F3621D0E65300613BBA /* SPOrderHomeHeadView.swift in Sources */,
 				562C7165215CE0B80039EFD0 /* SPShopAlcoholView.swift in Sources */,
@@ -2488,6 +2513,7 @@
 				9E5F7AC421C3FA9400A9EF35 /* SPFansListHeadView.swift in Sources */,
 				9ED254AE21CD3FF100A3166A /* SPDetView.swift in Sources */,
 				9E5F7AD021C4098F00A9EF35 /* SPCapitalDetListTableCell.swift in Sources */,
+				9E194D7021DC69100080B72D /* SPBundle.swift in Sources */,
 				9EF4C71720F48FF3007E9909 /* SPProductView.swift in Sources */,
 				9E34F6AF20F9DA8500D59ABD /* SPMineSectionHeaderView.swift in Sources */,
 				9E129F442102CB3100218A33 /* SPProductDetailTopView.swift in Sources */,

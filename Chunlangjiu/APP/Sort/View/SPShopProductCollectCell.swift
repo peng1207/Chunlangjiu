@@ -16,6 +16,7 @@ class SPShopProductCollectCell: UICollectionViewCell {
         view.signImgView.isHidden = true
         view.shopNameLabel.isHidden = true
         view.entShopBtn.isHidden = true
+        view.titleLabel.numberOfLines = 1
         return view
     }()
     

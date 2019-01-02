@@ -37,6 +37,14 @@ class SPIndexVC: SPBaseVC {
         }
         return view
     }()
+    fileprivate lazy var noNetLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 15)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        label.textAlignment = .left
+        label.text = "  您的网络出现问题，当前App无法获取数据"
+        return label
+    }()
     fileprivate var pushVC : Bool = false
     fileprivate var tableView : UITableView!
     fileprivate var collectionView : UICollectionView!
@@ -59,7 +67,7 @@ class SPIndexVC: SPBaseVC {
         let model = SPIndexGoods.sp_init(type: SP_HEADER)
         return model
     }()
-    
+    fileprivate var noNetHeight : Constraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -68,6 +76,7 @@ class SPIndexVC: SPBaseVC {
         self.sp_sendGoodRequest()
 //        self.tableView.sp_layoutHeaderView()
         self.sp_addNotification()
+        sp_netChange()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -97,6 +106,7 @@ class SPIndexVC: SPBaseVC {
     override func sp_setupUI() {
         
         self.view.addSubview(self.titleView)
+        self.view.addSubview(self.noNetLabel)
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -137,8 +147,13 @@ class SPIndexVC: SPBaseVC {
             maker.height.equalTo(SP_NAVGIT_HEIGHT + sp_getstatusBarHeight())
             maker.top.equalTo(self.view).offset(0)
         }
+        self.noNetLabel.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            self.noNetHeight = maker.height.equalTo(0).constraint
+            maker.top.equalTo(self.titleView.snp.bottom)
+        }
         self.collectionView.snp.makeConstraints { (maker) in
-            maker.top.equalTo(self.titleView.snp.bottom).offset(0)
+            maker.top.equalTo(self.noNetLabel.snp.bottom).offset(0)
             maker.left.right.equalTo(self.view).offset(0)
             if #available(iOS 11.0, *) {
               maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
@@ -557,6 +572,7 @@ extension SPIndexVC{
          NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
     }
     /// 定位成功通知
     @objc fileprivate func sp_locationNotification(){
@@ -589,6 +605,19 @@ extension SPIndexVC{
     }
     @objc fileprivate func sp_editPrice(){
         self.isEditPrice = true
+    }
+    @objc fileprivate func sp_netChange(){
+        if SPNetWorkManager.sp_notReachable() {
+            // 没有网络
+            self.noNetHeight.update(offset: 40)
+            if SPNetWorkManager.sp_isOpenWwan() == false {
+                
+            }
+            sp_log(message: "移动网络是否打开\(SPNetWorkManager.sp_isOpenWwan())")
+        }else{
+            // 有网络
+            self.noNetHeight.update(offset: 0)
+        }
     }
     
 }

@@ -9,13 +9,18 @@
 import Foundation
 import SnapKit
 class SPShopHomeVC: SPBaseVC {
-    
+    fileprivate lazy var backImgView : UIImageView = {
+        let view = UIImageView()
+        view.image = SPBundle.sp_img(name: "shop_bac")
+        return view
+    }()
     fileprivate lazy var shopHomeView : SPShopHomeView = {
         let view = SPShopHomeView()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.shopModel = shopModel
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickShopDetVC))
         view.addGestureRecognizer(tap)
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var conditionView : SPShopConditionView = {
@@ -40,7 +45,21 @@ class SPShopHomeVC: SPBaseVC {
         }
         return view
     }()
-  
+    fileprivate lazy var backBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_back"), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
+    fileprivate lazy var titleLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 18)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        label.textAlignment = .center
+        label.text = "店铺首页"
+        return label
+    }()
     fileprivate var collectionView : UICollectionView!
     fileprivate var dataArray : [SPProductModel]?
     fileprivate var shopCollectionCellID = "shopCollectionCellID"
@@ -54,12 +73,14 @@ class SPShopHomeVC: SPBaseVC {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -77,6 +98,7 @@ class SPShopHomeVC: SPBaseVC {
     /// 创建UI
     override func sp_setupUI() {
         self.navigationItem.title = "店铺首页"
+        self.view.addSubview(self.backImgView)
         self.view.addSubview(self.shopHomeView)
         self.view.addSubview(self.conditionView)
         let layout = UICollectionViewFlowLayout()
@@ -105,19 +127,24 @@ class SPShopHomeVC: SPBaseVC {
             }
             self?.sp_sendProductRequest()
         }
+        self.view.addSubview(self.backBtn)
+        self.view.addSubview(self.titleLabel)
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
+        self.backImgView.snp.makeConstraints { (maker) in
+            maker.left.right.top.bottom.equalTo(self.view).offset(0)
+        }
         self.shopHomeView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.view).offset(5)
-            maker.top.equalTo(self.view).offset(5)
+            maker.top.equalTo(self.view).offset(5 + sp_getstatusBarHeight() + SP_NAVGIT_HEIGHT)
             maker.right.equalTo(self.view).offset(-5)
             maker.height.equalTo(100)
         }
         self.conditionView.snp.makeConstraints { (maker) in
            maker.left.right.equalTo(self.shopHomeView).offset(0)
-            maker.top.equalTo(self.shopHomeView.snp.bottom).offset(10)
+            maker.top.equalTo(self.shopHomeView.snp.bottom).offset(5)
             maker.height.equalTo(50)
             
         }
@@ -130,6 +157,18 @@ class SPShopHomeVC: SPBaseVC {
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.backBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(0)
+            maker.top.equalTo(self.view).offset(sp_getstatusBarHeight() + 6)
+            maker.width.equalTo(30)
+            maker.height.equalTo(30)
+        }
+        self.titleLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.backBtn.snp.right).offset(0)
+            maker.right.equalTo(self.view).offset(-30)
+            maker.height.equalTo(SP_NAVGIT_HEIGHT)
+            maker.centerY.equalTo(self.backBtn.snp.centerY).offset(0)
         }
     }
     deinit {

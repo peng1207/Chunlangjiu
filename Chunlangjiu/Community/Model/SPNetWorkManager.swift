@@ -8,12 +8,16 @@
 // 处理网络相关的类 （监听网络，保存域名）
 import Foundation
 import Alamofire
+import CoreTelephony
+import Reachability
 /// 网络发生状态通知
 let SP_NETWORK_NOTIFICATION = "SP_NETWORK_NOTIFICATION"
 class SPNetWorkManager : NSObject {
     
     private static let reachManager = SPNetWorkManager()
     private var netWorkStatus : NetworkReachabilityManager.NetworkReachabilityStatus = .reachable(NetworkReachabilityManager.ConnectionType.ethernetOrWiFi)
+    private var netWorkOldStatus : NetworkReachabilityManager.NetworkReachabilityStatus = .unknown
+    private var wwanStatus : CTCellularDataRestrictedState = CTCellularDataRestrictedState.restrictedStateUnknown
     private var domainNameDic : [String : String] = [String : String]()
     private var reachManager : NetworkReachabilityManager!
     class func instance() -> SPNetWorkManager{
@@ -26,6 +30,7 @@ class SPNetWorkManager : NSObject {
     func sp_startMonitor(){
         let manager = NetworkReachabilityManager(host: "www.apple.com")
         manager?.listener = { status in
+            self.netWorkOldStatus = self.netWorkStatus
             self.netWorkStatus = status
             sp_log(message: "网络状态 \(status)")
             self.sp_sendNetWorckChange()
@@ -33,6 +38,20 @@ class SPNetWorkManager : NSObject {
         // 开始监听网络状态变化
         manager?.startListening()
         self.reachManager = manager
+ 
+        
+    }
+    func sp_startWwan(){
+        if #available(iOS 9.0, *) {
+            let cellularData = CTCellularData()
+            cellularData.cellularDataRestrictionDidUpdateNotifier = { [weak self](state) in
+                self?.wwanStatus = state
+                 sp_log(message: "\(state)")
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+       
     }
     /// 发送网络发生变化通知
     private func sp_sendNetWorckChange(){
@@ -42,8 +61,20 @@ class SPNetWorkManager : NSObject {
     ///
     /// - Returns: true 没有网络  false 有网络
     class func sp_notReachable() -> Bool {
-        if instance().netWorkStatus == .notReachable || instance().netWorkStatus == .unknown {
-            return true
+        sp_log(message: "\(instance().reachManager.networkReachabilityStatus)")
+        if instance().reachManager.isReachable {
+            return false
+        }
+        return true
+    }
+    /// 是否无网络变成有网络
+    ///
+    /// - Returns: true 是从无网络变成有网络 false 不是
+    class func sp_isNotChangehave()->Bool {
+        if instance().netWorkOldStatus == .notReachable {
+            if !sp_notReachable() {
+                return true
+            }
         }
         return false
     }
@@ -59,7 +90,12 @@ class SPNetWorkManager : NSObject {
     class func sp_isWwan() -> Bool{
          return instance().reachManager.isReachableOnWWAN
     }
-    
+    /// 判断移动网络是否开启
+    ///
+    /// - Returns: true 开启移动网络 false 关闭移动网络
+    class func sp_isOpenWwan() -> Bool {
+        return instance().wwanStatus == .restricted ? false : true
+    }
     /// 设置域名
     ///
     /// - Parameters:

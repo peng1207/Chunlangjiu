@@ -2,6 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "public_collect_gray.png",
       "scale" : "1x"
     },
     {

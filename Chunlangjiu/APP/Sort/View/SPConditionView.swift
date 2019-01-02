@@ -27,7 +27,7 @@ class SPConditionView:  UIView{
     fileprivate var sortCollectionView : UICollectionView!
     
     fileprivate lazy var lineView : UIView = {
-       return sp_getLineView()
+        return sp_getLineView()
     }()
     fileprivate lazy var sortView : SPSortView = {
         let view  = SPSortView()
@@ -41,7 +41,7 @@ class SPConditionView:  UIView{
     }()
     var sortArray : [SPSortLv3Model]? {
         didSet{
-//            self.sortCollectionView.reloadData()
+            //            self.sortCollectionView.reloadData()
         }
     }
     var selectComplete : SPSortViewSelectComplete?
@@ -62,6 +62,7 @@ class SPConditionView:  UIView{
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("品牌", for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_down_red"), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
@@ -71,26 +72,28 @@ class SPConditionView:  UIView{
     }()
     
     fileprivate lazy var placeBtn : UIButton = {
-       let btn = UIButton(type: UIButtonType.custom)
+        let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("产地", for: UIControlState.normal)
-          btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_down_red"), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickNewAction), for: UIControlEvents.touchUpInside)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
-          self.sp_setBtnEdge(btn: btn)
+        self.sp_setBtnEdge(btn: btn)
         return btn
     }()
     fileprivate lazy var typeBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-            let title = "类型"
+        let title = "类型"
         btn.setTitle(title, for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_down_red"), for: UIControlState.selected)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.addTarget(self, action: #selector(sp_clickPriceAction), for: UIControlEvents.touchUpInside)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
-          self.sp_setBtnEdge(btn: btn)
+        self.sp_setBtnEdge(btn: btn)
         return btn;
     }()
     fileprivate lazy var defultBtn : UIButton = {
@@ -98,11 +101,12 @@ class SPConditionView:  UIView{
         let title = "综合"
         btn.setTitle(title, for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_down_red"), for: UIControlState.selected)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.addTarget(self, action: #selector(sp_clickSortAction), for: UIControlEvents.touchUpInside)
-          self.sp_setBtnEdge(btn: btn)
+        self.sp_setBtnEdge(btn: btn)
         return btn;
     }()
     fileprivate lazy var priceBtn : UIButton = {
@@ -110,11 +114,12 @@ class SPConditionView:  UIView{
         let title = "价格区间"
         btn.setTitle(title, for: UIControlState.normal)
         btn.setImage(UIImage(named: "public_down"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_down_red"), for: UIControlState.selected)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: btnFontSize)
         btn.addTarget(self, action: #selector(sp_clickFilterAction), for: UIControlEvents.touchUpInside)
-          self.sp_setBtnEdge(btn: btn)
+        self.sp_setBtnEdge(btn: btn)
         return btn;
     }()
     fileprivate lazy var conditionFilterView : SPConditionFilterView! = {
@@ -134,15 +139,15 @@ class SPConditionView:  UIView{
     fileprivate let collectionHeight : CGFloat = 40
     var selectSortModel : SPSortLv3Model?{
         didSet{
-//            self.sortCollectionView.reloadData()
+            //            self.sortCollectionView.reloadData()
             self.sp_sendReqest()
         }
     }
-  
+    
     var selectBrand : SPBrandModel?{
         didSet{
             if let brandid = selectBrand?.brand_id , brandid > 0 {
-              self.brandBtn.setTitle(sp_getString(string: selectBrand?.brand_name).count > 0  ? sp_getString(string: selectBrand?.brand_name) : "品牌", for: UIControlState.normal)
+                self.brandBtn.setTitle(sp_getString(string: selectBrand?.brand_name).count > 0  ? sp_getString(string: selectBrand?.brand_name) : "品牌", for: UIControlState.normal)
             }else{
                 self.brandBtn.setTitle("品牌", for: UIControlState.normal)
             }
@@ -152,7 +157,7 @@ class SPConditionView:  UIView{
     var selectPlace : SPPlaceModel?{
         didSet{
             if let placeId = selectPlace?.area_id, placeId > 0   {
-                  self.placeBtn.setTitle(sp_getString(string:selectPlace?.area_name).count > 0  ? sp_getString(string: selectPlace?.area_name) : "产地", for: UIControlState.normal)
+                self.placeBtn.setTitle(sp_getString(string:selectPlace?.area_name).count > 0  ? sp_getString(string: selectPlace?.area_name) : "产地", for: UIControlState.normal)
             }else{
                 self.placeBtn.setTitle("产地", for: UIControlState.normal)
             }
@@ -166,17 +171,17 @@ class SPConditionView:  UIView{
             }else{
                 self.typeBtn.setTitle("类型", for: UIControlState.normal)
             }
-        self.sp_setBtnEdge(btn: typeBtn)
+            self.sp_setBtnEdge(btn: typeBtn)
         }
     }
     var alcoholDegree : SPAlcoholDegree?{
         didSet{
             if let alcoholId = alcoholDegree?.alcohol_id, alcoholId > 0 {
-                  self.defultBtn.setTitle(sp_getString(string:alcoholDegree?.alcohol_name).count > 0  ? sp_getString(string: alcoholDegree?.alcohol_name) : "综合", for: UIControlState.normal)
+                self.defultBtn.setTitle(sp_getString(string:alcoholDegree?.alcohol_name).count > 0  ? sp_getString(string: alcoholDegree?.alcohol_name) : "综合", for: UIControlState.normal)
             }else{
                 self.defultBtn.setTitle("综合", for: UIControlState.normal)
             }
-           self.sp_setBtnEdge(btn: defultBtn)
+            self.sp_setBtnEdge(btn: defultBtn)
         }
     }
     var isDefault : Bool! = false {
@@ -188,7 +193,7 @@ class SPConditionView:  UIView{
     var selectprice : SPPriceRange?{
         didSet{
             if let type = selectprice?.type , type != SPPirceRangeType.all {
-                 self.priceBtn.setTitle(sp_getString(string:selectprice?.showPrice).count > 0  ? sp_getString(string: selectprice?.showPrice) : "价格区间", for: UIControlState.normal)
+                self.priceBtn.setTitle(sp_getString(string:selectprice?.showPrice).count > 0  ? sp_getString(string: selectprice?.showPrice) : "价格区间", for: UIControlState.normal)
             }else{
                 self.priceBtn.setTitle("价格区间", for: UIControlState.normal)
             }
@@ -203,7 +208,7 @@ class SPConditionView:  UIView{
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
-//        sp_sendReqest()
+        //        sp_sendReqest()
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -226,15 +231,15 @@ class SPConditionView:  UIView{
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        layout.estimatedItemSize = CGSize(width: sp_getScreenWidth(), height: collectionHeight)
-//        self.sortCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-//        self.sortCollectionView.delegate = self
-//        self.sortCollectionView.dataSource = self
-//        self.sortCollectionView.register(SPConditionSortView.self, forCellWithReuseIdentifier: conditionSortCellID)
-//        self.sortCollectionView.backgroundColor = UIColor.white
-//        self.addSubview(self.sortCollectionView)
+        //        let layout = UICollectionViewFlowLayout()
+        //        layout.scrollDirection = .horizontal
+        //        layout.estimatedItemSize = CGSize(width: sp_getScreenWidth(), height: collectionHeight)
+        //        self.sortCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        //        self.sortCollectionView.delegate = self
+        //        self.sortCollectionView.dataSource = self
+        //        self.sortCollectionView.register(SPConditionSortView.self, forCellWithReuseIdentifier: conditionSortCellID)
+        //        self.sortCollectionView.backgroundColor = UIColor.white
+        //        self.addSubview(self.sortCollectionView)
         self.addSubview(self.sortLineView)
         self.addSubview(self.brandBtn)
         self.addSubview(self.placeBtn)
@@ -245,17 +250,17 @@ class SPConditionView:  UIView{
         self.sp_addConstraint()
         sp_asyncAfter(time: 0.1) {[weak self] in
             if let btn = self?.priceBtn{
-                  self?.sp_setBtnEdge(btn: btn)
+                self?.sp_setBtnEdge(btn: btn)
             }
         }
-       
+        
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-//        self.sortCollectionView.snp.makeConstraints { (maker) in
-//            maker.left.top.right.equalTo(self).offset(0)
-//            maker.height.equalTo(collectionHeight)
-//        }
+        //        self.sortCollectionView.snp.makeConstraints { (maker) in
+        //            maker.left.top.right.equalTo(self).offset(0)
+        //            maker.height.equalTo(collectionHeight)
+        //        }
         self.sortLineView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
             maker.top.equalTo(self.snp.top).offset(0)
@@ -264,7 +269,7 @@ class SPConditionView:  UIView{
         self.defultBtn.snp.makeConstraints { (maker) in
             maker.top.equalTo(self.sortLineView.snp.bottom).offset(0)
             maker.left.equalTo(self).offset(0)
-             maker.height.equalTo(40)
+            maker.height.equalTo(40)
             maker.width.equalTo(self.brandBtn.snp.width).offset(0)
         }
         
@@ -284,7 +289,7 @@ class SPConditionView:  UIView{
             maker.top.bottom.equalTo(self.placeBtn).offset(0)
             maker.width.equalTo(self.priceBtn.snp.width).offset(0)
         }
-       
+        
         self.priceBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.typeBtn.snp.right).offset(0)
             maker.top.bottom.equalTo(self.defultBtn).offset(0)
@@ -309,21 +314,21 @@ extension SPConditionView {
         sp_show(selectModel: self.selectBrand, list: self.brandArray)
     }
     @objc fileprivate func sp_clickNewAction(){
-         sp_setDefaultSelect()
+        sp_setDefaultSelect()
         self.placeBtn.isSelected = true
         sp_show(selectModel: self.selectPlace, list: self.placeArray)
     }
     @objc fileprivate func sp_clickPriceAction(){
-          sp_setDefaultSelect()
+        sp_setDefaultSelect()
         self.typeBtn.isSelected = true
         sp_show(selectModel: self.selectType, list: self.typeArray)
     }
     @objc fileprivate func sp_clickSortAction(){
-         sp_setDefaultSelect()
-//        self.defultBtn.isSelected = true
+        sp_setDefaultSelect()
+        //        self.defultBtn.isSelected = true
         self.isDefault = true
-         sp_dealDefaultBlock()
-//        sp_show(selectModel: self.alcoholDegree, list: self.alcoholDegreeArray)
+        sp_dealDefaultBlock()
+        //        sp_show(selectModel: self.alcoholDegree, list: self.alcoholDegreeArray)
     }
     @objc fileprivate func sp_clickFilterAction(){
         sp_setDefaultSelect()
@@ -352,7 +357,7 @@ extension SPConditionView {
         self.brandBtn.isSelected = false
         self.placeBtn.isSelected = false
         self.typeBtn.isSelected = false
-//        self.defultBtn.isSelected = false
+        //        self.defultBtn.isSelected = false
         self.isDefault = false
         self.priceBtn.isSelected = false
     }
@@ -394,7 +399,7 @@ extension SPConditionView {
         }
         block(nil,nil,model)
         SPThridManager.sp_search(eventId: SP_EventID.searchSort.rawValue, name: model?.cat_name)
-//        sp_sendReqest()
+        //        sp_sendReqest()
     }
     fileprivate func sp_dealComlete(type : SPConditionBtnType){
         guard let block  = self.clickBtnBlock else {
@@ -406,7 +411,7 @@ extension SPConditionView {
 extension SPConditionView:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sp_getArrayCount(array: self.sortArray) > 0 ? 1 : 0
-     }
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sp_getArrayCount(array: self.sortArray)
     }
@@ -426,10 +431,10 @@ extension SPConditionView:UICollectionViewDelegate,UICollectionViewDataSource,UI
                     if self.selectSortModel?.cat_id == nil && lv3Model?.cat_id == nil{
                         cell.isSelect = true
                     }else{
-                         cell.isSelect = false
+                        cell.isSelect = false
                     }
                 }else{
-                     cell.isSelect = false
+                    cell.isSelect = false
                 }
             }
             
@@ -513,11 +518,11 @@ extension SPConditionView {
     fileprivate func sp_sendPriceRange(){
         var list = [SPPriceRange]()
         list.append(SPPriceRange.sp_init(maxPrice: "", minPrice: "",type: SPPirceRangeType.all))
-         list.append(SPPriceRange.sp_init(maxPrice: "999", minPrice: nil,type: SPPirceRangeType.range900))
-         list.append(SPPriceRange.sp_init(maxPrice: "2999", minPrice: "1000",type: SPPirceRangeType.range2999))
-         list.append(SPPriceRange.sp_init(maxPrice: "4999", minPrice: "3000",type: SPPirceRangeType.range4999))
-         list.append(SPPriceRange.sp_init(maxPrice: "9999", minPrice: "5000",type: SPPirceRangeType.range9999))
-         list.append(SPPriceRange.sp_init(maxPrice: nil, minPrice: "10000",type: SPPirceRangeType.range10000))
+        list.append(SPPriceRange.sp_init(maxPrice: "999", minPrice: nil,type: SPPirceRangeType.range900))
+        list.append(SPPriceRange.sp_init(maxPrice: "2999", minPrice: "1000",type: SPPirceRangeType.range2999))
+        list.append(SPPriceRange.sp_init(maxPrice: "4999", minPrice: "3000",type: SPPirceRangeType.range4999))
+        list.append(SPPriceRange.sp_init(maxPrice: "9999", minPrice: "5000",type: SPPirceRangeType.range9999))
+        list.append(SPPriceRange.sp_init(maxPrice: nil, minPrice: "10000",type: SPPirceRangeType.range10000))
         self.priceArray = list
     }
 }

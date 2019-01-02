@@ -22,8 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }else{
             SPAPPManager.sp_showMainVC()
         }
-       
-    
         SPAPPManager.instance()
          SPAPPManager.sp_registerApp()
         SPRealmTool.configRealm()

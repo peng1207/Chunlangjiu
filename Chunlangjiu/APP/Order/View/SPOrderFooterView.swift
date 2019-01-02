@@ -42,6 +42,11 @@ class SPOrderFooterView:  UIView{
         view.backgroundColor = UIColor.white
         return view
     }()
+    var commissionView : SPCommissionView = {
+        let view = SPCommissionView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
     var detaileModel : SPOrderDetaileModel?{
         didSet{
             self.sp_setupData()
@@ -49,6 +54,7 @@ class SPOrderFooterView:  UIView{
     }
     fileprivate var refundTop : Constraint!
     fileprivate var payTop : Constraint!
+    fileprivate var commissionTop : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -100,10 +106,7 @@ class SPOrderFooterView:  UIView{
             }else{
                 maker.height.greaterThanOrEqualTo(0)
             }
-            
         }
-        
-        
         self.refundTop.update(offset: isRefund ? 10 : 0)
     }
     /// 添加UI
@@ -114,6 +117,7 @@ class SPOrderFooterView:  UIView{
         self.addSubview(self.addressView)
         self.addSubview(self.logicView)
         self.addSubview(self.priceView)
+        self.addSubview(self.commissionView)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -146,6 +150,12 @@ class SPOrderFooterView:  UIView{
         self.priceView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
             maker.top.equalTo(self.logicView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
+            
+        }
+        self.commissionView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self).offset(0)
+            self.commissionTop = maker.top.equalTo(self.priceView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }

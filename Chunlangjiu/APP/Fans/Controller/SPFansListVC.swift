@@ -124,7 +124,16 @@ extension SPFansListVC : UITableViewDelegate,UITableViewDataSource {
 }
 extension SPFansListVC {
     @objc fileprivate func sp_share(){
-        
+        let shareDataModel = SPShareDataModel()
+        shareDataModel.shareData = SP_SHARE_URL
+        shareDataModel.title = sp_getString(string: "")
+        shareDataModel.descr = sp_getString(string: "")
+        shareDataModel.currentViewController = self
+        shareDataModel.thumbImage = sp_getAppIcon()
+        shareDataModel.placeholderImage =  sp_getAppIcon()
+        SPShareManager.sp_share(shareDataModel: shareDataModel) { (model, error) in
+            
+        }
     }
     
 }

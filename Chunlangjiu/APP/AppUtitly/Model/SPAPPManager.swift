@@ -102,6 +102,7 @@ class SPAPPManager : NSObject{
         SPNetWorkManager.instance().sp_set(domainName: SP_MAIN_DOMAIN_NAME, key: SP_MAIN_DOMAIN_NAME_KEY)
         sp_log(message: "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))")
         SPNetWorkManager.instance().sp_startMonitor()
+        SPNetWorkManager.instance().sp_startWwan()
         sp_simpleSQueues(queueName: "com.chunlangjiu.registerThridApp") {
             SPThridManager.sp_registThridApp()
             sp_mainQueue {
@@ -294,6 +295,7 @@ extension SPAPPManager {
         NotificationCenter.default.addObserver(self, selector: #selector(sp_loginNotification), name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
          NotificationCenter.default.addObserver(self, selector: #selector(sp_becomeActive), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_enterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(sp_netChangeNotification), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
     }
     @objc fileprivate func sp_becomeActive(){
         sp_log(message: "进入前台")
@@ -306,6 +308,10 @@ extension SPAPPManager {
     ///  登录通知
     @objc fileprivate func sp_loginNotification(){
         SPAPPManager.sp_uploadPushToken()
+    }
+    ///  网络发生变化的通知
+    @objc fileprivate func sp_netChangeNotification(){
+        
     }
     /// 发送定时器运行的通知
     ///

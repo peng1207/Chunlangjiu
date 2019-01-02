@@ -31,14 +31,14 @@ class SPProductDetaileBottomView:  UIView{
     }()
     fileprivate lazy var collectionBtn : UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "public_collect_black"), for: UIControlState.normal)
-        btn.setImage(UIImage(named: "public_collect_red"), for: UIControlState.selected)
+        btn.setImage(UIImage(named: "public_collect_gray"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "mine_collect"), for: UIControlState.selected)
         btn.addTarget(self, action: #selector(sp_clickCollectionAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var shopCartBtn : UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "public_shopcart_black"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "tabbar_shopcart"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickShopCartAction), for: UIControlEvents.touchUpInside)
         btn.isHidden = true
         return btn

@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Chunlangjiu/APP/Sort/View/SPConditionView.swift"
-            timestampString = "567950861.444375"
+            timestampString = "568095736.205976"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "selectType"
             landmarkType = "24">
          </BreakpointContent>

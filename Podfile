@@ -29,6 +29,7 @@ target 'Chunlangjiu' do
     pod 'RealmSwift'
     pod 'NVActivityIndicatorView'
     pod 'MBProgressHUD', '~> 1.1.0'
+    pod 'ReachabilitySwift'
 #    pod 'JKWKWebViewHandler'
 #    target 'NotificationService' do
 #        platform :ios, "10.0"

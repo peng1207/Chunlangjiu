@@ -95,6 +95,12 @@ class SPInvitationCodeView:  UIView{
             maker.top.equalTo(self.inputTextFiled.snp.bottom).offset(20)
             maker.height.equalTo(30)
             maker.width.equalTo(self.inputBtn.snp.width).offset(0)
+            maker.bottom.equalTo(self.contentView).offset(-10)
+        }
+        self.inputBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.noBtn.snp.right).offset(10)
+            maker.top.height.equalTo(self.noBtn).offset(0)
+            maker.right.equalTo(self.contentView).offset(-10)
         }
         
     }

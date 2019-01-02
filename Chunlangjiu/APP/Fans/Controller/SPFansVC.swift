@@ -33,6 +33,7 @@ class SPFansVC: SPBaseVC {
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.setTitle("一键分享", for: UIControlState.normal)
         btn.sp_cornerRadius(cornerRadius: 5)
+        btn.addTarget(self, action: #selector(sp_share), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var listBtn : UIButton = {
@@ -109,7 +110,16 @@ class SPFansVC: SPBaseVC {
 }
 extension SPFansVC {
     @objc fileprivate func sp_share(){
-        
+        let shareDataModel = SPShareDataModel()
+        shareDataModel.shareData = SP_SHARE_URL
+        shareDataModel.title = sp_getString(string: "")
+        shareDataModel.descr = sp_getString(string: "")
+        shareDataModel.currentViewController = self
+        shareDataModel.thumbImage = sp_getAppIcon()
+        shareDataModel.placeholderImage =  sp_getAppIcon()
+        SPShareManager.sp_share(shareDataModel: shareDataModel) { (model, error) in
+            
+        }
     }
     fileprivate func sp_setupData(){
         self.imageView.image = SPQRCodeUtil.sp_getClearImage(sourceImage: SPQRCodeUtil.sp_setQRCode(qrCode: "100"), center:   sp_getAppIcon())
