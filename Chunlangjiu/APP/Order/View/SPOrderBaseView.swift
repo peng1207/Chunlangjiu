@@ -73,12 +73,10 @@ class SPOrderBaseView:  UIView{
                  self.auctionView.isHidden = true
             }
         }else{
-              self.auctionTop.update(offset: 0)
+             self.auctionTop.update(offset: 0)
              self.auctionView.contentLabel.text = ""
              self.auctionView.isHidden = true
         }
-        
-        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

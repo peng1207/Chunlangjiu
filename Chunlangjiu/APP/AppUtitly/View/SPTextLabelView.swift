@@ -13,14 +13,14 @@ class SPTextLabelView:  UIView{
     lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
         return label
     }()
     lazy var contentLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
         return label
     }()

@@ -112,6 +112,7 @@ extension SPMineVC: UITableViewDelegate ,UITableViewDataSource,UIImagePickerCont
         if cell == nil {
             cell = SPMineTableCell(style: UITableViewCellStyle.default, reuseIdentifier: mineTableCellID)
             cell?.contentView.backgroundColor = self.view.backgroundColor
+            
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             cell?.countModel = self.countModel

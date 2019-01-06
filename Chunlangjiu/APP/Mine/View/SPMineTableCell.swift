@@ -16,19 +16,20 @@ class SPMineTableCell : UITableViewCell {
     fileprivate lazy var cellView : UIView = {
         let view = UIView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 12)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        label.font = sp_getFontSize(size: 15)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.text = "查看更多订单"
         return label
     }()
     fileprivate lazy var contentLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.font = sp_getFontSize(size: 12)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.textAlignment = .left
         return label
     }()
@@ -119,8 +120,8 @@ class SPMineTableCell : UITableViewCell {
             maker.width.greaterThanOrEqualTo(0)
         }
         self.nextImageView.snp.makeConstraints { (maker) in
-            maker.width.equalTo(9)
-            maker.height.equalTo(17)
+            maker.width.equalTo(6)
+            maker.height.equalTo(11)
             maker.right.equalTo(self.cellView.snp.right).offset(-10)
             maker.centerY.equalTo(self.titleLabel.snp.centerY).offset(0)
         }

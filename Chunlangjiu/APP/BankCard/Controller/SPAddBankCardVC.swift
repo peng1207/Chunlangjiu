@@ -39,13 +39,20 @@ class SPAddBankCardVC: SPBaseVC {
         let view = SPAddressSelectView()
         view.titleLabel.text = "开户行"
         view.placeholder = "请选择开户行"
+        view.selectBlock = { [weak self] in
+            self?.sp_clickOpen()
+        }
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()
     fileprivate lazy var areaView : SPAddressSelectView = {
         let view = SPAddressSelectView()
         view.titleLabel.text = "开户支行"
+        view.placeholder = "         省          市"
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.selectBlock = { [weak self] in
+            self?.sp_clickArea()
+        }
         return view
     }()
     fileprivate lazy var subbranchView : SPAddressEditView = {
@@ -78,9 +85,20 @@ class SPAddBankCardVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickDone), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate lazy var areaPickerView : SPBankCardPicker = {
+        let view = SPBankCardPicker()
+        view.isHidden = true
+        view.selectBlock = { [weak self](pModel , cModel) in
+            self?.sp_dealSelectArea(pModel: pModel, cModel: cModel)
+        }
+        return view
+    }()
+    fileprivate var selectPModel : SPAreaModel?
+    fileprivate var selectCModel : SPAreaModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_setupData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -107,7 +125,14 @@ class SPAddBankCardVC: SPBaseVC {
         self.scrollView.addSubview(self.subbranchView)
         self.scrollView.addSubview(self.codeView)
         self.scrollView.addSubview(self.phoneView)
+        self.view.addSubview(self.areaPickerView)
         self.sp_addConstraint()
+    }
+    /// 赋值
+    fileprivate func sp_setupData(){
+         SPAPPManager.sp_getAreaData(isCity: false, complete: { [weak self](data) in
+            self?.areaPickerView.dataArray = data as? [SPAreaModel]
+        })
     }
     /// 处理有没数据
     override func sp_dealNoData(){
@@ -164,6 +189,14 @@ class SPAddBankCardVC: SPBaseVC {
             maker.top.equalTo(self.phoneView.snp.bottom).offset(0)
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
         }
+        self.areaPickerView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.view).offset(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
     }
     deinit {
         
@@ -173,5 +206,23 @@ extension SPAddBankCardVC {
     @objc fileprivate func sp_clickDone(){
         
     }
-    
+    @objc fileprivate func sp_clickArea(){
+        self.areaPickerView.isHidden = false
+    }
+    @objc fileprivate func sp_clickOpen(){
+        
+    }
+    /// 选择开户行省市的回调
+    ///
+    /// - Parameters:
+    ///   - pModel: 省
+    ///   - cModel: 市
+    fileprivate func sp_dealSelectArea(pModel : SPAreaModel?,cModel : SPAreaModel?){
+        self.selectPModel = pModel
+        self.selectCModel = cModel
+        sp_dealAreaData()
+    }
+    fileprivate func sp_dealAreaData(){
+        self.areaView.content = "\(sp_getString(string: self.selectPModel?.value)) 省 \(sp_getString(string: self.selectCModel?.value)) 市"
+    }
 }

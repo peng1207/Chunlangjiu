@@ -70,8 +70,8 @@ class SPPickerView:  UIView{
             maker.left.right.top.equalTo(appDeletaget.window!).offset(0)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo((appDeletaget.window?.safeAreaLayoutGuide.snp.bottom)!).offset(0)
-            } else {
-                   maker.bottom.equalTo((appDeletaget.window?.snp.bottom)!).offset(0)
+            }else{
+                maker.bottom.equalTo((appDeletaget.window?.snp.bottom)!).offset(0)
             }
         }
         if select < sp_getArrayCount(array: data) {

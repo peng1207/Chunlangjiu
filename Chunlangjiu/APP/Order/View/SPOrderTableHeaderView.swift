@@ -17,6 +17,7 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     fileprivate lazy var shopView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var shopLogoImageView : UIImageView = {

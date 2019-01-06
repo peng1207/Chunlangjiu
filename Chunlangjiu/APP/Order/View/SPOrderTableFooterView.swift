@@ -15,6 +15,7 @@ class SPOrderTableFooterView:  UITableViewHeaderFooterView{
     fileprivate lazy var footerView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var btnView : UIView = {

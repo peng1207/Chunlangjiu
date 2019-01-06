@@ -99,7 +99,7 @@ extension SPSetVC : UITableViewDelegate,UITableViewDataSource {
             cell?.selectionStyle = .none
             cell?.accessoryType =  UITableViewCell.AccessoryType.disclosureIndicator
             cell?.textLabel?.font = sp_getFontSize(size: 15)
-            cell?.textLabel?.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
+            cell?.textLabel?.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         }
         if indexPath.section < sp_getArrayCount(array: self.dataArray) {
             let array = self.dataArray[indexPath.section]

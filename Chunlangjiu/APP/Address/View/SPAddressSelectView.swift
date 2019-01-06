@@ -114,7 +114,7 @@ fileprivate extension  SPAddressSelectView {
         }else{
             self.contentLabel.text = sp_getString(string: self.placeholder)
             self.contentLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-            self.contentLabel.font = sp_getFontSize(size: 14)
+            self.contentLabel.font = sp_getFontSize(size: 13)
         }
         
     }

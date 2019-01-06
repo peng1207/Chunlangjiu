@@ -19,7 +19,7 @@ class SPFundsHeadView:  UIView{
     fileprivate lazy var balabceBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("余额", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickBalance), for: UIControlEvents.touchUpInside)
@@ -28,7 +28,7 @@ class SPFundsHeadView:  UIView{
     fileprivate lazy var bondBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("保证金", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickBond), for: UIControlEvents.touchUpInside)
