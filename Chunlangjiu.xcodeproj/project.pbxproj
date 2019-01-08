@@ -209,6 +209,7 @@
 		9E5F7AFE21C7F79300A9EF35 /* SPAuthHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */; };
 		9E5F7B0021C7F8A500A9EF35 /* SPAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */; };
 		9E5F7B0221C93F1B00A9EF35 /* SPAuthAddImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7B0121C93F1B00A9EF35 /* SPAuthAddImgView.swift */; };
+		9E62453A21E4F87C002478B5 /* SPString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62453921E4F87C002478B5 /* SPString.swift */; };
 		9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */; };
 		9E70D74F2155E51100CC6376 /* SPRealNameAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */; };
 		9E70D7512155E77700CC6376 /* SPMineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D7502155E77700CC6376 /* SPMineHeader.swift */; };
@@ -637,6 +638,7 @@
 		9E5F7AFD21C7F79300A9EF35 /* SPAuthHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthHeaderView.swift; sourceTree = "<group>"; };
 		9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthView.swift; sourceTree = "<group>"; };
 		9E5F7B0121C93F1B00A9EF35 /* SPAuthAddImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthAddImgView.swift; sourceTree = "<group>"; };
+		9E62453921E4F87C002478B5 /* SPString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPString.swift; sourceTree = "<group>"; };
 		9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCompanyAuth.swift; sourceTree = "<group>"; };
 		9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRealNameAuth.swift; sourceTree = "<group>"; };
 		9E70D7502155E77700CC6376 /* SPMineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeader.swift; sourceTree = "<group>"; };
@@ -1483,6 +1485,7 @@
 				9E89F0F52129218C000539A4 /* SPArray.swift */,
 				9EAE841121948DDC00847B82 /* SPAuthorizatio.swift */,
 				56107EF021C3B16F0012CFB9 /* SPTableDataSource.swift */,
+				9E62453921E4F87C002478B5 /* SPString.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2454,6 +2457,7 @@
 				9E34F6BB20FB3EF500D59ABD /* SPProductSearchHeaderView.swift in Sources */,
 				9EF4C6DE20EFCAD5007E9909 /* SPConfrimBtnView.swift in Sources */,
 				561C74EB21CE2B1800132D88 /* SPOrderImgeTableCell.swift in Sources */,
+				9E62453A21E4F87C002478B5 /* SPString.swift in Sources */,
 				9EF4C69220ECB3A1007E9909 /* SPLoginVC.swift in Sources */,
 				9E5F7AAA21B9794700A9EF35 /* SPSetVC.swift in Sources */,
 				9E8140AF211757A50063A6E4 /* SPEvaluateModel.swift in Sources */,

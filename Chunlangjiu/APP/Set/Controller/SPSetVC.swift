@@ -130,6 +130,8 @@ extension SPSetVC : UITableViewDelegate,UITableViewDataSource {
                     sp_pushBankCard()
                 case .agreement?:
                     sp_pushAgreement()
+                case .payPwd?:
+                    sp_pushPayPwd()
                 default:
                     sp_log(message: "没有找到")
                     
@@ -165,6 +167,10 @@ extension SPSetVC {
     fileprivate func sp_pushLoginPwd(){
         let loginPwdVC = SPLoginPwdVC()
         self.navigationController?.pushViewController(loginPwdVC, animated: true)
+    }
+    fileprivate func sp_pushPayPwd(){
+        let payPwdVC = SPPayPwdVC()
+        self.navigationController?.pushViewController(payPwdVC, animated: true)
     }
     fileprivate func sp_pushBankCard(){
         let bankCard = SPBankCardVC()

@@ -14,6 +14,7 @@ class SPSetData {
         var firstArray = [SPSetModel]()
         var secondArray = [SPSetModel]()
         firstArray.append(SPSetModel.sp_init(title: "登录密码", type: SPSetType.loginPwd))
+        firstArray.append(SPSetModel.sp_init(title: "支付密码", type: SPSetType.payPwd))
         firstArray.append(SPSetModel.sp_init(title: "我的资料", type: SPSetType.info))
         firstArray.append(SPSetModel.sp_init(title: "我的认证", type: SPSetType.auth))
         firstArray.append(SPSetModel.sp_init(title: "地址管理", type: SPSetType.address))
