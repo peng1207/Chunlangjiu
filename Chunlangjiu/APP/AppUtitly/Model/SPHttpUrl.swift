@@ -158,6 +158,9 @@ let SP_GET_TYPE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MA
 let SP_GET_ALCOHOL_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=category.alcohol.get"
 /// 获取分类下的酒精度
 let SP_GET_APPVERSION_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.versions"
+/// 修改登陆密码
+let SP_GET_MODIFY_LOGINPWD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.versions"
+
 /*-----------------------商家的接口--------------------------*/
 /// 获取店铺 的分类
 let SP_GET_SHOPSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=category.shop.get"

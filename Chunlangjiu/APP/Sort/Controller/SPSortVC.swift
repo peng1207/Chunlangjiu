@@ -36,7 +36,7 @@ class SPSortVC: SPBaseVC {
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.sp_cornerRadius(cornerRadius: 20)
         btn.isHidden = true
-        btn.addTarget(self, action: #selector(sp_sendRequest), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_sendRequestSort), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var searchBtn : UIButton = {
@@ -53,6 +53,7 @@ class SPSortVC: SPBaseVC {
         self.navigationItem.title = "分类"
         self.sp_setupUI()
         sp_sendRequestSort()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -73,7 +74,7 @@ class SPSortVC: SPBaseVC {
 //        self.addChildViewController(self.sortMainVC)
 //        self.view.addSubview(self.multistageVC.view)
 //        self.addChildViewController(self.multistageVC)
-//        self.view.addSubview(self.nodataBtn)
+        self.view.addSubview(self.nodataBtn)
 //        self.searchBtn.addTarget(self, action: #selector(clickSearchAction), for: UIControlEvents.touchUpInside)
 //        let searchItem = UIBarButtonItem(customView: self.searchBtn)
 //        self.navigationItem.rightBarButtonItem =  searchItem
@@ -108,12 +109,12 @@ fileprivate extension SPSortVC{
 //            maker.left.equalTo(self.sortMainVC.view.snp.right).offset(0)
 //            maker.bottom.equalTo(self.sortMainVC.view.snp.bottom).offset(0)
 //        }
-//        self.nodataBtn.snp.makeConstraints { (maker) in
-//            maker.left.equalTo(self.view).offset(20)
-//            maker.right.equalTo(self.view).offset(-20)
-//            maker.centerY.equalTo(self.view).offset(0)
-//            maker.height.equalTo(40)
-//        }
+        self.nodataBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(20)
+            maker.right.equalTo(self.view).offset(-20)
+            maker.centerY.equalTo(self.view).offset(0)
+            maker.height.equalTo(40)
+        }
     }
 }
 extension SPSortVC : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
@@ -158,14 +159,10 @@ fileprivate extension SPSortVC {
         sp_hideAnimation(view: self.view)
     }
     fileprivate func sp_dealNoBtnData() {
-        if  sp_getArrayCount(array: self.sortMainVC.dataArray) > 0 {
+        if sp_getArrayCount(array: self.dataArray) > 0 {
             self.nodataBtn.isHidden = true
-            self.sortMainVC.view.isHidden = false
-            self.multistageVC.view.isHidden = false
         }else{
             self.nodataBtn.isHidden = false
-            self.sortMainVC.view.isHidden = true
-            self.multistageVC.view.isHidden = true
         }
        
     }
@@ -176,7 +173,7 @@ fileprivate extension SPSortVC {
         self.multistageVC.rootModel = model
     }
     /// 获取分类
-    fileprivate func sp_sendRequestSort(){
+   @objc fileprivate func sp_sendRequestSort(){
         let request = SPRequestModel()
         SPAppRequest.sp_getCategory(requestModel: request) { [weak self](code, list, errorModel,totalPage) in
             self?.sp_dealSortRequest(code: code, list: list, errorModel: errorModel)
@@ -187,6 +184,7 @@ fileprivate extension SPSortVC {
             self.dataArray = list as? [SPSortLv3Model]
             self.collectionView.reloadData()
         }
+        sp_dealNoBtnData()
     }
 }
 // MARK: - action
@@ -199,5 +197,19 @@ extension SPSortVC{
     @objc fileprivate func clickSearchAction(){
         let searchVC = SPProductSearchVC()
         self.navigationController?.pushViewController(searchVC, animated: true)
+    }
+}
+// MARK: - notification
+extension SPSortVC {
+    fileprivate func sp_addNotification(){
+            NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
+    }
+    @objc fileprivate func sp_netChange(){
+        if SPNetWorkManager.sp_notReachable() == false {
+            // 有网络
+            if sp_getArrayCount(array: self.dataArray) <= 0 {
+                sp_sendRequestSort()
+            }
+        }
     }
 }

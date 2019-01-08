@@ -68,8 +68,8 @@ class SPAddBankCardVC: SPBaseVC {
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()
-    fileprivate lazy var codeView : SPAddressEditView = {
-        let view = SPAddressEditView()
+    fileprivate lazy var codeView : SPInputBtnView = {
+        let view = SPInputBtnView()
         view.titleLabel.text = "验证码"
         view.textFiled.placeholder = "请输入验证码"
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
@@ -135,7 +135,7 @@ class SPAddBankCardVC: SPBaseVC {
         self.scrollView.addSubview(self.codeView)
         self.scrollView.addSubview(self.phoneView)
         self.view.addSubview(self.areaPickerView)
-        self.codeView.addSubview(self.codeBtn)
+//        self.codeView.addSubview(self.codeBtn)
         self.sp_addConstraint()
     }
     /// 赋值
@@ -199,17 +199,7 @@ class SPAddBankCardVC: SPBaseVC {
             maker.top.equalTo(self.phoneView.snp.bottom).offset(0)
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
         }
-        self.codeBtn.snp.makeConstraints { (maker) in
-            maker.right.equalTo(self.codeView.snp.right).offset(-15)
-            maker.width.equalTo(71)
-            maker.height.equalTo(21)
-            maker.centerY.equalTo(self.codeView).offset(0)
-        }
-        self.codeView.textFiled.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.codeView.snp.left).offset(110)
-            maker.top.bottom.equalTo(self.codeView).offset(0)
-            maker.right.equalTo(self.codeBtn.snp.left).offset(-10)
-        }
+        
         self.areaPickerView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.view).offset(0)
             if #available(iOS 11.0, *) {

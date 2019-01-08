@@ -583,6 +583,7 @@ extension SPProductListVC{
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_auctionend(obj:)), name: NSNotification.Name(SP_AUCTIONEND_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
     }
     @objc fileprivate func sp_editPrice(){
         self.isEditPrice = true
@@ -608,11 +609,26 @@ extension SPProductListVC{
                 if isExist, index < sp_getArrayCount(array: self.dataArray){
                     self.dataArray?.remove(at: index)
                 }
-                
                 self.collectionView.reloadData()
                 sp_dealNoData()
             }
             
+        }
+        
+    }
+    @objc fileprivate func sp_timeRun(notification:Notification){
+        var second = 1
+        if notification.object is [String : Any] {
+            let dic : [String : Any] = notification.object as! [String : Any]
+            second = dic["timer"] as! Int
+        }
+        if sp_getArrayCount(array: self.dataArray) > 0  {
+            for model in self.dataArray! {
+                if model.isAuction {
+                     model.sp_set(second: second)
+                }
+            }
+            self.collectionView.reloadData()
         }
         
     }

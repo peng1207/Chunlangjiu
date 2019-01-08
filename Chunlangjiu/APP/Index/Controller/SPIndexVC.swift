@@ -45,6 +45,17 @@ class SPIndexVC: SPBaseVC {
         label.text = "  您的网络出现问题，当前App无法获取数据"
         return label
     }()
+    fileprivate lazy var nodataBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("没有数据，点击重试", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 16)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.sp_cornerRadius(cornerRadius: 20)
+        btn.isHidden = true
+//        btn.addTarget(self, action: #selector(sp_sendRequestSort), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     fileprivate var pushVC : Bool = false
     fileprivate var tableView : UITableView!
     fileprivate var collectionView : UICollectionView!
@@ -121,7 +132,7 @@ class SPIndexVC: SPBaseVC {
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.alwaysBounceVertical = true
         self.view.addSubview(self.collectionView)
-      
+        self.view.addSubview(self.nodataBtn)
         self.collectionView.sp_headerRefesh { [weak self]() in
             self?.currentPage = 1
             self?.sp_sendGoodRequest()
@@ -160,6 +171,12 @@ class SPIndexVC: SPBaseVC {
             } else {
                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.nodataBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(20)
+            maker.right.equalTo(self.view).offset(-20)
+            maker.centerY.equalTo(self.view).offset(0)
+            maker.height.equalTo(40)
         }
     }
     deinit {

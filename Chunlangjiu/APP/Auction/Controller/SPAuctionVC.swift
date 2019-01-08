@@ -344,6 +344,7 @@ extension SPAuctionVC{
         NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
     }
     @objc fileprivate func sp_timeRun(notification:Notification){
         var second = 1
@@ -375,4 +376,12 @@ extension SPAuctionVC{
         self.isEditPrice = true
     }
     
+    @objc fileprivate func sp_netChange(){
+        if SPNetWorkManager.sp_notReachable() == false {
+            // 有网络
+            if sp_getArrayCount(array: self.dataArray) <= 0 {
+                sp_sendRequest()
+            }
+        }
+    }
 }

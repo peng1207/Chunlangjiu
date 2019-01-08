@@ -328,6 +328,7 @@ extension SPConditionView {
         //        self.defultBtn.isSelected = true
         self.isDefault = true
         sp_dealDefaultBlock()
+          self.conditionFilterView.removeFromSuperview()
         //        sp_show(selectModel: self.alcoholDegree, list: self.alcoholDegreeArray)
     }
     @objc fileprivate func sp_clickFilterAction(){

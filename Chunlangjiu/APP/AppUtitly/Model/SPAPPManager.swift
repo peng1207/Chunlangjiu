@@ -311,6 +311,12 @@ extension SPAPPManager {
     }
     ///  网络发生变化的通知
     @objc fileprivate func sp_netChangeNotification(){
+        if SPNetWorkManager.sp_notReachable() == false {
+            // 有网络
+            if self.areaRequest && sp_getArrayCount(array: self.areaList) <= 0 {
+                sp_sendAreaRequest()
+            }
+        }
         
     }
     /// 发送定时器运行的通知
