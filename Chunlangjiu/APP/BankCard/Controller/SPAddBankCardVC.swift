@@ -75,6 +75,15 @@ class SPAddBankCardVC: SPBaseVC {
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()
+    fileprivate lazy var codeBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("获取验证码", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 12)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.addTarget(self, action: #selector(sp_clickCode), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     fileprivate lazy var doneBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("确定绑定", for: UIControlState.normal)
@@ -126,6 +135,7 @@ class SPAddBankCardVC: SPBaseVC {
         self.scrollView.addSubview(self.codeView)
         self.scrollView.addSubview(self.phoneView)
         self.view.addSubview(self.areaPickerView)
+        self.codeView.addSubview(self.codeBtn)
         self.sp_addConstraint()
     }
     /// 赋值
@@ -189,6 +199,17 @@ class SPAddBankCardVC: SPBaseVC {
             maker.top.equalTo(self.phoneView.snp.bottom).offset(0)
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
         }
+        self.codeBtn.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.codeView.snp.right).offset(-15)
+            maker.width.equalTo(71)
+            maker.height.equalTo(21)
+            maker.centerY.equalTo(self.codeView).offset(0)
+        }
+        self.codeView.textFiled.snp.remakeConstraints { (maker) in
+            maker.left.equalTo(self.codeView.snp.left).offset(110)
+            maker.top.bottom.equalTo(self.codeView).offset(0)
+            maker.right.equalTo(self.codeBtn.snp.left).offset(-10)
+        }
         self.areaPickerView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.view).offset(0)
             if #available(iOS 11.0, *) {
@@ -212,6 +233,9 @@ extension SPAddBankCardVC {
     @objc fileprivate func sp_clickOpen(){
         
     }
+    @objc fileprivate func sp_clickCode(){
+        
+    }
     /// 选择开户行省市的回调
     ///
     /// - Parameters:
@@ -225,4 +249,5 @@ extension SPAddBankCardVC {
     fileprivate func sp_dealAreaData(){
         self.areaView.content = "\(sp_getString(string: self.selectPModel?.value)) 省 \(sp_getString(string: self.selectCModel?.value)) 市"
     }
+    
 }

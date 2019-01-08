@@ -136,6 +136,7 @@ class SPAppRequest {
                     
                 }
                 if let block = complete{
+                    sp_log(message: " 获取商品数据\(listArray)")
                     block(errorcode,auctionList,listArray,nil,1)
                 }
             }else{

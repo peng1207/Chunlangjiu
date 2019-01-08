@@ -45,6 +45,12 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
         btn.addTarget(self, action: #selector(sp_clickDelete), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate lazy var auctionImgView : UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "public_unwinningbid")
+        view.isHidden = true 
+        return view
+    }()
     fileprivate var lineView : UIView = {
         return sp_getLineView()
     }()
@@ -92,6 +98,7 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
         self.shopView.addSubview(self.orderStateLabel)
         self.shopView.addSubview(self.deleteBtn)
         self.shopView.addSubview(self.lineView)
+        self.contentView.addSubview(self.auctionImgView)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -128,6 +135,12 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
             
             maker.left.right.bottom.equalTo(self.shopView).offset(0)
             maker.height.equalTo(sp_lineHeight)
+        }
+        self.auctionImgView.snp.makeConstraints { (maker) in
+            maker.width.equalTo(69)
+            maker.height.equalTo(51)
+            maker.right.equalTo(self.contentView).offset(-21)
+            maker.top.equalTo(self.shopView.snp.top).offset(20)
         }
     }
     deinit {

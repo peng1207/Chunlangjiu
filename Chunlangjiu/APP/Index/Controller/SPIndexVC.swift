@@ -617,9 +617,13 @@ extension SPIndexVC{
         }else{
             // 有网络
             self.noNetHeight.update(offset: 0)
+            if sp_getArrayCount(array: self.defaultGood.dataArray) <= 0 {
+                self.sp_sendRequest()
+                self.currentPage = 1
+                self.sp_sendGoodRequest()
+            }
         }
     }
-    
 }
 extension SPIndexVC{
     
@@ -629,6 +633,7 @@ extension SPIndexVC{
         parm.updateValue("index", forKey: "tmpl")
         model.parm = parm
         SPAppRequest.sp_getIndex(requestModel: model) { (code, indexModel, errorModel) in
+            
             if code  == SP_Request_Code_Success {
                 self.indexModel = indexModel
                 self.tableHeaderView.indexModel = indexModel
@@ -644,6 +649,7 @@ extension SPIndexVC{
         parm.updateValue("index", forKey: "tmpl")
         self.requestModel.parm = parm
         SPAppRequest.sp_getIndexGoods(requestModel: self.requestModel) { (code,auctionList,list, errorModel, total) in
+            
             self.sp_dealRequest(code: code,auctionList: auctionList, list: list, errorModel: errorModel, total: total)
         }
     }

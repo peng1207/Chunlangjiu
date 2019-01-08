@@ -59,7 +59,7 @@ class SPAddressEditView:  UIView{
             maker.top.bottom.equalTo(self).offset(0)
         }
         self.textFiled.snp.makeConstraints { (maker) in
-          self.contentLeftConstraint = maker.left.equalTo(self.snp.left).offset(110).constraint
+           self.contentLeftConstraint = maker.left.equalTo(self.snp.left).offset(110).constraint
             maker.top.bottom.equalTo(self).offset(0)
             maker.right.equalTo(self).offset(-10)
         }

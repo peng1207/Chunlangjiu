@@ -14,12 +14,19 @@ class SPWineValuationVC: SPBaseVC {
         let view = SPWineValuationView()
         return view
     }()
-    fileprivate lazy var showImageView : SPProductAddImgContentView = {
-        let view = SPProductAddImgContentView()
-        view.clickAddComplete = { [weak self](addView) in
+//    fileprivate lazy var showImageView : SPProductAddImgContentView = {
+//        let view = SPProductAddImgContentView()
+////        view.clickAddComplete = { [weak self](addView) in
+////            self?.sp_clickAddView(addView: addView)
+////        }
+//
+//        return view
+//    }()
+    fileprivate lazy var addImgView : SPProductAddImgView = {
+        let view = SPProductAddImgView()
+        view.clickAddBlock = { [weak self] (addView) in
             self?.sp_clickAddView(addView: addView)
         }
-     
         return view
     }()
     fileprivate lazy var submitBtn : UIButton = {
@@ -31,7 +38,7 @@ class SPWineValuationVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickSubmitAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
-     fileprivate var tempAddView : SPProductAddImageView?
+     fileprivate var tempAddView : SPAddImageView?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "估价"
@@ -55,7 +62,7 @@ class SPWineValuationVC: SPBaseVC {
         self.view.addSubview(self.scrollView)
         self.view.addSubview(self.submitBtn)
         self.scrollView.addSubview(self.baseView)
-        self.scrollView.addSubview(self.showImageView)
+        self.scrollView.addSubview(self.addImgView)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -78,10 +85,11 @@ class SPWineValuationVC: SPBaseVC {
             maker.height.greaterThanOrEqualTo(0)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
         }
-        self.showImageView.snp.makeConstraints { (maker) in
+        self.addImgView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
-            maker.top.equalTo(self.baseView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
+            maker.top.equalTo(self.baseView.snp.bottom).offset(10)
+            
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-20)
         }
     }
@@ -105,22 +113,23 @@ extension SPWineValuationVC {
             sp_showTextAlert(tips: "请输入所属系列")
             return
         }
-        let imageArray = self.showImageView.sp_getImage()
-        if sp_getArrayCount(array: imageArray) >= 5  {
+        let imageArray = self.addImgView.sp_getImgs()
+        if sp_getArrayCount(array: imageArray) >= 6  {
             sp_send(uploadImg: imageArray)
         }else{
-            sp_showTextAlert(tips: "请添加商品图片,至少5张")
+            sp_showTextAlert(tips: "请添加商品图片,至少6张")
         }
     }
     ///  点击添加图片事件
     ///
     /// - Parameter addView: 添加对象view
-    fileprivate func sp_clickAddView(addView : SPProductAddImageView){
+    fileprivate func sp_clickAddView(addView : SPAddImageView){
         tempAddView = addView
         //        sp_showSelectImage(viewController: self, delegate: self)
         sp_thrSelectImg(viewController: self, nav: self.navigationController) { [weak self](img) in
             if let view = self?.tempAddView {
-                self?.showImageView.sp_update(image: img, addImageView: view)
+//                self?.showImageView.sp_update(image: img, addImageView: view)
+                 self?.addImgView.sp_update(view: view, img: img)
             }
         }
     }
@@ -133,7 +142,8 @@ extension SPWineValuationVC : UIImagePickerControllerDelegate,UINavigationContro
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[ UIImagePickerControllerEditedImage] as? UIImage
         if let view = self.tempAddView {
-            self.showImageView.sp_update(image: image, addImageView: view)
+//            self.showImageView.sp_update(image: image, addImageView: view)
+              self.addImgView.sp_update(view: view, img: image)
         }
         picker.dismiss(animated: true, completion: nil)
     }

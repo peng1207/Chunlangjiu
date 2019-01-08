@@ -28,23 +28,27 @@ class SPRequestManager {
     
     class func sp_get(requestModel : SPRequestModel,requestBlock : SPRequestBlock?) {
         guard let url = requestModel.url else {
+            sp_log(message: "链接为空 不发送请求")
             if  let block = requestBlock {
                 block(nil,nil)
             }
             return
         }
         if SPNetWorkManager.sp_notReachable() {
+            sp_log(message: "没有网络 不发送请求")
             if  let block = requestBlock {
                 block(nil,nil)
             }
             return
         }
         guard let requestUrl = URL(string: url) else {
+            sp_log(message: "连接获取失败 不发送请求")
             if  let block = requestBlock {
                 block(nil,nil)
             }
             return
         }
+        sp_log(message: "发送请求数据")
         var httpMethod : HTTPMethod = .post
         switch requestModel.httpMethod {
         case .get:
