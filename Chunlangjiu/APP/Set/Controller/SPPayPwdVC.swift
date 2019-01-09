@@ -20,6 +20,7 @@ class SPPayPwdVC: SPBaseVC {
     fileprivate lazy var codeViw : SPInputBtnView = {
         let view = SPInputBtnView()
         view.titleLabel.text = "验证码"
+        view.textFiled.placeholder = "请输入验证码"
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.clickBlock = { [weak self] in
             self?.sp_clickCode()
@@ -29,6 +30,7 @@ class SPPayPwdVC: SPBaseVC {
     fileprivate lazy var pwdView : SPAddressEditView = {
         let view = SPAddressEditView()
         view.titleLabel.text = "密码"
+        view.textFiled.placeholder = "请输入6～16字母加数字的密码"
         view.textFiled.isSecureTextEntry = true
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
@@ -36,6 +38,7 @@ class SPPayPwdVC: SPBaseVC {
     fileprivate lazy var confirmPwdView : SPAddressEditView = {
         let view = SPAddressEditView()
         view.titleLabel.text = "确认密码"
+        view.textFiled.placeholder = "请输入6～16字母加数字的密码"
         view.textFiled.isSecureTextEntry = true
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
@@ -53,8 +56,6 @@ class SPPayPwdVC: SPBaseVC {
         let view = UIScrollView()
         return view
     }()
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
