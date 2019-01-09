@@ -27,6 +27,7 @@ class SPBankCardVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_sendRequest()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -119,4 +120,11 @@ extension SPBankCardVC : UITableViewDelegate,UITableViewDataSource {
         }
     }
     
+}
+extension SPBankCardVC {
+    fileprivate func sp_sendRequest(){
+        SPFundsRequest.sp_getBankCardList(requestModel: self.requestModel) { (code , list, errorModel, total) in
+            
+        }
+    }
 }

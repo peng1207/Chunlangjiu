@@ -68,9 +68,12 @@ class SPBalanceVC: SPBaseVC {
         label.text = "冻结金额"
         return label
     }()
+    fileprivate var moneyModel : SPMoneyModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_sendRequest()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -83,6 +86,12 @@ class SPBalanceVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    
+    /// 赋值
+    fileprivate func sp_setupData(){
+        self.useLabel.text = sp_getString(string: self.moneyModel?.money)
+        self.frozenLabel.text = sp_getString(string: self.moneyModel?.freeze_money)
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -166,6 +175,19 @@ extension SPBalanceVC {
         let rechargeVC = SPRechargeVC()
         rechargeVC.navigationItem.title = "充值"
         self.navigationController?.pushViewController(rechargeVC, animated: true)
+    }
+    
+}
+extension SPBalanceVC {
+    
+    fileprivate func sp_sendRequest(){
+        SPFundsRequest.sp_getMoney(requestModel: self.requestModel) { [weak self](code, model, msg, errorModel) in
+            if code == SP_Request_Code_Success {
+                self?.moneyModel = model
+            }
+            self?.sp_setupData()
+        }
+        
     }
     
 }

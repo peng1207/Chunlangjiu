@@ -29,21 +29,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.registerRemoteNotification()
         SPAPPManager.sp_appVersion()
         
-        let infoPlist = Bundle.main.infoDictionary
-        if let dic = infoPlist {
-            let icons : [String :Any]?   = dic["CFBundleIcons"] as? [String : Any]
-            if let iconDic : [String : Any] = icons {
-                let primaryIcon : [String : Any]? = iconDic["CFBundlePrimaryIcon"] as? [String : Any]
-                if let primaryIconDic = primaryIcon {
-                    let files = primaryIconDic["CFBundleIconFiles"]
-                      sp_log(message: "icons  is \(files)")
-                }
-               
-            }
-           
-//            let icons = dic["CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles"]
-           
-        }
+//        let enString = "a123456".sp_enCrypt(keyStr: "chunlang")
+//        sp_log(message: "加密后的数据 \(enString)--------");
+//        let deString = enString.sp_deCrypt(keyStr: "chunlang")
+//        sp_log(message: "解密后的数据 \(deString)")
+         
         
         // Override point for customization after application launch.
         return true

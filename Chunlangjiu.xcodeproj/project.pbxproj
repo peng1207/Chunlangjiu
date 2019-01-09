@@ -65,6 +65,8 @@
 		9E020E232116A3B30028ED50 /* SPSortLv2Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E020E222116A3B30028ED50 /* SPSortLv2Model.swift */; };
 		9E020E252116A3CC0028ED50 /* SPSortLv3Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E020E242116A3CC0028ED50 /* SPSortLv3Model.swift */; };
 		9E05AC89210DA78700A78001 /* SPThridManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05AC88210DA78700A78001 /* SPThridManager.swift */; };
+		9E08B20621E6430200DD3007 /* SPData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E08B20521E6430200DD3007 /* SPData.swift */; };
+		9E08B20821E6556200DD3007 /* SPMoneyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E08B20721E6556200DD3007 /* SPMoneyModel.swift */; };
 		9E0C8B2420E637BF00BD9743 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0C8B2320E637BF00BD9743 /* AppDelegate.swift */; };
 		9E0C8B2B20E637C000BD9743 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E0C8B2A20E637C000BD9743 /* Assets.xcassets */; };
 		9E0C8B3920E637C000BD9743 /* ChunlangjiuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0C8B3820E637C000BD9743 /* ChunlangjiuTests.swift */; };
@@ -485,6 +487,8 @@
 		9E05AC88210DA78700A78001 /* SPThridManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPThridManager.swift; sourceTree = "<group>"; };
 		9E05AC90210E08A900A78001 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		9E05AC92210E08A900A78001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9E08B20521E6430200DD3007 /* SPData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPData.swift; sourceTree = "<group>"; };
+		9E08B20721E6556200DD3007 /* SPMoneyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMoneyModel.swift; sourceTree = "<group>"; };
 		9E0C8B2020E637BF00BD9743 /* Chunlangjiu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chunlangjiu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E0C8B2320E637BF00BD9743 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E0C8B2A20E637C000BD9743 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1486,6 +1490,7 @@
 				9EAE841121948DDC00847B82 /* SPAuthorizatio.swift */,
 				56107EF021C3B16F0012CFB9 /* SPTableDataSource.swift */,
 				9E62453921E4F87C002478B5 /* SPString.swift */,
+				9E08B20521E6430200DD3007 /* SPData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1663,6 +1668,7 @@
 			isa = PBXGroup;
 			children = (
 				9E5F7AD121C4D21300A9EF35 /* SPCapitalDetModel.swift */,
+				9E08B20721E6556200DD3007 /* SPMoneyModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2375,6 +2381,7 @@
 				9EF4C68C20ECAB82007E9909 /* SPMainVC.swift in Sources */,
 				9E22EAEA21359EFF00B196D5 /* SPOrderTableHeaderView.swift in Sources */,
 				56691F73212AD2DF008768E2 /* SPDelegate.swift in Sources */,
+				9E08B20821E6556200DD3007 /* SPMoneyModel.swift in Sources */,
 				9EF4C6E820F1F27B007E9909 /* SPLabelView.swift in Sources */,
 				9E5F7AC021C3F82B00A9EF35 /* SPFansListTableCell.swift in Sources */,
 				9EF4C72320F4B3B4007E9909 /* SPProductDetaileView.swift in Sources */,
@@ -2513,6 +2520,7 @@
 				9E9404CF21E4758D00AC3313 /* SPFansRequest.swift in Sources */,
 				564A7D1C218AAEBB009027DB /* SPUpdateModel.swift in Sources */,
 				9E34F6C620FDC49300D59ABD /* SPAddressModel.swift in Sources */,
+				9E08B20621E6430200DD3007 /* SPData.swift in Sources */,
 				9E58EDBA21457C8100DFC3F2 /* SPAuctionPriceList.swift in Sources */,
 				9E5F7AD621C4E23800A9EF35 /* SPCapitalDetDetHeaderView.swift in Sources */,
 				56B21AFF21493D5F00BBA82D /* SPForgetPWDVC.swift in Sources */,

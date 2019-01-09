@@ -164,6 +164,19 @@ let SP_GET_MODIFY_LOGINPWD_URL = "\(SPNetWorkManager.instance().sp_getDomainName
 let SP_GeT_MODIFY_PAYPWD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.security.updatePayPassword"
 /// 密码修改 发送验证码
 let SP_GET_RESETSENDSMS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.resetSendSms"
+/// 获取银行卡列表
+let SP_GET_BANKCARD_LIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.list"
+/// 删除银行卡
+let SP_GET_BANKCARD_DELETE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.delete"
+/// 添加银行卡
+let SP_GET_BANKCARD_ADD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.add"
+/// 根据银行卡号获取相对应银行信息
+let SP_GET_BANKCARD_INFO_URL =  "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.get"
+/// 获取我的资金
+let SP_GET_FUNDS_MONEY_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.money"
+/// 我的资金提现
+let SP_GET_FUNDS_CASH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.cash"
+
 /*-----------------------商家的接口--------------------------*/
 /// 获取店铺 的分类
 let SP_GET_SHOPSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=category.shop.get"

@@ -51,3 +51,5 @@ typealias SPRealNameAuthComplete = (_ code : String,_ model : SPRealNameAuth?,_ 
 typealias SPPorudctDetComplete = (_ code : String,_ model : SPProductModel?,_ errorModel : SPRequestError?)->Void
 /// 获取版本信息
 typealias SPAPPVersionComplete = (_ code : String, _ model : SPUpdateModel?,_ errorModel : SPRequestError?)->Void
+/// 我的资金
+typealias SPFundsMoneyComplete = (_ code : String,_ model :SPMoneyModel?,_ msg : String,_ errorModel : SPRequestError?)->Void
