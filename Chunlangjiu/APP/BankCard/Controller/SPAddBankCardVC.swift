@@ -295,6 +295,7 @@ extension SPAddBankCardVC {
             sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success{
                 sp_showTextAlert(tips: msg.count > 0 ? msg : "添加银行卡成功")
+                self?.navigationController?.popViewController(animated: true)
             }else{
                 sp_showTextAlert(tips: msg)
             }

@@ -51,9 +51,11 @@ class SPCashVC: SPBaseVC {
         return view
     }()
     fileprivate var bandkCardModel : SPBankCardModel?
+    var price : String?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_setupData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -66,6 +68,10 @@ class SPCashVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    /// 赋值
+    fileprivate func sp_setupData(){
+     self.priceView.textFiled.placeholder = "最多可提现\(sp_getString(string: self.price))"
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -121,6 +127,34 @@ class SPCashVC: SPBaseVC {
 }
 extension SPCashVC {
     @objc fileprivate func sp_clickSubmit(){
+        guard let model = self.bandkCardModel else {
+            sp_showTextAlert(tips: "请选择银行卡")
+            return
+        }
+        if sp_getString(string: self.priceView.textFiled.text).count == 0 {
+            sp_showTextAlert(tips: "请输入需要提现的金额")
+            return
+        }
+        if let price = Float(sp_getString(string: self.priceView.textFiled.text)) , price <= 0 {
+            sp_showTextAlert(tips: "请输入大于0的金额")
+            return
+        }
+        var parm = [String : Any]()
+        if let bankCardId = model.bank_id {
+            parm.updateValue(bankCardId, forKey: "bank_id")
+        }
+        parm.updateValue(sp_getString(string: self.priceView.textFiled.text), forKey: "amount")
+        self.requestModel.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
+        SPFundsRequest.sp_getCash(requestModel: self.requestModel) { [weak self](code, msg, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                sp_showTextAlert(tips: msg.count > 0 ? msg : "提现成功")
+                self?.navigationController?.popViewController(animated: true)
+            }else{
+                sp_showTextAlert(tips: msg)
+            }
+        }
         
     }
     fileprivate func sp_clickBankCard(){
@@ -132,6 +166,6 @@ extension SPCashVC {
     }
     fileprivate func sp_dealSelect(model : SPBankCardModel?){
         self.bandkCardModel = model
-//        self.bankCardView.content = sp_getString(string: self.bandkCardModel.)
+        self.bankCardView.content = sp_getString(string: self.bandkCardModel?.card).replaceBankCard()
     }
 }

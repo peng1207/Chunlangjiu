@@ -40,7 +40,7 @@ class SPBalanceVC: SPBaseVC {
     }()
     fileprivate lazy var useLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 12)
+        label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.textAlignment = .center
         return label
@@ -62,7 +62,7 @@ class SPBalanceVC: SPBaseVC {
     }()
     fileprivate lazy var frozenTitleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 15)
+        label.font = sp_getFontSize(size: 13)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .center
         label.text = "冻结金额"
@@ -73,10 +73,11 @@ class SPBalanceVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
-        sp_sendRequest()
+    
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+            sp_sendRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -169,6 +170,7 @@ class SPBalanceVC: SPBaseVC {
 extension SPBalanceVC {
     @objc fileprivate func sp_clickCash(){
         let cashVC = SPCashVC()
+        cashVC.price = self.moneyModel?.money 
         self.navigationController?.pushViewController(cashVC, animated: true)
     }
     @objc fileprivate func sp_clickRecharge(){

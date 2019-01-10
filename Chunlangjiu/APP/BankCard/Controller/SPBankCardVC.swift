@@ -136,6 +136,7 @@ extension SPBankCardVC : UITableViewDelegate,UITableViewDataSource {
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             block(self.dataArray?[indexPath.row])
         }
+        self.navigationController?.popViewController(animated: true)
     }
     
 }
