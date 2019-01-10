@@ -52,10 +52,17 @@ class SPBankCardVC: SPBaseVC {
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.addBtn)
         self.sp_addConstraint()
+    
     }
     /// 处理有没数据
     override func sp_dealNoData(){
-        
+        if sp_getArrayCount(array: self.dataArray) > 0  {
+            self.noData.isHidden = true
+        }else{
+            self.noData.isHidden = false
+            self.noData.text = "您还没拥有银行卡，赶紧去添加哦！"
+        }
+       self.view.bringSubview(toFront: self.noData)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -111,6 +118,17 @@ extension SPBankCardVC : UITableViewDelegate,UITableViewDataSource {
         }
         return 155
     }
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "删除") { [weak self](action, indexPath) in
+            if indexPath.row < sp_getArrayCount(array: self?.dataArray) {
+                let model = self?.dataArray?[indexPath.row]
+                if let m = model {
+                    self?.sp_sendDeleteRequest(model: m)
+                }
+            }
+        }
+        return [deleteAction]
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let block = self.selectBlock  else {
             return
@@ -123,8 +141,38 @@ extension SPBankCardVC : UITableViewDelegate,UITableViewDataSource {
 }
 extension SPBankCardVC {
     fileprivate func sp_sendRequest(){
-        SPFundsRequest.sp_getBankCardList(requestModel: self.requestModel) { (code , list, errorModel, total) in
-            
+        SPFundsRequest.sp_getBankCardList(requestModel: self.requestModel) { [weak self](code , list, errorModel, total) in
+            if code == SP_Request_Code_Success {
+                self?.dataArray = list as? [SPBankCardModel]
+            }
+            self?.sp_dealNoData()
+            self?.tableView.reloadData()
         }
     }
+    /// 删除的请求
+    ///
+    /// - Parameter model: 删除的数据
+    fileprivate func sp_sendDeleteRequest(model : SPBankCardModel) {
+        var parm = [String : Any]()
+        if let bank_id = model.bank_id {
+            parm.updateValue(bank_id, forKey: "bank_id")
+        }
+        
+        let request = SPRequestModel()
+        request.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
+        SPFundsRequest.sp_getBankCardDelete(requestModel: request) { [weak self](code , msg, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success {
+                sp_showTextAlert(tips: msg.count > 0 ? msg : "删除成功")
+                self?.dataArray?.remove(model)
+                self?.tableView.reloadData()
+            }else{
+                sp_showTextAlert(tips: msg)
+            }
+            self?.sp_dealNoData()
+        }
+        
+    }
+    
 }

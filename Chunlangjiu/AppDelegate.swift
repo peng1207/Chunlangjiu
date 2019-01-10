@@ -29,11 +29,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.registerRemoteNotification()
         SPAPPManager.sp_appVersion()
         
-//        let enString = "a123456".sp_enCrypt(keyStr: "chunlang")
-//        sp_log(message: "加密后的数据 \(enString)--------");
-//        let deString = enString.sp_deCrypt(keyStr: "chunlang")
-//        sp_log(message: "解密后的数据 \(deString)")
-         
+         let enString = SPDes.encrypt(withText: "a123456", key: "chunlang")
+        sp_log(message: "加密后的数据\(sp_getString(string: enString))")
+        let deString = SPDes.decrypt(withText: enString, key: "chunlang")
+        sp_log(message: "解密后的数据 \(sp_getString(string: deString))")
+        
         
         // Override point for customization after application launch.
         return true

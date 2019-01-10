@@ -139,6 +139,23 @@ extension SPLoginPwdVC {
             sp_showTextAlert(tips: "输入新密码与确认密码不一致")
             return
         }
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: self.oldPwdView.textFiled.text), forKey: "login_password")
+        parm.updateValue(sp_getString(string: self.newPwdView.textFiled.text), forKey: "password")
+        parm.updateValue(sp_getString(string: self.confirmPwdView.textFiled.text), forKey: "password_confirmation")
+        
+        self.requestModel.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
+        SPSetRequest.sp_getModifyLoginPwd(requestModel: self.requestModel) { [weak self](code, msg , errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success {
+                sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? msg : "修改密码成功")
+                self?.navigationController?.popViewController(animated: true)
+            }else{
+                sp_showTextAlert(tips: msg)
+            }
+        }
+        
     }
    
     

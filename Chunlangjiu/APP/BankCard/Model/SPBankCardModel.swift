@@ -8,5 +8,10 @@
 
 import Foundation
 class SPBankCardModel : SPBaseModel {
-    
+    var bank_id : Int?
+    var user_id : Int?
+    var name : String?
+    var bank : String?
+    var card : String?
+    var mobile : String?
 }

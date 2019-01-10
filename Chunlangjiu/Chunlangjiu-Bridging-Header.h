@@ -24,4 +24,5 @@
 
 #import <AlipaySDK/AlipaySDK.h>
 #import <CommonCrypto/CommonCrypto.h>
+#import "SPDes.h"
 #endif

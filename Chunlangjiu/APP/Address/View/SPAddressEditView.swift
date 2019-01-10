@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 import SnapKit
+
+/// 值变化的通知
+typealias SPTextChangeComplete = (_ textFiled : SPTextFiled, _ text : String)->Void
+
 class SPAddressEditView:  UIView{
     
     lazy var titleLabel : UILabel = {
@@ -26,6 +30,7 @@ class SPAddressEditView:  UIView{
             
         })
         text.clearButtonMode = .whileEditing
+        text.addTarget(self, action: #selector(sp_textChange), for: UIControlEvents.editingChanged)
         return text
     }()
     lazy var lineView : UIView = {
@@ -33,6 +38,8 @@ class SPAddressEditView:  UIView{
     }()
     fileprivate var titleLeftConstraint : Constraint!
     fileprivate var contentLeftConstraint : Constraint!
+    var textChangeBlock : SPTextChangeComplete?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -71,5 +78,15 @@ class SPAddressEditView:  UIView{
     }
     deinit {
         
+    }
+}
+
+extension SPAddressEditView {
+    
+    @objc fileprivate func sp_textChange(){
+        guard let block = self.textChangeBlock else {
+            return
+        }
+        block(self.textFiled,sp_getString(string: self.textFiled.text))
     }
 }

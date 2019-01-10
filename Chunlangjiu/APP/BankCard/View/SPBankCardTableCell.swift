@@ -12,7 +12,7 @@ import SnapKit
 class SPBankCardTableCell: UITableViewCell {
     fileprivate lazy var cellView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
@@ -60,6 +60,8 @@ class SPBankCardTableCell: UITableViewCell {
     }
     /// 赋值
     fileprivate func sp_setupData(){
+        self.nameLabel.text = sp_getString(string: self.model?.name)
+        self.cardLabel.text = sp_getString(string: self.model?.card).replaceBankCard()
         
     }
     /// 添加UI

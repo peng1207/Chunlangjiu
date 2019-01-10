@@ -53,3 +53,5 @@ typealias SPPorudctDetComplete = (_ code : String,_ model : SPProductModel?,_ er
 typealias SPAPPVersionComplete = (_ code : String, _ model : SPUpdateModel?,_ errorModel : SPRequestError?)->Void
 /// 我的资金
 typealias SPFundsMoneyComplete = (_ code : String,_ model :SPMoneyModel?,_ msg : String,_ errorModel : SPRequestError?)->Void
+/// 获取银行卡信息
+typealias SPFundBankCardComplete = (_ code : String,_ model : SPBankCardInfoModel?,_ msg : String,_ errorModel : SPRequestError?)->Void

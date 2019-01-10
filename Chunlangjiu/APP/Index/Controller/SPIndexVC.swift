@@ -580,6 +580,13 @@ extension SPIndexVC{
         shopVC.shopModel = shopModel
         self.navigationController?.pushViewController(shopVC, animated: true)
     }
+    fileprivate func sp_dealNoDataBtn(){
+        if sp_getArrayCount(array: self.indexModel?.brandList) == 0 , sp_getArrayCount(array: self.indexModel?.bannerList) == 0 , sp_getArrayCount(array: self.indexModel?.iconList) == 0 , sp_getArrayCount(array: self.auctionGood.dataArray) == 0 , sp_getArrayCount(array: self.defaultGood.dataArray) == 0{
+            self.nodataBtn.isHidden = false
+        }else{
+            self.nodataBtn.isHidden = true
+        }
+    }
 }
 // MARK: - notification
 extension SPIndexVC{
@@ -649,14 +656,15 @@ extension SPIndexVC{
         var parm = [String:Any]()
         parm.updateValue("index", forKey: "tmpl")
         model.parm = parm
-        SPAppRequest.sp_getIndex(requestModel: model) { (code, indexModel, errorModel) in
+        SPAppRequest.sp_getIndex(requestModel: model) { [weak self](code, indexModel, errorModel) in
             
             if code  == SP_Request_Code_Success {
-                self.indexModel = indexModel
-                self.tableHeaderView.indexModel = indexModel
+                self?.indexModel = indexModel
+                self?.tableHeaderView.indexModel = indexModel
 //                self.tableView.sp_layoutHeaderView()
             }
-            sp_hideAnimation(view: self.view)
+            sp_hideAnimation(view: self?.view)
+            self?.sp_dealNoDataBtn()
         }
     }
     fileprivate func sp_sendGoodRequest(){
@@ -665,9 +673,9 @@ extension SPIndexVC{
         parm.updateValue(10, forKey: "pagesize")
         parm.updateValue("index", forKey: "tmpl")
         self.requestModel.parm = parm
-        SPAppRequest.sp_getIndexGoods(requestModel: self.requestModel) { (code,auctionList,list, errorModel, total) in
+        SPAppRequest.sp_getIndexGoods(requestModel: self.requestModel) { [weak self](code,auctionList,list, errorModel, total) in
             
-            self.sp_dealRequest(code: code,auctionList: auctionList, list: list, errorModel: errorModel, total: total)
+            self?.sp_dealRequest(code: code,auctionList: auctionList, list: list, errorModel: errorModel, total: total)
         }
     }
     fileprivate func sp_dealRequest(code:String,auctionList : [SPProductModel]?,list : [SPProductModel]? ,errorModel : SPRequestError?,total : Int){
@@ -699,6 +707,7 @@ extension SPIndexVC{
             
         }
         sp_dealDataArray()
+        self.sp_dealNoDataBtn()
         sp_mainQueue {
             self.collectionView.sp_stopHeaderRefesh()
             self.collectionView.sp_stopFooterRefesh()

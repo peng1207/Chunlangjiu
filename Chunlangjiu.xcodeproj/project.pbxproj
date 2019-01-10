@@ -164,6 +164,9 @@
 		9E34F6DB2101929300D59ABD /* SPShopHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34F6DA2101929300D59ABD /* SPShopHomeView.swift */; };
 		9E34F6DD2101CAA100D59ABD /* SPProductDetaileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34F6DC2101CAA100D59ABD /* SPProductDetaileVC.swift */; };
 		9E34F6DF2101D9C800D59ABD /* SPProductDetaileWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34F6DE2101D9C800D59ABD /* SPProductDetaileWebVC.swift */; };
+		9E48D58021E7004A0043D764 /* SPDes.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E48D57F21E7004A0043D764 /* SPDes.m */; };
+		9E48D58421E7009D0043D764 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E48D58221E7009D0043D764 /* GTMBase64.m */; };
+		9E48D58621E7180A0043D764 /* SPBankCardInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E48D58521E7180A0043D764 /* SPBankCardInfoModel.swift */; };
 		9E4AAECF214E2D9C00336892 /* SPRefuseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4AAECE214E2D9C00336892 /* SPRefuseView.swift */; };
 		9E4AAED3214E570100336892 /* SPMineHeadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4AAED2214E570100336892 /* SPMineHeadModel.swift */; };
 		9E4AAED5214EC58C00336892 /* SPDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4AAED4214EC58C00336892 /* SPDatePicker.swift */; };
@@ -595,6 +598,12 @@
 		9E34F6DA2101929300D59ABD /* SPShopHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopHomeView.swift; sourceTree = "<group>"; };
 		9E34F6DC2101CAA100D59ABD /* SPProductDetaileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductDetaileVC.swift; sourceTree = "<group>"; };
 		9E34F6DE2101D9C800D59ABD /* SPProductDetaileWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductDetaileWebVC.swift; sourceTree = "<group>"; };
+		9E48D57E21E7004A0043D764 /* SPDes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPDes.h; sourceTree = "<group>"; };
+		9E48D57F21E7004A0043D764 /* SPDes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPDes.m; sourceTree = "<group>"; };
+		9E48D58121E7009D0043D764 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		9E48D58221E7009D0043D764 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		9E48D58321E7009D0043D764 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		9E48D58521E7180A0043D764 /* SPBankCardInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBankCardInfoModel.swift; sourceTree = "<group>"; };
 		9E4AAECE214E2D9C00336892 /* SPRefuseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRefuseView.swift; sourceTree = "<group>"; };
 		9E4AAED2214E570100336892 /* SPMineHeadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeadModel.swift; sourceTree = "<group>"; };
 		9E4AAED4214EC58C00336892 /* SPDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDatePicker.swift; sourceTree = "<group>"; };
@@ -1474,6 +1483,9 @@
 		9E0C8B6920E63F8100BD9743 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9E48D58121E7009D0043D764 /* GTMBase64.h */,
+				9E48D58221E7009D0043D764 /* GTMBase64.m */,
+				9E48D58321E7009D0043D764 /* GTMDefines.h */,
 				56107EEE21C3AD550012CFB9 /* SPQRCodeUtil.swift */,
 				9E7DAADA21402AA20044C5FD /* SPDateManager.swift */,
 				9E0C8B6F20E6400300BD9743 /* SPBaseModel.swift */,
@@ -1491,6 +1503,8 @@
 				56107EF021C3B16F0012CFB9 /* SPTableDataSource.swift */,
 				9E62453921E4F87C002478B5 /* SPString.swift */,
 				9E08B20521E6430200DD3007 /* SPData.swift */,
+				9E48D57E21E7004A0043D764 /* SPDes.h */,
+				9E48D57F21E7004A0043D764 /* SPDes.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1729,6 +1743,7 @@
 			isa = PBXGroup;
 			children = (
 				9E5F7AE321C6284000A9EF35 /* SPBankCardModel.swift */,
+				9E48D58521E7180A0043D764 /* SPBankCardInfoModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2421,6 +2436,7 @@
 				9EFC5973217B0F6E0002B4BE /* SPLogiModel.swift in Sources */,
 				9ECB7C5021248C54009E843B /* SPDataBase.swift in Sources */,
 				567ECD58213E724300F254E4 /* SPShopCategory.swift in Sources */,
+				9E48D58421E7009D0043D764 /* GTMBase64.m in Sources */,
 				566313A9214146CB000336E0 /* SPIndexHande.swift in Sources */,
 				9EF4C6BA20EF237F007E9909 /* SPView.swift in Sources */,
 				9EF4C67620EC7391007E9909 /* SPMineVC.swift in Sources */,
@@ -2448,6 +2464,7 @@
 				9E7DAAD9213D9F620044C5FD /* SPProductRequest.swift in Sources */,
 				9E22EAF62135B39000B196D5 /* SPOrderToolModel.swift in Sources */,
 				9E5F7ABE21C3F76900A9EF35 /* SPFansListVC.swift in Sources */,
+				9E48D58021E7004A0043D764 /* SPDes.m in Sources */,
 				9E129F4E2103308400218A33 /* SPProductAddVC.swift in Sources */,
 				9EF4C72B20F75CD2007E9909 /* SPIndexSectionDHeaderView.swift in Sources */,
 				9E0C8B7020E6400300BD9743 /* SPBaseModel.swift in Sources */,
@@ -2485,6 +2502,7 @@
 				9EF4C6D820EFBAEF007E9909 /* SPConfrimSectionHeadView.swift in Sources */,
 				9EF4C6D020EF6E40007E9909 /* SPConfirmOrderVC.swift in Sources */,
 				561C74E921CE1F5700132D88 /* SPMineTableCell.swift in Sources */,
+				9E48D58621E7180A0043D764 /* SPBankCardInfoModel.swift in Sources */,
 				9EF4C6E020EFD3AD007E9909 /* SPAuctionTableCell.swift in Sources */,
 				56256FC2215A56BF005242B0 /* SPPlaceModel.swift in Sources */,
 				9E7A1FAC2143EC3B00C9BFD2 /* SPOrderLogisticsView.swift in Sources */,

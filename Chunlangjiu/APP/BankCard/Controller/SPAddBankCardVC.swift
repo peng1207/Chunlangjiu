@@ -32,7 +32,12 @@ class SPAddBankCardVC: SPBaseVC {
         let view = SPAddressEditView()
         view.titleLabel.text = "银行卡号"
         view.textFiled.placeholder = "请输入银行卡号"
+        view.textFiled.keyboardType =  UIKeyboardType.numberPad
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.textChangeBlock = { [weak self](textFiled,text) in
+            sp_log(message: "获取到text \(text)")
+            self?.sp_bankCardTextChange(text: text, textFiled: textFiled)
+        }
         return view
     }()
     fileprivate lazy var openView : SPAddressSelectView = {
@@ -104,6 +109,7 @@ class SPAddBankCardVC: SPBaseVC {
     }()
     fileprivate var selectPModel : SPAreaModel?
     fileprivate var selectCModel : SPAreaModel?
+    fileprivate var bankCardInfoModel : SPBankCardInfoModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -143,6 +149,7 @@ class SPAddBankCardVC: SPBaseVC {
          SPAPPManager.sp_getAreaData(isCity: false, complete: { [weak self](data) in
             self?.areaPickerView.dataArray = data as? [SPAreaModel]
         })
+        sp_hideKeyboard()
     }
     /// 处理有没数据
     override func sp_dealNoData(){
@@ -216,6 +223,7 @@ class SPAddBankCardVC: SPBaseVC {
 extension SPAddBankCardVC {
     @objc fileprivate func sp_clickDone(){
         
+        sp_sendAddRequest()
     }
     @objc fileprivate func sp_clickArea(){
         self.areaPickerView.isHidden = false
@@ -237,7 +245,60 @@ extension SPAddBankCardVC {
         sp_dealAreaData()
     }
     fileprivate func sp_dealAreaData(){
-        self.areaView.content = "\(sp_getString(string: self.selectPModel?.value)) 省 \(sp_getString(string: self.selectCModel?.value)) 市"
+        self.areaView.content = "\(sp_getString(string: self.selectPModel?.value)) \(sp_getString(string: self.selectCModel?.value)) "
     }
-    
+    /// 输入银行卡变化
+    ///
+    /// - Parameters:
+    ///   - text: 输入内容
+    ///   - textFiled: 输入框
+    fileprivate func sp_bankCardTextChange(text:String,textFiled:SPTextFiled){
+        if sp_getString(string: text).count == 8 {
+            // 调用获取对应银行卡信息
+            sp_sendBankCardRequest()
+        }else{
+            if sp_getString(string: text).count == 0 {
+                self.bankCardInfoModel = nil
+                self.sp_dealBankCard()
+            }
+        }
+    }
+}
+extension SPAddBankCardVC {
+    fileprivate func sp_sendBankCardRequest(){
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: self.bankCardView.textFiled.text), forKey: "card")
+        self.requestModel.parm = parm
+        SPFundsRequest.sp_getBankCardInfo(requestModel: self.requestModel) { [weak self](code , model, msg, errorModel) in
+            if code == SP_Request_Code_Success {
+                self?.bankCardInfoModel = model
+                self?.sp_dealBankCard()
+            }else{
+                sp_showTextAlert(tips: msg)
+            }
+        }
+        
+    }
+    fileprivate func sp_dealBankCard(){
+        self.openView.content = sp_getString(string: self.bankCardInfoModel?.bankname)
+    }
+    fileprivate func sp_sendAddRequest(){
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: self.nameView.textFiled.text), forKey: "name")
+        parm.updateValue(sp_getString(string: self.bankCardInfoModel?.bankname), forKey: "bank")
+        parm.updateValue(sp_getString(string: self.bankCardView.textFiled.text), forKey: "card")
+        parm.updateValue(sp_getString(string: self.phoneView.textFiled.text), forKey: "mobile")
+        let request = SPRequestModel()
+        request.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
+        SPFundsRequest.sp_getBankCardAdd(requestModel: request) { [weak self](code , msg, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                sp_showTextAlert(tips: msg.count > 0 ? msg : "添加银行卡成功")
+            }else{
+                sp_showTextAlert(tips: msg)
+            }
+        }
+        
+    }
 }
