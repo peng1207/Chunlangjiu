@@ -20,6 +20,7 @@ class SPRechargeFooterView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickDone), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    var clickBlock : SPBtnClickBlock?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -48,6 +49,9 @@ class SPRechargeFooterView:  UIView{
 }
 extension SPRechargeFooterView {
     @objc fileprivate func sp_clickDone(){
-        
+        guard let block = self.clickBlock else {
+            return
+        }
+        block() 
     }
 }

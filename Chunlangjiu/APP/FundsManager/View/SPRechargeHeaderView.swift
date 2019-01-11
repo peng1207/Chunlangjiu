@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 class SPRechargeHeaderView:  UIView{
-    fileprivate lazy var priceView : SPAddressEditView = {
+    lazy var priceView : SPAddressEditView = {
         let view = SPAddressEditView()
         view.titleLabel.text = "金额"
         view.textFiled.placeholder = "单笔金额不高于50000"

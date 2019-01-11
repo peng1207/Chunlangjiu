@@ -15,11 +15,17 @@ class SPRechargeVC: SPBaseVC {
     }()
     fileprivate lazy var footerView : SPRechargeFooterView = {
         let view = SPRechargeFooterView()
+        view.clickBlock = { [weak self] in
+            self?.sp_clickDone()
+        }
         return view
     }()
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPPayModel]?
     fileprivate var selectPay : SPPayModel?
+    /// 是否 缴纳保证金
+    var isBond : Bool = false
+    var price : String?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -55,6 +61,12 @@ class SPRechargeVC: SPBaseVC {
         data.append(aliPayModel)
         self.dataArray = data
         self.tableView.reloadData()
+        if self.isBond {
+            self.headerView.priceView.textFiled.text = sp_getString(string: self.price)
+            self.headerView.priceView.textFiled.isEnabled = false
+        }else{
+            self.headerView.priceView.textFiled.isEnabled = true
+        }
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -128,6 +140,18 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
             self.selectPay = self.dataArray?[indexPath.row]
             tableView.reloadData()
         }
+    }
+    
+}
+extension SPRechargeVC {
+    fileprivate func sp_clickDone(){
+        
+    }
+}
+extension SPRechargeVC {
+    
+    fileprivate func sp_sendBondRequest(){
+        
     }
     
 }

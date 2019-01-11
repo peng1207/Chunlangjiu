@@ -71,7 +71,7 @@ class SPCashVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-     self.priceView.textFiled.placeholder = "最多可提现\(sp_getString(string: self.price))"
+        self.priceView.textFiled.placeholder = "最多可提现\(sp_getString(string: self.price))"
     }
     /// 创建UI
     override func sp_setupUI() {

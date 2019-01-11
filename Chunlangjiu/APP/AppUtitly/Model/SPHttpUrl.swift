@@ -176,7 +176,10 @@ let SP_GET_BANKCARD_INFO_URL =  "\(SPNetWorkManager.instance().sp_getDomainName(
 let SP_GET_FUNDS_MONEY_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.money"
 /// 我的资金提现
 let SP_GET_FUNDS_CASH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.cash"
-
+/// 资金明细列表
+let SP_GET_CAPITALDETLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fund"
+/// 创建保证金订单
+let SP_GET_DEPOSITCREATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.depositCreate"
 /*-----------------------商家的接口--------------------------*/
 /// 获取店铺 的分类
 let SP_GET_SHOPSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=category.shop.get"

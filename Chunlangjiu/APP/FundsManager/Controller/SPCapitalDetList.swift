@@ -11,11 +11,12 @@ import SnapKit
 class SPCapitalDetList: SPBaseVC {
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPCapitalDetModel]?
-    
+    fileprivate var currentPage : Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_sendRequest()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -36,18 +37,29 @@ class SPCapitalDetList: SPBaseVC {
         self.tableView.backgroundColor = self.view.backgroundColor
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.sp_headerRefesh {
-            
+        self.tableView.sp_headerRefesh { [weak self] in
+            self?.currentPage = 1
+            self?.sp_sendRequest()
         }
-        self.tableView.sp_footerRefresh {
-            
+        self.tableView.sp_footerRefresh { [weak self] in
+            if let page = self?.currentPage {
+                self?.currentPage = page + 1
+                self?.sp_sendRequest()
+            }
         }
         self.view.addSubview(self.tableView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
     override func sp_dealNoData(){
-        
+        if sp_getArrayCount(array: self.dataArray) > 0 {
+            self.noData.isHidden = true
+        }else{
+            self.noData.isHidden = false
+            self.noData.text = "您还没交易过哦"
+        }
+        self.tableView.sp_stopFooterRefesh()
+        self.tableView.sp_stopHeaderRefesh()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -99,8 +111,43 @@ extension SPCapitalDetList : UITableViewDelegate,UITableViewDataSource {
         }
         return 5
     }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       return nil
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0
     }
     
+}
+extension SPCapitalDetList {
+    
+    fileprivate func sp_sendRequest(){
+        var parm = [String : Any]()
+        parm.updateValue(self.currentPage, forKey: "page_no")
+        self.requestModel.parm = parm
+        SPFundsRequest.sp_getCapitalDetList(requestModel: self.requestModel) { [weak self](code, list, errorModel,total) in
+            self?.sp_dealSuccess(code: code, list: list, errorModel: errorModel, total: total)
+        }
+    }
+    fileprivate func sp_dealSuccess(code : String,list : [Any]?,errorModel : SPRequestError?,total:Int){
+        if code == SP_Request_Code_Success {
+            if self.currentPage <= 1 {
+                self.dataArray?.removeAll()
+            }
+            if let array : [SPCapitalDetModel] = self.dataArray, let l : [SPCapitalDetModel] = list as? [SPCapitalDetModel]{
+                self.dataArray = array + l
+            }else{
+                self.dataArray = list as? [SPCapitalDetModel]
+            }
+            self.tableView.reloadData()
+        }else{
+            if self.currentPage > 1 {
+                self.currentPage = self.currentPage - 1
+            }
+        }
+        self.sp_dealNoData()
+    }
 }

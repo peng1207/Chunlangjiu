@@ -46,9 +46,14 @@ class SPCapitalDetListTableCell: UITableViewCell {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.titleLabel.text = sp_getString(string: self.model?.title)
-        self.priceLabel.text = sp_getString(string: self.model?.price)
-        self.timeLabel.text = sp_getString(string: self.model?.time)
+        self.titleLabel.text = sp_getString(string: self.model?.message)
+        self.priceLabel.text = sp_getString(string: self.model?.fee)
+        self.timeLabel.text = sp_getString(string: self.model?.logtime)
+        if sp_getString(string: self.model?.type) != "add" {
+            self.priceLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        }else{
+            self.priceLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        }
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
