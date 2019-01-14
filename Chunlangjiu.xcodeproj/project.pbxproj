@@ -164,6 +164,8 @@
 		9E34F6DB2101929300D59ABD /* SPShopHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34F6DA2101929300D59ABD /* SPShopHomeView.swift */; };
 		9E34F6DD2101CAA100D59ABD /* SPProductDetaileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34F6DC2101CAA100D59ABD /* SPProductDetaileVC.swift */; };
 		9E34F6DF2101D9C800D59ABD /* SPProductDetaileWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34F6DE2101D9C800D59ABD /* SPProductDetaileWebVC.swift */; };
+		9E460D1C21EC288600D125E4 /* SPDepositModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E460D1B21EC288600D125E4 /* SPDepositModel.swift */; };
+		9E460D1E21EC326B00D125E4 /* SPFansModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E460D1D21EC326B00D125E4 /* SPFansModel.swift */; };
 		9E48D58021E7004A0043D764 /* SPDes.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E48D57F21E7004A0043D764 /* SPDes.m */; };
 		9E48D58421E7009D0043D764 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E48D58221E7009D0043D764 /* GTMBase64.m */; };
 		9E48D58621E7180A0043D764 /* SPBankCardInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E48D58521E7180A0043D764 /* SPBankCardInfoModel.swift */; };
@@ -598,6 +600,8 @@
 		9E34F6DA2101929300D59ABD /* SPShopHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopHomeView.swift; sourceTree = "<group>"; };
 		9E34F6DC2101CAA100D59ABD /* SPProductDetaileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductDetaileVC.swift; sourceTree = "<group>"; };
 		9E34F6DE2101D9C800D59ABD /* SPProductDetaileWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductDetaileWebVC.swift; sourceTree = "<group>"; };
+		9E460D1B21EC288600D125E4 /* SPDepositModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDepositModel.swift; sourceTree = "<group>"; };
+		9E460D1D21EC326B00D125E4 /* SPFansModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansModel.swift; sourceTree = "<group>"; };
 		9E48D57E21E7004A0043D764 /* SPDes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPDes.h; sourceTree = "<group>"; };
 		9E48D57F21E7004A0043D764 /* SPDes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPDes.m; sourceTree = "<group>"; };
 		9E48D58121E7009D0043D764 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
@@ -1064,6 +1068,7 @@
 			isa = PBXGroup;
 			children = (
 				9E5F7AC121C3F9E800A9EF35 /* SPFansListModel.swift */,
+				9E460D1D21EC326B00D125E4 /* SPFansModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1683,6 +1688,7 @@
 			children = (
 				9E5F7AD121C4D21300A9EF35 /* SPCapitalDetModel.swift */,
 				9E08B20721E6556200DD3007 /* SPMoneyModel.swift */,
+				9E460D1B21EC288600D125E4 /* SPDepositModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2370,6 +2376,7 @@
 				9EF4C6DC20EFC409007E9909 /* SPConfrimFooterView.swift in Sources */,
 				56CC68D4212EC6BE00C298B7 /* SPConfirmOrderModel.swift in Sources */,
 				9EAE840E2194893E00847B82 /* KiClipperHelper.swift in Sources */,
+				9E460D1C21EC288600D125E4 /* SPDepositModel.swift in Sources */,
 				9EF4C6B320EF1B51007E9909 /* SPProductSearchVC.swift in Sources */,
 				9EC5141D21045C27006869B3 /* SPWineValuationSuccessVC.swift in Sources */,
 				9EC51453210CD9AE006869B3 /* SPShareManager.swift in Sources */,
@@ -2591,6 +2598,7 @@
 				9E020E192114BF0F0028ED50 /* SPHttpUrl.swift in Sources */,
 				9ED254C621D27D4800A3166A /* SPAppImg.swift in Sources */,
 				9EF4C72520F73D76007E9909 /* SPIndexATableCell.swift in Sources */,
+				9E460D1E21EC326B00D125E4 /* SPFansModel.swift in Sources */,
 				9EF4C71920F49006007E9909 /* SPProductOfShopView.swift in Sources */,
 				9EC5144B210C5D85006869B3 /* SPWineryScoreView.swift in Sources */,
 				9EC5143721097C67006869B3 /* SPAPPManager.swift in Sources */,

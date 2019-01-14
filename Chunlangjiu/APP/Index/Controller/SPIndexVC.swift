@@ -53,7 +53,7 @@ class SPIndexVC: SPBaseVC {
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.sp_cornerRadius(cornerRadius: 20)
         btn.isHidden = true
-//        btn.addTarget(self, action: #selector(sp_sendRequestSort), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickNoData), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate var pushVC : Bool = false
@@ -586,6 +586,10 @@ extension SPIndexVC{
         }else{
             self.nodataBtn.isHidden = true
         }
+    }
+    @objc fileprivate func sp_clickNoData(){
+        self.sp_sendRequest()
+        self.sp_sendGoodRequest()
     }
 }
 // MARK: - notification

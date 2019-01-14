@@ -54,13 +54,22 @@ class SPFansListHeadView:  UIView{
         label.textAlignment = .right
         return label
     }()
-    
+    var fansModel : SPFansModel?{
+        didSet{
+            sp_setupData()
+        }
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    /// 赋值
+    fileprivate func sp_setupData(){
+        self.numLabel.text = sp_getString(string: self.fansModel?.fans_sum)
+        self.priceLabel.text = sp_getString(string: self.fansModel?.commission_sum) 
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

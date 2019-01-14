@@ -232,4 +232,58 @@ class SPFundsRequest : SPAppRequest {
             }
         }
     }
+    /// 获取保证金相关信息
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getDepostit(requestModel:SPRequestModel,complete:SPDepoistComplete?){
+        requestModel.url = SP_GET_DEPOSIT_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPDepositModel?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPDepositModel.sp_deserialize(from: data)
+                }
+                if let block = complete {
+                    block(errorcode,msg,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"获取数据失败",nil,nil)
+                }
+            }
+        }
+    }
+    /// 创建充值订单
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getRechargeCreate(requestModel:SPRequestModel,complete:SPCreateOrderComplete?){
+        requestModel.url = SP_GET_RECHARGE_CREATE_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPOrderPayModel?
+                
+                if errorcode == SP_Request_Code_Success,sp_isDic(dic: data){
+                    model = SPOrderPayModel.sp_deserialize(from: data)
+                }
+                
+                if let block = complete {
+                    block(errorcode,msg,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"充值失败",nil,nil)
+                }
+            }
+        }
+    }
 }

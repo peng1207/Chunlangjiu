@@ -78,17 +78,12 @@ class SPAddBankCardVC: SPBaseVC {
         view.titleLabel.text = "验证码"
         view.textFiled.placeholder = "请输入验证码"
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.clickBlock = { [weak self] in
+            self?.sp_clickCode()
+        }
         return view
     }()
-    fileprivate lazy var codeBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("获取验证码", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 12)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
-        btn.addTarget(self, action: #selector(sp_clickCode), for: UIControlEvents.touchUpInside)
-        return btn
-    }()
+    
     fileprivate lazy var doneBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("确定绑定", for: UIControlState.normal)
@@ -110,6 +105,7 @@ class SPAddBankCardVC: SPBaseVC {
     fileprivate var selectPModel : SPAreaModel?
     fileprivate var selectCModel : SPAreaModel?
     fileprivate var bankCardInfoModel : SPBankCardInfoModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -123,6 +119,7 @@ class SPAddBankCardVC: SPBaseVC {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.codeView.sp_stopTime()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -222,7 +219,30 @@ class SPAddBankCardVC: SPBaseVC {
 }
 extension SPAddBankCardVC {
     @objc fileprivate func sp_clickDone(){
-        
+        if sp_getString(string: self.nameView.textFiled.text).count == 0  {
+            sp_showTextAlert(tips: "请输入您姓名")
+            return
+        }
+        if sp_getString(string: self.cardView.textFiled.text).count == 0 {
+            sp_showTextAlert(tips: "请输入身份证号码")
+            return
+        }
+        if sp_getString(string: self.bankCardView.textFiled.text).count == 0 {
+            sp_showTextAlert(tips: "请输入画银行卡号")
+            return
+        }
+        if sp_getString(string: self.subbranchView.textFiled.text).count == 0  {
+            sp_showTextAlert(tips: "请输入支行")
+            return
+        }
+        if sp_getString(string: self.phoneView.textFiled.text).count == 0 {
+            sp_showTextAlert(tips: "请输入手机号码")
+            return
+        }
+        if sp_getString(string: self.codeView.textFiled.text).count == 0 {
+            sp_showTextAlert(tips: "请输入验证码")
+            return
+        }
         sp_sendAddRequest()
     }
     @objc fileprivate func sp_clickArea(){
@@ -232,8 +252,27 @@ extension SPAddBankCardVC {
         
     }
     @objc fileprivate func sp_clickCode(){
+        if sp_getString(string: self.phoneView.textFiled.text).count == 0 {
+            sp_showTextAlert(tips: "请输入手机号码")
+            return
+        }
+        let request = SPRequestModel()
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: self.phoneView.textFiled.text), forKey: "mobile")
+        request.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
         
+        SPSetRequest.sp_getSendCMS(requestModel: request) { [weak self](code, msg, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            sp_showTextAlert(tips: msg)
+            if code == SP_Request_Code_Success {
+                self?.codeView.sp_startTime()
+            }else{
+                self?.codeView.codeBtn.isEnabled = true
+            }
+        }
     }
+   
     /// 选择开户行省市的回调
     ///
     /// - Parameters:
@@ -288,6 +327,9 @@ extension SPAddBankCardVC {
         parm.updateValue(sp_getString(string: self.bankCardInfoModel?.bankname), forKey: "bank")
         parm.updateValue(sp_getString(string: self.bankCardView.textFiled.text), forKey: "card")
         parm.updateValue(sp_getString(string: self.phoneView.textFiled.text), forKey: "mobile")
+        parm.updateValue(sp_getString(string: self.codeView.textFiled.text), forKey: "verifycode")
+        parm.updateValue(sp_getString(string: self.cardView.textFiled.text), forKey: "idcard")
+        parm.updateValue(sp_getString(string: self.subbranchView.textFiled.text), forKey: "bank_branch")
         let request = SPRequestModel()
         request.parm = parm
         sp_showAnimation(view: self.view, title: nil)

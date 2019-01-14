@@ -113,3 +113,12 @@ extension SPFundsVC {
         self.scrollView.setContentOffset(CGPoint(x: self.scrollView.frame.size.width * CGFloat(index), y: 0), animated: true)
     }
 }
+extension SPFundsVC{
+    fileprivate func sp_sendRequest(){
+        let parm = [String : Any]()
+        self.requestModel.parm = parm
+        SPFansRequest.sp_getInvitationCode(requestModel: self.requestModel) { (code, msg, errorModel) in
+            
+        }
+    }
+}

@@ -23,6 +23,7 @@ class SPRechargeVC: SPBaseVC {
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPPayModel]?
     fileprivate var selectPay : SPPayModel?
+    private var bounceApp = false
     /// 是否 缴纳保证金
     var isBond : Bool = false
     var price : String?
@@ -32,6 +33,7 @@ class SPRechargeVC: SPBaseVC {
         self.tableView.sp_layoutHeaderView()
         self.tableView.sp_layoutFooterView()
         sp_setupData()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -145,13 +147,123 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
 }
 extension SPRechargeVC {
     fileprivate func sp_clickDone(){
+        if self.selectPay == nil {
+            sp_showTextAlert(tips: "请选择支付方式")
+            return
+        }
+        if self.isBond == false , sp_getString(string: self.headerView.priceView.textFiled.text ).count == 0{
+            sp_showTextAlert(tips: "请输入充值金额")
+            return
+        }
+        if self.isBond {
+            self.sp_sendBondRequest()
+        }else{
+            sp_sendRechargeRequest()
+        }
         
     }
 }
 extension SPRechargeVC {
     
-    fileprivate func sp_sendBondRequest(){
+    /// 发起充值的请求
+    fileprivate func sp_sendRechargeRequest(){
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: self.headerView.priceView.textFiled.text), forKey: "money")
+        self.requestModel.parm = parm
+        SPFundsRequest.sp_getRechargeCreate(requestModel: self.requestModel) {  [weak self](code, msg, payModel, errorModel) in
+             self?.sp_dealBondrequest(code: code, msg: msg, payModel: payModel, errorModel: errorModel)
+        }
         
     }
     
+    /// 发起保证金的请求
+    fileprivate func sp_sendBondRequest(){
+        let parm = [String : Any]()
+        self.requestModel.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
+        SPFundsRequest.sp_getDepositCreate(requestModel: self.requestModel) { [weak self](code, msg, payModel, errorModel) in
+            self?.sp_dealBondrequest(code: code, msg: msg, payModel: payModel, errorModel: errorModel)
+        }
+    }
+  
+    fileprivate func sp_dealBondrequest(code: String,msg:String,payModel:SPOrderPayModel?,errorModel : SPRequestError? ){
+        if code == SP_Request_Code_Success {
+            self.sp_sendTopayRequest(payModel: payModel)
+        }else{
+            sp_hideAnimation(view: self.view)
+            sp_showTextAlert(tips: msg)
+        }
+    }
+    
+    fileprivate func sp_sendTopayRequest(payModel : SPOrderPayModel?){
+        let payRequest = SPRequestModel()
+        var parm = [String:Any]()
+        parm.updateValue(sp_getString(string:payModel?.payment_id), forKey: "payment_id")
+        parm.updateValue(sp_getString(string:self.selectPay?.app_rpc_id), forKey: "pay_app_id")
+        payRequest.parm = parm
+        
+        SPAppRequest.sp_getToPay(requestModel: payRequest) { [weak self](data, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if sp_isDic(dic: data) {
+                let errorCode  = sp_getString(string: data?[SP_Request_Errorcod_Key])
+                if sp_getString(string: errorCode).count > 0, sp_getString(string: errorCode) != SP_Request_Code_Success {
+                    self?.bounceApp = false
+                    sp_hideAnimation(view: nil)
+                    sp_showTextAlert(tips: "支付失败")
+                    self?.sp_pushOrderList(isSuccess: false)
+                }else{
+                    self?.bounceApp = true
+                    if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue{
+                        SPThridManager.sp_wxPay(dic: data!)
+                    }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue {
+                        SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                    }
+                }
+            }else{
+                self?.bounceApp = false
+                sp_hideAnimation(view: nil)
+                sp_showTextAlert(tips: "支付失败")
+                self?.sp_pushOrderList(isSuccess: false)
+            }
+            
+        }
+    }
+    fileprivate func sp_pushOrderList(isSuccess : Bool){
+        if isSuccess {
+             self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+}
+extension SPRechargeVC {
+    /// 添加通知
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_payResture(notification:)), name: NSNotification.Name(SP_PAYRESULT_NOTIFICATION), object: nil)
+    }
+    /// 支付结果回调
+    ///
+    /// - Parameter notification: 支付结果
+    @objc private func sp_payResture(notification:Notification){
+        if sp_isDic(dic: notification.object) {
+            let payResultDic : [String :Any] = notification.object as! [String : Any]
+            let payType = sp_getString(string: payResultDic[SP_PAY_TYPE_KEY])
+            let payState = sp_getString(string: payResultDic[SP_PAY_STATUES_KEY])
+            let client = payResultDic[SP_PAY_CLIENT_KEY]
+            sp_dealPay(state: payState, payType: payType,client: (client != nil))
+        }
+    }
+    private func sp_dealPay(state : String,payType : String,client : Bool){
+        if sp_getString(string: state).count > 0 &&  sp_getString(string: payType).count > 0  {
+            self.bounceApp = false
+            sp_hideAnimation(view: nil)
+            self.sp_pushOrderList(isSuccess: state == SP_PAY_SUCCESS ? true : false)
+            
+        }else{
+            if self.bounceApp && client {
+                sp_hideAnimation(view: nil)
+                self.sp_pushOrderList(isSuccess: false)
+            }
+            self.bounceApp = false
+        }
+    }
 }

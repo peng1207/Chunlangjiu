@@ -308,6 +308,7 @@ extension SPAPPManager {
     ///  登录通知
     @objc fileprivate func sp_loginNotification(){
         SPAPPManager.sp_uploadPushToken()
+        sp_showEnterCode()
     }
     ///  网络发生变化的通知
     @objc fileprivate func sp_netChangeNotification(){
@@ -328,6 +329,14 @@ extension SPAPPManager {
     }
 }
 extension SPAPPManager{
+    
+    /// 展示输入邀请码
+    fileprivate func sp_showEnterCode(){
+//        if let referrer = Bool(sp_getString(string: self.userModel?.referrer)) , referrer == false{
+            // 还没输入
+            SPInvitationCodeView.sp_showView(); 
+//        }
+    }
     
     fileprivate func sp_startTimer(){
         if self.timer == nil {

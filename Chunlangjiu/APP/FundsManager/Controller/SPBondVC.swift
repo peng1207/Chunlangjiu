@@ -39,7 +39,7 @@ class SPBondVC: SPBaseVC {
     }()
     fileprivate lazy var priceLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 12)
+        label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.textAlignment = .center
         return label
@@ -61,12 +61,14 @@ class SPBondVC: SPBaseVC {
         label.numberOfLines = 0
         return label
     }()
+    fileprivate var model : SPDepositModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        sp_sendRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -146,13 +148,39 @@ extension SPBondVC {
     
     @objc fileprivate func sp_clickSubmit(){
         if self.submitBtn.isSelected {
-            
+            sp_sendDeleteRequest()
         }else{
             let rechargeVC = SPRechargeVC()
             rechargeVC.navigationItem.title = "缴纳保证金"
+            rechargeVC.isBond = true
+            rechargeVC.price = sp_getString(string: self.model?.deposit)
             self.navigationController?.pushViewController(rechargeVC, animated: true)
         }
        
     }
+    fileprivate func sp_dealData(){
+        self.priceLabel.text = sp_getString(string: self.model?.deposit)
+        if sp_getString(string: self.model?.deposit_status) == "0" {
+            // 没有缴纳
+            self.submitBtn.isSelected = false
+        }else{
+            self.submitBtn.isSelected = true
+        }
+    }
     
+}
+
+extension SPBondVC {
+    fileprivate func sp_sendRequest(){
+        SPFundsRequest.sp_getDepostit(requestModel: self.requestModel) { [weak self](code , msg, model, errorModel) in
+            if code == SP_Request_Code_Success{
+                self?.model = model
+                self?.sp_dealData()
+            }
+            
+        }
+    }
+    fileprivate func sp_sendDeleteRequest(){
+        
+    }
 }

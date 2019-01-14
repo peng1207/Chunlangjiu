@@ -26,11 +26,13 @@ class SPFansListVC: SPBaseVC {
         return btn
     }()
     fileprivate var dataArray : [SPFansListModel]?
-    
+    fileprivate var currentPage : Int = 1
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
         self.tableView.sp_layoutHeaderView()
+        sp_sendFansRequest()
+        sp_sendRequest()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -54,13 +56,32 @@ class SPFansListVC: SPBaseVC {
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = UIView()
         self.tableView.backgroundColor = self.view.backgroundColor
+        self.tableView.sp_headerRefesh { [weak self]in
+            self?.currentPage = 1
+            self?.sp_sendRequest()
+            self?.sp_sendFansRequest()
+        }
+        self.tableView.sp_footerRefresh { [weak self]in
+            if let page = self?.currentPage {
+                self?.currentPage = page + 1
+                 self?.sp_sendRequest()
+            }
+        }
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.shareBtn)
         self.sp_addConstraint()
     }
     /// 处理有没数据
     override func sp_dealNoData(){
-        
+        self.tableView.sp_stopFooterRefesh()
+        self.tableView.sp_stopHeaderRefesh()
+        if sp_getArrayCount(array: self.dataArray) > 0 {
+            self.noData.isHidden = true
+        }else{
+            self.noData.isHidden = false
+            self.noData.text = "您还没有粉丝哦，赶紧分享邀请"
+            self.view.bringSubview(toFront: self.noData)
+        }
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -137,3 +158,39 @@ extension SPFansListVC {
     }
     
 }
+extension SPFansListVC {
+    fileprivate func sp_sendRequest(){
+        var parm = [String : Any]()
+        parm.updateValue(self.currentPage, forKey: "page_no")
+        self.requestModel.parm = parm
+        SPFansRequest.sp_getFansList(requestModel: self.requestModel) { [weak self](code, list, errorMode, total) in
+            self?.sp_dealRequestSuccess(code: code, list: list, errorModel: errorMode, total: total)
+        }
+    }
+    fileprivate func sp_dealRequestSuccess(code: String,list : Any?,errorModel : SPRequestError?,total : Int){
+        if code == SP_Request_Code_Success {
+            if self.currentPage <= 1{
+                self.dataArray?.removeAll()
+            }
+            if let array : [SPFansListModel] = self.dataArray , let l : [SPFansListModel] = list as? [SPFansListModel] {
+                self.dataArray = array + l
+            }else{
+                self.dataArray = list as? [SPFansListModel]
+            }
+        }
+        sp_dealNoData()
+    }
+    
+    fileprivate func sp_sendFansRequest(){
+        let parm = [String :Any]()
+        let rModel = SPRequestModel()
+        rModel.parm = parm
+        SPFansRequest.sp_getFansNum(requestModel: rModel) { [weak self](code, msg, model, errorModel) in
+            if code == SP_Request_Code_Success{
+                self?.headerView.fansModel = model
+            }
+        }
+    }
+    
+}
+

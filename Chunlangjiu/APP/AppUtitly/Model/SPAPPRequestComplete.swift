@@ -55,3 +55,7 @@ typealias SPAPPVersionComplete = (_ code : String, _ model : SPUpdateModel?,_ er
 typealias SPFundsMoneyComplete = (_ code : String,_ model :SPMoneyModel?,_ msg : String,_ errorModel : SPRequestError?)->Void
 /// 获取银行卡信息
 typealias SPFundBankCardComplete = (_ code : String,_ model : SPBankCardInfoModel?,_ msg : String,_ errorModel : SPRequestError?)->Void
+/// 获取保证金信息
+typealias SPDepoistComplete = (_ code : String,_ msg : String,_ model : SPDepositModel?,_ errorModel:SPRequestError?)->Void
+/// 获取粉丝数量
+typealias SPFansComplete = (_ code : String,_ msg : String,_ model : SPFansModel?,_ errorModel : SPRequestError?)->Void

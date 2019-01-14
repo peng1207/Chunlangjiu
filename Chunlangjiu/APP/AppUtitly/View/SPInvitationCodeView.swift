@@ -38,15 +38,29 @@ class SPInvitationCodeView:  UIView{
         btn.setTitle("填好了", for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 16)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_clickInput), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var noBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("没有邀请人，不填啦", for: UIControlState.normal)
+        btn.setTitle("不填啦", for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 16)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_remove), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    
+    class func sp_showView(){
+        let view = SPInvitationCodeView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue).withAlphaComponent(0.3)
+        let appdelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appdelegate.window?.addSubview(view)
+        view.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo((appdelegate.window!))
+            maker.bottom.equalTo((appdelegate.window?.snp.bottom)!).offset(0)
+        }
+        
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,6 +84,7 @@ class SPInvitationCodeView:  UIView{
         self.contentView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self).offset(30)
             maker.right.equalTo(self).offset(-30)
+            maker.centerY.equalTo(self.snp.centerY).offset(0)
             maker.top.greaterThanOrEqualTo(self).offset(sp_getstatusBarHeight())
             maker.bottom.lessThanOrEqualTo(self).offset(-SP_TABBAR_HEIGHT)
             maker.height.greaterThanOrEqualTo(0)
@@ -106,5 +121,30 @@ class SPInvitationCodeView:  UIView{
     }
     deinit {
         
+    }
+}
+extension SPInvitationCodeView {
+   @objc fileprivate func sp_remove(){
+        self.removeFromSuperview()
+    }
+    @objc fileprivate func sp_clickInput(){
+        if sp_getString(string: self.inputTextFiled.text).count == 0 {
+            sp_showTextAlert(tips: "请输入邀请码")
+            return
+        }
+        sp_sendRequest()
+        sp_remove()
+    }
+    
+}
+extension SPInvitationCodeView {
+    fileprivate func sp_sendRequest(){
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: self.inputTextFiled.text), forKey: "referrer")
+        let requestModel = SPRequestModel()
+        requestModel.parm = parm
+        SPFansRequest.sp_getInputInvitationCode(requestModel: requestModel) { (code, msg, errorModel) in
+            
+        }
     }
 }
