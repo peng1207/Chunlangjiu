@@ -14,6 +14,7 @@ class SPInvitationCodeView:  UIView{
     fileprivate lazy var contentView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var closeBtn : UIButton = {
@@ -31,6 +32,7 @@ class SPInvitationCodeView:  UIView{
     fileprivate lazy var inputTextFiled : SPTextFiled = {
         let textFiled = SPTextFiled()
         textFiled.placeholder = "请填写邀请人的邀请码"
+        textFiled.font = sp_getFontSize(size: 16)
         return textFiled
     }()
     fileprivate lazy var inputBtn : UIButton = {

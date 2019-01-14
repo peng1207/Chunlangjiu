@@ -55,6 +55,10 @@ class SPFansRequest : SPAppRequest {
                             if let lDic : [String : Any] = listDic as? [String : Any]{
                                 let model = SPFansListModel.sp_deserialize(from: lDic)
                                 if let m = model {
+                                    if let createTime : Int = m.createtime {
+                                        m.time = SPDateManager.sp_string(to:TimeInterval(exactly: createTime))
+                                    }
+                                 
                                     dataArray.append(m)
                                 }
                             }
@@ -78,19 +82,23 @@ class SPFansRequest : SPAppRequest {
     /// - Parameters:
     ///   - requestModel: 请求数据
     ///   - complete: 回调
-    class func sp_getInvitationCode(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+    class func sp_getInvitationCode(requestModel:SPRequestModel,complete:SPInvitationCodeComplete?){
         requestModel.url = SP_GET_INVITATIONCODE_URL
         sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
             if let json = dataJson {
                 let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
                 let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
                 let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var invitationCode : String = ""
+                if errorcode == SP_Request_Code_Success {
+                    invitationCode = sp_getString(string: data?["code"])
+                }
                 if let block = complete {
-                    
+                    block(errorcode,msg,invitationCode,nil)
                 }
             }else{
                 if let block = complete {
-                    
+                    block(SP_Request_Error,"获取邀请码失败","",nil)
                 }
             }
         }
@@ -107,6 +115,8 @@ class SPFansRequest : SPAppRequest {
                 let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
                 let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
                 let msg = sp_getString(string: json[SP_Request_Msg_Key])
+               
+                
                 if let block = complete {
                     block(errorcode,msg,nil)
                 }

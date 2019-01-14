@@ -59,3 +59,5 @@ typealias SPFundBankCardComplete = (_ code : String,_ model : SPBankCardInfoMode
 typealias SPDepoistComplete = (_ code : String,_ msg : String,_ model : SPDepositModel?,_ errorModel:SPRequestError?)->Void
 /// 获取粉丝数量
 typealias SPFansComplete = (_ code : String,_ msg : String,_ model : SPFansModel?,_ errorModel : SPRequestError?)->Void
+/// 获取邀请码
+typealias SPInvitationCodeComplete = (_ code : String,_ msg : String,_ invitationCode :String?,_ errorModel : SPRequestError?)->Void

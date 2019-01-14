@@ -97,7 +97,7 @@ class SPOrderBaseView:  UIView{
             maker.left.equalTo(self.codeView.contentLabel.snp.right).offset(5)
             maker.centerY.equalTo(self.codeView.snp.centerY).offset(0)
             maker.width.equalTo(50)
-            maker.height.equalTo(21)
+            maker.height.equalTo(20)
         }
         self.orderTimeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.codeView).offset(0)
@@ -119,9 +119,7 @@ extension SPOrderBaseView {
     
     @objc fileprivate func sp_clickCopyAction(){
         //就这两句话就实现了
-        let paste = UIPasteboard.general
-        paste.string = sp_getString(string: self.detaileModel?.tid)
-        sp_showTextAlert(tips: "复制成功")
+        sp_copy(text: sp_getString(string: self.detaileModel?.tid))
     }
     
 }

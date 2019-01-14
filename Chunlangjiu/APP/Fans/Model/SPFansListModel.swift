@@ -9,7 +9,8 @@
 import Foundation
 class SPFansListModel : SPBaseModel {
     var name : String?
-    var phone : String?
+    var mobile : String?
+    var commission : String?
+    var createtime : Int?
     var time : String?
-    var price : String?
 }

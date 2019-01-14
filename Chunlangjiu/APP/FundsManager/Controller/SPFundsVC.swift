@@ -114,11 +114,5 @@ extension SPFundsVC {
     }
 }
 extension SPFundsVC{
-    fileprivate func sp_sendRequest(){
-        let parm = [String : Any]()
-        self.requestModel.parm = parm
-        SPFansRequest.sp_getInvitationCode(requestModel: self.requestModel) { (code, msg, errorModel) in
-            
-        }
-    }
+    
 }

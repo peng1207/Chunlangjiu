@@ -60,9 +60,9 @@ class SPFansListTableCell: UITableViewCell {
     }
     fileprivate func sp_setupData(){
         self.nameLabel.text = sp_getString(string: self.model?.name)
-        self.phoneLabel.text = sp_getString(string: self.model?.phone)
+        self.phoneLabel.text = sp_getString(string: self.model?.mobile)
         self.timeLabel.text = sp_getString(string: self.model?.time)
-        self.priceLabel.text = sp_getString(string: self.model?.price)
+        self.priceLabel.text = sp_getString(string: self.model?.commission)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

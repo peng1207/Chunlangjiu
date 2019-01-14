@@ -45,12 +45,33 @@ class SPFansVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickList), for: UIControlEvents.touchUpInside)
         return btn
     }()
-    
+    fileprivate lazy var copyBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("复制", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ff9600.rawValue)
+        btn.titleLabel?.font = sp_getFontSize(size: 12)
+         btn.sp_cornerRadius(cornerRadius: 10)
+        btn.addTarget(self, action: #selector(sp_clickCopy), for: UIControlEvents.touchUpInside)
+        btn.isHidden = true
+        return btn
+    }()
+    fileprivate var invitationCode : String?{
+        didSet{
+            self.codeLabel.text = "我的推荐码:\(  sp_getString(string: invitationCode))"
+            if sp_getString(string: self.invitationCode).count > 0 {
+                self.copyBtn.isHidden = false
+            }else{
+                self.copyBtn.isHidden = true
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_setupData()
+        sp_sendRequest()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -69,6 +90,7 @@ class SPFansVC: SPBaseVC {
         self.navigationItem.title = "我的推荐"
         self.view.addSubview(self.imageView)
         self.view.addSubview(self.codeLabel)
+        self.view.addSubview(self.copyBtn)
         self.view.addSubview(self.tipsLabel)
         self.view.addSubview(self.shareBtn)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.listBtn)
@@ -87,10 +109,16 @@ class SPFansVC: SPBaseVC {
             maker.height.equalTo(self.imageView.snp.width).offset(0)
         }
         self.codeLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.view).offset(10)
-            maker.right.equalTo(self.view).offset(-10)
+            maker.width.greaterThanOrEqualTo(0)
+            maker.centerX.equalTo(self.view.snp.centerX).offset(-30)
             maker.top.equalTo(self.imageView.snp.bottom).offset(15)
             maker.height.greaterThanOrEqualTo(0)
+        }
+        self.copyBtn.snp.makeConstraints { (maker) in
+            maker.width.equalTo(50)
+            maker.height.equalTo(20)
+            maker.left.equalTo(self.codeLabel.snp.right).offset(5)
+            maker.centerY.equalTo(self.codeLabel.snp.centerY).offset(0)
         }
         self.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.codeLabel).offset(0)
@@ -121,11 +149,26 @@ extension SPFansVC {
             
         }
     }
+    @objc fileprivate func sp_clickCopy(){
+        sp_copy(text: sp_getString(string: self.invitationCode))
+    }
     fileprivate func sp_setupData(){
         self.imageView.image = SPQRCodeUtil.sp_getClearImage(sourceImage: SPQRCodeUtil.sp_setQRCode(qrCode: "100"), center:   sp_getAppIcon())
     }
     @objc fileprivate func sp_clickList(){
         let listVC = SPFansListVC()
         self.navigationController?.pushViewController(listVC, animated: true)
+    }
+}
+extension SPFansVC {
+    fileprivate func sp_sendRequest(){
+        let parm = [String : Any]()
+        self.requestModel.parm = parm
+        SPFansRequest.sp_getInvitationCode(requestModel: self.requestModel) { [weak self](code, msg, invitationCode, errorModel) in
+            if code == SP_Request_Code_Success {
+                self?.invitationCode = invitationCode
+            }
+        }
+        
     }
 }

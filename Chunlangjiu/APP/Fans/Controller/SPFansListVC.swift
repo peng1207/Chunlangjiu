@@ -73,6 +73,7 @@ class SPFansListVC: SPBaseVC {
     }
     /// 处理有没数据
     override func sp_dealNoData(){
+        self.tableView.reloadData()
         self.tableView.sp_stopFooterRefesh()
         self.tableView.sp_stopHeaderRefesh()
         if sp_getArrayCount(array: self.dataArray) > 0 {

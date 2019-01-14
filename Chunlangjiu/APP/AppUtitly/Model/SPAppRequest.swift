@@ -745,7 +745,7 @@ class SPAppRequest {
                 if sp_isDic(dic: data) ,errorcode == SP_Request_Code_Success{
                     let userModel = SPUserModel.sp_deserialize(from: data)
                     SPAPPManager.instance().userModel = userModel
-                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
+//                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
                 }
                 if let block = complete {
                     block(errorcode,msg,nil)
@@ -794,7 +794,7 @@ class SPAppRequest {
                 if sp_isDic(dic: data) ,errorcode == SP_Request_Code_Success{
                     let userModel = SPUserModel.sp_deserialize(from: data)
                     SPAPPManager.instance().userModel = userModel
-                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
+//                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
                 }
                 if let block = complete {
                     block(errorcode,msg,nil)

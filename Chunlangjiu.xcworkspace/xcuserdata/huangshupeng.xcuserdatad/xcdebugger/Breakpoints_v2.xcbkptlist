@@ -41,13 +41,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Chunlangjiu/APP/AppUtitly/Model/SPAPPManager.swift"
-            timestampString = "569154539.139432"
+            filePath = "Chunlangjiu/APP/Fans/View/SPFansListTableCell.swift"
+            timestampString = "569176591.078849"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
-            landmarkName = "sp_showEnterCode()"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "sp_setupData()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Chunlangjiu/APP/Fans/Controller/SPFansListVC.swift"
+            timestampString = "569176591.0789289"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
