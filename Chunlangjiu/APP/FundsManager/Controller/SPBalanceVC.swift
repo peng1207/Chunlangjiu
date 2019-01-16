@@ -91,8 +91,8 @@ class SPBalanceVC: SPBaseVC {
     
     /// 赋值
     fileprivate func sp_setupData(){
-        self.useLabel.text = sp_getString(string: self.moneyModel?.money)
-        self.frozenLabel.text = sp_getString(string: self.moneyModel?.freeze_money)
+        self.useLabel.text = sp_getString(string: self.moneyModel?.money).count > 0 ?  sp_getString(string: self.moneyModel?.money) : "0.00"
+        self.frozenLabel.text = sp_getString(string: self.moneyModel?.freeze_money).count > 0 ?  sp_getString(string: self.moneyModel?.freeze_money) : "0.00"
     }
     /// 创建UI
     override func sp_setupUI() {

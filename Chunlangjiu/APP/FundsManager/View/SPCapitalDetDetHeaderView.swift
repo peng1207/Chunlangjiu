@@ -24,7 +24,7 @@ class SPCapitalDetDetHeaderView:  UIView{
         label.text = "交易金额"
         return label
     }()
-    fileprivate lazy var priceLabel : UILabel = {
+    lazy var priceLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 30)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)

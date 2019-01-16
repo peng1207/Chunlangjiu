@@ -155,6 +155,7 @@ extension SPRechargeVC {
             sp_showTextAlert(tips: "请输入充值金额")
             return
         }
+        sp_hideKeyboard()
         if self.isBond {
             self.sp_sendBondRequest()
         }else{

@@ -33,6 +33,11 @@ class SPInvitationCodeView:  UIView{
         let textFiled = SPTextFiled()
         textFiled.placeholder = "请填写邀请人的邀请码"
         textFiled.font = sp_getFontSize(size: 16)
+        textFiled.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
+            
+        }, doneBlock: {
+            
+        })
         return textFiled
     }()
     fileprivate lazy var inputBtn : UIButton = {

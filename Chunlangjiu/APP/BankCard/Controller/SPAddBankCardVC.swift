@@ -110,6 +110,7 @@ class SPAddBankCardVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_setupData()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -343,5 +344,29 @@ extension SPAddBankCardVC {
             }
         }
         
+    }
+}
+extension SPAddBankCardVC {
+    
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_keyboardWillShow(obj:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    @objc private func sp_keyboardWillShow(obj:Notification){
+        let height = sp_getKeyBoardheight(notification: obj)
+        sp_updateTableLayout(height: height)
+    }
+    @objc private func sp_keyboardWillHide(){
+        sp_updateTableLayout(height: 0)
+    }
+    private func sp_updateTableLayout(height:CGFloat){
+        self.scrollView.snp.remakeConstraints { (maker) in
+            maker.left.top.right.equalTo(self.view).offset(0)
+            if height > 0 {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(-height)
+            }else{
+                maker.bottom.equalTo(self.doneBtn.snp.top).offset(-10)
+            }
+        }
     }
 }

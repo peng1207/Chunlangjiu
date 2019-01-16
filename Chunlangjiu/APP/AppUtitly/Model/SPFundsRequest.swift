@@ -187,6 +187,9 @@ class SPFundsRequest : SPAppRequest {
                             if let listD : [String : Any] = listDic as? [String : Any] {
                                 let model = SPCapitalDetModel.sp_deserialize(from: listD)
                                 if let m = model {
+                                    if let time : Int = m.logtime {
+                                        m.time = SPDateManager.sp_string(to: TimeInterval(time))
+                                    }
                                  listArray.append(m)
                                 }
                             }

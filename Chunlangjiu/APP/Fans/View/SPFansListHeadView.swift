@@ -68,8 +68,8 @@ class SPFansListHeadView:  UIView{
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.numLabel.text = sp_getString(string: self.fansModel?.fans_sum)
-        self.priceLabel.text = sp_getString(string: self.fansModel?.commission_sum) 
+        self.numLabel.text = sp_getString(string: self.fansModel?.fans_sum).count > 0 ?sp_getString(string: self.fansModel?.fans_sum) : "0"
+        self.priceLabel.text = sp_getString(string: self.fansModel?.commission_sum).count > 0 ? sp_getString(string: self.fansModel?.commission_sum) : "0.00"
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

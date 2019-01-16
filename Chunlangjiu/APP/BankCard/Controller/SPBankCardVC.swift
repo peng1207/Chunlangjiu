@@ -27,10 +27,11 @@ class SPBankCardVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
-        sp_sendRequest()
+      
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+          sp_sendRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

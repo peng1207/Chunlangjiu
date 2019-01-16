@@ -20,6 +20,11 @@ class SPInputBtnView : UIView{
     }()
      lazy var textFiled : SPTextFiled = {
         let filed = SPTextFiled()
+        filed.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
+            
+        }, doneBlock: {
+            
+        })
         return filed
     }()
     

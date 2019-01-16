@@ -56,7 +56,10 @@ class SPFansRequest : SPAppRequest {
                                 let model = SPFansListModel.sp_deserialize(from: lDic)
                                 if let m = model {
                                     if let createTime : Int = m.createtime {
-                                        m.time = SPDateManager.sp_string(to:TimeInterval(exactly: createTime))
+                                       
+                                        if let date =  SPDateManager.sp_date(to: TimeInterval(exactly: createTime)) {
+                                             m.time = SPDateManager.sp_dateString(to: date)
+                                        }
                                     }
                                  
                                     dataArray.append(m)

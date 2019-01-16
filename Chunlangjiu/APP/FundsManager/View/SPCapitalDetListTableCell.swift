@@ -48,7 +48,7 @@ class SPCapitalDetListTableCell: UITableViewCell {
     fileprivate func sp_setupData(){
         self.titleLabel.text = sp_getString(string: self.model?.message)
         self.priceLabel.text = sp_getString(string: self.model?.fee)
-        self.timeLabel.text = sp_getString(string: self.model?.logtime)
+        self.timeLabel.text = sp_getString(string: self.model?.time)
         if sp_getString(string: self.model?.type) != "add" {
             self.priceLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         }else{
@@ -64,19 +64,24 @@ class SPCapitalDetListTableCell: UITableViewCell {
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.titleLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.contentView).offset(18)
-            maker.top.equalTo(self.contentView).offset(16)
-            maker.height.greaterThanOrEqualTo(0)
-            maker.right.lessThanOrEqualTo(self.priceLabel.snp.left).offset(-11)
-        }
+        
         self.priceLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.priceLabel.snp.makeConstraints { (maker) in
-            maker.right.equalTo(self.contentView).offset(-21)
-            maker.centerY.equalTo(self.titleLabel.snp.centerY).offset(0)
+            maker.right.equalTo(self.contentView.snp.right).offset(-21)
+            maker.top.equalTo(self.contentView).offset(16)
             maker.width.greaterThanOrEqualTo(0)
             maker.height.greaterThanOrEqualTo(0)
         }
+        
+        self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultLow, for: UILayoutConstraintAxis.horizontal)
+        self.titleLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.contentView).offset(18)
+            maker.centerY.equalTo(self.priceLabel.snp.centerY).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+//            maker.width.greaterThanOrEqualTo(0)
+            maker.right.lessThanOrEqualTo(self.priceLabel.snp.left).offset(-10);
+        }
+       
         self.timeLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
             maker.top.equalTo(self.titleLabel.snp.bottom).offset(10)

@@ -332,10 +332,10 @@ extension SPAPPManager{
     
     /// 展示输入邀请码
     fileprivate func sp_showEnterCode(){
-//        if let referrer = Bool(sp_getString(string: self.userModel?.referrer)) , referrer == false{
+        if let referrer = Bool(sp_getString(string: self.userModel?.referrer)) , referrer == false{
             // 还没输入
             SPInvitationCodeView.sp_showView(); 
-//        }
+        }
     }
     
     fileprivate func sp_startTimer(){

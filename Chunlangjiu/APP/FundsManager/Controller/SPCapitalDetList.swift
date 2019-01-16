@@ -99,6 +99,7 @@ extension SPCapitalDetList : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section < sp_getArrayCount(array: self.dataArray) {
             let detVC = SPCapitalDetDetVC()
+            detVC.model = self.dataArray?[indexPath.row]
             self.navigationController?.pushViewController(detVC, animated: true)
         }
     }
