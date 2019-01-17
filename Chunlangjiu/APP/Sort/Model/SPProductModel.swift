@@ -98,7 +98,10 @@ class SPProductModel : HandyJSON {
     var alcohol_id : String?
     var parameter : String?
     var payment_id  : String?
-    var rule : String? 
+    var rule : String?
+    var shop_name : String?
+    /// 店铺等级
+    var grade : String?
     required init() {}
     func mapping(mapper: HelpingMapper) {
         mapper.specify(property: &showCartPrice, name: "price.price") { (rawString) -> String in

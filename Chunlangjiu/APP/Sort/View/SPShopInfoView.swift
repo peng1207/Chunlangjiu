@@ -79,7 +79,7 @@ class SPShopInfoView:  UIView{
         }
         self.timeLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.infoLabel.snp.left).offset(0)
-            maker.top.equalTo(self.timeTitleLabel.snp.bottom).offset(0)
+            maker.top.equalTo(self.timeTitleLabel.snp.top).offset(0)
             maker.right.equalTo(self.infoLabel.snp.right).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(-18)

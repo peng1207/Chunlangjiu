@@ -55,7 +55,13 @@ class  SPShopHomeView:  UIView{
     fileprivate func sp_setupData(){
         self.shopIconImageView.sp_cache(string: sp_getString(string: shopModel?.shop_logo), plImage: sp_getLogoImg())
         self.nameLabel.text = sp_getString(string: shopModel?.shop_name)
-        
+        if sp_getString(string: self.shopModel?.grade) == SP_GRADE_2 {
+            self.typeImgView.image = sp_getPartnerImg()
+        }else if sp_getString(string: self.shopModel?.grade) == SP_GRADE_1 {
+            self.typeImgView.image = sp_getStartUserImg()
+        }else{
+            self.typeImgView.image = sp_getDefaultUserImg()
+        }
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

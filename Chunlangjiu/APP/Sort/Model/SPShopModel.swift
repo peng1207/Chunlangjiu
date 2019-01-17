@@ -21,7 +21,11 @@ class SPShopModel : HandyJSON {
     var shop_addr : String? 
     var confrim_auction_price : String?
     var confrim_max_price : String?
-    var confirm_start_price : String? 
+    var confirm_start_price : String?
+    var open_time : Int?
+    var openTime : String? 
+    /// 店铺等级
+    var grade : String?
     var productArray : [SPProductModel]?
     required init() {}
     func mapping(mapper: HelpingMapper) {

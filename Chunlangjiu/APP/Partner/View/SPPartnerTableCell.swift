@@ -9,10 +9,13 @@
 import Foundation
 import UIKit
 import SnapKit
+
+typealias SPPartnerComplete = (_ model : SPPartnerModel?)->Void
 class SPPartnerTableCell: UITableViewCell {
     fileprivate lazy var cellView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var shopImgView : UIImageView = {
@@ -44,14 +47,12 @@ class SPPartnerTableCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-    fileprivate lazy var partnerLabel : UILabel = {
-        let label = UILabel()
-        label.font = sp_getFontSize(size: 10)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_eee000.rawValue)
-        label.textAlignment = .center
-        label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
-        return label
+    fileprivate lazy var typeImgView : UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "public_partner")
+        return view
     }()
+    
     fileprivate lazy var entBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("进店 >", for: UIControlState.normal)
@@ -60,6 +61,7 @@ class SPPartnerTableCell: UITableViewCell {
         btn.addTarget(self, action: #selector(sp_clickEnter), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    var clickShopBlock : SPPartnerComplete?
     var model : SPPartnerModel?{
         didSet{
             self.sp_setupData()
@@ -77,14 +79,21 @@ class SPPartnerTableCell: UITableViewCell {
     }
     /// 赋值
     fileprivate func sp_setupData(){
+        self.shopImgView.sp_cache(string: sp_getString(string: self.model?.shop_logo), plImage: sp_getLogoImg())
+        self.nameLabel.text = sp_getString(string: self.model?.shopname)
+        self.addressLabel.text = "地址:\(sp_getString(string: self.model?.shop_addr))"
+        let att = NSMutableAttributedString(string: "该店家有", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)])
+        att.append(NSAttributedString(string: "80", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font: sp_getFontSize(size: 12)]))
         
+         att.append(NSAttributedString(string: "款商品正在销售", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue),NSAttributedStringKey.font: sp_getFontSize(size: 11)]))
+        self.tipLabel.attributedText = att
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.contentView.addSubview(self.cellView)
         self.cellView.addSubview(self.shopImgView)
         self.cellView.addSubview(self.nameLabel)
-        self.cellView.addSubview(self.partnerLabel)
+        self.cellView.addSubview(self.typeImgView)
         self.cellView.addSubview(self.addressLabel)
         self.cellView.addSubview(self.labelView)
         self.cellView.addSubview(self.tipLabel)
@@ -95,7 +104,7 @@ class SPPartnerTableCell: UITableViewCell {
     fileprivate func sp_addConstraint(){
         self.cellView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.contentView).offset(6)
-            maker.right.equalTo(self.contentView.snp.right).offset(-4)
+            maker.right.equalTo(self.contentView.snp.right).offset(-6)
             maker.bottom.equalTo(self.contentView.snp.bottom).offset(0)
             maker.height.equalTo(110)
         }
@@ -105,13 +114,14 @@ class SPPartnerTableCell: UITableViewCell {
             maker.bottom.equalTo(self.cellView.snp.bottom).offset(-14)
             maker.width.equalTo(self.shopImgView.snp.height).offset(0)
         }
+        self.nameLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.nameLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.shopImgView.snp.right).offset(13)
             maker.top.equalTo(self.shopImgView).offset(0)
             maker.width.greaterThanOrEqualTo(0)
             maker.height.greaterThanOrEqualTo(0)
         }
-        self.partnerLabel.snp.makeConstraints { (maker) in
+        self.typeImgView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.nameLabel.snp.right).offset(12)
             maker.top.equalTo(self.nameLabel.snp.top).offset(0)
             maker.width.equalTo(60)
@@ -139,7 +149,7 @@ class SPPartnerTableCell: UITableViewCell {
         self.entBtn.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.entBtn.snp.makeConstraints { (maker) in
             maker.right.equalTo(self.cellView.snp.right).offset(-15)
-            maker.top.equalTo(self.tipLabel.snp.top).offset(0)
+            maker.centerY.equalTo(self.tipLabel.snp.centerY).offset(0)
             maker.height.equalTo(11)
             maker.width.greaterThanOrEqualTo(0)
         }
@@ -151,7 +161,10 @@ class SPPartnerTableCell: UITableViewCell {
 }
 extension SPPartnerTableCell {
     @objc fileprivate func sp_clickEnter(){
-        
+        guard let block = self.clickShopBlock else {
+            return
+        }
+        block(self.model) 
     }
     
 }

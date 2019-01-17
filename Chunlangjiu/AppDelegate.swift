@@ -24,15 +24,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         SPAPPManager.instance()
          SPAPPManager.sp_registerApp()
+        SPAPPManager.sp_getOpenAdvRequesst()
         SPRealmTool.configRealm()
         self.window?.makeKeyAndVisible()
         self.registerRemoteNotification()
         SPAPPManager.sp_appVersion()
         
-         let enString = SPDes.encrypt(withText: "a123456", key: "chunlang")
-        sp_log(message: "加密后的数据\(sp_getString(string: enString))")
-        let deString = SPDes.decrypt(withText: enString, key: "chunlang")
-        sp_log(message: "解密后的数据 \(sp_getString(string: deString))")
+//         let enString = SPDes.encrypt(withText: "a123456", key: "chunlang")
+//        sp_log(message: "加密后的数据\(sp_getString(string: enString))")
+//        let deString = SPDes.decrypt(withText: enString, key: "chunlang")
+//        sp_log(message: "解密后的数据 \(sp_getString(string: deString))")
         
         
         // Override point for customization after application launch.

@@ -8,12 +8,14 @@
 
 import Foundation
 import UIKit
-
+import Kingfisher
 private let SP_SAVE_USER_DATA_KEY = "SP_SAVE_USER_DATA_KEY"
 private let SP_SAVE_LOCATIONCITY_KEY = "SP_SAVE_LOCATIONCITY_KEY"
 private let SP_SAVE_SHOWCITY_KEY = "SP_SAVE_SHOWCITY_KEY"
 private let SP_SAVE_LATITUDE_KEY = "SP_SAVE_LATITUDE_KEY"
 private let SP_SAVE_LONGITUDE_KEY = "SP_SAVE_LONGITUDE_KEY"
+/// 保存 开屏广告
+private let SP_SAVE_OPENADV_KEY = "SP_SAVE_OPENADV_KEY"
 /// 保存教程页
 private let SP_SAVE_TUTORIALPAGE_KEY = "SP_SAVE_TUTORIALPAGE_KEY"
 //let SP_SHOP_ACCESSTOKEN = "35b5a32db3a7a1c22243c699b8e59aff18c7f4532875d76012ac3e8e4238abcf"
@@ -203,6 +205,9 @@ class SPAPPManager : NSObject{
             }
         }
     }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 // MARK: - 获取数据
 fileprivate extension SPAPPManager {
@@ -317,6 +322,7 @@ extension SPAPPManager {
             if self.areaRequest && sp_getArrayCount(array: self.areaList) <= 0 {
                 sp_sendAreaRequest()
             }
+            SPAPPManager.sp_getOpenAdvRequesst()
         }
         
     }
@@ -403,5 +409,85 @@ extension SPAPPManager{
             window.rootViewController = SPTutorialPageVC()
         }
     }
+}
+//MARK: - 开屏广告
+extension SPAPPManager {
+    /// 下载图片
+    ///
+    /// - Parameter urlString: 图片链接
+    class func sp_downImg(urlString : String){
+        if sp_getString(string: urlString).count == 0 {
+            return
+        }
+        let enString = urlString.MD5String
+        let cachePath = sp_getCachePath()
+        let filePath =  "\(sp_getString(string: cachePath))/\(sp_getString(string: enString)).jpg"
+        let isExist : Bool =  FileManager.default.fileExists(atPath: filePath)
+        if isExist == false {
+            let downloader = ImageDownloader.default
+            downloader.sessionConfiguration = URLSessionConfiguration.default
+            downloader.downloadTimeout = 30
+            downloader.downloadImage(with: URL(string: sp_getString(string: urlString))!, retrieveImageTask: nil, options: nil, progressBlock: nil) { (image, error, url, data) in
+                
+                if let imageData = data {
+                   try? imageData.write(to: URL(fileURLWithPath: sp_getString(string: filePath)))
+                }
+            }
+        }
+    }
+    /// 获取开屏的广告
+    class func sp_getOpenAdvRequesst(){
+        let request = SPRequestModel()
+        SPAppRequest.sp_getOpenAdv(requestModel: request) { (code , model, errorModel) in
+            if code  == SP_Request_Code_Success {
+                sp_saveOpenAdv(model: model)
+                sp_downImg(urlString: sp_getString(string: model?.url))
+            }
+        }
+    }
+    
+    /// 保存获取到开屏广告数据
+    ///
+    /// - Parameter model: 开屏广告对象
+    class func sp_saveOpenAdv(model : SPOpenAdvModel?){
+        let oldModel = sp_getOpenAdv()
+        if let m = model  {
+            sp_saveUser(data: m.toJSONString(), key: SP_SAVE_OPENADV_KEY)
+        }else{
+            sp_saveUser(data: nil, key: SP_SAVE_OPENADV_KEY)
+        }
+        if let oldM = oldModel {
+            var removePath = ""
+            if let nM = model {
+                if sp_getString(string: oldM.url) == sp_getString(string: nM.url) {
+                    
+                }else {
+                    // 删除旧的链接
+                    removePath = "\(sp_getCachePath())/\(sp_getString(string: oldM.url)).jpg"
+                }
+            }else {
+                // 直接删除
+                 removePath = "\(sp_getCachePath())/\(sp_getString(string: oldM.url)).jpg"
+            }
+            if sp_getString(string: removePath).count > 0 {
+               try? FileManager.default.removeItem(atPath: sp_getString(string: removePath))
+            }
+        }
+        
+    }
+    /// 获取开屏广告Model
+    ///
+    /// - Returns:
+    class func sp_getOpenAdv()->SPOpenAdvModel?{
+        if let value = sp_getUser(key: SP_SAVE_OPENADV_KEY) {
+            if sp_getString(string: value).count > 0 {
+                let jsonString = sp_getString(string: value)
+                let model = SPOpenAdvModel.sp_deserialize(from: jsonString)
+                return model
+            }
+        }
+        return nil
+    }
+    
 }
 

@@ -99,7 +99,7 @@ class SPRechargeVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {

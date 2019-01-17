@@ -9,8 +9,7 @@
 import Foundation
 import CryptoSwift
 extension String {
-    static let key = "chunlang"
-    static let iv = ""
+    
     /// 隐藏手机号码中间四位
     ///
     /// - Returns: 隐藏后的字符串
@@ -35,6 +34,29 @@ extension String {
         let end = self.index(self.startIndex, offsetBy: self.count - 4)
         let range = Range(uncheckedBounds: (lower: start, upper: end))
         return self.replacingCharacters(in: range, with: "****  ****  ****  ")
+    }
+    var MD5String: String {
+        
+        let cStrl = cString(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue));
+        
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 16);
+        
+        CC_MD5(cStrl, CC_LONG(strlen(cStrl!)), buffer);
+        
+        var md5String = "";
+        
+        for idx in 0...15 {
+            
+       let obcStrl = String.init(format: "%02x", buffer[idx]);
+            
+      md5String.append(obcStrl);
+            
+           }
+        
+    free(buffer);
+        
+  return md5String;
+        
     }
     
 }

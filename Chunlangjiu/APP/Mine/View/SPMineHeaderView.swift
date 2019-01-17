@@ -39,6 +39,9 @@ class SPMineHeaderView:  UICollectionReusableView{
     }()
     fileprivate lazy var logoImgView : UIImageView = {
         let view = UIImageView()
+        view.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickIcon))
+        view.addGestureRecognizer(tap)
         return view
     }()
     fileprivate lazy var nameLabel : UILabel = {
@@ -65,6 +68,7 @@ class SPMineHeaderView:  UICollectionReusableView{
     }()
     var clickIdent : SPBtnClickBlock?
     var clickLogin : SPBtnClickBlock?
+    var clickIcon : SPBtnClickBlock?
     var memberModel : SPMemberModel?{
         didSet{
             sp_setupData()
@@ -83,7 +87,7 @@ class SPMineHeaderView:  UICollectionReusableView{
         self.entBtn.isSelected = SPAPPManager.sp_isBusiness() ? true : false
         self.titleLabel.text = SPAPPManager.sp_isBusiness() ? "卖家中心" : "买家中心"
         self.logoImgView.sp_cache(string: sp_getString(string: self.memberModel?.head_portrait), plImage: sp_getLogoImg())
-        self.nameLabel.text = sp_getString(string: self.memberModel?.username)
+        self.nameLabel.text = sp_getString(string: self.memberModel?.shop_name)
         if sp_getString(string: self.nameLabel.text).count <= 0 {
             self.nameLabel.text = sp_getString(string: memberModel?.login_account)
         }
@@ -177,5 +181,11 @@ extension SPMineHeaderView {
             self.authImgView.image = UIImage(named: "public_unAuth")
         }
         
+    }
+    @objc fileprivate func sp_clickIcon(){
+        guard let block = self.clickIcon else {
+            return
+        }
+        block()
     }
 }

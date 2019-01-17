@@ -124,6 +124,14 @@ class SPProductContentView:  UIView{
             self.auctionImageView.isHidden = true
         }
         self.labelView.listArray = self.productModel?.sp_getLabel()
+        self.shopNameLabel.text = sp_getString(string: self.productModel?.shop_name);
+        if sp_getString(string: self.productModel?.grade) == SP_GRADE_2 {
+            self.signImgView.image = sp_getPartnerImg()
+        }else if sp_getString(string: self.productModel?.grade) == SP_GRADE_1{
+            self.signImgView.image = sp_getStartUserImg()
+        }else{
+            self.signImgView.image = sp_getDefaultUserImg()
+        }
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -173,19 +181,22 @@ class SPProductContentView:  UIView{
             maker.width.equalTo(60)
             maker.height.equalTo(15)
         }
+//        self.entShopBtn.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
+        self.entShopBtn.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.snp.right).offset(-12)
+            maker.centerY.equalTo(self.signImgView.snp.centerY).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.width.equalTo(35)
+//            maker.width.greaterThanOrEqualTo(0)
+        }
+//        self.shopNameLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.shopNameLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.signImgView.snp.right).offset(5)
             maker.height.greaterThanOrEqualTo(0)
             maker.centerY.equalTo(self.signImgView.snp.centerY).offset(0)
             maker.right.equalTo(self.entShopBtn.snp.left).offset(-5)
         }
-        self.entShopBtn.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
-        self.entShopBtn.snp.makeConstraints { (maker) in
-            maker.right.equalTo(self.snp.right).offset(-16)
-            maker.centerY.equalTo(self.signImgView.snp.centerY).offset(0)
-            maker.height.greaterThanOrEqualTo(0)
-            maker.width.greaterThanOrEqualTo(0)
-        }
+      
         self.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
             maker.right.equalTo(self.shopCartBtn.snp.left).offset(-8)

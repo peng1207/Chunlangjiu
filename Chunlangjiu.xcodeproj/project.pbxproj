@@ -391,6 +391,9 @@
 		9EF4C72720F73D8B007E9909 /* SPIndexDTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C72620F73D8B007E9909 /* SPIndexDTableCell.swift */; };
 		9EF4C72920F75CBE007E9909 /* SPIndexSectionAHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C72820F75CBE007E9909 /* SPIndexSectionAHeaderView.swift */; };
 		9EF4C72B20F75CD2007E9909 /* SPIndexSectionDHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C72A20F75CD2007E9909 /* SPIndexSectionDHeaderView.swift */; };
+		9EF733CB21F0700200ECCC48 /* SPRevokeBondVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF733CA21F0700200ECCC48 /* SPRevokeBondVC.swift */; };
+		9EF7933221EF7C3700E956BC /* SPPartnerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF7933121EF7C3700E956BC /* SPPartnerRequest.swift */; };
+		9EF7933421EF8C8800E956BC /* SPOpenAdvModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF7933321EF8C8800E956BC /* SPOpenAdvModel.swift */; };
 		9EFC5973217B0F6E0002B4BE /* SPLogiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFC5972217B0F6E0002B4BE /* SPLogiModel.swift */; };
 		9EFC5975217B11CF0002B4BE /* SPOrderLogicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFC5974217B11CF0002B4BE /* SPOrderLogicView.swift */; };
 		9EFC5977217B33C00002B4BE /* SPEventHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFC5976217B33C00002B4BE /* SPEventHeader.swift */; };
@@ -830,6 +833,9 @@
 		9EF4C72620F73D8B007E9909 /* SPIndexDTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexDTableCell.swift; sourceTree = "<group>"; };
 		9EF4C72820F75CBE007E9909 /* SPIndexSectionAHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexSectionAHeaderView.swift; sourceTree = "<group>"; };
 		9EF4C72A20F75CD2007E9909 /* SPIndexSectionDHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexSectionDHeaderView.swift; sourceTree = "<group>"; };
+		9EF733CA21F0700200ECCC48 /* SPRevokeBondVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRevokeBondVC.swift; sourceTree = "<group>"; };
+		9EF7933121EF7C3700E956BC /* SPPartnerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPartnerRequest.swift; sourceTree = "<group>"; };
+		9EF7933321EF8C8800E956BC /* SPOpenAdvModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOpenAdvModel.swift; sourceTree = "<group>"; };
 		9EFC5972217B0F6E0002B4BE /* SPLogiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLogiModel.swift; sourceTree = "<group>"; };
 		9EFC5974217B11CF0002B4BE /* SPOrderLogicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderLogicView.swift; sourceTree = "<group>"; };
 		9EFC5976217B33C00002B4BE /* SPEventHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPEventHeader.swift; sourceTree = "<group>"; };
@@ -1704,6 +1710,7 @@
 				9E5F7ADB21C4ECAD00A9EF35 /* SPCashVC.swift */,
 				9E5F7ADD21C4ECE000A9EF35 /* SPRechargeVC.swift */,
 				9E5F7ADF21C4ECF400A9EF35 /* SPBalanceVC.swift */,
+				9EF733CA21F0700200ECCC48 /* SPRevokeBondVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1939,6 +1946,8 @@
 				9E9404CA21E4757100AC3313 /* SPFundsRequest.swift */,
 				9E9404CC21E4757F00AC3313 /* SPSetRequest.swift */,
 				9E9404CE21E4758D00AC3313 /* SPFansRequest.swift */,
+				9EF7933121EF7C3700E956BC /* SPPartnerRequest.swift */,
+				9EF7933321EF8C8800E956BC /* SPOpenAdvModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2420,6 +2429,7 @@
 				9E5F7AE021C4ECF400A9EF35 /* SPBalanceVC.swift in Sources */,
 				9E5F7A9F21B9791300A9EF35 /* SPActivityVC.swift in Sources */,
 				9E194D6B21DC63B40080B72D /* SPNotNetView.swift in Sources */,
+				9EF7933421EF8C8800E956BC /* SPOpenAdvModel.swift in Sources */,
 				9E22EAE821359B0D00B196D5 /* SPOrderTableCell.swift in Sources */,
 				56F47F3621D0E65300613BBA /* SPOrderHomeHeadView.swift in Sources */,
 				9EEC698621E2452B00C9E36C /* SPBankCardPicker.swift in Sources */,
@@ -2434,6 +2444,8 @@
 				9EF4C6D620EF7C10007E9909 /* APPUtitly.swift in Sources */,
 				9E324CFF217E1E7E00F9AB5F /* SPProductRuleView.swift in Sources */,
 				5610337F21380CBA009DB376 /* SPOrderPriceView.swift in Sources */,
+				9EF733CB21F0700200ECCC48 /* SPRevokeBondVC.swift in Sources */,
+				9EF7933221EF7C3700E956BC /* SPPartnerRequest.swift in Sources */,
 				9E5F7B0021C7F8A500A9EF35 /* SPAuthView.swift in Sources */,
 				9EF4C6D220EF7384007E9909 /* SPConfrimAddressView.swift in Sources */,
 				9EC51419210435B0006869B3 /* SPWineValuationView.swift in Sources */,

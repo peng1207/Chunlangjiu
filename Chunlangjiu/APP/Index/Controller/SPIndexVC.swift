@@ -180,7 +180,7 @@ class SPIndexVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{

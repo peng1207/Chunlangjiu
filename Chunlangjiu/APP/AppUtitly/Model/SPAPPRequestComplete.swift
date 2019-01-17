@@ -61,3 +61,4 @@ typealias SPDepoistComplete = (_ code : String,_ msg : String,_ model : SPDeposi
 typealias SPFansComplete = (_ code : String,_ msg : String,_ model : SPFansModel?,_ errorModel : SPRequestError?)->Void
 /// 获取邀请码
 typealias SPInvitationCodeComplete = (_ code : String,_ msg : String,_ invitationCode :String?,_ errorModel : SPRequestError?)->Void
+typealias SPOpenAdvComplete = (_ code : String,_ model : SPOpenAdvModel?,_ errorModel : SPRequestError?)->Void

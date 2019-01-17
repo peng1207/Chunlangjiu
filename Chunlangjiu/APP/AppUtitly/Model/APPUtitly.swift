@@ -17,6 +17,11 @@ let SP_IS_ENTERPRISE  = "1"
 /// 是否显示竞拍的功能
 let SP_ISSHOW_AUCTION = true
 let SP_KVO_KEY_CONTENTSIZE = "contentSize"
+///城市合伙人
+let SP_GRADE_2 = "2"
+///星级用户
+let SP_GRADE_1 = "1"
+
 /// 获取默认的图片
 ///
 /// - Returns: 图片

@@ -58,6 +58,7 @@ class SPAuctionView:  UIView{
        
         self.numLabel.attributedText = numAtt
         self.productView.productModel = self.productModel
+        
     }
     
     /// 添加UI

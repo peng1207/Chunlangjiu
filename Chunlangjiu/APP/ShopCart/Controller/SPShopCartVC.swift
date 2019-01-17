@@ -64,6 +64,7 @@ class SPShopCartVC: SPBaseVC {
         super.viewDidLoad()
         self.navigationItem.title = "购物车"
         self.sp_setupUI()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -143,7 +144,7 @@ class SPShopCartVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPShopCartVC : UITableViewDelegate,UITableViewDataSource{
@@ -581,6 +582,15 @@ extension SPShopCartVC {
         }
        
     }
-    
+}
+extension SPShopCartVC {
+    fileprivate func sp_addNotification(){
+         NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
+    }
+    @objc fileprivate func sp_netChange(){
+        if SPNetWorkManager.sp_notReachable() == false {
+            sp_sendRequest()
+        }
+    }
     
 }

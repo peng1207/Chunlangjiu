@@ -817,3 +817,11 @@ func sp_getAppIcon()->UIImage?{
     }
     return nil
 }
+
+/// 获取沙盒cache目录
+///
+/// - Returns: 目录
+func sp_getCachePath()->String{
+     let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+    return sp_getString(string: cachePath)
+}

@@ -54,10 +54,15 @@ class SPBondVC: SPBaseVC {
     }()
     fileprivate lazy var tipsLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 11)
+        label.font = sp_getFontSize(size: 12)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.textAlignment = .left
-        label.text = "保证金交纳说明：\n1、保证金交纳成功后，用户即可成为星级卖家，尊享海量特权。\n2、卖家升级为星级卖家，可无限发布商品，发布的商品享有优先排序功能。\n3、此操作成功后，需要短信提示。"
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.paragraphSpacing = 10.0
+        paragraphStyle.firstLineHeadIndent = 0
+        let att = NSMutableAttributedString(string: "保证金交纳说明：\n1、保证金交纳成功后，用户即可成为星级卖家，尊享海量特权。\n2、卖家升级为星级卖家，可无限发布商品，发布的商品享有优先排序功能。\n3、此操作成功后，需要短信提示。")
+        att.addAttributes([NSAttributedStringKey.paragraphStyle : paragraphStyle ,NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)], range: NSRange(location: 0, length: att.length))
+        label.attributedText = att
         label.numberOfLines = 0
         return label
     }()
@@ -65,6 +70,7 @@ class SPBondVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_showAnimation(view: self.view, title: nil)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -148,7 +154,8 @@ extension SPBondVC {
     
     @objc fileprivate func sp_clickSubmit(){
         if self.submitBtn.isSelected {
-            sp_sendDeleteRequest()
+            let revokeVC = SPRevokeBondVC()
+            self.navigationController?.pushViewController(revokeVC, animated: true)
         }else{
             let rechargeVC = SPRechargeVC()
             rechargeVC.navigationItem.title = "缴纳保证金"
@@ -173,6 +180,7 @@ extension SPBondVC {
 extension SPBondVC {
     fileprivate func sp_sendRequest(){
         SPFundsRequest.sp_getDepostit(requestModel: self.requestModel) { [weak self](code , msg, model, errorModel) in
+            sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success{
                 self?.model = model
                 self?.sp_dealData()

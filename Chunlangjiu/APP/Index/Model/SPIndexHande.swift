@@ -45,8 +45,7 @@ class SPIndexHande : NSObject {
                     productVC.brandModel = brandModel
                      viewController.navigationController?.pushViewController(productVC, animated: true)
                 }
-            
-            
+
         case SPIndexType.winery.rawValue:
             let wineryVC = SPWineryVC()
             viewController.navigationController?.pushViewController(wineryVC, animated: true)
@@ -71,6 +70,8 @@ class SPIndexHande : NSObject {
             }
         case SPIndexType.sellwine.rawValue:
             sp_sellwine(viewController: viewController)
+        case SPIndexType.partner.rawValue:
+            sp_pushPartnerVC(viewController: viewController)
         default:
             sp_log(message: "没有找到 点击没有反应")
         }
@@ -143,6 +144,14 @@ class SPIndexHande : NSObject {
         let realVC = SPRealNameAuthenticationVC()
         viewController.navigationController?.pushViewController(realVC, animated: true)
     }
+    /// 跳到城市合伙人界面
+    ///
+    /// - Parameter viewController: 当前控制器
+    class func sp_pushPartnerVC(viewController:UIViewController){
+        let partnerVC = SPPartnerVC()
+        viewController.navigationController?.pushViewController(partnerVC, animated: true)
+    }
+    
     class func sp_getLintTypeName(lineType : String?)->String{
         var name = ""
         switch sp_getString(string: lineType) {

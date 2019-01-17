@@ -19,6 +19,9 @@ class SPMineVC: SPBaseVC {
         view.clickIdent = { [weak self] in
             self?.sp_clickIdentAction()
         }
+        view.clickIcon = { [weak self] in
+            self?.sp_clickIconAction()
+        }
         return view
     }()
     fileprivate var dataArray : [SPMineSectionModel]?
@@ -95,7 +98,7 @@ class SPMineVC: SPBaseVC {
         
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 // MARK: - delegate
@@ -512,6 +515,9 @@ extension SPMineVC {
 // MARK: - 请求 数据
 extension SPMineVC{
     
+    /// 上传图片
+    ///
+    /// - Parameter image: 图片
     fileprivate func sp_uploadImage(image : UIImage?){
         guard let uImage = image else {
             return
@@ -552,7 +558,8 @@ extension SPMineVC{
             if code == SP_Request_Code_Success {
                 if let model = SPAPPManager.instance().memberModel {
                     model.head_portrait = imgUrl
-                    self?.tableView.reloadData()
+                    SPAPPManager.instance().memberModel = model
+                    self?.headerView.memberModel = model
                 }
             }
             
@@ -652,8 +659,9 @@ extension SPMineVC{
 // MARK: - notification
 extension SPMineVC{
     fileprivate func sp_addNotification(){
-         NotificationCenter.default.addObserver(self, selector: #selector(sp_logout), name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_logout), name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_changeIdent), name: NSNotification.Name(SP_CHANGEID_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
     }
     /// 退出登录通知
     @objc fileprivate func sp_logout(){
@@ -668,5 +676,12 @@ extension SPMineVC{
     @objc fileprivate func sp_changeIdent(){
         self.sp_getData()
         sp_sendAllRequest()
+    }
+    @objc fileprivate func sp_netChange(){
+        if SPNetWorkManager.sp_notReachable() {
+            
+        }else{
+             self.sp_sendAllRequest()
+        }
     }
 }

@@ -114,7 +114,7 @@ class SPCityVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPCityVC : UITableViewDelegate,UITableViewDataSource{

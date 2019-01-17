@@ -62,6 +62,7 @@ class SPShopDetVC: SPBaseVC {
         self.headerView.shopModel = self.shopModel
         self.addressView.addressLabel.text = sp_getString(string: self.shopModel?.shop_addr)
         self.infoView.infoLabel.text = sp_getString(string: self.shopModel?.shop_descript)
+        self.infoView.timeLabel.text = sp_getString(string: self.shopModel?.openTime)
     }
     /// 创建UI
     override func sp_setupUI() {

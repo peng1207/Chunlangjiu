@@ -194,6 +194,8 @@ let SP_GET_INVITATIONCODE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(
 let SP_GET_INPUT_INVITATIONCODE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.code.set"
 /// 获取城市合伙人
 let SP_GET_PARTNER_URL =  "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=shop.featured"
+/// 获取开屏广告
+let SP_GET_OPENADV_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.open.img"
 /*-----------------------商家的接口--------------------------*/
 /// 获取店铺 的分类
 let SP_GET_SHOPSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=category.shop.get"

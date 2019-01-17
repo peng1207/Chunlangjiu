@@ -140,7 +140,7 @@ class SPProductDetaileVC: SPBaseVC {
     }
     deinit {
 //        self.scrollView.delegate = nil
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 // MARK: - deletage

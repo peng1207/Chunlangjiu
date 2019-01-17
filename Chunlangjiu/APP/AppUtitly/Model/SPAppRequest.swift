@@ -585,6 +585,11 @@ class SPAppRequest {
                     let shopInfo : [String :Any]? = data?["shopInfo"] as? [String:Any]
                     if sp_isDic(dic: shopInfo){
                         shopModel = SPShopModel.sp_deserialize(from: shopInfo)
+                        if let time = shopModel?.open_time {
+                            if let date = SPDateManager.sp_date(to: TimeInterval(exactly: time)){
+                                    shopModel?.openTime = SPDateManager.sp_dateString(to: date)
+                            }
+                        }
                     }
                 }
                 if let block = complete {
@@ -1980,6 +1985,32 @@ class SPAppRequest {
                     block(errorcode,model,nil)
                 }
                 
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
+    /// 获取开屏广告
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getOpenAdv(requestModel:SPRequestModel,complete:SPOpenAdvComplete?){
+        requestModel.url = SP_GET_OPENADV_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPOpenAdvModel?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPOpenAdvModel.sp_deserialize(from: data)
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
             }else{
                 if let block = complete {
                     block(SP_Request_Error,nil,nil)

@@ -80,6 +80,9 @@ class SPSortVC: SPBaseVC {
 //        self.navigationItem.rightBarButtonItem =  searchItem
         self.sp_addConstraint()
     }
+    deinit {
+         NotificationCenter.default.removeObserver(self)
+    }
 }
 
 fileprivate extension SPSortVC{
@@ -116,6 +119,7 @@ fileprivate extension SPSortVC{
             maker.height.equalTo(40)
         }
     }
+    
 }
 extension SPSortVC : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {

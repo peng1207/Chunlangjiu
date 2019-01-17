@@ -73,11 +73,11 @@ class SPBalanceVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
-    
+        sp_showAnimation(view: self.view, title: nil)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-            sp_sendRequest()
+        sp_sendRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -184,6 +184,7 @@ extension SPBalanceVC {
     
     fileprivate func sp_sendRequest(){
         SPFundsRequest.sp_getMoney(requestModel: self.requestModel) { [weak self](code, model, msg, errorModel) in
+            sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
                 self?.moneyModel = model
             }

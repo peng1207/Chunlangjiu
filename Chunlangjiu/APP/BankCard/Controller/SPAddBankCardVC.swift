@@ -215,7 +215,7 @@ class SPAddBankCardVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPAddBankCardVC {
