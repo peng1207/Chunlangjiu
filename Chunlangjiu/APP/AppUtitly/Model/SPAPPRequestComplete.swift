@@ -60,5 +60,8 @@ typealias SPDepoistComplete = (_ code : String,_ msg : String,_ model : SPDeposi
 /// 获取粉丝数量
 typealias SPFansComplete = (_ code : String,_ msg : String,_ model : SPFansModel?,_ errorModel : SPRequestError?)->Void
 /// 获取邀请码
-typealias SPInvitationCodeComplete = (_ code : String,_ msg : String,_ invitationCode :String?,_ errorModel : SPRequestError?)->Void
+typealias SPInvitationCodeComplete = (_ code : String,_ msg : String,_ invitationCode :String?,_ url : String? ,_ errorModel : SPRequestError?)->Void
+/// 获取开屏广告的回调
 typealias SPOpenAdvComplete = (_ code : String,_ model : SPOpenAdvModel?,_ errorModel : SPRequestError?)->Void
+/// 检查商品是否发布
+typealias SPCheckProductComplete = (_ code : String,_ data : [String : Any]?,_ errorModel : SPRequestError?)->Void

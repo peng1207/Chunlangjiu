@@ -21,7 +21,15 @@ let SP_KVO_KEY_CONTENTSIZE = "contentSize"
 let SP_GRADE_2 = "2"
 ///星级用户
 let SP_GRADE_1 = "1"
+/// 普通用户
+let SP_GRADE_0 = "0"
 
+/// 账单类型 默认
+let SP_FUNDS_BILL_TYPE_DEFAULT = "default"
+/// 账单类型 充值
+let SP_FUNDS_BILL_TYPE_RECHARGE = "recharge"
+/// 账单类型 提现
+let SP_FUNDS_BILL_TYPE_CASH = "cash"
 /// 获取默认的图片
 ///
 /// - Returns: 图片

@@ -60,7 +60,10 @@ class SPRequestManager {
         case .put :
             httpMethod = .put
         }
-        requestModel.isRequest = true
+//        let configuration = URLSessionConfiguration.default
+//        configuration.requestCachePolicy = .returnCacheDataDontLoad
+//        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+//        let dataRequest = SessionManager(configuration: configuration).request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
         let dataRequest =  request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
         
         switch requestModel.reponseFormt {

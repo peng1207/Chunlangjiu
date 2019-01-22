@@ -13,6 +13,7 @@ class SPProductTipView:  UIView{
     fileprivate lazy var contentView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var titleLabel : UILabel = {
@@ -38,18 +39,22 @@ class SPProductTipView:  UIView{
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.sp_cornerRadius(cornerRadius: 5)
         btn.addTarget(self, action: #selector(sp_clickNo), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var upgradeBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("升级星级卖家", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.sp_cornerRadius(cornerRadius: 5)
         btn.addTarget(self, action: #selector(sp_clickUpgrade), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate var canceBlock : SPBtnClickBlock?
+    fileprivate var doneBlock : SPBtnClickBlock?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -58,14 +63,16 @@ class SPProductTipView:  UIView{
         fatalError("init(coder:) has not been implemented")
     }
     
-    class func sp_show(title:String?){
-        let view = SPProductTipsView()
+    class func sp_show(title:String?,canceComplete:SPBtnClickBlock?=nil,doneComplete:SPBtnClickBlock?=nil){
+        let view = SPProductTipView()
+        view.canceBlock = canceComplete
+        view.doneBlock = doneComplete
         if sp_getString(string: title).count > 0 {
             view.contentLabel.text = sp_getString(string: title)
         }
         view.backgroundColor =  SPColorForHexString(hex: SP_HexColor.color_333333.rawValue).withAlphaComponent(0.3)
         let appDeleage : AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        view.window?.addSubview(view)
+        appDeleage.window?.addSubview(view)
         view.snp.makeConstraints { (maker) in
             maker.left.right.top.bottom.equalTo(appDeleage.window!).offset(0)
         }
@@ -119,11 +126,25 @@ class SPProductTipView:  UIView{
     }
 }
 extension SPProductTipView {
+    /// 点击不考虑
     @objc fileprivate func sp_clickNo(){
-        
+        guard let block = self.canceBlock else {
+            return
+        }
+        block()
+        sp_remove()
     }
+    /// 点击升级
     @objc fileprivate func sp_clickUpgrade(){
-        
+        guard let block = self.doneBlock else {
+            return
+        }
+        block()
+        sp_remove()
+    }
+    /// 移除view
+    fileprivate func sp_remove(){
+        self.removeFromSuperview()
     }
     
 }

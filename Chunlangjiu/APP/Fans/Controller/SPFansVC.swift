@@ -66,6 +66,7 @@ class SPFansVC: SPBaseVC {
             }
         }
     }
+    fileprivate var qrUrl : String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -139,8 +140,8 @@ class SPFansVC: SPBaseVC {
 extension SPFansVC {
     @objc fileprivate func sp_share(){
         let shareDataModel = SPShareDataModel()
-        shareDataModel.shareData = SP_SHARE_URL
-        shareDataModel.title = sp_getString(string: "")
+        shareDataModel.shareData = sp_getString(string: self.qrUrl).count > 0 ? sp_getString(string: self.qrUrl) : SP_SHARE_URL
+        shareDataModel.title = sp_getString(string: "给您推荐高端酒综合服务平台-醇狼")
         shareDataModel.descr = sp_getString(string: "")
         shareDataModel.currentViewController = self
         shareDataModel.thumbImage = sp_getAppIcon()
@@ -157,16 +158,21 @@ extension SPFansVC {
     }
     @objc fileprivate func sp_clickList(){
         let listVC = SPFansListVC()
+        listVC.shareUrl = self.qrUrl
         self.navigationController?.pushViewController(listVC, animated: true)
     }
 }
 extension SPFansVC {
     fileprivate func sp_sendRequest(){
+        sp_showAnimation(view: self.view, title: nil)
         let parm = [String : Any]()
         self.requestModel.parm = parm
-        SPFansRequest.sp_getInvitationCode(requestModel: self.requestModel) { [weak self](code, msg, invitationCode, errorModel) in
+        SPFansRequest.sp_getInvitationCode(requestModel: self.requestModel) { [weak self](code, msg, invitationCode, url, errorModel) in
+            sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
                 self?.invitationCode = invitationCode
+                self?.qrUrl = url
+                self?.sp_setupData()
             }
         }
         

@@ -291,6 +291,27 @@ class SPProductRequest : SPAppRequest {
             }
         }
     }
-    
+    /// 检查用户是否达到最大发布商品的权限
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getCheckProduct(requestModel:SPRequestModel,complete:SPCheckProductComplete?){
+        requestModel.url = SP_GET_CHECKITEM_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                    block(errorcode,data,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
 }
 

@@ -34,6 +34,9 @@ class SPRechargeVC: SPBaseVC {
         self.tableView.sp_layoutFooterView()
         sp_setupData()
         sp_addNotification()
+        if self.isBond {
+            sp_sendGetBondRequest()
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -232,6 +235,16 @@ extension SPRechargeVC {
     fileprivate func sp_pushOrderList(isSuccess : Bool){
         if isSuccess {
              self.navigationController?.popViewController(animated: true)
+        }
+    }
+    /// 获取保证金金额请求
+    fileprivate func sp_sendGetBondRequest(){
+        sp_showAnimation(view: self.view, title: nil)
+        SPFundsRequest.sp_getDepostit(requestModel: self.requestModel) { [weak self](code , msg, model, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                self?.headerView.priceView.textFiled.text = sp_getString(string: model?.deposit)
+            }
         }
     }
     

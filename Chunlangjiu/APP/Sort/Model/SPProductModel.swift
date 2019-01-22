@@ -21,7 +21,7 @@ class SPProductModel : HandyJSON {
     var quantity : Int! = 0
     var gift : String?
     var promotion : [String]?
-    var shop_id : String?
+    var shop_id : Int?
     var cat_id : String?
     var brand_id : String?
     var shop_cat_id : String?
@@ -102,6 +102,8 @@ class SPProductModel : HandyJSON {
     var shop_name : String?
     /// 店铺等级
     var grade : String?
+    var rate  : String?
+    var service_url : String?
     required init() {}
     func mapping(mapper: HelpingMapper) {
         mapper.specify(property: &showCartPrice, name: "price.price") { (rawString) -> String in

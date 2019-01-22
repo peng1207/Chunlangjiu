@@ -22,13 +22,34 @@ class SPCommissionView:  UIView{
         view.contentLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return view
     }()
-    
+    var detaileModel : SPOrderDetaileModel?{
+        didSet{
+            self.sp_setupData()
+        }
+    }
+    fileprivate var  commissionHeight : Constraint!
+    fileprivate var payHeight : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    fileprivate func sp_setupData(){
+        self.pCommissionView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.commission))"
+        self.sPayView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.shop_payment))"
+        if sp_getString(string: self.detaileModel?.commission).count > 0 {
+            self.commissionHeight.update(offset: 40)
+        }else{
+            self.commissionHeight.update(offset: 0)
+        }
+        if sp_getString(string: self.detaileModel?.shop_payment).count > 0 {
+            self.payHeight.update(offset: 40)
+        }else{
+            self.payHeight.update(offset: 0)
+        }
+        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -41,12 +62,12 @@ class SPCommissionView:  UIView{
         self.pCommissionView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
             maker.top.equalTo(self).offset(0)
-            maker.height.equalTo(40)
+           self.commissionHeight =  maker.height.equalTo(0).constraint
         }
         self.sPayView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.pCommissionView).offset(0)
             maker.top.equalTo(self.pCommissionView.snp.bottom).offset(0)
-            maker.height.equalTo(40)
+          self.payHeight = maker.height.equalTo(0).constraint
             maker.bottom.equalTo(self.snp.bottom).offset(0)
         }
     }

@@ -93,15 +93,17 @@ class SPFansRequest : SPAppRequest {
                 let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
                 let msg = sp_getString(string: json[SP_Request_Msg_Key])
                 var invitationCode : String = ""
+                var url : String = ""
                 if errorcode == SP_Request_Code_Success {
                     invitationCode = sp_getString(string: data?["code"])
+                    url = sp_getString(string: data?["url"])
                 }
                 if let block = complete {
-                    block(errorcode,msg,invitationCode,nil)
+                    block(errorcode,msg,invitationCode,url,nil)
                 }
             }else{
                 if let block = complete {
-                    block(SP_Request_Error,"获取邀请码失败","",nil)
+                    block(SP_Request_Error,"获取邀请码失败","",nil,nil)
                 }
             }
         }

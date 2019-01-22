@@ -71,6 +71,8 @@ class SPFansListVC: SPBaseVC {
         self.view.addSubview(self.shareBtn)
         self.sp_addConstraint()
     }
+    var shareUrl : String? 
+    
     /// 处理有没数据
     override func sp_dealNoData(){
         self.tableView.reloadData()
@@ -137,7 +139,7 @@ extension SPFansListVC : UITableViewDelegate,UITableViewDataSource {
         if view == nil {
             view = SPFansListSectionView(reuseIdentifier: fansListHeadID)
         }
-        return view
+        return  view
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -147,8 +149,8 @@ extension SPFansListVC : UITableViewDelegate,UITableViewDataSource {
 extension SPFansListVC {
     @objc fileprivate func sp_share(){
         let shareDataModel = SPShareDataModel()
-        shareDataModel.shareData = SP_SHARE_URL
-        shareDataModel.title = sp_getString(string: "")
+        shareDataModel.shareData = sp_getString(string: self.shareUrl).count > 0 ? sp_getString(string: self.shareUrl) :  SP_SHARE_URL
+        shareDataModel.title = sp_getString(string: "给您推荐高端酒综合服务平台-醇狼")
         shareDataModel.descr = sp_getString(string: "")
         shareDataModel.currentViewController = self
         shareDataModel.thumbImage = sp_getAppIcon()

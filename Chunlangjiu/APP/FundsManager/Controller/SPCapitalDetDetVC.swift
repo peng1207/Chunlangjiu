@@ -14,7 +14,7 @@ class SPCapitalDetDetVC: SPBaseVC {
         let view = SPCapitalDetDetHeaderView()
         return view
     }()
-    fileprivate var dataArray : [Any]?
+    fileprivate var dataArray : [SPCapitalDetDetModel] = [SPCapitalDetDetModel]()
     var model : SPCapitalDetModel?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,35 @@ class SPCapitalDetDetVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.headerView.priceLabel.text = sp_getString(string: self.model?.fee)
+        self.headerView.priceLabel.text = "\(sp_getString(string: SP_CHINE_MONEY))\(sp_getString(string: self.model?.fee))"
+        
+        
+        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_DEFAULT || sp_getString(string: self.model?.bill_type).count == 0 {
+             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "商品名称", content: sp_getString(string: self.model?.message)))
+        }
+        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_RECHARGE || sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_CASH {
+              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易状态", content: ""))
+        }
+        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易类型", content: ""))
+        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_RECHARGE {
+             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "付款方式", content: ""))
+        }
+        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_CASH {
+             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "提现银行", content: ""))
+        }
+        
+        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "订单编号", content: ""))
+        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_CASH{
+            self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "申请时间", content: sp_getString(string: self.model?.time)))
+             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "到帐时间", content: ""))
+        }else{
+              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "创建时间", content: sp_getString(string: self.model?.time)))
+        }
+      
+        // 充值
+        
+        self.tableView.reloadData()
+        
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -46,7 +74,8 @@ class SPCapitalDetDetVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableHeaderView = self.headerView
-        self.tableView.rowHeight = 50
+        self.tableView.estimatedRowHeight = 50
+        self.tableView.rowHeight = UITableViewAutomaticDimension
         self.view.addSubview(self.tableView)
         self.sp_addConstraint()
     }
@@ -63,7 +92,6 @@ class SPCapitalDetDetVC: SPBaseVC {
             } else {
                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
-           
         }
     }
     deinit {
@@ -83,6 +111,9 @@ extension SPCapitalDetDetVC: UITableViewDelegate,UITableViewDataSource {
         var cell : SPCapitalDetDetTableCell? = tableView.dequeueReusableCell(withIdentifier: capitalDetDetCellID) as? SPCapitalDetDetTableCell
         if cell == nil {
             cell = SPCapitalDetDetTableCell(style: UITableViewCellStyle.default, reuseIdentifier: capitalDetDetCellID)
+        }
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            cell?.model = self.dataArray[indexPath.row]
         }
         return cell!
     }

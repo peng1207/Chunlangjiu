@@ -51,6 +51,8 @@ class SPOrderModel : SPBaseModel {
     var cancel_id : String?
     var logi : SPLogiModel?
     var info : String?
+    var commission : String?
+    var shop_payment : String?
     func sp_set(s:Int){
         if let second = self.second {
             self.second = second - s

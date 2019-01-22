@@ -18,6 +18,14 @@ class SPAuctionInfoView:  UIView{
         label.text = "拍卖说明"
         return label
     }()
+    fileprivate lazy var moreBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("更多说明", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 13)
+        btn.addTarget(self, action: #selector(sp_clickMore), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     fileprivate lazy var joinView : UIView = {
         let view = sp_setupView(img: UIImage(named: "public_auction_join"), title: "参与出价")
         return view
@@ -46,6 +54,7 @@ class SPAuctionInfoView:  UIView{
         let view = sp_setupNext()
         return view
     }()
+    var clickBlock : SPBtnClickBlock?
     fileprivate func sp_setupView(img:UIImage?,title:String?)->UIView{
         let view = UIView()
         let imgView = UIImageView(image: img)
@@ -84,9 +93,16 @@ class SPAuctionInfoView:  UIView{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    @objc fileprivate func sp_clickMore(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block()
+    }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.titleLabel)
+        self.addSubview(self.moreBtn)
         self.addSubview(self.lineView)
         self.addSubview(self.joinView)
         self.addSubview(self.joinImgView)
@@ -103,6 +119,12 @@ class SPAuctionInfoView:  UIView{
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self).offset(0)
             maker.height.equalTo(40)
+        }
+        self.moreBtn.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.snp.right).offset(-32)
+            maker.height.equalTo(self.titleLabel.snp.height).offset(0)
+            maker.centerY.equalTo(self.titleLabel.snp.centerY).offset(0)
+            maker.width.greaterThanOrEqualTo(0)
         }
         self.lineView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
@@ -149,3 +171,4 @@ class SPAuctionInfoView:  UIView{
         
     }
 }
+

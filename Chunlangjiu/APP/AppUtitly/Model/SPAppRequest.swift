@@ -181,9 +181,9 @@ class SPAppRequest {
                                 }
                             }
                         }
-                        let allModel = SPSortLv3Model()
-                        allModel.cat_name = "全部"
-                        lv3Array.insert(allModel, at: 0)
+//                        let allModel = SPSortLv3Model()
+//                        allModel.cat_name = "全部"
+//                        lv3Array.insert(allModel, at: 0)
                     }
                 }
                 if let block = complete{

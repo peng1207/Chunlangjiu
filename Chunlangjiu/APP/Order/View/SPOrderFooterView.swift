@@ -108,6 +108,13 @@ class SPOrderFooterView:  UIView{
             }
         }
         self.refundTop.update(offset: isRefund ? 10 : 0)
+        self.commissionView.detaileModel = self.detaileModel
+        if sp_getString(string: self.detaileModel?.commission).count > 0  || sp_getString(string: self.detaileModel?.shop_payment).count > 0  {
+            self.commissionTop.update(offset: 10)
+        }else{
+            self.commissionTop.update(offset: 0)
+        }
+        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -155,8 +162,9 @@ class SPOrderFooterView:  UIView{
         }
         self.commissionView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            self.commissionTop = maker.top.equalTo(self.priceView.snp.bottom).offset(10).constraint
+            self.commissionTop = maker.top.equalTo(self.priceView.snp.bottom).offset(0).constraint
             maker.height.greaterThanOrEqualTo(0)
+//            maker.height.equalTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }
     }

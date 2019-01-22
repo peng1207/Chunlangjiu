@@ -338,34 +338,38 @@ extension SPCompanyAuthenticationVC {
     }
     @objc fileprivate func sp_submit(){
         guard sp_getString(string: self.companyNameView.textFiled.text).count > 0 else {
-            sp_showTextAlert(tips: "请输入企业名称")
+            sp_showTextAlert(tips: "请输入企业（公司）名称")
             return
         }
         guard sp_getString(string: self.nameView.textFiled.text).count > 0  else {
-            sp_showTextAlert(tips: "请输入法人名称")
+            sp_showTextAlert(tips: "请输入企业（公司）法人名称")
             return
         }
-        guard sp_getString(string: self.codeView.textFiled.text).count > 0 else {
-            sp_showTextAlert(tips: "请输入营业执照")
+        guard sp_getString(string: self.cardView.textFiled.text).count > 0  else {
+            sp_showTextAlert(tips: "请输入企业（公司）法人身份证号")
             return
         }
-        
-        guard sp_getString(string: self.timeView.content).count > 0 else {
-            sp_showTextAlert(tips: "请输入成立时间")
-            return
-        }
-        guard sp_getString(string: self.areaView.textFiled.text).count > 0 else {
-            sp_showTextAlert(tips: "请输入经营区域")
-            return
-        }
-        guard sp_getString(string: self.addressView.textFiled.text).count > 0 else {
-            sp_showTextAlert(tips: "请输入详细地址")
-            return
-        }
-        guard sp_getString(string: self.telView.textFiled.text).count > 0  else {
-            sp_showTextAlert(tips: "请输入固定电话")
-            return
-        }
+//        guard sp_getString(string: self.codeView.textFiled.text).count > 0 else {
+//            sp_showTextAlert(tips: "请输入营业执照")
+//            return
+//        }
+//
+//        guard sp_getString(string: self.timeView.content).count > 0 else {
+//            sp_showTextAlert(tips: "请输入成立时间")
+//            return
+//        }
+//        guard sp_getString(string: self.areaView.textFiled.text).count > 0 else {
+//            sp_showTextAlert(tips: "请输入经营区域")
+//            return
+//        }
+//        guard sp_getString(string: self.addressView.textFiled.text).count > 0 else {
+//            sp_showTextAlert(tips: "请输入详细地址")
+//            return
+//        }
+//        guard sp_getString(string: self.telView.textFiled.text).count > 0  else {
+//            sp_showTextAlert(tips: "请输入固定电话")
+//            return
+//        }
         guard businessImageView.imgView.image != nil else {
             sp_showTextAlert(tips: "请上传营业执照副本照片")
             return

@@ -109,9 +109,9 @@ class SPProductContentView:  UIView{
         self.productImageView.sp_cache(string: productModel?.image_default_id, plImage: sp_getDefaultImg())
         
         self.titleLabel.attributedText = productModel?.sp_getTitleAtt()
-        let haoP = "98%"
+        
         self.salePriceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: productModel?.price))"
-        self.tipsLabel.text = "\(sp_getString(string: self.productModel?.view_count))人关注 \(sp_getString(string: self.productModel?.rate_count))条评价 \(haoP)好评"
+        self.tipsLabel.text = "\(sp_getString(string: self.productModel?.view_count))人关注 \(sp_getString(string: self.productModel?.rate_count))条评价 \(sp_getString(string: productModel?.rate))%好评"
        
         self.maxPriceLabel.attributedText = self.productModel?.sp_getMaxPrice()
         if let isAuction = self.productModel?.isAuction, isAuction == true {

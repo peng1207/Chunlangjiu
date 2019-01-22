@@ -85,6 +85,7 @@ class SPShopHomeVC: SPBaseVC {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
+    
     override func sp_dealNoData() {
         self.collectionView.sp_stopFooterRefesh()
         self.collectionView.sp_stopHeaderRefesh()
@@ -229,6 +230,11 @@ extension SPShopHomeVC {
     /// 赋值
     fileprivate func sp_setupData(){
         self.shopHomeView.shopModel = self.shopModel
+        if sp_getString(string: self.shopModel?.grade).count == 0 || sp_getString(string: self.shopModel?.grade) == SP_GRADE_0 {
+            self.backImgView.image = SPBundle.sp_img(name: "shop_bac")
+        }else{
+            self.backImgView.image = SPBundle.sp_img(name: "shop_bac_star")
+        }
     }
     @objc fileprivate func sp_clickShopDetVC(){
         let detVC = SPShopDetVC()

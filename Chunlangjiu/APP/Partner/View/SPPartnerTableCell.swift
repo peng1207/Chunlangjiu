@@ -31,6 +31,7 @@ class SPPartnerTableCell: UITableViewCell {
     }()
     fileprivate lazy var labelView : SPLabelView = {
         let view = SPLabelView()
+        view.borderColor = SPColorForHexString(hex: SP_HexColor.color_01b5da.rawValue)
         return view
     }()
     fileprivate lazy var addressLabel : UILabel = {
@@ -83,10 +84,12 @@ class SPPartnerTableCell: UITableViewCell {
         self.nameLabel.text = sp_getString(string: self.model?.shopname)
         self.addressLabel.text = "地址:\(sp_getString(string: self.model?.shop_addr))"
         let att = NSMutableAttributedString(string: "该店家有", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)])
-        att.append(NSAttributedString(string: "80", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font: sp_getFontSize(size: 12)]))
+        att.append(NSAttributedString(string: "\(sp_getString(string: self.model?.num).count > 0 ? sp_getString(string: self.model?.num) : "0")", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font: sp_getFontSize(size: 12)]))
         
          att.append(NSAttributedString(string: "款商品正在销售", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue),NSAttributedStringKey.font: sp_getFontSize(size: 11)]))
         self.tipLabel.attributedText = att
+        self.labelView.listArray = self.model?.sp_getLabel()
+      
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

@@ -28,10 +28,12 @@ class SPBondVC: SPBaseVC {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("缴纳保证金", for: UIControlState.normal)
         btn.setTitle("撤销保证金", for: UIControlState.selected)
+        btn.setTitle("撤销保证金中", for: UIControlState.disabled)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.selected)
         btn.setBackgroundImage(UIImage.sp_getImageWithColor(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)), for: UIControlState.normal)
         btn.setBackgroundImage(UIImage.sp_getImageWithColor(color: SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)), for: UIControlState.selected)
+         btn.setBackgroundImage(UIImage.sp_getImageWithColor(color: SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)), for: UIControlState.disabled)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickSubmit), for: UIControlEvents.touchUpInside)
         btn.sp_cornerRadius(cornerRadius: 5)
@@ -170,8 +172,13 @@ extension SPBondVC {
         if sp_getString(string: self.model?.deposit_status) == "0" {
             // 没有缴纳
             self.submitBtn.isSelected = false
-        }else{
+            self.submitBtn.isEnabled = true
+        }else if sp_getString(string: self.model?.deposit_status) == "2"{
+            self.submitBtn.isEnabled = false
+        }
+        else{
             self.submitBtn.isSelected = true
+            self.submitBtn.isEnabled = true
         }
     }
     

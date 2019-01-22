@@ -133,7 +133,7 @@ extension SPRevokeBondVC {
             self?.sp_revoke()
         }))
         
-        alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.default, handler: { (action) in
+        alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
         self.present(alertController, animated: true, completion: nil)
@@ -156,7 +156,13 @@ extension SPRevokeBondVC {
         }
         self.requestModel.parm = parm
         sp_showAnimation(view: self.view, title: "正在提交中...")
-        
+        SPFundsRequest.sp_getDepositCance(requestModel: self.requestModel) { [weak self](code, msg, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            sp_showTextAlert(tips: msg)
+            if code == SP_Request_Code_Success {
+                self?.navigationController?.popViewController(animated: true)
+            }
+        }
         
     }
     

@@ -53,6 +53,9 @@ class SPProductDetaileVC: SPBaseVC {
         view.recommendView.selectBlock = { [weak self] (model) in
             self?.sp_select(model: model)
         }
+        view.auctionInfoView.clickBlock = { [weak self] in
+            self?.sp_pushAuctionInfo()
+        }
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_pushShop))
         view.shopView.addGestureRecognizer(tap)
         view.productView.lookDetaile.addTarget(self, action: #selector(sp_lookAuction), for: UIControlEvents.touchUpInside)
@@ -350,6 +353,10 @@ extension SPProductDetaileVC {
         let detaileVC = SPProductDetaileVC()
         detaileVC.productModel = productModel
         self.navigationController?.pushViewController(detaileVC, animated: true)
+    }
+    fileprivate func sp_pushAuctionInfo(){
+        let auctionInfoVC = SPAuctionInfoVC()
+        self.navigationController?.pushViewController(auctionInfoVC, animated: true)
     }
 }
 // MARK: - 网络请求

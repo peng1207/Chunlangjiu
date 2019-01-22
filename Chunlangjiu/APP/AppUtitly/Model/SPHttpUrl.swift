@@ -180,6 +180,8 @@ let SP_GET_FUNDS_CASH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key:
 let SP_GET_CAPITALDETLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fund"
 /// 创建保证金订单
 let SP_GET_DEPOSITCREATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.depositCreate"
+/// 撤销保证金
+let SP_GET_DEPOSITCANCE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.refund"
 /// 获取保证金信息
 let SP_GET_DEPOSIT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.get"
 /// 粉丝及佣金汇总
@@ -239,6 +241,9 @@ let SP_GET_CANCEDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: S
 let SP_GET_CANCECHECK_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=trade.cencel.shop.check"
 /// 更新店铺信息
 let SP_GET_UPDATESHOP_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=user.update.shop"
+/// 检查用户是否可以发布商品
+let SP_GET_CHECKITEM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=item.check"
+
 /*-----------------------web-------------------------*/
 /// 获取商家销售中的商品数据
 let SP_GET_ONSALE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/onsale.html"
@@ -267,3 +272,4 @@ let SP_GET_MSG_WEB_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP
 let SP_GET_ITECEMTER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/app-itemCenter.html"
 /// 商品管理
 let SP_GET_EVALUATE_WEB_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/app-evaluate.html"
+

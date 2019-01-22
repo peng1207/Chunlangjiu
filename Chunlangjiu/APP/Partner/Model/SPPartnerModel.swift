@@ -20,4 +20,16 @@ class SPPartnerModel : SPBaseModel {
     var grade : String?
     var shopname : String?
     var shoptype : String?
+    var num : String? 
+    var label : String?
+    func sp_getLabel()->[String]{
+        if sp_getString(string: self.label).count > 0 {
+            if sp_getString(string: self.label).contains("，") {
+                return sp_getString(string: self.label).components(separatedBy: "，")
+            }else{
+                return sp_getString(string: self.label).components(separatedBy: ",")
+            }
+        }
+        return [String]()
+    }
 }

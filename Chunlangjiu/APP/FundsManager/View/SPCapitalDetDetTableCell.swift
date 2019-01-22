@@ -24,7 +24,8 @@ class SPCapitalDetDetTableCell: UITableViewCell {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
-        label.textAlignment = .center
+        label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
     
@@ -34,9 +35,18 @@ class SPCapitalDetDetTableCell: UITableViewCell {
         self.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         self.sp_setupUI()
     }
-    
+    var model : SPCapitalDetDetModel? {
+        didSet{
+            sp_setupData()
+        }
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    /// 赋值
+    fileprivate func sp_setupData(){
+        self.titleLabel.text = sp_getString(string: model?.title)
+        self.contentLabel.text = sp_getString(string: model?.content)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -50,16 +60,21 @@ class SPCapitalDetDetTableCell: UITableViewCell {
         self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.contentView).offset(31)
-            maker.top.bottom.equalTo(self.contentView).offset(0)
+            maker.top.equalTo(self.contentView).offset(15)
+            maker.height.equalTo(20)
             maker.width.greaterThanOrEqualTo(0)
         }
+        
         self.contentLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.right).offset(18)
             maker.right.equalTo(self.contentView).offset(-11)
-            maker.top.bottom.equalTo(self.contentView).offset(0)
+            maker.top.equalTo(self.contentView.snp.top).offset(15)
+            maker.height.greaterThanOrEqualTo(20)
         }
         self.lineView.snp.makeConstraints { (maker) in
-            maker.left.right.bottom.equalTo(self.contentView).offset(0)
+            maker.left.right.equalTo(self.contentView).offset(0)
+            maker.top.equalTo(self.contentLabel.snp.bottom).offset(15)
+            maker.bottom.equalTo(self.contentView).offset(0)
             maker.height.equalTo(sp_lineHeight)
         }
     }

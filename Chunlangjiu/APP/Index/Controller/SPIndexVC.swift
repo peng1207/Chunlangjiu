@@ -272,13 +272,15 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
             let indexModel : SPIndexGoods? = self.dataArray?[section];
             if sp_getString(string: indexModel?.type) == SP_HEADER {
                 var height : CGFloat = collectionView.frame.size.width *  0.65
+                if sp_getArrayCount(array: self.indexModel?.bannerList) == 0 {
+                    height = 0.0
+                }
                 if sp_getArrayCount(array: self.indexModel?.iconList) > 0 {
-                    height = height + 81
+                    height = height + 81.0
                 }
                 if sp_getArrayCount(array: self.indexModel?.brandList) > 0 {
-                    height = height + 210
+                    height = height + 210.0
                 }
-                
                 return CGSize(width: collectionView.frame.size.width, height: height)
             }else{
                 return CGSize(width: collectionView.frame.size.width, height: 54)
@@ -576,6 +578,8 @@ extension SPIndexVC{
             return
         }
         let shopModel = SPShopModel()
+        shopModel.shop_id = product.shop_id
+        shopModel.shop_name = product.shop_name 
         let shopVC = SPShopHomeVC()
         shopVC.shopModel = shopModel
         self.navigationController?.pushViewController(shopVC, animated: true)

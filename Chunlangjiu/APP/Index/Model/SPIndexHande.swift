@@ -47,6 +47,7 @@ class SPIndexHande : NSObject {
                 }
 
         case SPIndexType.winery.rawValue:
+//             sp_pushPartnerVC(viewController: viewController)
             let wineryVC = SPWineryVC()
             viewController.navigationController?.pushViewController(wineryVC, animated: true)
         case SPIndexType.evaluation.rawValue:

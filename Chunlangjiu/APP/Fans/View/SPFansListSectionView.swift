@@ -41,7 +41,7 @@ class SPFansListSectionView: UITableViewHeaderFooterView{
         label.textAlignment = .center
         var att = NSMutableAttributedString()
         att.append(NSAttributedString(string: "累计佣金", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)]))
-        att.append(NSAttributedString(string: "(¥)", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+        att.append(NSAttributedString(string: "(\(sp_getString(string: SP_CHINE_MONEY)))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor:SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
         label.attributedText = att
         return label
     }()

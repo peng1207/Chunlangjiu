@@ -322,6 +322,10 @@ extension SPRealNameAuthenticationVC{
             sp_showTextAlert(tips: "请输入您的身份证号码")
             return
         }
+        guard sp_getString(string: self.phoneView.textFiled.text).count > 0 else{
+            sp_showTextAlert(tips: "请输入有效电话")
+            return
+        }
         guard self.positiveView.imgView.image != nil else {
             sp_showTextAlert(tips: "请上传身份证正面")
             return

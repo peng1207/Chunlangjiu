@@ -31,6 +31,9 @@ class SPCapitalDetDetHeaderView:  UIView{
         label.textAlignment = .center
         return label
     }()
+    fileprivate lazy var lineView : UIView = {
+        return sp_getLineView()
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -43,6 +46,7 @@ class SPCapitalDetDetHeaderView:  UIView{
         self.addSubview(self.contentView)
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.priceLabel)
+        self.addSubview(self.lineView)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -65,6 +69,12 @@ class SPCapitalDetDetHeaderView:  UIView{
             maker.top.equalTo(self.titleLabel.snp.bottom).offset(20)
             maker.height.greaterThanOrEqualTo(0)
         }
+        self.lineView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self).offset(0)
+            maker.top.equalTo(self.contentView.snp.bottom).offset(10)
+            maker.height.equalTo(sp_lineHeight)
+        }
+        
     }
     deinit {
         

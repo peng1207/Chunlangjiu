@@ -239,6 +239,8 @@ extension SPAuctionVC {
             return
         }
         let shopModel = SPShopModel()
+        shopModel.shop_id = product.shop_id
+        shopModel.shop_name = product.shop_name 
         let shopVC = SPShopHomeVC()
         shopVC.shopModel = shopModel
         self.navigationController?.pushViewController(shopVC, animated: true)

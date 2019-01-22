@@ -92,7 +92,11 @@ class SPProductDetaileView:  UIView {
         view.isHidden = true
         return view
     }()
-    
+    lazy var serviceView : SPProductServiceView = {
+        let view = SPProductServiceView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
     lazy var pullUpRefreshView : UIView = {
         let view = UIView()
         view.isHidden = true
@@ -137,6 +141,7 @@ class SPProductDetaileView:  UIView {
         self.productScrollView.addSubview(self.detView)
         self.productScrollView.addSubview(self.evaluateView)
         self.productScrollView.addSubview(self.auctionInfoView)
+        self.productScrollView.addSubview(self.serviceView)
         self.productScrollView.addSubview(self.recommendView)
         self.productScrollView.addSubview(self.pullUpRefreshView)
         
@@ -194,10 +199,15 @@ class SPProductDetaileView:  UIView {
             self.auctionInfoHeight = maker.height.equalTo(0).constraint
             self.auctionInfoTop = maker.top.equalTo(self.detView.snp.bottom).offset(0).constraint
         }
+        self.serviceView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.productScrollView).offset(0)
+            maker.top.equalTo(self.auctionInfoView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
+        }
         
         self.recommendView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
-            self.recommendTop = maker.top.equalTo(self.auctionInfoView.snp.bottom).offset(10).constraint
+            self.recommendTop = maker.top.equalTo(self.serviceView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
         }
         self.pullUpRefreshView.snp.makeConstraints { (maker) in
@@ -286,6 +296,7 @@ extension SPProductDetaileView : UIScrollViewDelegate {
         self.shopView.isHidden = false
         self.pullUpRefreshView.isHidden = false
         self.ruleView.content = sp_getString(string: self.detaileModel?.item?.rule)
+        self.serviceView.imgUrl = sp_getString(string: self.detaileModel?.item?.service_url)
         if sp_getString(string: self.detaileModel?.item?.explain).count > 0 {
              self.tipsTop.update(offset: 0)
             self.tipsView.isHidden = false

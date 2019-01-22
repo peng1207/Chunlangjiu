@@ -151,11 +151,13 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }else{
              self.sp_sendRequest()
         }
-        
+       
+       
        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+         sp_sendCheckRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -882,6 +884,37 @@ extension SPProductAddVC{
         }
     }
     
+    /// 发送检查的请求
+    fileprivate func sp_sendCheckRequest(){
+         sp_showAnimation(view: self.view, title: nil)
+        let request = SPRequestModel()
+        request.parm = [String : Any]()
+        SPProductRequest.sp_getCheckProduct(requestModel: request) { [weak self](code, data, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                if sp_isDic(dic: data) {
+                    if let dic : [String : Any] = data {
+                        let status = sp_getString(string: dic["status"])
+                        let tips = sp_getString(string: dic["tips"])
+                        if let isCheck : Bool = Bool(status), isCheck == false {
+                             self?.sp_dealCheckTip(tips: tips)
+                        }
+                    }
+                }
+               
+            }
+        }
+    }
+    fileprivate func sp_dealCheckTip(tips:String){
+        SPProductTipView.sp_show(title: tips, canceComplete: { [weak self]in
+           self?.navigationController?.popViewController(animated: true)
+        }) { [weak self]in
+            let rechargerVC = SPRechargeVC()
+            rechargerVC.isBond = true
+            rechargerVC.navigationItem.title = "缴纳保证金"
+            self?.navigationController?.pushViewController(rechargerVC, animated: true)
+        };
+    }
     
 }
 // MARK: - deletage
