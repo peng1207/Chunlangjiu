@@ -49,11 +49,14 @@ class SPCapitalDetListTableCell: UITableViewCell {
         self.titleLabel.text = sp_getString(string: self.model?.message)
         self.priceLabel.text = sp_getString(string: self.model?.fee)
         self.timeLabel.text = sp_getString(string: self.model?.time)
-        if sp_getString(string: self.model?.type) != "add" {
+        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE {
+             self.priceLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        }else if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH {
             self.priceLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         }else{
-            self.priceLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+            self.priceLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         }
+      
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

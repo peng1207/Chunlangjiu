@@ -39,22 +39,22 @@ class SPCapitalDetDetVC: SPBaseVC {
         self.headerView.priceLabel.text = "\(sp_getString(string: SP_CHINE_MONEY))\(sp_getString(string: self.model?.fee))"
         
         
-        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_DEFAULT || sp_getString(string: self.model?.bill_type).count == 0 {
+        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_DEFAULT || sp_getString(string: self.model?.type).count == 0 {
              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "商品名称", content: sp_getString(string: self.model?.message)))
         }
-        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_RECHARGE || sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_CASH {
+        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE || sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH {
               self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易状态", content: ""))
         }
         self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易类型", content: ""))
-        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_RECHARGE {
+        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE {
              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "付款方式", content: ""))
         }
-        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_CASH {
+        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH {
              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "提现银行", content: ""))
         }
         
         self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "订单编号", content: ""))
-        if sp_getString(string: self.model?.bill_type) == SP_FUNDS_BILL_TYPE_CASH{
+        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH{
             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "申请时间", content: sp_getString(string: self.model?.time)))
              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "到帐时间", content: ""))
         }else{

@@ -25,11 +25,11 @@ let SP_GRADE_1 = "1"
 let SP_GRADE_0 = "0"
 
 /// 账单类型 默认
-let SP_FUNDS_BILL_TYPE_DEFAULT = "default"
+let SP_FUNDS_BILL_TYPE_DEFAULT = "sell"
 /// 账单类型 充值
-let SP_FUNDS_BILL_TYPE_RECHARGE = "recharge"
+let SP_FUNDS_BILL_TYPE_RECHARGE = "add"
 /// 账单类型 提现
-let SP_FUNDS_BILL_TYPE_CASH = "cash"
+let SP_FUNDS_BILL_TYPE_CASH = "expense"
 /// 获取默认的图片
 ///
 /// - Returns: 图片

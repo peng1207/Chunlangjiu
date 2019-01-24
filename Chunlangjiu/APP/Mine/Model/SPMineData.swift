@@ -380,6 +380,10 @@ class SPMineData {
                 count = sp_getString(string: cModel.canceled_num)
             case .after_sale? :
                 count = sp_getString(string: cModel.after_sale_num)
+            case .warehouseProduct? :
+                count = sp_getString(string: cModel.instock_num)
+            case .reviewProduct? :
+                count = sp_getString(string: cModel.pending_num)
             case .none:
                 count = ""
             case .some(_):

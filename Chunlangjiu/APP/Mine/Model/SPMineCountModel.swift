@@ -23,6 +23,11 @@ class SPMineCountModel : SPBaseModel {
     var coupon_num : Int?
     /// 售后订单数量
     var after_sale_num : Int?
+    /// 仓库中
+    var instock_num : Int?
+    /// 待审核
+    var pending_num : Int?
+    
     /// 积分
     var point : Int?
     var money : String?

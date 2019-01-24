@@ -20,16 +20,19 @@ class SPCapitalDetVC: SPBaseVC {
     }()
     fileprivate lazy var recordVC : SPCapitalDetList = {
         let vc = SPCapitalDetList()
+        vc.type = SP_FUNDS_BILL_TYPE_DEFAULT
         self.addChildViewController(vc)
         return vc
     }()
     fileprivate lazy var rechargeVC : SPCapitalDetList = {
         let vc = SPCapitalDetList()
+        vc.type = SP_FUNDS_BILL_TYPE_RECHARGE
         self.addChildViewController(vc)
         return vc
     }()
     fileprivate lazy var cashVC : SPCapitalDetList = {
         let vc = SPCapitalDetList()
+        vc.type = SP_FUNDS_BILL_TYPE_CASH
         self.addChildViewController(vc)
         return vc
     }()

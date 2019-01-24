@@ -243,7 +243,7 @@ extension SPProductAddImgView {
             self.fifView.sp_update(image: nil)
             self.sixView.sp_update(image: nil)
         }else if count == 1 {
-            sp_updateFourLayout(show: false)
+            sp_updateFourLayout(show: true)
             sp_updateFifLayout(show: false)
             sp_updateSixLayout(show: false)
             self.fourView.sp_update(image: nil)
@@ -251,20 +251,20 @@ extension SPProductAddImgView {
             self.sixView.sp_update(image: nil)
         }else if count == 2 {
             sp_updateFourLayout(show: true)
-            sp_updateFifLayout(show: false)
+            sp_updateFifLayout(show: true)
             sp_updateSixLayout(show: false)
             self.fifView.sp_update(image: nil)
             self.sixView.sp_update(image: nil)
         }else if count == 3 {
             sp_updateFourLayout(show: true)
             sp_updateFifLayout(show: true)
-            sp_updateSixLayout(show: false)
+            sp_updateSixLayout(show: true)
             self.sixView.sp_update(image: nil)
         }else if count == 4 {
             sp_updateFourLayout(show: true)
             sp_updateFifLayout(show: true)
             sp_updateSixLayout(show: true)
-            self.sixView.sp_update(image: nil)
+            
         }
         if sp_getArrayCount(array: self.imgArray) > 0 {
             var index = 0

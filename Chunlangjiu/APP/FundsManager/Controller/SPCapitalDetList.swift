@@ -12,7 +12,7 @@ class SPCapitalDetList: SPBaseVC {
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPCapitalDetModel]?
     fileprivate var currentPage : Int = 1
-    
+    var type : String?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -128,6 +128,7 @@ extension SPCapitalDetList {
     fileprivate func sp_sendRequest(){
         var parm = [String : Any]()
         parm.updateValue(self.currentPage, forKey: "page_no")
+        parm.updateValue(sp_getString(string: self.type), forKey: "type")
         self.requestModel.parm = parm
         SPFundsRequest.sp_getCapitalDetList(requestModel: self.requestModel) { [weak self](code, list, errorModel,total) in
             self?.sp_dealSuccess(code: code, list: list, errorModel: errorModel, total: total)
