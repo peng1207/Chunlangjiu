@@ -29,7 +29,7 @@ class SPAuctionInfoVC: SPBaseVC {
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.text = "1.点击“出价”参与竞拍，价高者得；\n2.竞拍成功，支付货款；\n3.等待卖家发货。"
+        label.text = "1.点击“出价”参与竞拍，价高者得；\n2.竞拍成功，支付尾款；\n3.等待卖家发货。"
         return label
     }()
     

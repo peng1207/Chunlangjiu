@@ -11,7 +11,8 @@ import SnapKit
 class SPActivityVC: SPBaseVC {
     
     fileprivate var tableView : UITableView!
-    fileprivate var dataArray : [SPActivityModel]?
+    fileprivate var dataArray : [SPActivityHeaderModel]?
+    fileprivate var activityModel : SPActivityModel?
     fileprivate lazy var headerView : SPActivityHeaderView = {
         let view = SPActivityHeaderView()
         view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.835)
@@ -22,10 +23,18 @@ class SPActivityVC: SPBaseVC {
         view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.533 + 41.0)
         return view
     }()
+    fileprivate lazy var backBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_back_wither"), for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
      fileprivate var pushVC : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        self.sp_sendRequest()
+        self.sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -42,6 +51,37 @@ class SPActivityVC: SPBaseVC {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
+    /// 赋值
+    fileprivate func sp_setupData(){
+        var dataArray = [SPActivityHeaderModel]()
+        if SP_ISSHOW_AUCTION {
+            if sp_getArrayCount(array: self.activityModel?.auction) > 0 {
+                let auctionModel = SPActivityHeaderModel.sp_init(type: SP_AUCTION)
+                auctionModel.dataArray = self.activityModel?.auction
+                dataArray.append(auctionModel)
+            }
+          
+        }
+        if sp_getArrayCount(array: self.activityModel?.item) > 0  {
+            let goodModel = SPActivityHeaderModel.sp_init(type: "")
+            goodModel.dataArray = self.activityModel?.item
+            dataArray.append(goodModel)
+        }
+        
+        self.dataArray = dataArray
+        self.headerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.top_img), plImage: sp_getDefaultImg())
+        self.footerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.bottom_img), plImage: sp_getDefaultImg())
+        if sp_getString(string: self.activityModel?.color).count > 0  {
+            self.view.backgroundColor = SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
+             self.tableView.backgroundColor = self.view.backgroundColor
+        }
+        self.tableView.reloadData()
+        self.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.835)
+        self.tableView.tableHeaderView = self.headerView
+        self.tableView.tableFooterView = self.footerView
+        
+        self.sp_dealNoData()
+    }
     /// 创建UI
     override func sp_setupUI() {
         self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
@@ -51,12 +91,25 @@ class SPActivityVC: SPBaseVC {
         self.tableView.backgroundColor = self.view.backgroundColor
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+       
         self.view.addSubview(self.tableView)
+        self.view.addSubview(self.backBtn)
         self.sp_addConstraint()
     }
     /// 处理有没数据
     override func sp_dealNoData(){
-        
+        if self.activityModel == nil {
+            self.noData.isHidden = false
+            self.noData.text = "暂时没有活动哦!"
+            self.view.bringSubview(toFront: self.noData)
+        }else{
+            self.noData.isHidden = true
+        }
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -69,9 +122,15 @@ class SPActivityVC: SPBaseVC {
             }
          
         }
+        self.backBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(10)
+            maker.top.equalTo(self.view.snp.top).offset(sp_getstatusBarHeight()  + 2)
+            maker.width.equalTo(30)
+            maker.height.equalTo(30)
+        }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
@@ -82,18 +141,18 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section < sp_getArrayCount(array: self.dataArray) {
             let model = self.dataArray?[section]
-            return sp_getArrayCount(array: model?.list)
+            return sp_getArrayCount(array: model?.dataArray)
         }
         return 0
         
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var model : SPActivityModel?
+        var model : SPActivityHeaderModel?
         var productModel : SPProductModel?
         if indexPath.section < sp_getArrayCount(array: self.dataArray) {
             model = self.dataArray?[indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: model?.list){
-                productModel = model?.list?[indexPath.row]
+            if indexPath.row < sp_getArrayCount(array: model?.dataArray){
+                productModel = model?.dataArray?[indexPath.row]
             }
         }
         if let p = productModel, p.isAuction {
@@ -103,6 +162,9 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
                 cell = SPAuctionTableCell(style: UITableViewCellStyle.default, reuseIdentifier: activityAuctionCellID)
             }
             cell?.auctionView.productModel = p
+            cell?.auctionView.productView.shopBlock = { [weak self](model) in
+                self?.sp_clickShop(model: model)
+            }
             return cell!
         }else{
             let activityCellID = "activityCellID"
@@ -111,16 +173,19 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
                 cell = SPProductTableCell(style: UITableViewCellStyle.default, reuseIdentifier: activityCellID)
             }
             cell?.productView.productModel = productModel
+            cell?.productView.shopBlock = {  [weak self](model) in
+                self?.sp_clickShop(model: model)
+            }
             return cell!
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var model : SPActivityModel?
+        var model : SPActivityHeaderModel?
         var productModel : SPProductModel?
         if indexPath.section < sp_getArrayCount(array: self.dataArray) {
             model = self.dataArray?[indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: model?.list){
-                productModel = model?.list?[indexPath.row]
+            if indexPath.row < sp_getArrayCount(array: model?.dataArray){
+                productModel = model?.dataArray?[indexPath.row]
             }
         }
         if let p = productModel, p.isAuction {
@@ -150,12 +215,12 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var model : SPActivityModel?
+        var model : SPActivityHeaderModel?
         var productModel : SPProductModel?
         if indexPath.section < sp_getArrayCount(array: self.dataArray) {
             model = self.dataArray?[indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: model?.list){
-                productModel = model?.list?[indexPath.row]
+            if indexPath.row < sp_getArrayCount(array: model?.dataArray){
+                productModel = model?.dataArray?[indexPath.row]
             }
         }
         if let p = productModel {
@@ -167,4 +232,58 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
         
     }
     
+}
+extension SPActivityVC {
+    
+    fileprivate func sp_sendRequest(){
+        
+        SPAppRequest.sp_getActivityList(requestModel: self.requestModel) { [weak self](code, model, errorModel) in
+            self?.activityModel = model
+            self?.sp_setupData()
+        }
+        
+    }
+    
+}
+extension SPActivityVC {
+    
+    fileprivate func sp_clickShop(model : SPProductModel?){
+        guard let product = model else {
+            return
+        }
+        let shopModel = SPShopModel()
+        shopModel.shop_id = product.shop_id
+        shopModel.shop_name = product.shop_name
+        let shopVC = SPShopHomeVC()
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
+    }
+    
+}
+extension SPActivityVC {
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
+    }
+    @objc fileprivate func sp_timeRun(notification:Notification){
+        var second = 1
+        if notification.object is [String : Any] {
+            let dic : [String : Any] = notification.object as! [String : Any]
+            second = dic["timer"] as! Int
+        }
+        if sp_getArrayCount(array: self.activityModel?.auction) > 0  {
+            sp_simpleSQueues {
+                var list = [SPProductModel]()
+                for model in (self.activityModel?.auction)! {
+                    model.sp_set(second: second)
+                    if model.second > 0 {
+                        list.append(model)
+                    }
+                }
+                self.activityModel?.auction = list
+                self.sp_setupData()
+            }
+        }
+        
+        
+    }
 }

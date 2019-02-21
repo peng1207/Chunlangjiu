@@ -148,6 +148,9 @@ extension SPOrderLogisticsView {
         guard let block = self.complete else {
             return
         }
+        if isSuccess {
+            SPOrderHandle.sp_dealOrderNotificaton(orderModel: orderModel)
+        }
         block(isSuccess)
     }
     fileprivate func sp_showPicker(){

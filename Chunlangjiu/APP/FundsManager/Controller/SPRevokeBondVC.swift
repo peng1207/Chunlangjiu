@@ -156,7 +156,7 @@ extension SPRevokeBondVC {
         }
         self.requestModel.parm = parm
         sp_showAnimation(view: self.view, title: "正在提交中...")
-        SPFundsRequest.sp_getDepositCance(requestModel: self.requestModel) { [weak self](code, msg, errorModel) in
+        SPFundsRequest.sp_getDepositRefund(requestModel: self.requestModel) { [weak self](code, msg, errorModel) in
             sp_hideAnimation(view: self?.view)
             sp_showTextAlert(tips: msg)
             if code == SP_Request_Code_Success {

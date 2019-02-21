@@ -262,6 +262,7 @@ class SPOrderHandle : NSObject {
             sp_hideAnimation(view: nil)
             if code == SP_Request_Code_Success {
                 sp_showTextAlert(tips: "商品签单成功")
+                sp_dealOrderNotificaton(orderModel: orderModel)
                 sp_dealComplete(isSuccess: true, complete: complete)
             }else{
                 sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? sp_getString(string: msg) : "商品签单失败")
@@ -269,12 +270,51 @@ class SPOrderHandle : NSObject {
             }
         }
     }
+    /// 回调
     private class  func sp_dealComplete(isSuccess : Bool,complete: SPOrderHandleComplete?){
         guard let block = complete else {
             return
         }
         block(isSuccess)
     }
+    /// 处理订单处理完成
+    ///
+    /// - Parameter orderModel: 订单数据
+    class func sp_dealOrderNotificaton(orderModel : SPOrderModel?)->Void{
+        guard let model = orderModel else {
+            return
+        }
+        switch sp_getString(string: model.status) {
+        case SP_WAIT_BUYER_PAY:
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_ALL_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_SELLER_SEND_GOODS_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_BUYER_PAY_NOTIFICATION), object: nil)
+        case SP_WAIT_SELLER_SEND_GOODS:
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_ALL_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_BUYER_CONFIRM_GOODS_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_SELLER_SEND_GOODS_NOTIFICATION), object: nil)
+        case SP_WAIT_BUYER_CONFIRM_GOODS:
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_FINISH_NOTIFICATION), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_BUYER_CONFIRM_GOODS_NOTIFICATION), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_ALL_NOTIFICATION), object: nil)
+        case SP_STATUS_0:
+            if SPAPPManager.sp_isBusiness(){
+                
+            }else{
+                if sp_getString(string: model.type) == SP_AUCTION {
+                    NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_AUCTIIN_PAY), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_AUCTION_ING_NOTIFICATION), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_AUCTION_ALL_NOTIFICATION), object: nil)
+                }else{
+                    
+                }
+            }
+        default:
+            sp_log(message: "没有找到")
+        }
+        
+    }
+    
     /// 买家统一的上传图片接口
     ///
     /// - Parameters:

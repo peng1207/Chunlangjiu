@@ -80,6 +80,7 @@ class SPCompanyAuthenticationVC: SPBaseVC {
         view.tipLabel.text = ""
         view.sp_update(tipBottom: -3)
         view.sp_update(imgHeight: 236)
+        view.exampleImgView.image = SPBundle.sp_img(name: "public_businesslicense")
         view.clickAddBlock = { [weak self](addView)in
             self?.sp_dealClickImageAction(addView: addView)
         }
@@ -89,6 +90,7 @@ class SPCompanyAuthenticationVC: SPBaseVC {
         let view = SPAuthAddImgView()
         view.titleLabel.text = "法人身份证正面面照"
         view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.exampleImgView.image = SPBundle.sp_img(name: "public_IDCard_positive")
         view.submitBtn.setTitle("上传正面照", for: UIControlState.normal)
         view.clickAddBlock = { [weak self](addView)in
             self?.sp_dealClickImageAction(addView: addView)
@@ -100,6 +102,7 @@ class SPCompanyAuthenticationVC: SPBaseVC {
         let view = SPAuthAddImgView()
         view.titleLabel.text = "法人身份证反面照"
         view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.exampleImgView.image = SPBundle.sp_img(name: "public_IDCard_back")
         view.submitBtn.setTitle("上传反面照", for: UIControlState.normal)
         view.clickAddBlock = { [weak self](addView)in
             self?.sp_dealClickImageAction(addView: addView)
@@ -110,6 +113,7 @@ class SPCompanyAuthenticationVC: SPBaseVC {
         let view = SPAuthAddImgView()
         view.titleLabel.text = "食品流通许可证/酒水流通许可证"
         view.detLabel.text = "上传许可证"
+        view.exampleImgView.image = SPBundle.sp_img(name: "public_licence")
         view.submitBtn.setTitle("上传许可证", for: UIControlState.normal)
         view.tipLabel.text = ""
         view.sp_update(tipBottom: -3)
@@ -286,6 +290,7 @@ class SPCompanyAuthenticationVC: SPBaseVC {
 }
 extension SPCompanyAuthenticationVC {
     fileprivate func sp_dealClickImageAction(addView : SPAuthAddImgView?){
+        sp_hideKeyboard()
         self.tempAddImageView = addView
         sp_showSelectImage(viewController: self, allowsEditing: false,delegate: self)
     }
@@ -324,7 +329,12 @@ extension SPCompanyAuthenticationVC{
     @objc private func sp_keyBoardWillHidden(){
         self.scrollView.snp.remakeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.submitBtn.snp.top).offset(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                // Fallback on earlier versions
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
         }
     }
 }
@@ -398,8 +408,9 @@ extension SPCompanyAuthenticationVC {
             
             if sp_getString(string: self.businessUrl).count == 0{
                 let uploadImage = sp_fixOrientation(aImage: self.businessImageView.imgView.image!)
-                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-                if let d = data {
+//                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
+                let d = sp_resetImgSize(sourceImage: uploadImage)
+//                if let d = data {
                     group.enter()
                     let imageRequestModel = SPRequestModel()
                     imageRequestModel.data = [d]
@@ -417,12 +428,13 @@ extension SPCompanyAuthenticationVC {
                         }
                         group.leave()
                     }
-                }
+//                }
             }
             if sp_getString(string: self.cardUrl).count == 0{
                 let uploadImage = sp_fixOrientation(aImage: self.cardImageView.imgView.image!)
-                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-                if let d = data {
+//                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
+                let d : Data = sp_resetImgSize(sourceImage: uploadImage)
+//                if let d : Data = data {
                     group.enter()
                     let imageRequestModel = SPRequestModel()
                     imageRequestModel.data = [d]
@@ -440,12 +452,13 @@ extension SPCompanyAuthenticationVC {
                         }
                         group.leave()
                     }
-                }
+//                }
             }
             if sp_getString(string: self.oppositeUrl).count == 0 {
                 let uploadImage = sp_fixOrientation(aImage: self.oppositeView.imgView.image!)
-                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-                if let d = data {
+//                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
+                let d : Data = sp_resetImgSize(sourceImage: uploadImage)
+//                if let d : Data = data {
                     group.enter()
                     let imageRequestModel = SPRequestModel()
                     imageRequestModel.data = [d]
@@ -463,12 +476,13 @@ extension SPCompanyAuthenticationVC {
                         }
                         group.leave()
                     }
-                }
+//                }
             }
             if sp_getString(string: self.licenceUrl).count == 0 {
                 let uploadImage = sp_fixOrientation(aImage: self.licenceImageView.imgView.image!)
-                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-                if let d = data {
+//                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
+                let d : Data = sp_resetImgSize(sourceImage: uploadImage)
+//                if let d : Data = data {
                     group.enter()
                     let imageRequestModel = SPRequestModel()
                     imageRequestModel.data = [d]
@@ -486,7 +500,7 @@ extension SPCompanyAuthenticationVC {
                         }
                         group.leave()
                     }
-                }
+//                }
             }
             
             group.notify(queue: .main) {
@@ -506,14 +520,16 @@ extension SPCompanyAuthenticationVC {
         var parm = [String : Any]()
         parm.updateValue(sp_getString(string: self.companyNameView.textFiled.text), forKey: "company_name")
         parm.updateValue(sp_getString(string: self.nameView.textFiled.text), forKey: "representative")
-        parm.updateValue(sp_getString(string: self.codeView.textFiled.text), forKey: "license_num")
-        parm.updateValue(sp_getString(string: self.timeView.contentLabel.text), forKey: "establish_date")
-        parm.updateValue(sp_getString(string: self.areaView.textFiled.text), forKey: "area")
-        parm.updateValue(sp_getString(string: self.addressView.textFiled.text), forKey: "address")
-        parm.updateValue(sp_getString(string: self.telView.textFiled.text), forKey: "company_phone")
+        parm.updateValue(sp_getString(string: self.cardView.textFiled.text), forKey: "idcard")
+//        parm.updateValue(sp_getString(string: self.codeView.textFiled.text), forKey: "license_num")
+//        parm.updateValue(sp_getString(string: self.timeView.contentLabel.text), forKey: "establish_date")
+//        parm.updateValue(sp_getString(string: self.areaView.textFiled.text), forKey: "area")
+//        parm.updateValue(sp_getString(string: self.addressView.textFiled.text), forKey: "address")
+//        parm.updateValue(sp_getString(string: self.telView.textFiled.text), forKey: "company_phone")
         parm.updateValue(sp_getString(string: self.businessUrl), forKey: "license_img")
         parm.updateValue(sp_getString(string: self.cardUrl), forKey: "shopuser_identity_img_z")
         parm.updateValue(sp_getString(string: self.licenceUrl), forKey: "food_or_wine_img")
+        parm.updateValue(sp_getString(string: self.oppositeUrl), forKey: "shopuser_identity_img_f");
         requestModel.parm = parm
       
         SPAppRequest.sp_getCompanyAuth(requestModel: self.requestModel) { [weak self](code, msg, errorModel) in

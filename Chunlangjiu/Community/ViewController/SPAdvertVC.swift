@@ -14,13 +14,17 @@ import SnapKit
 class SPAdvertVC : SPBaseVC{
     
     fileprivate lazy var advertImg : UIImageView = {
-        return UIImageView()
+        let img = UIImageView()
+        img.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickImg))
+        img.addGestureRecognizer(tap)
+        return img
     }()
     fileprivate lazy var skipBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("完成", for: UIControlState.normal)
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue).withAlphaComponent(0.3)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.sp_cornerRadius(cornerRadius: 15)
         btn.addTarget(self, action: #selector(sp_clickSkip), for: UIControlEvents.touchUpInside)
         return btn
@@ -107,11 +111,32 @@ extension SPAdvertVC {
     }
     fileprivate func sp_setBtnValue(){
         let att = NSMutableAttributedString()
-        att.append(NSAttributedString(string: "\(sp_getString(string: self.timeCount))s", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+        att.append(NSAttributedString(string: "\(sp_getString(string: self.timeCount))s", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
          att.append(NSAttributedString(string: " | 完成", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
         self.skipBtn.setAttributedTitle(att, for: UIControlState.normal)
-        
-        
     }
+    @objc fileprivate func sp_clickImg(){
+        let appdeleage = UIApplication.shared.delegate as! AppDelegate
+        var vc : UIViewController? = nil
+        if let window = appdeleage.window  {
+            if let rootVC = window.rootViewController {
+                if let mainVC : SPMainVC  = rootVC as? SPMainVC {
+                    let selectVC = mainVC.viewControllers?[mainVC.selectedIndex]
+                    if let sVC : UINavigationController = selectVC as? UINavigationController {
+                        vc = sVC.topViewController
+                    }else if let sVC : UIViewController = selectVC {
+                        vc = sVC
+                    }
+                }
+            }
+        }
+        
+        if let viewController = vc {
+            let model =  SPAPPManager.sp_getOpenAdv()
+            SPIndexHande.sp_deal(viewController: viewController, lineType: model?.linktype,linktarget: model?.link, webparam: model?.webparam)
+            self.sp_clickSkip()
+        }
+    }
+    
 }
 

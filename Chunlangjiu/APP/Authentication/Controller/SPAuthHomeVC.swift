@@ -57,6 +57,7 @@ class SPAuthHomeVC: SPBaseVC {
                 companyView.applyBtn.isEnabled = false
             }else{
                 companyView.applyBtn.isEnabled = true
+               
             }
         }
     }
@@ -73,11 +74,12 @@ class SPAuthHomeVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_setupData()
-        sp_sendRealNameAuth()
-        sp_sendCompanyAuthStatus()
+       
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        sp_sendRealNameAuth()
+        sp_sendCompanyAuthStatus()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -153,12 +155,30 @@ class SPAuthHomeVC: SPBaseVC {
 }
 extension SPAuthHomeVC {
     fileprivate func sp_clickReal(){
-        let realVC = SPRealNameAuthenticationVC()
-        self.navigationController?.pushViewController(realVC, animated: true)
+        if sp_getString(string: self.realNameAuth?.status) ==  SP_STATUS_LOCKED{
+              sp_showTextAlert(tips: "您的认证正在审核中，我们会尽快处理的")
+        }else{
+            if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FAILING{
+                sp_showTextAlert(tips: "您的认证被驳回，请重新提交资料审核")
+            }
+            let realVC = SPRealNameAuthenticationVC()
+            self.navigationController?.pushViewController(realVC, animated: true)
+        }
+        
+       
     }
     fileprivate func sp_clickCompany(){
-        let companyVC = SPCompanyAuthenticationVC()
-        self.navigationController?.pushViewController(companyVC, animated: true)
+        if sp_getString(string: self.companyAuth?.status) == SP_STATUS_LOCKED {
+            sp_showTextAlert(tips: "您的认证正在审核中，我们会尽快处理的")
+        }else{
+            if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING{
+                 sp_showTextAlert(tips: "您的认证被驳回，请重新提交资料审核")
+            }
+            let companyVC = SPCompanyAuthenticationVC()
+            self.navigationController?.pushViewController(companyVC, animated: true)
+        }
+        
+        
     }
 }
 extension SPAuthHomeVC {

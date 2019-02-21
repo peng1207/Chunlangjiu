@@ -93,6 +93,8 @@ class SPOrderDetaileVC: SPBaseVC {
                  maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
+       
+        
         self.headerView.snp.makeConstraints { (maker) in
             maker.top.equalToSuperview()
             maker.left.right.equalTo(view)

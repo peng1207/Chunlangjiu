@@ -65,6 +65,7 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
         }, doneBlock: { [weak self] in
             self?.sp_dealPrice()
         })
+        
         return textField
     }()
     fileprivate lazy var auctionLineView : UIView = {
@@ -100,6 +101,7 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
         self.contentView.addSubview(self.remarkLabel)
         self.contentView.addSubview(self.remarkTextField)
         self.contentView.addSubview(self.lineView)
+        self.auctionTextField.addTarget(self, action: #selector(sp_textChange), for: UIControlEvents.editingChanged)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -156,6 +158,10 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
     }
 }
 extension SPConfrimSectionFootView{
+    
+    @objc fileprivate func  sp_textChange(){
+        self.sp_dealPrice()
+    }
     
     fileprivate func sp_dealDone(){
         self.shopModel?.remark = sp_getString(string: self.remarkTextField.text)

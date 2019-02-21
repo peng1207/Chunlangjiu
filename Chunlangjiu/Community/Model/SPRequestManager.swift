@@ -26,6 +26,20 @@ typealias SPRequestBlock = (_ data : Any? ,_ error: Error?) -> Void
 class SPRequestManager {
     static  fileprivate var requestCacheArr = [DataRequest]()
     
+    let netManager : SessionManager = {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        return SessionManager(configuration: configuration)
+    }()
+    
+//    static func sp_getSessionManager()->SessionManager{
+//        let configuration = URLSessionConfiguration.default
+//        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+//        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+//        return SessionManager(configuration: configuration)
+//    }
+    
     class func sp_get(requestModel : SPRequestModel,requestBlock : SPRequestBlock?) {
         guard let url = requestModel.url else {
             sp_log(message: "链接为空 不发送请求")
@@ -60,12 +74,12 @@ class SPRequestManager {
         case .put :
             httpMethod = .put
         }
-//        let configuration = URLSessionConfiguration.default
-//        configuration.requestCachePolicy = .returnCacheDataDontLoad
-//        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-//        let dataRequest = SessionManager(configuration: configuration).request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
-        let dataRequest =  request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
+        // 忽略本地缓存，重新获取，防止没更新json文件
+        SessionManager.default.session.configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
         
+//        let dataRequest =   SPRequestManager().netManager.request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
+        let dataRequest = request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
+    
         switch requestModel.reponseFormt {
         case .json:
             dataRequest.responseJSON { (dataResponse : DataResponse) in

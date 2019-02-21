@@ -247,6 +247,7 @@ extension SPAddBankCardVC {
         sp_sendAddRequest()
     }
     @objc fileprivate func sp_clickArea(){
+        sp_hideKeyboard()
         self.areaPickerView.isHidden = false
     }
     @objc fileprivate func sp_clickOpen(){

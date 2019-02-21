@@ -381,6 +381,7 @@ extension SPProductDetaileVC {
             self.detaileModel = detaileModel
             self.detaileView.detaileModel = detaileModel
             self.bottomView.detaileModel = detaileModel
+            self.bottomView.countModel = self.countModel
         }else{
             self.bottomView.isHidden = true
 
@@ -550,8 +551,6 @@ extension SPProductDetaileVC {
             }else{
                  sp_showTextAlert(tips: msg)
             }
-           
-            
         }
     }
     fileprivate func sp_sendRecommd(){

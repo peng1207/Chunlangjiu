@@ -896,8 +896,9 @@ extension SPProductAddVC{
                     if let dic : [String : Any] = data {
                         let status = sp_getString(string: dic["status"])
                         let tips = sp_getString(string: dic["tips"])
+                        let deposit = sp_getString(string: dic["deposit"])
                         if let isCheck : Bool = Bool(status), isCheck == false {
-                             self?.sp_dealCheckTip(tips: tips)
+                             self?.sp_dealCheckTip(tips: tips,deposit: deposit)
                         }
                     }
                 }
@@ -905,12 +906,13 @@ extension SPProductAddVC{
             }
         }
     }
-    fileprivate func sp_dealCheckTip(tips:String){
+    fileprivate func sp_dealCheckTip(tips:String,deposit:String){
         SPProductTipView.sp_show(title: tips, canceComplete: { [weak self]in
            self?.navigationController?.popViewController(animated: true)
         }) { [weak self]in
             let rechargerVC = SPRechargeVC()
             rechargerVC.isBond = true
+            rechargerVC.price = deposit
             rechargerVC.navigationItem.title = "缴纳保证金"
             self?.navigationController?.pushViewController(rechargerVC, animated: true)
         };

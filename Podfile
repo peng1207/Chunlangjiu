@@ -26,7 +26,7 @@ target 'Chunlangjiu' do
     pod 'AMapLocation-NO-IDFA'
     pod 'GTSDK','2.2.0.0-noidfa'
     pod 'CryptoSwift'
-    pod 'RealmSwift'
+    pod 'RealmSwift','~> 3.10.0'
     pod 'NVActivityIndicatorView'
     pod 'MBProgressHUD', '~> 1.1.0'
     pod 'ReachabilitySwift'

@@ -60,9 +60,12 @@ class SPIndexHande : NSObject {
             NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_TAB_SHOPCART)"])
         case SPIndexType.member.rawValue:
             NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_TAB_MINE)"])
-        case SPIndexType.activity.rawValue:
+        case SPIndexType.auction.rawValue:
             
                NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_ISSHOW_AUCTION ? SP_TAB_AUCTION : SP_TAB_SORT)"])
+        case SPIndexType.activity.rawValue:
+            let activityVC = SPActivityVC()
+            viewController.navigationController?.pushViewController(activityVC, animated: true)
         case SPIndexType.h5.rawValue:
             if sp_getString(string: linktarget).count > 0 {
                 let webVC = SPWebVC()

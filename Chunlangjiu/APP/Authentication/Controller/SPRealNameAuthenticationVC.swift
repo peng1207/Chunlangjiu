@@ -94,6 +94,7 @@ class SPRealNameAuthenticationVC: SPBaseVC {
         let view = SPAuthAddImgView()
         view.titleLabel.text = "身份证正面照"
         view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.exampleImgView.image = SPBundle.sp_img(name: "public_IDCard_positive")
         view.submitBtn.setTitle("上传正面照", for: UIControlState.normal)
         view.clickAddBlock = { [weak self](addView)in
              self?.sp_dealClickImageAction(addView: addView)
@@ -105,6 +106,7 @@ class SPRealNameAuthenticationVC: SPBaseVC {
         let view = SPAuthAddImgView()
         view.titleLabel.text = "身份证反面照"
         view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.exampleImgView.image = SPBundle.sp_img(name: "public_IDCard_back")
         view.submitBtn.setTitle("上传反面照", for: UIControlState.normal)
         view.clickAddBlock = { [weak self](addView)in
             self?.sp_dealClickImageAction(addView: addView)
@@ -116,6 +118,7 @@ class SPRealNameAuthenticationVC: SPBaseVC {
         let view = SPAuthAddImgView()
         view.titleLabel.text = "手持身份证照"
         view.detLabel.text = "请用手机横向拍摄以保证图片正常显示"
+        view.exampleImgView.image = SPBundle.sp_img(name: "public_hold_IDCard")
         view.submitBtn.setTitle("上传手持身份证照", for: UIControlState.normal)
         view.clickAddBlock = { [weak self](addView)in
             self?.sp_dealClickImageAction(addView: addView)
@@ -268,6 +271,7 @@ class SPRealNameAuthenticationVC: SPBaseVC {
 }
 extension SPRealNameAuthenticationVC {
     fileprivate func sp_dealClickImageAction(addView : SPAuthAddImgView?){
+         sp_hideKeyboard()
         self.tempAddImageView = addView
         sp_showSelectImage(viewController: self, allowsEditing: false,delegate: self)
     }
@@ -307,7 +311,12 @@ extension SPRealNameAuthenticationVC {
     @objc private func sp_keyBoardWillHidden(){
         self.scrollView.snp.remakeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.submitBtn.snp.top).offset(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                // Fallback on earlier versions
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
         }
     }
 }
@@ -353,9 +362,9 @@ extension SPRealNameAuthenticationVC{
             
             if sp_getString(string: self.positiveUrl).count == 0{
                 let uploadImage = sp_fixOrientation(aImage: self.positiveView.imgView.image!)
-                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-                
-                if let d = data {
+//                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
+                 let d = sp_resetImgSize(sourceImage: uploadImage)
+//                if let d = data {
                     group.enter()
                     let imageRequestModel = SPRequestModel()
                     imageRequestModel.data = [d]
@@ -373,13 +382,13 @@ extension SPRealNameAuthenticationVC{
                         }
                         group.leave()
                     }
-                }
+//                }
             }
             if sp_getString(string: self.oppositeUrl).count == 0{
                 let uploadImage1 = sp_fixOrientation(aImage: self.oppositeView.imgView.image!)
-                let data1 = UIImageJPEGRepresentation(uploadImage1, 0.5)
-                
-                if let d1 = data1 {
+//                let data1 = UIImageJPEGRepresentation(uploadImage1, 0.5)
+                 let d1 = sp_resetImgSize(sourceImage: uploadImage1)
+//                if let d1 = data1 {
                     group.enter()
                     let imageRequestModel1 = SPRequestModel()
                     imageRequestModel1.data = [d1]
@@ -397,13 +406,13 @@ extension SPRealNameAuthenticationVC{
                         }
                         group.leave()
                     }
-                }
+//                }
             }
             if sp_getString(string: self.holdUrl).count == 0{
                 let uploadImage2 = sp_fixOrientation(aImage: self.holdView.imgView.image!)
-                let data2 = UIImageJPEGRepresentation(uploadImage2, 0.5)
-               
-                if let d2 = data2 {
+//                let data2 = UIImageJPEGRepresentation(uploadImage2, 0.5)
+                let d2 = sp_resetImgSize(sourceImage: uploadImage2)
+//                if let d2 = data2 {
                     group.enter()
                     let imageRequestModel2 = SPRequestModel()
                     imageRequestModel2.data = [d2]
@@ -422,7 +431,7 @@ extension SPRealNameAuthenticationVC{
                         }
                         group.leave()
                     }
-                }
+//                }
             }
             
             group.notify(queue: .main) { [weak self]() in
@@ -445,6 +454,7 @@ extension SPRealNameAuthenticationVC{
         parm.updateValue(sp_getString(string: self.holdUrl), forKey: "dentity")
         parm.updateValue(sp_getString(string: self.positiveUrl), forKey: "dentity_front")
         parm.updateValue(sp_getString(string: self.oppositeUrl), forKey: "dentity_reverse")
+        parm.updateValue(sp_getString(string: self.phoneView.textFiled.text), forKey: "mobile")
         self.requestModel.parm = parm
         SPAppRequest.sp_getAuthonYm(requestModel: self.requestModel) { [weak self](code, msg, errorModel) in
             sp_hideAnimation(view: nil)

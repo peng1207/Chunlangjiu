@@ -66,8 +66,8 @@ class SPFansVC: SPBaseVC {
             }
         }
     }
-    fileprivate var qrUrl : String?
-    
+ 
+    fileprivate var shareModel : SPFansShareModel? 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -140,9 +140,9 @@ class SPFansVC: SPBaseVC {
 extension SPFansVC {
     @objc fileprivate func sp_share(){
         let shareDataModel = SPShareDataModel()
-        shareDataModel.shareData = sp_getString(string: self.qrUrl).count > 0 ? sp_getString(string: self.qrUrl) : SP_SHARE_URL
-        shareDataModel.title = sp_getString(string: "给您推荐高端酒综合服务平台-醇狼")
-        shareDataModel.descr = sp_getString(string: "")
+        shareDataModel.shareData = sp_getString(string: self.shareModel?.url).count > 0 ? sp_getString(string: self.shareModel?.url) :  SP_SHARE_URL
+        shareDataModel.title = sp_getString(string: sp_getString(string: self.shareModel?.title)).count > 0 ? sp_getString(string: sp_getString(string: self.shareModel?.title)) : "给您推荐高端酒综合服务平台-醇狼"
+        shareDataModel.descr = sp_getString(string: sp_getString(string: self.shareModel?.sub_title))
         shareDataModel.currentViewController = self
         shareDataModel.thumbImage = sp_getAppIcon()
         shareDataModel.placeholderImage =  sp_getAppIcon()
@@ -154,11 +154,12 @@ extension SPFansVC {
         sp_copy(text: sp_getString(string: self.invitationCode))
     }
     fileprivate func sp_setupData(){
-        self.imageView.image = SPQRCodeUtil.sp_getClearImage(sourceImage: SPQRCodeUtil.sp_setQRCode(qrCode: "100"), center:   sp_getAppIcon())
+        self.invitationCode = sp_getString(string: self.shareModel?.code)
+        self.imageView.image = SPQRCodeUtil.sp_getClearImage(sourceImage: SPQRCodeUtil.sp_setQRCode(qrCode: sp_getString(string: sp_getString(string: self.shareModel?.url))), center:   sp_getAppIcon())
     }
     @objc fileprivate func sp_clickList(){
         let listVC = SPFansListVC()
-        listVC.shareUrl = self.qrUrl
+        listVC.shareModel = self.shareModel
         self.navigationController?.pushViewController(listVC, animated: true)
     }
 }
@@ -167,14 +168,14 @@ extension SPFansVC {
         sp_showAnimation(view: self.view, title: nil)
         let parm = [String : Any]()
         self.requestModel.parm = parm
-        SPFansRequest.sp_getInvitationCode(requestModel: self.requestModel) { [weak self](code, msg, invitationCode, url, errorModel) in
+        SPFansRequest.sp_getInvitationCode(requestModel: self.requestModel) { [weak self](code , msg, shareModel, errorModel) in
             sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
-                self?.invitationCode = invitationCode
-                self?.qrUrl = url
+                self?.shareModel = shareModel
                 self?.sp_setupData()
             }
         }
+      
         
     }
 }

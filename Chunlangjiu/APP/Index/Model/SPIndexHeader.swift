@@ -34,4 +34,6 @@ enum SPIndexType : String {
     case sellwine = "sellwine"
     /// 城市合伙人
     case partner = "partner"
+    /// 竞拍专区
+    case auction = "auction"
 }

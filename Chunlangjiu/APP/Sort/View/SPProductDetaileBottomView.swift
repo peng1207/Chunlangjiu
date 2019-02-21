@@ -100,15 +100,24 @@ class SPProductDetaileBottomView:  UIView{
     }
     var countModel : SPShopCarCount? {
         didSet{
-            if let m = countModel {
-                if m.number > 0 {
-                    self.countLabel.isHidden = false
+            if let isAuction = detaileModel?.item?.isAuction , isAuction == true{
+                self.countLabel.isHidden = true
+            }else if detaileModel == nil{
+                self.countLabel.isHidden = true
+            }
+            else{
+                if let m = countModel {
+                    if m.number > 0 {
+                        self.countLabel.isHidden = false
+                    }else{
+                        self.countLabel.isHidden = true
+                    }
                 }else{
                     self.countLabel.isHidden = true
                 }
-            }else{
-                self.countLabel.isHidden = true
             }
+            
+          
             
             self.countLabel.text = sp_getString(string: countModel?.number)
         }

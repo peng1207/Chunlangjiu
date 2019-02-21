@@ -11,8 +11,8 @@ import UIKit
 import SnapKit
 
 class SPProductTableCell: UITableViewCell {
-    lazy var productView : SPProductView = {
-        let view = SPProductView()
+    lazy var productView : SPProductContentView = {
+        let view = SPProductContentView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()

@@ -9,28 +9,28 @@
 import Foundation
 class SPOrderModel : SPBaseModel {
     
-    var tid : Int! = 0
-    var shop_id : Int! = 0
-    var shop_logo : String?
-    var user_id : Int! = 0
-    var status : String?
-    var cancel_status : String?
-    var payment : String?
-    var pay_type : String?
-    var created_time : String?
-    var modified_time : String?
-    var buyer_rate : String?
-    var is_buyer_rate : String?
-    var totalItem : String?
-    var status_desc : String?
-    var shopname : String?
-    var aftersales_bn : String?
-    var aftersales_type : String?
-    var end_time : String?
+    var tid : Int! = 0          // 订单ID
+    var shop_id : Int! = 0      // 店铺ID
+    var shop_logo : String?     // 店铺logo
+    var user_id : Int! = 0      // 用户ID
+    var status : String?        // 订单状态
+    var cancel_status : String?     // 取消状态
+    var payment : String?           // 付款
+    var pay_type : String?          // 支付类型
+    var created_time : String?      // 创建时间
+    var modified_time : String?     // 修改时间
+    var buyer_rate : String?        // 评价
+    var is_buyer_rate : String?     // 是否评价
+    var totalItem : String?         // 总数量
+    var status_desc : String?       // 订单状态描述
+    var shopname : String?          // 店铺名称
+    var aftersales_bn : String?     // 售后码
+    var aftersales_type : String?       // 售后状态
+    var end_time : String?              // 结束时间
     var consign_time : String?
     var oid : Int! = 0
     var num : Int! = 0
-    var order : [SPOrderItemModel]?
+    var order : [SPOrderItemModel]?    // 商品项
     var second : Int! = 0
     var reason : String?
     var close_time : String?
@@ -51,8 +51,8 @@ class SPOrderModel : SPBaseModel {
     var cancel_id : String?
     var logi : SPLogiModel?
     var info : String?
-    var commission : String?
-    var shop_payment : String?
+    var commission : String?   // 佣金
+    var shop_payment : String?  // 店铺实收
     func sp_set(s:Int){
         if let second = self.second {
             self.second = second - s

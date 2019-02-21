@@ -123,8 +123,8 @@ class SPAddImageView:  UIView{
         self.deleteBtn.snp.makeConstraints { (maker) in
             maker.top.equalTo(self).offset(-8)
             maker.right.equalTo(self).offset(8)
-            maker.width.equalTo(25)
-            maker.height.equalTo(25)
+            maker.width.equalTo(30)
+            maker.height.equalTo(30)
         }
     }
     deinit {

@@ -23,6 +23,8 @@ class SPRechargeVC: SPBaseVC {
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPPayModel]?
     fileprivate var selectPay : SPPayModel?
+    fileprivate var payPwd : String?
+    fileprivate var balanceStatus : SPBalanceStatus?
     private var bounceApp = false
     /// 是否 缴纳保证金
     var isBond : Bool = false
@@ -35,7 +37,9 @@ class SPRechargeVC: SPBaseVC {
         sp_setupData()
         sp_addNotification()
         if self.isBond {
-            sp_sendGetBondRequest()
+            if sp_getString(string: self.price).count == 0 {
+                 sp_sendGetBondRequest()
+            }
         }
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +68,16 @@ class SPRechargeVC: SPBaseVC {
         aliPayModel.app_display_name = "支付宝"
         aliPayModel.app_rpc_id = SPPayType.aliPay.rawValue
         data.append(aliPayModel)
+        
+        if isBond {
+            let blanceModel = SPPayModel()
+            blanceModel.app_display_name = "余额"
+            blanceModel.app_rpc_id = SPPayType.balance.rawValue
+            data.append(blanceModel)
+            sp_showAnimation(view: self.view, title: nil)
+            sp_sendBalanceStatusReequest()
+        }
+      
         self.dataArray = data
         self.tableView.reloadData()
         if self.isBond {
@@ -120,7 +134,8 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
             cell = SPRechargeTableCell(style: UITableViewCellStyle.default, reuseIdentifier: rechargeCellID)
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
-            cell?.model = self.dataArray?[indexPath.row]
+            let payModel = self.dataArray?[indexPath.row]
+            cell?.model = payModel
             if let pay = self.selectPay , let model = cell?.model{
                 if sp_getString(string: pay.app_rpc_id) == sp_getString(string:  model.app_rpc_id) {
                     cell?.sp_isSelect(select: true)
@@ -130,6 +145,15 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
             }else{
                  cell?.sp_isSelect(select: false)
             }
+            if sp_getString(string: payModel?.app_rpc_id) == SPPayType.balance.rawValue{
+                if let status = self.balanceStatus {
+                    if let isPwd : Bool = status.password , isPwd == false{
+                        cell?.payContentLabel.text = "(没有设置密码)"
+                    }
+                    
+                }
+            }
+            
             cell?.clickBlock = { [weak self] (model) in
                 self?.selectPay = model
                 self?.tableView.reloadData()
@@ -142,7 +166,19 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
-            self.selectPay = self.dataArray?[indexPath.row]
+            let payModel = self.dataArray?[indexPath.row]
+            
+            if sp_getString(string: payModel?.app_rpc_id) == SPPayType.balance.rawValue {
+                if let status = self.balanceStatus {
+                    if let isPwd : Bool = status.password , isPwd == false{
+                        sp_showTextAlert(tips: "没有设置密码")
+                        tableView.reloadData()
+                        return
+                    }
+                }
+            }
+            
+            self.selectPay = payModel
             tableView.reloadData()
         }
     }
@@ -160,7 +196,19 @@ extension SPRechargeVC {
         }
         sp_hideKeyboard()
         if self.isBond {
-            self.sp_sendBondRequest()
+            if sp_getString(string: self.selectPay?.app_rpc_id) == SPPayType.balance.rawValue {
+                SPBalanceView.sp_show(title: "余额支付", msg: nil) { [weak self](isSuccess, pwd) in
+                    if isSuccess {
+                        self?.payPwd = pwd
+                        self?.sp_sendBondRequest()
+                    }else{
+                        
+                    }
+                }
+            }else{
+                self.sp_sendBondRequest()
+            }
+            
         }else{
             sp_sendRechargeRequest()
         }
@@ -204,6 +252,9 @@ extension SPRechargeVC {
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string:payModel?.payment_id), forKey: "payment_id")
         parm.updateValue(sp_getString(string:self.selectPay?.app_rpc_id), forKey: "pay_app_id")
+        if sp_getString(string: self.selectPay?.app_rpc_id) == SPPayType.balance.rawValue{
+            parm.updateValue(sp_getString(string: self.payPwd), forKey: "deposit_password")
+        }
         payRequest.parm = parm
         
         SPAppRequest.sp_getToPay(requestModel: payRequest) { [weak self](data, errorModel) in
@@ -221,6 +272,8 @@ extension SPRechargeVC {
                         SPThridManager.sp_wxPay(dic: data!)
                     }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue {
                         SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                    }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.balance.rawValue {
+                       self?.sp_pushOrderList(isSuccess: true)
                     }
                 }
             }else{
@@ -234,7 +287,14 @@ extension SPRechargeVC {
     }
     fileprivate func sp_pushOrderList(isSuccess : Bool){
         if isSuccess {
-             self.navigationController?.popViewController(animated: true)
+            if self.isBond {
+                let successVC = SPBondSuccessVC()
+                successVC.bondPrice = self.price
+                self.navigationController?.pushViewController(successVC, animated: true)
+            }else{
+                 self.navigationController?.popViewController(animated: true)
+            }
+            
         }
     }
     /// 获取保证金金额请求
@@ -247,7 +307,16 @@ extension SPRechargeVC {
             }
         }
     }
-    
+    fileprivate func sp_sendBalanceStatusReequest(){
+        SPAppRequest.sp_getBalanceStatus(requestModel: SPRequestModel()) { [weak self](code, balanceStatus, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                 self?.balanceStatus = balanceStatus
+                 self?.tableView.reloadData()
+            }
+        }
+        
+    }
 }
 extension SPRechargeVC {
     /// 添加通知

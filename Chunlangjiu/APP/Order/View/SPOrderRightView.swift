@@ -63,7 +63,7 @@ class SPOrderRightView:  UIView{
         }
         self.btn.snp.makeConstraints { (maker) in
             maker.height.equalTo(20)
-             maker.left.equalTo(self.contentLabel.snp.right).offset(-10)
+            maker.left.equalTo(self.contentLabel.snp.right).offset(10)
             maker.centerY.equalTo(self.snp.centerY).offset(0)
             maker.width.greaterThanOrEqualTo(0)
         }

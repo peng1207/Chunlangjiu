@@ -111,8 +111,10 @@ extension SPMainVC {
     /// 处理开屏广告
     fileprivate func sp_dealOpenAdv(){
         let model = SPAPPManager.sp_getOpenAdv()
-        if let m = model , sp_getString(string: m.url).count > 0 {
-            let img = UIImage(contentsOfFile: sp_getString(string: model?.sp_getLocalPath()))
+        if let m = model , sp_getString(string: m.imagesrc).count > 0 {
+            let file = sp_getString(string: m.sp_getLocalPath())
+            
+            let img = UIImage(contentsOfFile:file )
             if img != nil {
                 let advertVC = SPAdvertVC()
                 advertVC.model = m

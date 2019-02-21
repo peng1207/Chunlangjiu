@@ -57,7 +57,9 @@ class SPCapitalDetList: SPBaseVC {
         }else{
             self.noData.isHidden = false
             self.noData.text = "您还没交易过哦"
+             self.view.bringSubview(toFront: self.noData)
         }
+
         self.tableView.sp_stopFooterRefesh()
         self.tableView.sp_stopHeaderRefesh()
     }

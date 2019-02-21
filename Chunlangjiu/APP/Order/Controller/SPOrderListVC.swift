@@ -18,6 +18,7 @@ class SPOrderListVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_request()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -82,6 +83,7 @@ class SPOrderListVC: SPBaseVC {
        
         self.tableView.delegate = nil
         self.tableView.dataSource = nil
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
@@ -353,5 +355,66 @@ extension SPOrderListVC{
         shopModel.shop_id = model.shop_id
         shopVC.shopModel = shopModel
         self.navigationController?.pushViewController(shopVC, animated: true)
+    }
+}
+extension SPOrderListVC {
+    
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_wait_buyer_pay_notification), name: NSNotification.Name(SP_ORDER_WAIT_BUYER_PAY_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_seller_send_goods_notification), name: NSNotification.Name(SP_ORDER_WAIT_SELLER_SEND_GOODS_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_confirm_goods_notification), name: NSNotification.Name(SP_ORDER_WAIT_BUYER_CONFIRM_GOODS_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_finish_notification), name: NSNotification.Name(SP_ORDER_FINISH_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_all_notification), name: NSNotification.Name(SP_ORDER_ALL_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_auction_pay_notification), name: NSNotification.Name(SP_ORDER_AUCTIIN_PAY), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_auction_ing_notification), name: NSNotification.Name(SP_ORDER_AUCTION_ING_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_auction_all_notification), name: NSNotification.Name(SP_ORDER_AUCTION_ALL_NOTIFICATION), object: nil)
+    }
+    @objc fileprivate func sp_wait_buyer_pay_notification(){
+        if self.toolModel?.status == .pendPay {
+            self.currentPage = 1
+            sp_request()
+        }
+    }
+    @objc fileprivate func sp_seller_send_goods_notification(){
+        if self.toolModel?.status == .deliver {
+            self.currentPage = 1
+            sp_request()
+        }
+    }
+    @objc fileprivate func sp_confirm_goods_notification(){
+        if self.toolModel?.status == .receipt {
+            self.currentPage = 1
+            sp_request()
+        }
+    }
+    @objc fileprivate func sp_finish_notification(){
+        if self.toolModel?.status == .finish {
+            self.currentPage = 1
+            sp_request()
+        }
+    }
+    @objc fileprivate func sp_all_notification(){
+        if self.toolModel?.status == .all {
+            self.currentPage = 1
+            sp_request()
+        }
+    }
+    @objc fileprivate func sp_auction_pay_notification(){
+        if self.toolModel?.status == .paydown {
+            self.currentPage = 1
+            sp_request()
+        }
+    }
+    @objc fileprivate func sp_auction_ing_notification(){
+        if self.toolModel?.status == .auction_ing {
+            self.currentPage = 1
+            sp_request()
+        }
+    }
+    @objc fileprivate func sp_auction_all_notification(){
+        if self.toolModel?.status == .all {
+            self.currentPage = 1
+            sp_request()
+        }
     }
 }

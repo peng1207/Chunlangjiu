@@ -219,6 +219,7 @@
 		9E5F7B0021C7F8A500A9EF35 /* SPAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */; };
 		9E5F7B0221C93F1B00A9EF35 /* SPAuthAddImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7B0121C93F1B00A9EF35 /* SPAuthAddImgView.swift */; };
 		9E62453A21E4F87C002478B5 /* SPString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E62453921E4F87C002478B5 /* SPString.swift */; };
+		9E6AD15E22021364000B44AB /* SPBalanceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6AD15D22021364000B44AB /* SPBalanceStatus.swift */; };
 		9E70D74D2155E50700CC6376 /* SPCompanyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */; };
 		9E70D74F2155E51100CC6376 /* SPRealNameAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */; };
 		9E70D7512155E77700CC6376 /* SPMineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E70D7502155E77700CC6376 /* SPMineHeader.swift */; };
@@ -266,6 +267,7 @@
 		9E9404CD21E4757F00AC3313 /* SPSetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9404CC21E4757F00AC3313 /* SPSetRequest.swift */; };
 		9E9404CF21E4758D00AC3313 /* SPFansRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9404CE21E4758D00AC3313 /* SPFansRequest.swift */; };
 		9E9404D121E4796C00AC3313 /* SPInputBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9404D021E4796C00AC3313 /* SPInputBtnView.swift */; };
+		9EA86C792219BAA500088AD8 /* SPFansShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA86C782219BAA500088AD8 /* SPFansShareModel.swift */; };
 		9EAE840E2194893E00847B82 /* KiClipperHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAE840B2194893E00847B82 /* KiClipperHelper.swift */; };
 		9EAE840F2194893E00847B82 /* KiImageClipperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAE840C2194893E00847B82 /* KiImageClipperViewController.swift */; };
 		9EAE84102194893E00847B82 /* KiClipperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAE840D2194893E00847B82 /* KiClipperView.swift */; };
@@ -321,7 +323,11 @@
 		9ED254CE21D89D4F00A3166A /* SPShopConditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254CD21D89D4F00A3166A /* SPShopConditionView.swift */; };
 		9ED254D021D8A3E600A3166A /* SPProductTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254CF21D8A3E600A3166A /* SPProductTipView.swift */; };
 		9EE0509921F2BE2B00C1F26F /* SPCapitalDetDetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE0509821F2BE2B00C1F26F /* SPCapitalDetDetModel.swift */; };
+		9EE7F28122067A28002C69FE /* SPActivityHeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE7F28022067A28002C69FE /* SPActivityHeaderModel.swift */; };
 		9EEC698621E2452B00C9E36C /* SPBankCardPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEC698521E2452B00C9E36C /* SPBankCardPicker.swift */; };
+		9EF09FDE221C588400AB9148 /* SPRevokeBondTipVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FDD221C588400AB9148 /* SPRevokeBondTipVC.swift */; };
+		9EF09FE0221C5D6700AB9148 /* SPBondSuccessVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FDF221C5D6700AB9148 /* SPBondSuccessVC.swift */; };
+		9EF09FE2221C64F100AB9148 /* SPBuyerPrivilegeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FE1221C64F100AB9148 /* SPBuyerPrivilegeVC.swift */; };
 		9EF4C67420EC7385007E9909 /* SPIndexVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67320EC7385007E9909 /* SPIndexVC.swift */; };
 		9EF4C67620EC7391007E9909 /* SPMineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67520EC7391007E9909 /* SPMineVC.swift */; };
 		9EF4C67820EC73A2007E9909 /* SPShopCartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */; };
@@ -664,6 +670,7 @@
 		9E5F7AFF21C7F8A500A9EF35 /* SPAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthView.swift; sourceTree = "<group>"; };
 		9E5F7B0121C93F1B00A9EF35 /* SPAuthAddImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthAddImgView.swift; sourceTree = "<group>"; };
 		9E62453921E4F87C002478B5 /* SPString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPString.swift; sourceTree = "<group>"; };
+		9E6AD15D22021364000B44AB /* SPBalanceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBalanceStatus.swift; sourceTree = "<group>"; };
 		9E70D74C2155E50700CC6376 /* SPCompanyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCompanyAuth.swift; sourceTree = "<group>"; };
 		9E70D74E2155E51100CC6376 /* SPRealNameAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRealNameAuth.swift; sourceTree = "<group>"; };
 		9E70D7502155E77700CC6376 /* SPMineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeader.swift; sourceTree = "<group>"; };
@@ -711,6 +718,7 @@
 		9E9404CC21E4757F00AC3313 /* SPSetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSetRequest.swift; sourceTree = "<group>"; };
 		9E9404CE21E4758D00AC3313 /* SPFansRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansRequest.swift; sourceTree = "<group>"; };
 		9E9404D021E4796C00AC3313 /* SPInputBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPInputBtnView.swift; sourceTree = "<group>"; };
+		9EA86C782219BAA500088AD8 /* SPFansShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansShareModel.swift; sourceTree = "<group>"; };
 		9EAE840B2194893E00847B82 /* KiClipperHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KiClipperHelper.swift; sourceTree = "<group>"; };
 		9EAE840C2194893E00847B82 /* KiImageClipperViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KiImageClipperViewController.swift; sourceTree = "<group>"; };
 		9EAE840D2194893E00847B82 /* KiClipperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KiClipperView.swift; sourceTree = "<group>"; };
@@ -766,7 +774,11 @@
 		9ED254CD21D89D4F00A3166A /* SPShopConditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopConditionView.swift; sourceTree = "<group>"; };
 		9ED254CF21D8A3E600A3166A /* SPProductTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductTipView.swift; sourceTree = "<group>"; };
 		9EE0509821F2BE2B00C1F26F /* SPCapitalDetDetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetDetModel.swift; sourceTree = "<group>"; };
+		9EE7F28022067A28002C69FE /* SPActivityHeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPActivityHeaderModel.swift; sourceTree = "<group>"; };
 		9EEC698521E2452B00C9E36C /* SPBankCardPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBankCardPicker.swift; sourceTree = "<group>"; };
+		9EF09FDD221C588400AB9148 /* SPRevokeBondTipVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRevokeBondTipVC.swift; sourceTree = "<group>"; };
+		9EF09FDF221C5D6700AB9148 /* SPBondSuccessVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBondSuccessVC.swift; sourceTree = "<group>"; };
+		9EF09FE1221C64F100AB9148 /* SPBuyerPrivilegeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBuyerPrivilegeVC.swift; sourceTree = "<group>"; };
 		9EF4C67320EC7385007E9909 /* SPIndexVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPIndexVC.swift; sourceTree = "<group>"; };
 		9EF4C67520EC7391007E9909 /* SPMineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineVC.swift; sourceTree = "<group>"; };
 		9EF4C67720EC73A2007E9909 /* SPShopCartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopCartVC.swift; sourceTree = "<group>"; };
@@ -858,8 +870,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E22EAE42132F08C00B196D5 /* libWeChatSDK.a in Frameworks */,
 				9E22EADC2132D94D00B196D5 /* libz.tbd in Frameworks */,
+				9E22EAE42132F08C00B196D5 /* libWeChatSDK.a in Frameworks */,
 				9E22EADA2132D94700B196D5 /* libc++.tbd in Frameworks */,
 				9E22EAD82132D91E00B196D5 /* CoreMotion.framework in Frameworks */,
 				9E22EAD62132D91800B196D5 /* CFNetwork.framework in Frameworks */,
@@ -1043,6 +1055,7 @@
 			isa = PBXGroup;
 			children = (
 				9ED254B321CF10EF00A3166A /* SPActivityModel.swift */,
+				9EE7F28022067A28002C69FE /* SPActivityHeaderModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1081,6 +1094,7 @@
 			children = (
 				9E5F7AC121C3F9E800A9EF35 /* SPFansListModel.swift */,
 				9E460D1D21EC326B00D125E4 /* SPFansModel.swift */,
+				9EA86C782219BAA500088AD8 /* SPFansShareModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1720,6 +1734,9 @@
 				9E5F7ADD21C4ECE000A9EF35 /* SPRechargeVC.swift */,
 				9E5F7ADF21C4ECF400A9EF35 /* SPBalanceVC.swift */,
 				9EF733CA21F0700200ECCC48 /* SPRevokeBondVC.swift */,
+				9EF09FDD221C588400AB9148 /* SPRevokeBondTipVC.swift */,
+				9EF09FDF221C5D6700AB9148 /* SPBondSuccessVC.swift */,
+				9EF09FE1221C64F100AB9148 /* SPBuyerPrivilegeVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2002,6 +2019,7 @@
 				9E22EAB72130667900B196D5 /* SPPayModel.swift */,
 				9E22EABD2131BFA000B196D5 /* SPConfirmOrderPrice.swift */,
 				9E22EABF2132432600B196D5 /* SPOrderPayModel.swift */,
+				9E6AD15D22021364000B44AB /* SPBalanceStatus.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2350,6 +2368,7 @@
 				9E5F7AC221C3F9E800A9EF35 /* SPFansListModel.swift in Sources */,
 				9E8140AD211746340063A6E4 /* SPAPPRequestComplete.swift in Sources */,
 				9EC51451210CB128006869B3 /* SPNavigationBar.swift in Sources */,
+				9EF09FE2221C64F100AB9148 /* SPBuyerPrivilegeVC.swift in Sources */,
 				9E34F6B920FB33F700D59ABD /* SPProductSearchCollectCell.swift in Sources */,
 				9E7DAAC9213B93170044C5FD /* SPOrderApplyRefundVC.swift in Sources */,
 				9E5F7AF821C6A54400A9EF35 /* SPCustomerServiceVC.swift in Sources */,
@@ -2390,6 +2409,7 @@
 				56107EEF21C3AD550012CFB9 /* SPQRCodeUtil.swift in Sources */,
 				9E34F6DB2101929300D59ABD /* SPShopHomeView.swift in Sources */,
 				9ED254B821CF115800A3166A /* SPActivityFooterView.swift in Sources */,
+				9EE7F28122067A28002C69FE /* SPActivityHeaderModel.swift in Sources */,
 				9E34F6C720FDC49300D59ABD /* SPAddressTableCell.swift in Sources */,
 				9EF4C6DC20EFC409007E9909 /* SPConfrimFooterView.swift in Sources */,
 				56CC68D4212EC6BE00C298B7 /* SPConfirmOrderModel.swift in Sources */,
@@ -2410,6 +2430,7 @@
 				9EC5143D210AE770006869B3 /* SPWineryListHeaderView.swift in Sources */,
 				9EF4C6BC20EF431D007E9909 /* SPCityVC.swift in Sources */,
 				9EF4C6F420F2401B007E9909 /* SPWineryListTableCell.swift in Sources */,
+				9EA86C792219BAA500088AD8 /* SPFansShareModel.swift in Sources */,
 				9E5F7AA121B9791E00A9EF35 /* SPFansVC.swift in Sources */,
 				9E22EAE62135998800B196D5 /* SPOrderModel.swift in Sources */,
 				9E8140A9211737910063A6E4 /* SPProductModel.swift in Sources */,
@@ -2484,6 +2505,7 @@
 				9EF4C68020EC75AC007E9909 /* SPColor.swift in Sources */,
 				9E22EAF82135B60900B196D5 /* SPOrderData.swift in Sources */,
 				9E89F0F62129218C000539A4 /* SPArray.swift in Sources */,
+				9E6AD15E22021364000B44AB /* SPBalanceStatus.swift in Sources */,
 				9EC5142B21049702006869B3 /* SPTabBar.swift in Sources */,
 				9E7DAADD214033BE0044C5FD /* SPPickerView.swift in Sources */,
 				9E05AC89210DA78700A78001 /* SPThridManager.swift in Sources */,
@@ -2604,6 +2626,7 @@
 				9E324CFD217C8EC700F9AB5F /* SPWinderGrade.swift in Sources */,
 				9EC5143F210C30C7006869B3 /* SPWineryDetaileBtnView.swift in Sources */,
 				568E39892133E4BD00EDDCFC /* SPShopCarCount.swift in Sources */,
+				9EF09FDE221C588400AB9148 /* SPRevokeBondTipVC.swift in Sources */,
 				9E129F56210332CE00218A33 /* SPProductBaseView.swift in Sources */,
 				9EF4C68A20EC869D007E9909 /* SPDevice.swift in Sources */,
 				9EF4C6E220EFD404007E9909 /* SPImageView.swift in Sources */,
@@ -2631,6 +2654,7 @@
 				9E22EAFA2135B61500B196D5 /* SPOrderHeader.swift in Sources */,
 				9E2F808C21DA11B500348311 /* SPProductAddImgView.swift in Sources */,
 				9EF4C6FC20F26D84007E9909 /* SPBannerCollectCell.swift in Sources */,
+				9EF09FE0221C5D6700AB9148 /* SPBondSuccessVC.swift in Sources */,
 				9E34F6CD20FDD17500D59ABD /* SPTextView.swift in Sources */,
 				9E7DAAC7213B78D60044C5FD /* SPProductEvaluationListTableCell.swift in Sources */,
 				9E324D01217E243000F9AB5F /* SPShowRule.swift in Sources */,
@@ -2892,6 +2916,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Chunlangjiu/Lib/WechtSDK",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chunlangjiu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = ChunlangJiuDeve;

@@ -191,8 +191,10 @@ class SPProductModel : HandyJSON {
         if sp_getString(string: self.label).count > 0 {
             if sp_getString(string: self.label).contains("，") {
                 return sp_getString(string: self.label).components(separatedBy: "，")
-            }else{
+            }else if sp_getString(string: self.label).contains(","){
                 return sp_getString(string: self.label).components(separatedBy: ",")
+            }else {
+                return sp_getString(string: self.label).components(separatedBy: " ")
             }
         }
        return [String]()

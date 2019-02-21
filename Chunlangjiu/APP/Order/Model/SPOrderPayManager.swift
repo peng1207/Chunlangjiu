@@ -8,11 +8,18 @@
 
 import Foundation
 class SPOrderPayManager : NSObject {
-     private var bounceApp = false
+    private var bounceApp = false
+    private var payPwd :String?
+    fileprivate var balanceStatus : SPBalanceStatus?{
+        didSet{
+            self.payView.balanceStatus = balanceStatus
+        }
+    }
     var orderModel : SPOrderModel?
     var complete : SPOrderHandleComplete?
     fileprivate lazy var payView : SPPayView = {
         let view = SPPayView()
+        
         view.selectBlock = { (model ) in
             self.sp_dealPaySelect(mode: model)
             self.sp_hidePayView()
@@ -29,15 +36,24 @@ class SPOrderPayManager : NSObject {
         sp_addNotification()
     }
     func sp_payRequest(){
-        SPAppRequest.sp_getPayList(requestModel: SPRequestModel()) { (code , list, errorModel, total ) in
+        sp_showAnimation(view: nil, title: nil)
+        SPAppRequest.sp_getBalanceStatus(requestModel: SPRequestModel()) { (code, balanceStatus, errorModel) in
             if code == SP_Request_Code_Success {
-                self.payDataArray = list as? [SPPayModel]
-                self.sp_clickPayAction()
-            }else{
-                sp_showTextAlert(tips: "支付失败")
-                self.sp_dealComplete(isSuccess: false)
+                self.balanceStatus = balanceStatus
+            }
+            SPAppRequest.sp_getPayList(requestModel: SPRequestModel()) { (code , list, errorModel, total ) in
+                sp_hideAnimation(view: nil)
+                if code == SP_Request_Code_Success {
+                    self.payDataArray = list as? [SPPayModel]
+                    self.sp_clickPayAction()
+                }else{
+                    sp_showTextAlert(tips: "支付失败")
+                    self.sp_dealComplete(isSuccess: false)
+                }
             }
         }
+      
+        
     }
     fileprivate func sp_hidePayView(){
         self.payView.removeFromSuperview()
@@ -56,15 +72,34 @@ class SPOrderPayManager : NSObject {
         guard let payModel = mode else {
             return
         }
-        sp_crearePayRequest(selectPayModel: payModel)
+        if sp_getString(string: payModel.app_rpc_id) == SPPayType.balance.rawValue {
+            sp_showBalance(mode: payModel)
+        }else{
+             sp_crearePayRequest(selectPayModel: payModel)
+        }
+       
     }
+    private func sp_showBalance(mode : SPPayModel?){
+        guard let payModel = mode else {
+            return
+        }
+        SPBalanceView.sp_show(title: "余额支付", msg: nil) { [weak self](isSuccess, pwd) in
+            if isSuccess {
+                self?.payPwd = pwd
+                self?.sp_crearePayRequest(selectPayModel: payModel)
+            }else{
+                
+            }
+        }
+    }
+    
     fileprivate func sp_crearePayRequest(selectPayModel:SPPayModel){
         sp_showAnimation(view: nil, title: "支付中")
         
         if sp_getString(string: orderModel?.type) == SP_AUCTION ,sp_getString(string: orderModel?.status) == SP_AUCTION_0{
             let payModel = SPOrderPayModel()
             payModel.payment_id = sp_getString(string: orderModel?.payment_id)
-             self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
+            self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
         }else{
             let request = SPRequestModel()
             var parm = [String:Any]()
@@ -75,6 +110,8 @@ class SPOrderPayManager : NSObject {
                     if sp_getString(string: selectPayModel.app_rpc_id ) == SPPayType.wxPay.rawValue{
                         self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
                     }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.aliPay.rawValue{
+                        self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
+                    }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.balance.rawValue {
                         self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
                     }
                     
@@ -95,22 +132,31 @@ class SPOrderPayManager : NSObject {
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string:pay.payment_id), forKey: "payment_id")
         parm.updateValue(sp_getString(string:selectPayModel.app_rpc_id), forKey: "pay_app_id")
+        if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.balance.rawValue {
+            parm.updateValue(sp_getString(string: self.payPwd), forKey: "deposit_password")
+        }
         payRequest.parm = parm
         self.bounceApp = false
         SPAppRequest.sp_getToPay(requestModel: payRequest) { (data, errorModel) in
             if sp_isDic(dic: data){
                 let errorCode  = sp_getString(string: data?[SP_Request_Errorcod_Key])
-                if sp_getString(string: errorCode).count > 0, sp_getString(string: errorCode) != SP_Request_Code_Success {
+                if sp_getString(string: errorCode).count > 0 , sp_getString(string: errorCode) != SP_Request_Code_Success {
                     self.bounceApp = false
                     sp_hideAnimation(view: nil)
-                    sp_showTextAlert(tips: "支付失败")
+                    let msg = sp_getString(string: data?[SP_Request_Msg_Key])
+                    
+                    sp_showTextAlert(tips:  sp_getString(string: msg).count > 0 ?  msg : "支付失败")
                     self.sp_dealComplete(isSuccess: false)
                 }else{
-                    self.bounceApp = true
                     if selectPayModel.app_rpc_id == SPPayType.wxPay.rawValue {
+                        self.bounceApp = true
                         SPThridManager.sp_wxPay(dic: data!)
                     }else if selectPayModel.app_rpc_id == SPPayType.aliPay.rawValue {
+                        self.bounceApp = true
                         SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                    }else if selectPayModel.app_rpc_id == SPPayType.balance.rawValue{
+                        sp_hideAnimation(view: nil)
+                        self.sp_dealComplete(isSuccess: true)
                     }
                 }
             }else{
@@ -155,6 +201,9 @@ class SPOrderPayManager : NSObject {
     fileprivate func  sp_dealComplete(isSuccess: Bool){
         guard let block = self.complete else {
             return
+        }
+        if isSuccess {
+            SPOrderHandle.sp_dealOrderNotificaton(orderModel: orderModel)
         }
         block(isSuccess)
         sp_remove()

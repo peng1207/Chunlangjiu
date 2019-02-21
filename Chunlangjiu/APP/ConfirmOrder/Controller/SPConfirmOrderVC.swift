@@ -14,6 +14,8 @@ let SP_MODE_TYPE_FASTBUY = "fastbuy"
 let SP_MODE_TYPE_CART = "cart"
 class SPConfirmOrderVC: SPBaseVC {
     fileprivate var tableView : UITableView!
+    fileprivate var payPwd : String?
+    fileprivate var balanceStatus : SPBalanceStatus?
     fileprivate lazy var addressView : SPConfrimAddressView = {
         let view = SPConfrimAddressView()
         view.clickBlock = { [weak self] in
@@ -52,8 +54,11 @@ class SPConfirmOrderVC: SPBaseVC {
     private var bounceApp = false
     override func viewDidLoad() {
         super.viewDidLoad()
+        sp_showAnimation(view: self.view, title: nil)
+         self.sp_setupUI()
         self.sp_sendPayListRequest()
-        self.sp_setupUI()
+        self.sp_sendBalanceStatusReequest()
+       
         self.title = "确认订单"
         self.sp_setupData()
         self.sp_addNotification()
@@ -196,9 +201,13 @@ extension SPConfirmOrderVC {
                 sp_showTextAlert(tips: "请输入出价金额")
                 return
             }
+            if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.balance.rawValue {
+                sp_balancePay(orderPay: nil)
+            }else{
+                 sp_sendAuctionRequest(price: sp_getString(string:shopModel?.confrim_auction_price))
+            }
             
-            
-            sp_sendAuctionRequest(price: sp_getString(string:shopModel?.confrim_auction_price))
+           
         }else{
             var parm = [String:Any]()
             parm.updateValue(self.modelType, forKey: "mode")
@@ -364,10 +373,18 @@ extension SPConfirmOrderVC {
 extension SPConfirmOrderVC {
     fileprivate func sp_sendSubmitRequest(parm : [String : Any]?){
         self.requestModel.parm = parm
-        sp_showAnimation(view: nil, title: "提交中,请勿重复提交")
-        SPAppRequest.sp_getCreateOrder(requestModel: self.requestModel) { [weak self](code , msg, orderPay, errorModel) in
-            self?.sp_dealCreateComplete(code: code, msg: msg, orderPay: orderPay, errorModel: errorModel)
+        self.payPwd = nil
+        if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.balance.rawValue {
+            sp_balancePay(orderPay: nil)
+        }else{
+            sp_showAnimation(view: nil, title: "提交中,请勿重复提交")
+            SPAppRequest.sp_getCreateOrder(requestModel: self.requestModel) { [weak self](code , msg, orderPay, errorModel) in
+                self?.sp_dealCreateComplete(code: code, msg: msg, orderPay: orderPay, errorModel: errorModel)
+            }
         }
+        
+        
+        
     }
     fileprivate func sp_sendAuctionRequest(price : String){
         var parm = [String : Any]()
@@ -395,8 +412,9 @@ extension SPConfirmOrderVC {
                 return
             }
             if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.balance.rawValue {
-                sp_hideAnimation(view: nil)
-                sp_balancePay(orderPay: pay)
+               
+//                sp_balancePay(orderPay: pay)
+                sp_sendBalanceRequest(orderPay: pay, pwd: sp_getString(string: self.payPwd))
             }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue{
                 sp_sendWXRequest(orderPay: orderPay)
             }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue{
@@ -410,15 +428,28 @@ extension SPConfirmOrderVC {
         }
     }
     fileprivate func sp_balancePay(orderPay:SPOrderPayModel?){
-        guard let pay = orderPay else {
-            return
-        }
-        SPBalanceView.sp_show(title: "余额支付", msg: nil) { (isSuccess, pwd) in
+//        guard let pay = orderPay else {
+//            return
+//        }
+        SPBalanceView.sp_show(title: "余额支付", msg: nil) { [weak self](isSuccess, pwd) in
             if isSuccess {
-                self.sp_sendBalanceRequest(orderPay: pay, pwd: sp_getString(string: pwd))
+                self?.payPwd = pwd
+                if let isAuction = self?.isAuction, isAuction == true{
+                     let shopModel = self?.confirmOrder?.dataArray?.first
+                      self?.sp_sendAuctionRequest(price: sp_getString(string:shopModel?.confrim_auction_price))
+                }else{
+                     self?.sp_dealBalance()
+                }
+               
             }else{
-                self.navigationController?.popViewController(animated: true)
+               
             }
+        }
+    }
+    fileprivate func sp_dealBalance(){
+        sp_showAnimation(view: nil, title: "提交中,请勿重复提交")
+        SPAppRequest.sp_getCreateOrder(requestModel: self.requestModel) { [weak self](code , msg, orderPay, errorModel) in
+            self?.sp_dealCreateComplete(code: code, msg: msg, orderPay: orderPay, errorModel: errorModel)
         }
     }
     /// 余额请求
@@ -433,11 +464,21 @@ extension SPConfirmOrderVC {
         let payRequest = SPRequestModel()
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string: pay.payment_id), forKey: "payment_id")
-        parm.updateValue(sp_getString(string: pay.payment_type), forKey: "pay_app_id")
+        parm.updateValue(sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id), forKey: "pay_app_id")
         parm.updateValue(sp_getString(string: pwd), forKey: "deposit_password")
         payRequest.parm = parm
-        SPAppRequest.sp_getToPay(requestModel: payRequest) { (data, errorModel) in
-            
+        SPAppRequest.sp_getToPay(requestModel: payRequest) { [weak self](data, errorModel) in
+             sp_hideAnimation(view: nil)
+            if let dic = data {
+                sp_showTextAlert(tips: sp_getString(string: dic[SP_Request_Msg_Key]))
+                if sp_getString(string: dic[SP_Request_Errorcod_Key] ) == SP_Request_Code_Success{
+                     self?.sp_pushOrderList(isSuccess: true)
+                }else{
+                     self?.sp_pushOrderList(isSuccess: false)
+                }
+            }else{
+                  self?.sp_pushOrderList(isSuccess: false)
+            }
         }
     }
     fileprivate func sp_sendWXRequest(orderPay:SPOrderPayModel?){
@@ -498,8 +539,18 @@ extension SPConfirmOrderVC {
         SPAppRequest.sp_getPayList(requestModel: SPRequestModel()) { [weak self](code , list, errorModel, total ) in
             if code == SP_Request_Code_Success {
                 self?.confirmOrder?.payType = list as? [SPPayModel]
+                self?.payView.payDataArray = self?.confirmOrder?.payType
             }
             
         }
+    }
+    fileprivate func sp_sendBalanceStatusReequest(){
+        SPAppRequest.sp_getBalanceStatus(requestModel: SPRequestModel()) { [weak self](code, balanceStatus, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                self?.payView.balanceStatus = balanceStatus
+            }
+        }
+        
     }
 }

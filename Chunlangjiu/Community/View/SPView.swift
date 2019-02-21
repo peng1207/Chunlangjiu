@@ -23,7 +23,7 @@ extension UIView{
     }
     
     /// 设置view的圆角 防止离屏渲染
-    ///
+    /// 使用自动布局，需要在layoutsubviews 中使用
     /// - Parameter corner: 圆角半径
     func sp_setCornerRadius(corner : CGFloat){
         

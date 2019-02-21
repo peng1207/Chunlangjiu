@@ -164,9 +164,11 @@ class SPOrderFooterView:  UIView{
             maker.left.right.equalTo(self).offset(0)
             self.commissionTop = maker.top.equalTo(self.priceView.snp.bottom).offset(0).constraint
             maker.height.greaterThanOrEqualTo(0)
-//            maker.height.equalTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }
+//        self.snp.makeConstraints { (maker) in
+//            maker.bottom.equalTo(self.commissionView.snp.bottom).offset(10)
+//        }
     }
     deinit {
         

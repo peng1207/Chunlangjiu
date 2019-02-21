@@ -30,7 +30,7 @@ class SPProductTipView:  UIView{
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.text = "尊敬的用户，您现在还是普通卖家，\n只能发布3件商品，交纳1000元保证金，\n升级成为星级卖家，享海量特权！"
+        label.text = "尊敬的用户，您现在还是普通卖家，\n只能发布3件商品，交纳2000元保证金，\n升级成为星级卖家，享海量特权！"
         return label
     }()
     fileprivate lazy var noBtn : UIButton = {

@@ -181,7 +181,9 @@ let SP_GET_CAPITALDETLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(
 /// 创建保证金订单
 let SP_GET_DEPOSITCREATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.depositCreate"
 /// 撤销保证金
-let SP_GET_DEPOSITCANCE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.refund"
+let SP_GET_DEPOSITREFUND_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.refund"
+/// 取消申请撤销保证金
+let SP_GET_DEPOSITCANCEL_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.cancel"
 /// 获取保证金信息
 let SP_GET_DEPOSIT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.get"
 /// 粉丝及佣金汇总
@@ -198,6 +200,10 @@ let SP_GET_INPUT_INVITATIONCODE_URL = "\(SPNetWorkManager.instance().sp_getDomai
 let SP_GET_PARTNER_URL =  "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=shop.featured"
 /// 获取开屏广告
 let SP_GET_OPENADV_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.open.img"
+/// 获取余额的状态
+let SP_GET_BALANCESTATUS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.pay.status"
+/// 获取活动列表
+let SP_GET_ACTIVITYLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.open.activity"
 /*-----------------------商家的接口--------------------------*/
 /// 获取店铺 的分类
 let SP_GET_SHOPSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=category.shop.get"

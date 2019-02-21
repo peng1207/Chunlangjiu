@@ -35,9 +35,15 @@ class SPAuthAddImgView:  UIView{
         return view
     }()
     
+    lazy var exampleImgView : UIImageView = {
+        let view = UIImageView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
+    
     lazy var imgView : UIImageView = {
         let view = UIImageView()
-        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_1599da.rawValue)
+        
         view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
@@ -75,6 +81,7 @@ class SPAuthAddImgView:  UIView{
         self.addSubview(self.titleLabel)
         self.addSubview(self.detLabel)
         self.addSubview(self.contentView)
+        self.contentView.addSubview(self.exampleImgView)
         self.contentView.addSubview(self.imgView)
         self.contentView.addSubview(self.submitBtn)
         self.contentView.addSubview(self.tipLabel)
@@ -106,6 +113,9 @@ class SPAuthAddImgView:  UIView{
             maker.width.equalTo(200)
            self.imgHeightConstraint = maker.height.equalTo(110).constraint
         }
+        self.exampleImgView.snp.makeConstraints { (maker) in
+            maker.left.right.top.bottom.equalTo(self.imgView).offset(0)
+        }
         self.submitBtn.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.imgView).offset(0)
             maker.top.equalTo(self.imgView.snp.bottom).offset(10)
@@ -132,6 +142,7 @@ extension SPAuthAddImgView {
     }
     func sp_update(image : UIImage?)->Void{
         self.imgView.image = image
+        
     }
     func sp_update(imgHeight:CGFloat)->Void{
         self.imgHeightConstraint.update(offset: imgHeight)

@@ -31,6 +31,12 @@ class SPRechargeTableCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
+    lazy var payContentLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 14)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        return label
+    }()
     fileprivate lazy var lineView : UIView = {
         return sp_getLineView()
     }()
@@ -55,14 +61,17 @@ class SPRechargeTableCell: UITableViewCell {
         self.titleLabel.text = sp_getString(string: model?.app_display_name)
         if sp_getString(string: model?.app_rpc_id) == SPPayType.wxPay.rawValue {
             self.typeImgView.image = UIImage(named: "public_pay_wx")
-        }else{
+        }else if sp_getString(string: model?.app_rpc_id) == SPPayType.aliPay.rawValue{
             self.typeImgView.image = UIImage(named: "public_pay_ailpy")
+        }else{
+            self.typeImgView.image = UIImage(named: "public_pay_balance")
         }
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.contentView.addSubview(self.typeImgView)
         self.contentView.addSubview(self.titleLabel)
+         self.contentView.addSubview(self.payContentLabel)
         self.contentView.addSubview(self.selectBtn)
         self.sp_addConstraint()
     }
@@ -74,10 +83,17 @@ class SPRechargeTableCell: UITableViewCell {
             maker.width.equalTo(30)
             maker.height.equalTo(29)
         }
+         self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.typeImgView.snp.right).offset(9)
             maker.top.bottom.equalTo(self.contentView).offset(0)
             maker.right.equalTo(self.selectBtn.snp.left).offset(-9)
+        }
+        self.payContentLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
+        self.payContentLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.titleLabel.snp.right).offset(4)
+            maker.top.bottom.equalTo(self.contentView).offset(0)
+            maker.right.equalTo(self.selectBtn.snp.right).offset(-8)
         }
         self.selectBtn.snp.makeConstraints { (maker) in
             maker.right.equalTo(self.contentView).offset(-15)

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 class SPActivityFooterView:  UIView{
-    fileprivate lazy var imgView : UIImageView = {
+    lazy var imgView : UIImageView = {
         let view = UIImageView()
         return view
     }()

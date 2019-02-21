@@ -252,6 +252,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
             let headerView : SPIndexCollectHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: collectionHeaderID, for: indexPath) as! SPIndexCollectHeaderView
             headerView.titleLabel.text = sp_getString(string: indexModel?.name)
             headerView.moreBtn.isHidden = sp_getString(string: indexModel?.type) == SP_AUCTION ? false : true
+            headerView.moreBtn.addTarget(self, action: #selector(sp_clickMore), for: UIControlEvents.touchUpInside)
             return headerView
         }
     }
@@ -595,6 +596,9 @@ extension SPIndexVC{
         self.sp_sendRequest()
         self.sp_sendGoodRequest()
     }
+    @objc fileprivate func sp_clickMore(){
+        NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_ISSHOW_AUCTION ? SP_TAB_AUCTION : SP_TAB_SORT)"])
+    }
 }
 // MARK: - notification
 extension SPIndexVC{
@@ -672,7 +676,9 @@ extension SPIndexVC{
 //                self.tableView.sp_layoutHeaderView()
             }
             sp_hideAnimation(view: self?.view)
+            self?.sp_dealDataArray()
             self?.sp_dealNoDataBtn()
+            
         }
     }
     fileprivate func sp_sendGoodRequest(){

@@ -430,6 +430,7 @@ extension SPAPPManager {
             downloader.downloadImage(with: URL(string: sp_getString(string: urlString))!, retrieveImageTask: nil, options: nil, progressBlock: nil) { (image, error, url, data) in
                 
                 if let imageData = data {
+                   try? FileManager.default.removeItem(atPath: sp_getString(string: filePath))
                    try? imageData.write(to: URL(fileURLWithPath: sp_getString(string: filePath)))
                 }
             }
@@ -438,10 +439,13 @@ extension SPAPPManager {
     /// 获取开屏的广告
     class func sp_getOpenAdvRequesst(){
         let request = SPRequestModel()
+        var parm = [String : Any]()
+        parm.updateValue("activityindex", forKey: "tmpl")
+        request.parm = parm
         SPAppRequest.sp_getOpenAdv(requestModel: request) { (code , model, errorModel) in
             if code  == SP_Request_Code_Success {
                 sp_saveOpenAdv(model: model)
-                sp_downImg(urlString: sp_getString(string: model?.url))
+                sp_downImg(urlString: sp_getString(string: model?.imagesrc))
             }
         }
     }
@@ -459,15 +463,15 @@ extension SPAPPManager {
         if let oldM = oldModel {
             var removePath = ""
             if let nM = model {
-                if sp_getString(string: oldM.url) == sp_getString(string: nM.url) {
+                if sp_getString(string: oldM.imagesrc) == sp_getString(string: nM.imagesrc) {
                     
                 }else {
                     // 删除旧的链接
-                    removePath = "\(sp_getCachePath())/\(sp_getString(string: oldM.url)).jpg"
+                    removePath = "\(sp_getCachePath())/\(sp_getString(string: sp_getString(string: oldM.imagesrc).MD5String)).jpg"
                 }
             }else {
                 // 直接删除
-                 removePath = "\(sp_getCachePath())/\(sp_getString(string: oldM.url)).jpg"
+                 removePath = "\(sp_getCachePath())/\(sp_getString(string: sp_getString(string: oldM.imagesrc).MD5String)).jpg"
             }
             if sp_getString(string: removePath).count > 0 {
                try? FileManager.default.removeItem(atPath: sp_getString(string: removePath))

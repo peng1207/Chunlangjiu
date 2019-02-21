@@ -146,6 +146,47 @@ class SPAppRequest {
             }
         }
     }
+    /// 获取活动数据
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getActivityList(requestModel:SPRequestModel,complete:SPActivityListComplete?){
+        requestModel.url = SP_GET_ACTIVITYLIST_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPActivityModel?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPActivityModel.sp_deserialize(from: data)
+                
+                    if let m = model {
+                        var auctionArray = [SPProductModel]()
+                        if sp_getArrayCount(array: m.auction) > 0 {
+                            for productModel in m.auction!{
+                                productModel.isAuction = true
+                                productModel.sp_getSecond()
+                                if productModel.second > 0 {
+                                    auctionArray.append(productModel)
+                                }
+                            }
+                        }
+                        m.auction = auctionArray
+                        
+                    }
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
     ///  获取商品分类
     ///
     /// - Parameters:
@@ -1510,6 +1551,10 @@ class SPAppRequest {
     ///   - requestModel: 请求数据
     ///   - complete: 回调
     class func sp_getPayList(requestModel:SPRequestModel,complete:SPRequestCompletList?){
+        var parm = [String:Any]()
+        parm.updateValue("v2", forKey: "v")
+        requestModel.parm = parm
+ 
         requestModel.url = SP_GET_PAYLIST_URL
         sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
             if let json = dataJson {
@@ -1541,6 +1586,37 @@ class SPAppRequest {
             }else{
                 if let block = complete {
                     block(SP_Request_Error,nil,nil,0)
+                }
+            }
+        }
+    }
+    /// 获取余额的状态
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getBalanceStatus(requestModel:SPRequestModel,complete:SPBalanceStatusComplete?){
+        requestModel.url = SP_GET_BALANCESTATUS_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var balanceStatus : SPBalanceStatus?
+                if errorcode == SP_Request_Code_Success {
+                    if let dic = data {
+                        if dic.count > 0 {
+                            balanceStatus = SPBalanceStatus.sp_deserialize(from: dic)
+                        }
+                    }
+                }
+                if let block = complete {
+                    block(errorcode,balanceStatus,nil)
+                    
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
                 }
             }
         }
@@ -1998,7 +2074,7 @@ class SPAppRequest {
     ///   - requestModel: 请求数据
     ///   - complete: 回调
     class func sp_getOpenAdv(requestModel:SPRequestModel,complete:SPOpenAdvComplete?){
-        requestModel.url = SP_GET_OPENADV_URL
+        requestModel.url = SP_GET_INDEX_URL
         sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
             if let json = dataJson {
                 let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
@@ -2006,7 +2082,14 @@ class SPAppRequest {
                 let msg = sp_getString(string: json[SP_Request_Msg_Key])
                 var model : SPOpenAdvModel?
                 if errorcode == SP_Request_Code_Success {
-                    model = SPOpenAdvModel.sp_deserialize(from: data)
+                    if let modules : [Any] = data?["modules"] as? [Any] {
+                        if sp_getArrayCount(array: modules) > 0 {
+                            if let listDic : [String : Any] =  modules.first as? [String : Any] {
+                                model = SPOpenAdvModel.sp_deserialize(from:listDic["params"] as? [String : Any])
+                            }
+                           
+                        }
+                    }
                 }
                 if let block = complete {
                     block(errorcode,model,nil)

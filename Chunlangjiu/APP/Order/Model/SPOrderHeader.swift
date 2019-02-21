@@ -43,7 +43,7 @@ enum SPPayType : String {
     /// 支付宝
     case aliPay         = "alipayApp"
     /// 余额支付
-    case balance        = "online"
+    case balance        = "deposit"
     /// 大额支付
     case largePayment   = "largePay"
 }

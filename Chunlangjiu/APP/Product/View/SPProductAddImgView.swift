@@ -57,6 +57,8 @@ class SPProductAddImgView:  UIView{
         let view = SPAddImageView()
         view.tag = 0
         view.showDelete = true
+        view.showImageView.imageView.image = UIImage(named: "public_add_gray")
+         view.showImageView.imageSize = CGSize(width: 21, height: 21)
          view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         view.clickAddBlock = { [weak self] (addView) in
              self?.sp_clickAdd(view: addView)
@@ -70,6 +72,8 @@ class SPProductAddImgView:  UIView{
         let view = SPAddImageView()
         view.tag = 1
         view.showDelete = true
+        view.showImageView.imageView.image = UIImage(named: "public_add_gray")
+         view.showImageView.imageSize = CGSize(width: 21, height: 21)
          view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         view.clickAddBlock = { [weak self] (addView) in
              self?.sp_clickAdd(view: addView)
@@ -83,6 +87,8 @@ class SPProductAddImgView:  UIView{
         let view = SPAddImageView()
         view.tag = 2
         view.showDelete = true
+        view.showImageView.imageView.image = UIImage(named: "public_add_gray")
+         view.showImageView.imageSize = CGSize(width: 21, height: 21)
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         view.clickAddBlock = { [weak self] (addView) in
              self?.sp_clickAdd(view: addView)
@@ -96,6 +102,8 @@ class SPProductAddImgView:  UIView{
         let view = SPAddImageView()
         view.tag = 3
         view.showDelete = true
+        view.showImageView.imageView.image = UIImage(named: "public_add_gray")
+         view.showImageView.imageSize = CGSize(width: 21, height: 21)
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         view.clickAddBlock = { [weak self] (addView) in
              self?.sp_clickAdd(view: addView)

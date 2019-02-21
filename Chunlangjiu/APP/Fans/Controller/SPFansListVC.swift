@@ -27,6 +27,7 @@ class SPFansListVC: SPBaseVC {
     }()
     fileprivate var dataArray : [SPFansListModel]?
     fileprivate var currentPage : Int = 1
+    var shareModel : SPFansShareModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -71,7 +72,7 @@ class SPFansListVC: SPBaseVC {
         self.view.addSubview(self.shareBtn)
         self.sp_addConstraint()
     }
-    var shareUrl : String? 
+    
     
     /// 处理有没数据
     override func sp_dealNoData(){
@@ -149,9 +150,9 @@ extension SPFansListVC : UITableViewDelegate,UITableViewDataSource {
 extension SPFansListVC {
     @objc fileprivate func sp_share(){
         let shareDataModel = SPShareDataModel()
-        shareDataModel.shareData = sp_getString(string: self.shareUrl).count > 0 ? sp_getString(string: self.shareUrl) :  SP_SHARE_URL
-        shareDataModel.title = sp_getString(string: "给您推荐高端酒综合服务平台-醇狼")
-        shareDataModel.descr = sp_getString(string: "")
+        shareDataModel.shareData = sp_getString(string: self.shareModel?.url).count > 0 ? sp_getString(string: self.shareModel?.url) :  SP_SHARE_URL
+        shareDataModel.title = sp_getString(string: sp_getString(string: self.shareModel?.title)).count > 0 ? sp_getString(string: sp_getString(string: self.shareModel?.title)) : "给您推荐高端酒综合服务平台-醇狼"
+        shareDataModel.descr = sp_getString(string: sp_getString(string: self.shareModel?.sub_title))
         shareDataModel.currentViewController = self
         shareDataModel.thumbImage = sp_getAppIcon()
         shareDataModel.placeholderImage =  sp_getAppIcon()
