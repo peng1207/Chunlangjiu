@@ -42,8 +42,9 @@ class SPSortCollectCell : UICollectionViewCell {
         self.contentView.addSubview(self.sortImgView)
         self.contentView.addSubview(self.titleLabel)
         self.sp_addConstraint()
-        self.contentView.sp_setCornerRadius(corner: 5)
+        self.contentView.sp_cornerRadius(cornerRadius: 5)
     }
+    
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.sortImgView.snp.makeConstraints { (maker) in

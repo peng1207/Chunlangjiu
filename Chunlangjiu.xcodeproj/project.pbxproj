@@ -304,6 +304,7 @@
 		9ECB7C4C2121F038009E843B /* WEIPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4B2121F037009E843B /* WEIPageControl.swift */; };
 		9ECB7C4E2123498D009E843B /* SPSearchRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4D2123498D009E843B /* SPSearchRecord.swift */; };
 		9ECB7C5021248C54009E843B /* SPDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4F21248C54009E843B /* SPDataBase.swift */; };
+		9ECE7BDD221FA33900FE6BCD /* SPNetWorkFailureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BDC221FA33900FE6BCD /* SPNetWorkFailureVC.swift */; };
 		9ED254AC21CBE70400A3166A /* SPProductAuctionCollectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254AB21CBE70400A3166A /* SPProductAuctionCollectCell.swift */; };
 		9ED254AE21CD3FF100A3166A /* SPDetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254AD21CD3FF100A3166A /* SPDetView.swift */; };
 		9ED254B021CE81DB00A3166A /* SPMineCollectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254AF21CE81DB00A3166A /* SPMineCollectCell.swift */; };
@@ -755,6 +756,7 @@
 		9ECB7C4B2121F037009E843B /* WEIPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEIPageControl.swift; sourceTree = "<group>"; };
 		9ECB7C4D2123498D009E843B /* SPSearchRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSearchRecord.swift; sourceTree = "<group>"; };
 		9ECB7C4F21248C54009E843B /* SPDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDataBase.swift; sourceTree = "<group>"; };
+		9ECE7BDC221FA33900FE6BCD /* SPNetWorkFailureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNetWorkFailureVC.swift; sourceTree = "<group>"; };
 		9ED254AB21CBE70400A3166A /* SPProductAuctionCollectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductAuctionCollectCell.swift; sourceTree = "<group>"; };
 		9ED254AD21CD3FF100A3166A /* SPDetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDetView.swift; sourceTree = "<group>"; };
 		9ED254AF21CE81DB00A3166A /* SPMineCollectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPMineCollectCell.swift; sourceTree = "<group>"; };
@@ -1457,6 +1459,7 @@
 			children = (
 				9EF4C67320EC7385007E9909 /* SPIndexVC.swift */,
 				9EF4C6BB20EF431D007E9909 /* SPCityVC.swift */,
+				9ECE7BDC221FA33900FE6BCD /* SPNetWorkFailureVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2506,6 +2509,7 @@
 				9E22EAF82135B60900B196D5 /* SPOrderData.swift in Sources */,
 				9E89F0F62129218C000539A4 /* SPArray.swift in Sources */,
 				9E6AD15E22021364000B44AB /* SPBalanceStatus.swift in Sources */,
+				9ECE7BDD221FA33900FE6BCD /* SPNetWorkFailureVC.swift in Sources */,
 				9EC5142B21049702006869B3 /* SPTabBar.swift in Sources */,
 				9E7DAADD214033BE0044C5FD /* SPPickerView.swift in Sources */,
 				9E05AC89210DA78700A78001 /* SPThridManager.swift in Sources */,

@@ -42,7 +42,10 @@ class SPIndexVC: SPBaseVC {
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.textAlignment = .left
-        label.text = "  您的网络出现问题，当前App无法获取数据"
+        label.text = "  当前网络出现问题，请检查您的网络设置"
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickNetFailure))
+        label.addGestureRecognizer(tap)
+        label.isUserInteractionEnabled = true
         return label
     }()
     fileprivate lazy var nodataBtn : UIButton = {
@@ -117,7 +120,7 @@ class SPIndexVC: SPBaseVC {
     override func sp_setupUI() {
         
         self.view.addSubview(self.titleView)
-        self.view.addSubview(self.noNetLabel)
+       
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -132,6 +135,7 @@ class SPIndexVC: SPBaseVC {
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.alwaysBounceVertical = true
         self.view.addSubview(self.collectionView)
+         self.view.addSubview(self.noNetLabel)
         self.view.addSubview(self.nodataBtn)
         self.collectionView.sp_headerRefesh { [weak self]() in
             self?.currentPage = 1
@@ -574,6 +578,9 @@ extension SPIndexVC{
         }
         
     }
+    /// 点击店铺
+    ///
+    /// - Parameter model: 商品model
     fileprivate func sp_clickShop(model : SPProductModel?){
         guard let product = model else {
             return
@@ -585,6 +592,7 @@ extension SPIndexVC{
         shopVC.shopModel = shopModel
         self.navigationController?.pushViewController(shopVC, animated: true)
     }
+    /// 处理没有数据时按钮显示
     fileprivate func sp_dealNoDataBtn(){
         if sp_getArrayCount(array: self.indexModel?.brandList) == 0 , sp_getArrayCount(array: self.indexModel?.bannerList) == 0 , sp_getArrayCount(array: self.indexModel?.iconList) == 0 , sp_getArrayCount(array: self.auctionGood.dataArray) == 0 , sp_getArrayCount(array: self.defaultGood.dataArray) == 0{
             self.nodataBtn.isHidden = false
@@ -592,12 +600,19 @@ extension SPIndexVC{
             self.nodataBtn.isHidden = true
         }
     }
+    /// 点击没有数据
     @objc fileprivate func sp_clickNoData(){
         self.sp_sendRequest()
         self.sp_sendGoodRequest()
     }
+    /// 点击竞拍更多
     @objc fileprivate func sp_clickMore(){
         NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_ISSHOW_AUCTION ? SP_TAB_AUCTION : SP_TAB_SORT)"])
+    }
+    /// 点击网络失败
+    @objc fileprivate func sp_clickNetFailure(){
+        let failureVC = SPNetWorkFailureVC()
+        self.navigationController?.pushViewController(failureVC, animated: true)
     }
 }
 // MARK: - notification

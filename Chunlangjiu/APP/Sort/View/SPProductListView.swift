@@ -314,10 +314,10 @@ class SPProductListVCell: UICollectionViewCell {
     fileprivate func sp_setupUI(){
         self.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
         self.contentView.addSubview(self.productView)
-       
+        self.contentView.sp_cornerRadius(cornerRadius: 5)
         self.productView.lineView.isHidden = true
         self.sp_addConstraint()
-        self.contentView.sp_setCornerRadius(corner: 5)
+      
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -344,6 +344,7 @@ class SPProductListVCell: UICollectionViewCell {
             maker.height.greaterThanOrEqualTo(0)
         }
     }
+   
     deinit {
         
     }

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+typealias SPOrderImgComplete = (_ model : SPOrderModel?)->Void
 class SPOrderImgeTableCell : UITableViewCell {
     
     fileprivate var collectionView : UICollectionView!
@@ -18,7 +19,7 @@ class SPOrderImgeTableCell : UITableViewCell {
             sp_setupData()
         }
     }
-  
+    var clickBlock : SPOrderImgComplete?
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -37,8 +38,8 @@ class SPOrderImgeTableCell : UITableViewCell {
     fileprivate func sp_setupUI(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
@@ -47,6 +48,8 @@ class SPOrderImgeTableCell : UITableViewCell {
         self.collectionView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         self.contentView.addSubview(self.collectionView)
         self.sp_addConstraint()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_dealComplete))
+        self.collectionView.addGestureRecognizer(tap)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -73,6 +76,19 @@ extension SPOrderImgeTableCell : UICollectionViewDelegate ,UICollectionViewDataS
             cell.itemModel = self.model?.order?[indexPath.row]
         }
         return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let w = collectionView.frame.size.height - 20
+        return CGSize(width:w, height:w)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        sp_dealComplete()
+    }
+    @objc fileprivate func sp_dealComplete(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block(self.model)
     }
 }
 class SPOrderImageCollectionCell : UICollectionViewCell {

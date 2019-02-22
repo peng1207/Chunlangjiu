@@ -103,8 +103,9 @@ class SPMineHeaderView:  UICollectionReusableView{
         self.contentView.addSubview(self.authImgView)
         self.contentView.addSubview(self.noLoginBtn)
         self.sp_addConstraint()
-        self.logoImgView.layoutIfNeeded()
-        self.logoImgView.sp_setCornerRadius(corner: 25)
+     
+//        self.logoImgView.sp_setCornerRadius(corner: 25)
+        self.logoImgView.sp_cornerRadius(cornerRadius: 25)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){

@@ -109,6 +109,9 @@ extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
             if imgCell == nil {
                 imgCell = SPOrderImgeTableCell(style: UITableViewCellStyle.default, reuseIdentifier: orderImgCellID)
             }
+            imgCell?.clickBlock = { [weak self](orderModel) in
+                self?.sp_dealSelect(model: orderModel)
+            }
             imgCell?.model = model
             return imgCell!
         }
@@ -193,11 +196,14 @@ extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section < sp_getArrayCount(array: self.dataArray){
-            let detaileVC = SPOrderDetaileVC()
-            detaileVC.orderModel = self.dataArray?[indexPath.section]
-            detaileVC.toolModel = self.toolModel
-            self.navigationController?.pushViewController(detaileVC, animated: true)
+            sp_dealSelect(model: self.dataArray?[indexPath.section])
         }
+    }
+    fileprivate func sp_dealSelect(model : SPOrderModel?){
+        let detaileVC = SPOrderDetaileVC()
+        detaileVC.orderModel = model
+        detaileVC.toolModel = self.toolModel
+        self.navigationController?.pushViewController(detaileVC, animated: true)
     }
     
 }

@@ -91,14 +91,14 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     }
     class func sp_beginLogPageView(pageName : String){
         MobClick.beginLogPageView(sp_getString(string: pageName))
-        sp_log(message: "beginLogPageView \(pageName)")
+        
     }
     class func sp_endLogPageView(pageName : String){
         MobClick.endLogPageView(sp_getString(string: pageName))
-         sp_log(message: "endLogPageView \(pageName)")
+        
     }
     func geTuiSdkDidRegisterClient(_ clientId: String) {
-            sp_log(message: "获取clientid \(clientId)")
+        
         SPAPPManager.instance().clientId = clientId
         SPAPPManager.sp_uploadPushToken()
     }
