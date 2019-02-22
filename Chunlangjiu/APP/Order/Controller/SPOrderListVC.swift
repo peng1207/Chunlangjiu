@@ -139,7 +139,7 @@ extension SPOrderListVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section < sp_getArrayCount(array: self.dataArray) {
             let model = self.dataArray?[section]
-            let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: model,showDelete: false)
+            let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: model,showDelete: true)
             return 50.0 + (bottomIsHidden ? 0.0 : 50.0)
         }
         return 100

@@ -232,8 +232,10 @@ extension SPShopHomeVC {
         self.shopHomeView.shopModel = self.shopModel
         if sp_getString(string: self.shopModel?.grade).count == 0 || sp_getString(string: self.shopModel?.grade) == SP_GRADE_0 {
             self.backImgView.image = SPBundle.sp_img(name: "shop_bac")
-        }else{
+        }else if sp_getString(string: self.shopModel?.grade) == SP_GRADE_1{
             self.backImgView.image = SPBundle.sp_img(name: "shop_bac_star")
+        }else{
+            self.backImgView.image = SPBundle.sp_img(name: "shop_bac_partner")
         }
     }
     @objc fileprivate func sp_clickShopDetVC(){

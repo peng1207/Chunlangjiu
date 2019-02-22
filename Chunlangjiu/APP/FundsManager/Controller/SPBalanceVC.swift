@@ -21,6 +21,7 @@ class SPBalanceVC: SPBaseVC {
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickCash), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     fileprivate lazy var rechargeBtn : UIButton = {
@@ -30,6 +31,7 @@ class SPBalanceVC: SPBaseVC {
          btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickRecharge), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     fileprivate lazy var contentView : UIView = {

@@ -37,7 +37,7 @@ class SPOrderTableFooterView:  UITableViewHeaderFooterView{
         btn.setTitle("取消订单", for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.normal)
-        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), width: sp_lineHeight)
+//        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), width: sp_lineHeight)
         btn.addTarget(self, action: #selector(sp_clickCance), for: UIControlEvents.touchUpInside)
         btn.sp_cornerRadius(cornerRadius: 15)
         return btn
@@ -47,8 +47,8 @@ class SPOrderTableFooterView:  UITableViewHeaderFooterView{
         btn.setTitle("去付款", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
-        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), width: sp_lineHeight)
+//        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+//        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), width: sp_lineHeight)
         btn.sp_cornerRadius(cornerRadius: 15)
         btn.addTarget(self, action: #selector(sp_clickDone), for: UIControlEvents.touchUpInside)
         return btn
@@ -82,13 +82,16 @@ class SPOrderTableFooterView:  UITableViewHeaderFooterView{
     /// 赋值
     fileprivate func sp_setupData(){
         self.priceLabel.text = "共\(sp_getString(string: orderModel?.totalItem))件商品  合计：\(SP_CHINE_MONEY)\(sp_getString(string: orderModel?.payment))"
-        let cance : (canceIsHidden : Bool,canceText : String) = SPOrderBtnManager.sp_dealCanceState(orderModel: self.orderModel,showDelete: false)
-        let done : (doneIsHidden : Bool, doneText: String) = SPOrderBtnManager.sp_dealDoneState(orderModel: self.orderModel,showDelete: false)
+        let cance : (canceIsHidden : Bool,canceText : String,color:UIColor) = SPOrderBtnManager.sp_dealCanceState(orderModel: self.orderModel,showDelete: true)
+        let done : (doneIsHidden : Bool, doneText: String,color : UIColor) = SPOrderBtnManager.sp_dealDoneState(orderModel: self.orderModel,showDelete: true)
         self.canceBtn.isHidden = cance.canceIsHidden
         self.canceBtn.setTitle(sp_getString(string: cance.canceText), for: UIControlState.normal)
         self.doneBtn.isHidden = done.doneIsHidden
         self.doneBtn.setTitle(sp_getString(string: done.doneText), for: UIControlState.normal)
-    
+        self.canceBtn.setTitleColor(cance.color, for: UIControlState.normal)
+        self.canceBtn.sp_border(color: cance.color, width: sp_lineHeight)
+        self.doneBtn.setTitleColor(done.color, for: UIControlState.normal)
+        self.doneBtn.sp_border(color: done.color, width: sp_lineHeight)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

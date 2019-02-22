@@ -31,8 +31,16 @@ class SPBuyerPrivilegeVC: SPBaseVC {
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
-        label.text = "1、独一无二的星级标识，信用度更高；\n2、星级卖家店铺装饰；\n3、发布商品自由，不受数量限制；\n4、比普通卖家商品排序更靠前；\n5、比普通卖家更容易卖出藏酒；\n6、新功能优先体验权!"
+//        label.text = "1、独一无二的星级标识，信用度更高；\n2、星级卖家店铺装饰；\n3、发布商品自由，不受数量限制；\n4、比普通卖家商品排序更靠前；\n5、比普通卖家更容易卖出藏酒；\n6、新功能优先体验权!"
         label.numberOfLines = 0
+        let att = NSMutableAttributedString()
+          att.append(NSAttributedString(string: "1、独一无二的星级标识，信用度更高；\n2、星级卖家店铺装饰；\n3、发布商品自由，不受数量限制；\n4、比普通卖家商品排序更靠前；\n5、比普通卖家更容易卖出藏酒；\n6、新功能优先体验权!", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
+        let paragraphStyle:NSMutableParagraphStyle = NSMutableParagraphStyle()
+        
+        paragraphStyle.lineSpacing = 3 //大小调整
+       
+        att.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, att.length))
+        label.attributedText = att
         return label
     }()
     override func viewDidLoad() {

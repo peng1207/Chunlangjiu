@@ -22,6 +22,7 @@ class SPRevokeBondTipVC: SPBaseVC {
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickRevoke), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     fileprivate lazy var noRevokeBtn : UIButton = {
@@ -31,6 +32,7 @@ class SPRevokeBondTipVC: SPBaseVC {
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickNoRevoke), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     
@@ -116,7 +118,7 @@ class SPRevokeBondTipVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(-52)
             }
             maker.width.equalTo(self.noRevokeBtn.snp.width).offset(0)
-            maker.height.equalTo(30)
+            maker.height.equalTo(45)
         }
         self.noRevokeBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.revokeBtn.snp.right).offset(29)

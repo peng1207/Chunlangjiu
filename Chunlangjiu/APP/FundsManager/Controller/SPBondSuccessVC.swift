@@ -38,6 +38,7 @@ class SPBondSuccessVC: SPBaseVC {
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickBackMember), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     fileprivate lazy var canceBtn : UIButton = {
@@ -47,6 +48,7 @@ class SPBondSuccessVC: SPBaseVC {
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickCance), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     var isRevoke : Bool = false
@@ -146,7 +148,7 @@ class SPBondSuccessVC: SPBaseVC {
         self.canceBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.contentView).offset(33)
             maker.top.equalTo(self.tipLabel.snp.bottom).offset(37)
-            maker.height.equalTo(30)
+            maker.height.equalTo(45)
             maker.width.equalTo(self.backBtn.snp.width).offset(0)
             maker.bottom.equalTo(self.contentView.snp.bottom).offset(-26)
         }

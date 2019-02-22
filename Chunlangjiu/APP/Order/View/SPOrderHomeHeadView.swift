@@ -15,7 +15,7 @@ class SPOrderHomeHeadView: UIView {
     
     fileprivate lazy var orderBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("普通订单", for: UIControlState.normal)
+        btn.setTitle("商品订单", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
