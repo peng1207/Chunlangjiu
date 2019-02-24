@@ -40,8 +40,16 @@ class SPOrderListVC: SPBaseVC {
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
         self.tableView.rowHeight = 125
+        self.tableView.estimatedRowHeight = 0
+        self.tableView.estimatedSectionFooterHeight = 0
+        self.tableView.estimatedSectionHeaderHeight = 0
         self.tableView.showsVerticalScrollIndicator = false
         self.tableView.backgroundColor = self.view.backgroundColor
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.noData);
         self.tableView.sp_headerRefesh {[weak self] () in
@@ -83,6 +91,7 @@ class SPOrderListVC: SPBaseVC {
        
         self.tableView.delegate = nil
         self.tableView.dataSource = nil
+        self.tableView.sp_removeAllRefesh()
         NotificationCenter.default.removeObserver(self)
     }
 }
@@ -305,6 +314,9 @@ extension SPOrderListVC {
         }
     }
     fileprivate func sp_sendAuction(){
+        if self.requestModel.isRequest {
+            return
+        }
         var parm = [String : Any]()
         parm.updateValue(self.currentPage, forKey: "page_no")
         parm.updateValue(10, forKey: "page_size")

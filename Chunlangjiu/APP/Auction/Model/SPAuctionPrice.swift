@@ -15,4 +15,6 @@ class SPAuctionPrice : SPBaseModel{
     var sold_quantity : String?
     var promotion : [Any]?
     var mobile : String?
+    var time : String?
+    var showTime : String? 
 }

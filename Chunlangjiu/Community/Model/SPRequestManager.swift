@@ -76,10 +76,10 @@ class SPRequestManager {
         }
         // 忽略本地缓存，重新获取，防止没更新json文件
         SessionManager.default.session.configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        
+        SessionManager.default.session.configuration.timeoutIntervalForRequest = 30
 //        let dataRequest =   SPRequestManager().netManager.request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
         let dataRequest = request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
-    
+        requestModel.isRequest = true
         switch requestModel.reponseFormt {
         case .json:
             dataRequest.responseJSON { (dataResponse : DataResponse) in

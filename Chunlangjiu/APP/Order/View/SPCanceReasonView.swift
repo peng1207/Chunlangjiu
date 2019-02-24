@@ -20,17 +20,21 @@ class SPCanceReasonView:  UIView{
     fileprivate lazy var canceBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("取消", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 18)
         btn.addTarget(self, action: #selector(sp_clickCance), for: UIControlEvents.touchUpInside)
-    return btn
+        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), width: sp_lineHeight)
+        btn.sp_cornerRadius(cornerRadius: 20)
+        return btn
     }()
     fileprivate lazy var doneBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("确定", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.normal)
+       
         btn.addTarget(self, action: #selector(sp_clickDone), for: UIControlEvents.touchUpInside)
+        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), width: sp_lineHeight)
+        btn.sp_cornerRadius(cornerRadius: 20)
         return btn
     }()
     fileprivate var listData : [String]?
@@ -62,6 +66,7 @@ class SPCanceReasonView:  UIView{
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.rowHeight = 44
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: sp_lineHeight))
         self.contentView.addSubview(self.tableView)
         self.contentView.addSubview(self.canceBtn)
         self.contentView.addSubview(self.doneBtn)
@@ -82,16 +87,18 @@ class SPCanceReasonView:  UIView{
         }
         self.tableView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.contentView).offset(0)
-            maker.bottom.equalTo(self.canceBtn.snp.top).offset(0)
+            maker.bottom.equalTo(self.canceBtn.snp.top).offset(-5)
         }
         self.canceBtn.snp.makeConstraints { (maker) in
-            maker.left.bottom.equalTo(self.contentView).offset(0)
-            maker.height.equalTo(49)
+            maker.left.equalTo(self.contentView).offset(10)
+            maker.bottom.equalTo(self.contentView).offset(-10)
+            maker.height.equalTo(40)
             maker.width.equalTo(self.doneBtn.snp.width).offset(0)
         }
         self.doneBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.canceBtn.snp.right).offset(0)
-            maker.bottom.right.equalTo(self.contentView).offset(0)
+            maker.left.equalTo(self.canceBtn.snp.right).offset(10)
+            maker.right.equalTo(self.contentView).offset(-10)
+            maker.bottom.equalTo(self.canceBtn.snp.bottom).offset(0)
             maker.height.equalTo(self.canceBtn.snp.height).offset(0)
         }
     }

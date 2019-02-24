@@ -42,4 +42,9 @@ extension UIScrollView {
         self.es.stopLoadingMore()
 
     }
+    /// 移除所有的刷新控件
+    func sp_removeAllRefesh(){
+        self.es.removeRefreshHeader()
+        self.es.removeRefreshFooter()
+    }
 }

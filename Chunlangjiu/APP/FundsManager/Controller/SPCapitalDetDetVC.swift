@@ -43,9 +43,10 @@ class SPCapitalDetDetVC: SPBaseVC {
              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "商品名称", content: sp_getString(string: self.model?.message)))
         }
         if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE || sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH {
-              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易状态", content: ""))
+              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易状态", content: "交易成功"))
         }
-        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易类型", content: ""))
+       
+        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易类型", content:  sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE ? "充值" : sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH ? "提现" : ""))
         if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE {
              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "付款方式", content: ""))
         }

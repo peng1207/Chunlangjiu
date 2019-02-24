@@ -13,7 +13,7 @@ class SPRealmTool : Object {
     /// 配置数据库
      class func configRealm(){
         /// 如果要存储的数据模型属性发生变化,需要配置当前版本号比之前大
-         let dbVersion : UInt64 = 17
+         let dbVersion : UInt64 = 18
         let docPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0] as String
         let dbPath = docPath.appending("/chunlangDB.realm")
         sp_log(message: "数据库地址:\(dbPath)")

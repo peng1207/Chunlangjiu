@@ -20,7 +20,7 @@ class SPOrderModel : SPBaseModel {
     var created_time : String?      // 创建时间
     var modified_time : String?     // 修改时间
     var buyer_rate : String?        // 评价
-    var is_buyer_rate : String?     // 是否评价
+    var is_buyer_rate : String?     // 用户是否评价
     var totalItem : String?         // 总数量
     var status_desc : String?       // 订单状态描述
     var shopname : String?          // 店铺名称

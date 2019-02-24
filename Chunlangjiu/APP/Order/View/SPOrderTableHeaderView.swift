@@ -82,6 +82,23 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
         self.shopLogoImageView.sp_cache(string: sp_getString(string: self.orderModel?.shop_logo), plImage:  sp_getLogoImg())
         self.shopNameLabel.text = "\(sp_getString(string: orderModel?.shopname)) >"
         self.orderStateLabel.text = sp_getString(string: orderModel?.status_desc)
+        self.orderStateLabel.isHidden = false
+        if  sp_getString(string: orderModel?.type) == SP_AUCTION {
+            if sp_getString(string: orderModel?.status) == SP_AUCTION_2 {
+                 self.auctionImgView.isHidden = false
+                self.orderStateLabel.isHidden = true
+                self.auctionImgView.image = UIImage(named: "public_winningbid")
+            }else if sp_getString(string: orderModel?.status) == SP_AUCTION_3{
+                 self.auctionImgView.isHidden = false
+                self.auctionImgView.image = UIImage(named: "public_unwinningbid")
+                 self.orderStateLabel.isHidden = true
+            }else{
+                 self.auctionImgView.isHidden = true
+            }
+            
+        }else{
+            self.auctionImgView.isHidden = true
+        }
     }
     /// 处理删除按钮
     func sp_dealDelete(){

@@ -104,6 +104,7 @@ class SPProductListVC: SPBaseVC {
         self.sp_setupUI()
         self.conditionView.selectBrand = self.brandModel 
         if self.canRequest {
+            sp_showAnimation(view: self.view, title: nil)
             self.sp_sendRequest()
 //            self.sp_sendRequestFilter()
         }
@@ -469,6 +470,7 @@ extension SPProductListVC {
     ///   - errorModel: 错误model
     ///   - totalPage: 总页数
     fileprivate func sp_dealRequest(errorCode:String,list:[Any]?,errorModel:SPRequestError?,totalPage:Int){
+        sp_hideAnimation(view: self.view)
         if errorCode == SP_Request_Code_Success {
             if self.currentPage == 1 {
                 self.dataArray?.removeAll()

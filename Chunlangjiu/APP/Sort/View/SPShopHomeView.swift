@@ -28,7 +28,7 @@ class  SPShopHomeView:  UIView{
         view.image = sp_getDefaultUserImg()
         return view
     }()
-    fileprivate lazy var authLabel : UILabel = {
+    lazy var authLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 11)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)

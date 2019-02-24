@@ -525,6 +525,7 @@ class SPAppRequest {
                             let dic : [String : Any] = listDic as! [String : Any]
                             let productModel = SPAuctionPrice.sp_deserialize(from: dic)
                             if let p = productModel {
+                                p.showTime = SPDateManager.sp_string(to: TimeInterval(sp_getString(string: p.time)))
                                 dataList.append(p)
                             }
                         }

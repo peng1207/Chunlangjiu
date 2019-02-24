@@ -48,7 +48,8 @@ class SPLookAuctionVC: SPBaseVC {
             self.noData.isHidden = true
         }else{
             self.noData.isHidden = false
-            self.noData.text = "还没有人出价哦"
+            self.noData.text = "还没有人出价哦,赶紧去出价～"
+            self.view.bringSubview(toFront: self.noData)
         }
     }
     /// 添加约束
@@ -82,6 +83,13 @@ extension SPLookAuctionVC : UITableViewDelegate,UITableViewDataSource {
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             cell?.model = self.dataArray?[indexPath.row]
+            if indexPath.row == 0 {
+                cell?.statusLabel.text = "领先"
+                cell?.statusLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+            }else{
+                cell?.statusLabel.text = "落后"
+                cell?.statusLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+            }
         }
         
         return cell!

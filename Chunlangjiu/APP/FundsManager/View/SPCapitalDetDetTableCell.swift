@@ -23,7 +23,7 @@ class SPCapitalDetDetTableCell: UITableViewCell {
     fileprivate lazy var contentLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label

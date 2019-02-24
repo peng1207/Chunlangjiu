@@ -266,6 +266,7 @@ extension SPProductEvaluationVC : UITableViewDelegate,UITableViewDataSource{
         var headerView : SPOrderTableHeaderView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: evaluationProductHeaderID) as? SPOrderTableHeaderView
         if headerView == nil {
             headerView = SPOrderTableHeaderView(reuseIdentifier: evaluationProductHeaderID)
+            headerView?.sp_leftRightZero()
         }
         if let detaile = self.orderModel {
             headerView?.orderModel = detaile

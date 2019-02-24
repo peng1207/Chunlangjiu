@@ -16,8 +16,9 @@ class SPShopHomeVC: SPBaseVC {
     }()
     fileprivate lazy var shopHomeView : SPShopHomeView = {
         let view = SPShopHomeView()
-        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+//        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.shopModel = shopModel
+//        view.authLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickShopDetVC))
         view.addGestureRecognizer(tap)
         view.sp_cornerRadius(cornerRadius: 5)

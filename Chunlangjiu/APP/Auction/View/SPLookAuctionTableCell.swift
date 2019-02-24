@@ -60,6 +60,7 @@ class SPLookAuctionTableCell: UITableViewCell {
     fileprivate func sp_setupData(){
         self.phoneLabel.text = sp_getString(string: self.model?.mobile)
         self.priceLabel.text = sp_getString(string: self.model?.price)
+        self.timeLabel.text = sp_getString(string: self.model?.showTime)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
