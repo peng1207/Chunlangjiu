@@ -70,6 +70,7 @@ class SPAddBankCardVC: SPBaseVC {
         let view = SPAddressEditView()
         view.titleLabel.text = "手机号"
         view.textFiled.placeholder = "请输入银行预留手机号"
+        view.textFiled.keyboardType = UIKeyboardType.numberPad
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()
@@ -263,8 +264,7 @@ extension SPAddBankCardVC {
         parm.updateValue(sp_getString(string: self.phoneView.textFiled.text), forKey: "mobile")
         request.parm = parm
         sp_showAnimation(view: self.view, title: nil)
-        
-        SPSetRequest.sp_getSendCMS(requestModel: request) { [weak self](code, msg, errorModel) in
+        SPAppRequest.sp_getSendSms(requestModel: request) {  [weak self](code , msg, errorModel) in
             sp_hideAnimation(view: self?.view)
             sp_showTextAlert(tips: msg)
             if code == SP_Request_Code_Success {
@@ -273,6 +273,7 @@ extension SPAddBankCardVC {
                 self?.codeView.codeBtn.isEnabled = true
             }
         }
+    
     }
    
     /// 选择开户行省市的回调

@@ -29,7 +29,7 @@ class SPOrderStateView:  UIView{
     fileprivate lazy var stateLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.preferredMaxLayoutWidth =  sp_getScreenWidth()
         return label
     }()

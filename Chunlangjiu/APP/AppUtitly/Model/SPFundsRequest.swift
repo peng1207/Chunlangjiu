@@ -207,6 +207,35 @@ class SPFundsRequest : SPAppRequest {
             }
         }
     }
+    /// 获取资金明细详情
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getCapitalDetDet(requestModel:SPRequestModel,complete:SPCapitalDetDetComplete?){
+        requestModel.url = SP_GET_CAPITALDETDET_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPCapitalDetContentModel?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPCapitalDetContentModel.sp_deserialize(from: data)
+                    if let time : Int = model?.time{
+                        model?.showTime = SPDateManager.sp_string(to: TimeInterval(time))
+                    }
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
     /// 创建保证金订单
     ///
     /// - Parameters:
@@ -333,4 +362,5 @@ class SPFundsRequest : SPAppRequest {
             }
         }
     }
+    
 }

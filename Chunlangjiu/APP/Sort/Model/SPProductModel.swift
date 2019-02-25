@@ -9,15 +9,25 @@
 import Foundation
 import HandyJSON
 class SPProductModel : HandyJSON {
+    /// 商品ID
     var item_id : Int! = 0
+    /// 分类ID
     var cart_id : String?
+    /// skuID
     var sku_id : String?
+    /// 名称
     var title : String?
+    /// 默认图片
     var image_default_id : String?
+    /// 图片地址
     var imgsrc : String?
+    /// 价格
     var price : String?
+    /// 购物车展示价格
     var showCartPrice : String?
+    /// 数量
     var sold_quantity : Int! = 0
+    /// 数量
     var quantity : Int! = 0
     var gift : String?
     var promotion : [String]?
@@ -74,35 +84,59 @@ class SPProductModel : HandyJSON {
     var store : Int! = 0
     var natureProps : [[String:Any]]?
     var valid : String?
+    /// 规格
     var spec : [String:Any]?
+    /// 是否竞拍商品
     var isAuction : Bool = false
+    /// 竞拍 起拍价
     var auction_starting_price : String?
+    /// 最高价格
     var max_price : String?
     var check : String?
+    /// 是否支付
     var is_pay : String?
     var pledge : String? 
-    var auction_status : String?
+    /// 竞拍状态
+    var auction_status : String?  // 明拍还是暗拍 true 明 false 暗
+    ///
     var auction_store : Int!
+    /// 竞拍开始时间
     var auction_begin_time : String?
+    /// 竞拍结束时间
     var auction_end_time : String?
+    /// 竞拍出价数
     var auction_number : Int! = 0
+    /// 竞拍ID
     var auctionitem_id : String?
     var original_bid : String? 
     var desc : String?
+    /// 秒数
     var second : Int! = 0
+    /// 标签
     var label : String?
+    /// 说明
     var explain : String?
+    /// 是否收藏
     var is_collect : String?
+    /// 地区ID
     var area_id : String?
+    ///
     var odor_id : String?
+    /// 酒精度ID
     var alcohol_id : String?
+    /// 商品参数
     var parameter : String?
+    /// 支付ID
     var payment_id  : String?
+    /// 规则
     var rule : String?
+    /// 店铺名称
     var shop_name : String?
     /// 店铺等级
     var grade : String?
+    /// 好评数
     var rate  : String?
+    /// 服务保障图片地址
     var service_url : String?
     required init() {}
     func mapping(mapper: HelpingMapper) {

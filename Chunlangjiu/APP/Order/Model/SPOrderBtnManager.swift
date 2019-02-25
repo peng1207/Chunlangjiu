@@ -29,6 +29,7 @@ class SPOrderBtnManager {
                 }else{
                     if sp_getString(string: orderModel?.cancel_status) == SP_NO_APPLY_CANCEL || sp_getString(string: orderModel?.cancel_status) == SP_FAILS{
                         canceText = "无货"
+                        color = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
                     }else{
                         isHidden = true
                     }

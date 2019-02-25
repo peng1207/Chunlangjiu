@@ -767,7 +767,7 @@ class SPOrderRequest  : SPAppRequest {
                         detailModel?.type = sp_getString(string: payments["type"])
                         detailModel?.modified_time = sp_getString(string: payments["modified_time"])
                         detailModel?.tid = Int(sp_getString(string: detailModel?.payment_id))
-                       
+                        detailModel?.payment = sp_getString(string: payments["cur_money"])
                     }
                     
                     

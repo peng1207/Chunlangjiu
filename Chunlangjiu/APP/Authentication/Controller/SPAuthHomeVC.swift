@@ -74,6 +74,7 @@ class SPAuthHomeVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_setupData()
+        sp_showAnimation(view: self.view, title: nil)
        
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -177,14 +178,14 @@ extension SPAuthHomeVC {
             let companyVC = SPCompanyAuthenticationVC()
             self.navigationController?.pushViewController(companyVC, animated: true)
         }
-        
-        
+    
     }
 }
 extension SPAuthHomeVC {
     fileprivate func sp_sendCompanyAuthStatus(){
         let request = SPRequestModel()
         SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in
+            sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success{
                 self?.companyAuth = model
                 
@@ -194,6 +195,7 @@ extension SPAuthHomeVC {
     fileprivate func sp_sendRealNameAuth(){
         let request = SPRequestModel()
         SPAppRequest.sp_getRealNameAuth(requestModel: request) { [weak self](code , model , errorModel) in
+             sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success{
                 self?.realNameAuth = model
                 

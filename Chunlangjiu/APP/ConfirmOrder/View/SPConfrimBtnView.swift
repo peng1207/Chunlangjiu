@@ -23,7 +23,7 @@ class SPConfrimBtnView:  UIView{
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         return label
     }()
-    fileprivate lazy var btn : UIButton = {
+    lazy var btn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("去结算", for: UIControlState.normal)
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
@@ -32,6 +32,17 @@ class SPConfrimBtnView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickSubitAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    lazy var auctionBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("支付定金", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.addTarget(self, action: #selector(sp_clickSubitAction), for: UIControlEvents.touchUpInside)
+        btn.isHidden = true
+        return btn
+    }()
+    
     var clickBlock : SPBtnClickBlock?
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,6 +57,7 @@ class SPConfrimBtnView:  UIView{
         self.addSubview(self.titleLabel)
         self.addSubview(self.priceLabel)
         self.addSubview(self.btn)
+        self.addSubview(self.auctionBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -65,6 +77,9 @@ class SPConfrimBtnView:  UIView{
             maker.right.equalTo(self).offset(0)
             maker.top.bottom.equalTo(self).offset(0)
             maker.width.equalTo(80)
+        }
+        self.auctionBtn.snp.makeConstraints { (maker) in
+            maker.left.right.top.bottom.equalTo(self).offset(0)
         }
     }
     deinit {

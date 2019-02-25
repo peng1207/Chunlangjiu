@@ -1375,6 +1375,7 @@ class SPAppRequest {
                     confirmOrder?.pledge = productModel?.pledge
                     shopModel?.confirm_start_price = productModel?.auction_starting_price 
                     shopModel?.confrim_max_price = productModel?.max_price
+                    shopModel?.confirm_auction_status = productModel?.auction_status
                     if let model = productModel{
                         shopModel?.productArray = [model]
                     }

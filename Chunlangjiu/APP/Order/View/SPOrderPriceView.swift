@@ -68,7 +68,7 @@ class SPOrderPriceView:  UIView{
             if let status = Bool(sp_getString(string: detaileModel?.auction_status)) ,  status == false{
                  self.freeView.contentLabel.text = "保密出价"
             }else{
-                 self.freeView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.max_price))"
+                 self.freeView.contentLabel.text = "\(SP_CHINE_MONEY)\( sp_getString(string: detaileModel?.max_price).count > 0 ? sp_getString(string: detaileModel?.max_price) : "0.00")"
             }
             self.offerView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.original_bid))"
             self.offerView.isHidden = false

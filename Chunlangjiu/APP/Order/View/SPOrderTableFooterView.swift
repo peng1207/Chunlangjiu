@@ -58,6 +58,7 @@ class SPOrderTableFooterView:  UITableViewHeaderFooterView{
     }()
     fileprivate var leftConstraint : Constraint!
     fileprivate var rightConstraint : Constraint!
+    var priceColor : UIColor?
     var orderModel : SPOrderModel?{
         didSet{
             self.sp_setupData()
@@ -81,7 +82,11 @@ class SPOrderTableFooterView:  UITableViewHeaderFooterView{
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.priceLabel.text = "共\(sp_getString(string: orderModel?.totalItem))件商品  合计：\(SP_CHINE_MONEY)\(sp_getString(string: orderModel?.payment))"
+        let att = NSMutableAttributedString()
+        att.append(NSAttributedString(string: "共\(sp_getString(string: orderModel?.totalItem))件商品  合计：", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
+        
+        att.append(NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: orderModel?.payment))", attributes: [NSAttributedStringKey.foregroundColor :  (self.priceColor != nil) ? self.priceColor! : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue) ]))
+        self.priceLabel.attributedText = att
         let cance : (canceIsHidden : Bool,canceText : String,color:UIColor) = SPOrderBtnManager.sp_dealCanceState(orderModel: self.orderModel,showDelete: true)
         let done : (doneIsHidden : Bool, doneText: String,color : UIColor) = SPOrderBtnManager.sp_dealDoneState(orderModel: self.orderModel,showDelete: true)
         self.canceBtn.isHidden = cance.canceIsHidden

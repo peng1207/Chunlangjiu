@@ -69,3 +69,5 @@ typealias SPCheckProductComplete = (_ code : String,_ data : [String : Any]?,_ e
 typealias SPBalanceStatusComplete = (_ code : String,_ model : SPBalanceStatus?,_ errorModel : SPRequestError?)->Void
 /// 获取活动列表
 typealias SPActivityListComplete = (_ code :String, _ model : SPActivityModel?,_ errorModel : SPRequestError?)->Void
+/// 获取资金明细详情
+typealias SPCapitalDetDetComplete = (_ code : String, _ model : SPCapitalDetContentModel?,_ errorModel : SPRequestError?)->Void

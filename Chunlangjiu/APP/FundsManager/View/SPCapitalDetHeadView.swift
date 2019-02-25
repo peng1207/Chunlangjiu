@@ -42,6 +42,15 @@ class SPCapitalDetHeadView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickCash), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate lazy var refundBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("退款", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.addTarget(self, action: #selector(sp_clickRefund), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     var clickBlock : SPCapitalComplete?
     fileprivate lazy var lineView : UIView = {
         return sp_getLineView()
@@ -58,6 +67,7 @@ class SPCapitalDetHeadView:  UIView{
         self.addSubview(self.recordBtn)
         self.addSubview(self.rechargeBtn)
         self.addSubview(self.cashBtn)
+        self.addSubview(self.refundBtn)
         self.addSubview(self.lineView)
         self.sp_addConstraint()
     }
@@ -74,8 +84,13 @@ class SPCapitalDetHeadView:  UIView{
         }
         self.cashBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.rechargeBtn.snp.right).offset(0)
-            maker.right.equalTo(self.snp.right).offset(0)
+            maker.width.equalTo(self.refundBtn.snp.width).offset(0)
             maker.top.bottom.equalTo(self.rechargeBtn).offset(0)
+        }
+        self.refundBtn.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.snp.right).offset(0)
+            maker.left.equalTo(self.cashBtn.snp.right).offset(0)
+            maker.top.bottom.equalTo(self.cashBtn).offset(0)
         }
     }
     deinit {
@@ -98,13 +113,20 @@ extension SPCapitalDetHeadView {
         self.cashBtn.isSelected = true
         sp_dealComplete()
     }
+    @objc fileprivate func sp_clickRefund(){
+        sp_setBtnDefault()
+        self.refundBtn.isSelected = true
+        sp_dealComplete()
+    }
     fileprivate func sp_setBtnDefault(){
         self.rechargeBtn.isSelected = false
         self.recordBtn.isSelected = false
         self.cashBtn.isSelected = false
+        self.refundBtn.isSelected = false
     }
+    
     func sp_getIndex()->Int{
-        return self.recordBtn.isSelected ? 0 : self.rechargeBtn.isSelected ? 1 : 2
+        return self.recordBtn.isSelected ? 0 : self.rechargeBtn.isSelected ? 1 : self.cashBtn.isSelected ? 2 : 3
     }
     fileprivate func sp_dealComplete(){
         guard let block = self.clickBlock else {

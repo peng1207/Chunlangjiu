@@ -16,11 +16,14 @@ class SPCapitalDetDetVC: SPBaseVC {
     }()
     fileprivate var dataArray : [SPCapitalDetDetModel] = [SPCapitalDetDetModel]()
     var model : SPCapitalDetModel?
+    fileprivate var detModel : SPCapitalDetContentModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
         self.tableView.sp_layoutHeaderView()
-        sp_setupData()
+        sp_showAnimation(view: self.view, title: "加载中...")
+        sp_sendRequest()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -36,34 +39,33 @@ class SPCapitalDetDetVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.headerView.priceLabel.text = "\(sp_getString(string: SP_CHINE_MONEY))\(sp_getString(string: self.model?.fee))"
-        
-        
-        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_DEFAULT || sp_getString(string: self.model?.type).count == 0 {
-             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "商品名称", content: sp_getString(string: self.model?.message)))
-        }
-        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE || sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH {
-              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易状态", content: "交易成功"))
+        self.headerView.priceLabel.text = "\(sp_getString(string: SP_CHINE_MONEY))\(sp_getString(string: self.detModel?.fee))"
+//        if sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_DEFAULT || sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_REFUND || sp_getString(string: self.detModel?.type).count == 0 {
+//             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "商品名称", content: sp_getString(string: self.model?.message)))
+//        }
+        if sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_RECHARGE || sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_CASH {
+              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易状态", content: sp_getString(string: self.detModel?.status)))
         }
        
-        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易类型", content:  sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE ? "充值" : sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH ? "提现" : ""))
-        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_RECHARGE {
-             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "付款方式", content: ""))
+        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "交易类型", content: sp_getString(string: self.detModel?.memo)))
+        
+        if sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_RECHARGE{
+            
+            self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "付款方式", content: sp_getString(string: self.detModel?.pay_name)))
         }
-        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH {
-             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "提现银行", content: ""))
+        if sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_CASH {
+             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "提现银行", content: sp_getString(string: self.detModel?.bank_name)))
         }
         
-        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "订单编号", content: ""))
-        if sp_getString(string: self.model?.type) == SP_FUNDS_BILL_TYPE_CASH{
-            self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "申请时间", content: sp_getString(string: self.model?.time)))
-             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "到帐时间", content: ""))
+        self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "订单编号", content: sp_getString(string: self.detModel?.id)))
+        if sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_CASH{
+            self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "申请时间", content: sp_getString(string: self.detModel?.showTime)))
+//             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "到帐时间", content: ""))
         }else{
-              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "创建时间", content: sp_getString(string: self.model?.time)))
+              self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "创建时间", content: sp_getString(string: self.detModel?.showTime)))
         }
       
         // 充值
-        
         self.tableView.reloadData()
         
     }
@@ -122,4 +124,23 @@ extension SPCapitalDetDetVC: UITableViewDelegate,UITableViewDataSource {
         
     }
     
+}
+extension SPCapitalDetDetVC {
+    
+    fileprivate func sp_sendRequest(){
+        var parm = [String : Any]()
+        if let id = self.model?.log_id {
+            parm.updateValue(id, forKey: "log_id")
+        }
+        self.requestModel.parm = parm
+        SPFundsRequest.sp_getCapitalDetDet(requestModel: self.requestModel) { [weak self](code ,detModel, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success {
+                self?.detModel = detModel
+                self?.sp_setupData()
+            }else{
+                
+            }
+        }
+    }
 }

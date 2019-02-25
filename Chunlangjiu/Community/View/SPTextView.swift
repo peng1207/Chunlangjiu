@@ -13,13 +13,12 @@ class SPTextView:  UIView{
     
     lazy var textView : UITextView = {
         let view = UITextView()
-          view.tintColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        view.tintColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         view.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
-            
+
         }, doneBlock: {
-            
+
         })
- 
         return view;
     }()
     lazy var placeholderLabel : UILabel = {

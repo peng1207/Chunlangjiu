@@ -144,21 +144,24 @@ class SPProductDetaileBottomView:  UIView{
                 self.editPriceBtn.isHidden = false
                 self.auctionLabel.isHidden = false
                 self.shopCartBtn.isHidden = true
+                let att = NSMutableAttributedString()
                 if let isCheck : Bool = Bool(sp_getString(string: self.detaileModel?.item?.check)), isCheck == true{
                     
 //                   self.editPriceBtn.isSelected = true
                     if let isPay : Bool = Bool(sp_getString(string: self.detaileModel?.item?.is_pay)),isPay == true{
                         self.editPriceBtn.setTitle("修改出价", for: UIControlState.normal)
-                         self.auctionLabel.text = "已付定金\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))"
+                        att.append(NSAttributedString(string: "已付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
                     }else{
                         self.editPriceBtn.setTitle("去付定金", for: UIControlState.normal)
-                         self.auctionLabel.text = "未付定金\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))"
+                          att.append(NSAttributedString(string: "未付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
                     }
                 }else{
                     self.editPriceBtn.setTitle("立即出价", for: UIControlState.normal)
 //                    self.editPriceBtn.isSelected = false
-                    self.auctionLabel.text = "应付定金\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))"
+                      att.append(NSAttributedString(string: "应付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
                 }
+                att.append(NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+                self.auctionLabel.attributedText = att
             }else{
                 self.shopCartBtn.isHidden = false
             }

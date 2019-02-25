@@ -25,7 +25,7 @@ class SPSearchView:  UIView{
         textFiled.delegate = self
         textFiled.returnKeyType = UIReturnKeyType.search
         textFiled.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
-            
+
         }, doneBlock: { [weak self]in
             self?.sp_dealComplete()
         })

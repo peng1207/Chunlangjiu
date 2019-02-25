@@ -30,6 +30,8 @@ let SP_FUNDS_BILL_TYPE_DEFAULT = "sell"
 let SP_FUNDS_BILL_TYPE_RECHARGE = "add"
 /// 账单类型 提现
 let SP_FUNDS_BILL_TYPE_CASH = "expense"
+/// 账单类型 提现
+let SP_FUNDS_BILL_TYPE_REFUND = "refund"
 /// 获取默认的图片
 ///
 /// - Returns: 图片

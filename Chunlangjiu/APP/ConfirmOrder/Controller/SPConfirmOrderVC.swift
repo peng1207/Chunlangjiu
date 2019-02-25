@@ -274,8 +274,14 @@ extension SPConfirmOrderVC {
     /// 处理底部按钮
     fileprivate func sp_dealBottom(){
         if isAuction {
-            self.bottomView.priceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: confirmOrder?.pledge))"
+            self.bottomView.auctionBtn.isHidden = false
+            let att = NSMutableAttributedString()
+            att.append(NSAttributedString(string: "支付定金", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
+            att.append(NSAttributedString(string: "(\(SP_CHINE_MONEY)\(sp_getString(string: confirmOrder?.pledge)))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
+            self.bottomView.auctionBtn.setAttributedTitle(att, for: UIControlState.normal)
+//            self.bottomView.priceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: confirmOrder?.pledge))"
         }else{
+            self.bottomView.auctionBtn.isHidden = true
            self.bottomView.priceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: self.confirmOrder?.total?.allPayment))"
         }
        

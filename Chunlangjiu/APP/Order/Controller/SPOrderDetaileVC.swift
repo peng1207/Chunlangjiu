@@ -171,7 +171,7 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         if footerView == nil{
             footerView = SPOrderTableFooterView(reuseIdentifier: orderFooterID)
             footerView?.sp_leftRightZero()
-           
+            footerView?.priceColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         }
         if let detaile = self.orderDetaileModel {
             footerView?.orderModel = detaile

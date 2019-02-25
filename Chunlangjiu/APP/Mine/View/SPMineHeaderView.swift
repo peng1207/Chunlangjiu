@@ -54,6 +54,9 @@ class SPMineHeaderView:  UICollectionReusableView{
     fileprivate lazy var authImgView : UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "public_unAuth")
+        view.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickAuth))
+        view.addGestureRecognizer(tap)
         return view
     }()
     fileprivate lazy var noLoginBtn : UIButton = {
@@ -69,6 +72,7 @@ class SPMineHeaderView:  UICollectionReusableView{
     var clickIdent : SPBtnClickBlock?
     var clickLogin : SPBtnClickBlock?
     var clickIcon : SPBtnClickBlock?
+    var clickAuth : SPBtnClickBlock?
     var memberModel : SPMemberModel?{
         didSet{
             sp_setupData()
@@ -185,6 +189,12 @@ extension SPMineHeaderView {
     }
     @objc fileprivate func sp_clickIcon(){
         guard let block = self.clickIcon else {
+            return
+        }
+        block()
+    }
+    @objc fileprivate func sp_clickAuth(){
+        guard let block = self.clickAuth else {
             return
         }
         block()

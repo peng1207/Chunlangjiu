@@ -22,6 +22,9 @@ class SPMineVC: SPBaseVC {
         view.clickIcon = { [weak self] in
             self?.sp_clickIconAction()
         }
+        view.clickAuth = { [weak self] in
+            self?.sp_clickIdentAction(isPush: false)
+        }
         return view
     }()
     fileprivate var dataArray : [SPMineSectionModel]?
@@ -264,50 +267,58 @@ extension SPMineVC {
         self.pushVC = true 
     }
     /// 点击切换身份事件
-    fileprivate func sp_clickIdentAction(){
+    fileprivate func sp_clickIdentAction(isPush:Bool = true){
         guard let userModel = SPAPPManager.instance().userModel else {
             sp_pushLogin()
             return
         }
-        guard let realModel = self.realNameAuth else {
-            sp_pushRealNameVC()
-            return
-        }
- 
-        if sp_getString(string: realModel.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH{
-           
-            if sp_getString(string: userModel.identity) == SP_IS_ENTERPRISE {
-                SPAPPManager.sp_change(identity: "")
-                
-            }else{
-                SPAPPManager.sp_change(identity: SP_IS_ENTERPRISE)
-                
-            }
-           sp_changeIdent()
-           self.headerView.sp_setupData()
-           sp_transitionAnimation()
-        }else{
-            if  sp_getString(string: realModel.status) == SP_STATUS_ACTIVE || sp_getString(string: realModel.status) == SP_STATUS_FAILING{
-                if sp_getString(string: realModel.status) == SP_STATUS_ACTIVE  {
-                    sp_showTextAlert(tips: "您还没有进行实名认证，请先认证！")
-                }
-                
-                sp_clickAuthAction()
-            }else if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_LOCKED {
-                let alertController = UIAlertController(title: "提示", message: "您的认证正在审核中，我们会尽快处理的", preferredStyle: UIAlertControllerStyle.alert)
-                alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
+//        guard let realModel = self.realNameAuth else {
+//            sp_pushAuthHomeVC()
+//            return
+//        }
+//
+        if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH{
+            if isPush {
+                if sp_getString(string: userModel.identity) == SP_IS_ENTERPRISE {
+                    SPAPPManager.sp_change(identity: "")
                     
-                }))
-                sp_mainQueue { [weak self] in
-                    self?.present(alertController, animated: true, completion: nil)
+                }else{
+                    SPAPPManager.sp_change(identity: SP_IS_ENTERPRISE)
+                    
                 }
-                
+                sp_changeIdent()
+                self.headerView.sp_setupData()
+                sp_transitionAnimation()
             }
+        }else{
+            sp_pushAuthHomeVC()
+//            if  sp_getString(string: realModel.status) == SP_STATUS_ACTIVE || sp_getString(string: realModel.status) == SP_STATUS_FAILING{
+//                if sp_getString(string: realModel.status) == SP_STATUS_ACTIVE  {
+//                    sp_showTextAlert(tips: "您还没有进行实名认证，请先认证！")
+//                }
+//
+//
+//            }else if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_LOCKED {
+//                let alertController = UIAlertController(title: "提示", message: "您的认证正在审核中，我们会尽快处理的", preferredStyle: UIAlertControllerStyle.alert)
+//                alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
+//
+//                }))
+//                sp_mainQueue { [weak self] in
+//                    self?.present(alertController, animated: true, completion: nil)
+//                }
+//
+//            }
         }
     }
+    
+    fileprivate func sp_pushAuthHomeVC(){
+        self.pushVC = true
+        let authVC = SPAuthHomeVC()
+        self.navigationController?.pushViewController(authVC, animated: true)
+    }
+    
     /// 点击认证
     fileprivate func sp_clickAuthAction(){
-        
         guard let model = self.realNameAuth else {
             sp_pushRealNameVC()
             return

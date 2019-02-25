@@ -150,7 +150,8 @@ class SPOrderProductView  :  UIView{
             if let status = Bool(sp_getString(string: orderItem?.auction_status)) , status == false{
                  maxAtt.append(NSAttributedString(string: "保密出价", attributes:[NSAttributedStringKey.font: sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
             }else{
-                 maxAtt.append(NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: orderItem?.max_price))", attributes:[NSAttributedStringKey.font: sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
+               
+                 maxAtt.append(NSAttributedString(string: "\(SP_CHINE_MONEY)\( sp_getString(string: orderItem?.max_price).count > 0 ? sp_getString(string: orderItem?.max_price) : "0.00")", attributes:[NSAttributedStringKey.font: sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
             }
             
            

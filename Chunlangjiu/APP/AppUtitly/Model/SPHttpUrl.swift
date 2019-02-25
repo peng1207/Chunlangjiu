@@ -178,6 +178,8 @@ let SP_GET_FUNDS_MONEY_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key
 let SP_GET_FUNDS_CASH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.cash"
 /// 资金明细列表
 let SP_GET_CAPITALDETLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fund"
+/// 资金明细详情
+let SP_GET_CAPITALDETDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fundInfo"
 /// 创建保证金订单
 let SP_GET_DEPOSITCREATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.depositCreate"
 /// 撤销保证金

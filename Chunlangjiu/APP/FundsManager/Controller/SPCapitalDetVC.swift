@@ -36,6 +36,12 @@ class SPCapitalDetVC: SPBaseVC {
         self.addChildViewController(vc)
         return vc
     }()
+    fileprivate lazy var refundVC : SPCapitalDetList = {
+        let vc = SPCapitalDetList()
+        vc.type = SP_FUNDS_BILL_TYPE_REFUND
+        self.addChildViewController(vc)
+        return vc
+    }()
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
         
@@ -67,6 +73,7 @@ class SPCapitalDetVC: SPBaseVC {
         self.scrollView.addSubview(self.recordVC.view)
         self.scrollView.addSubview(self.rechargeVC.view)
         self.scrollView.addSubview(self.cashVC.view)
+        self.scrollView.addSubview(self.refundVC.view)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -102,6 +109,10 @@ class SPCapitalDetVC: SPBaseVC {
         self.cashVC.view.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.rechargeVC.view.snp.right).offset(0)
             maker.top.bottom.width.equalTo(self.rechargeVC.view).offset(0)
+        }
+        self.refundVC.view.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.cashVC.view.snp.right).offset(0)
+            maker.top.bottom.width.equalTo(self.cashVC.view).offset(0)
         }
     }
     deinit {

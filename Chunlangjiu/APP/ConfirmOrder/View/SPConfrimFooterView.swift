@@ -52,7 +52,11 @@ class SPConfrimFooterView:  UIView{
         view.backgroundColor = UIColor.white
         view.lineView.isHidden = false
         view.contentLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
-        view.titleLabel.text = "应付定金"
+//        view.titleLabel.text = "应付定金 （若落标，定金则原路退回）"
+        let att = NSMutableAttributedString()
+        att.append(NSAttributedString(string: "应付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 15)]))
+        att.append(NSAttributedString(string: "（若落标，定金则原路退回）", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue),NSAttributedStringKey.font:sp_getFontSize(size: 12)]))
+        view.titleLabel.attributedText = att
         view.isHidden = true
         return view
     }()
@@ -61,7 +65,7 @@ class SPConfrimFooterView:  UIView{
         label.numberOfLines = 0
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.isHidden = true
-        label.font = sp_getFontSize(size: 14)
+        label.font = sp_getFontSize(size: 12)
         label.preferredMaxLayoutWidth = sp_getScreenWidth()
         return label
     }()
@@ -111,12 +115,14 @@ class SPConfrimFooterView:  UIView{
         self.freeView.isHidden = isAuction
         self.autoTipLabel.isHidden = !isAuction
         if isAuction {
-            let title = "说明：\n1、仅第一次对竞拍商品出价需交付定金；\n2、竞拍结束后，定金将会在三个工作日内进行退还；\n3、买家中标后不可申请退款退货，如违约平台将有权不返还定金，请您在出价前务必慎重考虑。\n"
-            let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: sp_getString(string: title))
+           
+            let attributedString:NSMutableAttributedString = NSMutableAttributedString()
+            attributedString.append(NSAttributedString(string: "说明：\n", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+            attributedString.append(NSAttributedString(string: "1.“出价金额”为竞拍叫价，叫价期间无需进行支付操作，请慎重出价，若您中标，则需支付扣除定金外的尾款；\n2.买家中标后不支付竞拍尾款，平台将有权不返还定金，\n3.竞拍结束，若落标，定金将在三个工作日内进行退还。", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
             let paragraphStyle:NSMutableParagraphStyle = NSMutableParagraphStyle()
             
             paragraphStyle.lineSpacing = 5 //大小调整
-            attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, sp_getString(string: title).count))
+            attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))
             
             self.autoTipLabel.attributedText = attributedString
             self.autoTop.update(offset: 10)
@@ -188,8 +194,8 @@ class SPConfrimFooterView:  UIView{
             
         }
         self.autoTipLabel.snp.makeConstraints { (maker ) in
-            maker.left.equalTo(self).offset(11)
-            maker.right.equalTo(self).offset(-11)
+            maker.left.equalTo(self).offset(12)
+            maker.right.equalTo(self).offset(-12)
             self.autoTop = maker.top.equalTo(self.autoPayView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(0)

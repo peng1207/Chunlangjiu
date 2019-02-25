@@ -16,7 +16,7 @@ class  SPShopHomeView:  UIView{
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
-    fileprivate lazy var nameLabel : UILabel = {
+    lazy var nameLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 16)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
