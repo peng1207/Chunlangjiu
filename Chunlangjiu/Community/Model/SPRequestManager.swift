@@ -26,11 +26,12 @@ typealias SPRequestBlock = (_ data : Any? ,_ error: Error?) -> Void
 class SPRequestManager {
     static  fileprivate var requestCacheArr = [DataRequest]()
     
-    let netManager : SessionManager = {
+    public static let netManager : SessionManager = {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        return SessionManager(configuration: configuration)
+        configuration.timeoutIntervalForRequest = 30
+        return Alamofire.SessionManager(configuration: configuration)
     }()
     
 //    static func sp_getSessionManager()->SessionManager{
@@ -74,11 +75,13 @@ class SPRequestManager {
         case .put :
             httpMethod = .put
         }
+       
+        let dataRequest =  netManager.request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
         // 忽略本地缓存，重新获取，防止没更新json文件
-        SessionManager.default.session.configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        SessionManager.default.session.configuration.timeoutIntervalForRequest = 30
-//        let dataRequest =   SPRequestManager().netManager.request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
-        let dataRequest = request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
+        //        SessionManager.default.session.configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        //        SessionManager.default.session.configuration.timeoutIntervalForRequest = 30
+//        let dataRequest = request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
+     
         requestModel.isRequest = true
         switch requestModel.reponseFormt {
         case .json:

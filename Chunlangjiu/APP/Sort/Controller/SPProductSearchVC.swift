@@ -26,6 +26,14 @@ class SPProductSearchVC: SPBaseVC {
         btn.addTarget(self, action: #selector(clickListAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate lazy var searchBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_search_white"), for: UIControlState.normal)
+        btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+  
+        btn.addTarget(self, action: #selector(sp_clickSearchBtn), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     fileprivate let SPProductSearchCollectCellID = "SPProductSearchCollectCellID"
     fileprivate let SPProductSearchHeaderID = "SPProductSearchHeaderID"
     fileprivate let SPProductSearchFooterID = "SPProductSearchFooterID"
@@ -58,12 +66,14 @@ class SPProductSearchVC: SPBaseVC {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_keyboardShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -73,12 +83,15 @@ class SPProductSearchVC: SPBaseVC {
         self.navigationItem.titleView = self.searchView
       
          self.view.addSubview(self.collectionView)
-       
-        let listBtnItem = UIBarButtonItem(customView: self.listBtn )
-        self.navigationItem.rightBarButtonItem = listBtnItem
+        self.sp_addSearchBtn()
         self.sp_addConstraint()
    
     }
+    /// 添加搜索按钮
+    fileprivate func sp_addSearchBtn(){
+         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.searchBtn)
+    }
+    
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.collectionView.snp.makeConstraints { (maker) in
@@ -140,6 +153,7 @@ extension SPProductSearchVC : UICollectionViewDelegate ,UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row < sp_getArrayCount(array: self.dataAray) {
              let model = self.dataAray?[indexPath.row]
+            
             sp_clickSearch(text: sp_getString(string: model?.searchValue))
         }
     }
@@ -149,6 +163,9 @@ extension SPProductSearchVC {
     @objc fileprivate func clickListAction(){
         self.listBtn.isSelected = !self.listBtn.isSelected
         self.productVC?.isH = self.listBtn.isSelected
+    }
+    @objc fileprivate func sp_clickSearchBtn(){
+        sp_clickSearch(text: sp_getString(string: self.searchView.searchTextFiled.text))
     }
     /// 获取本地数据
     fileprivate func sp_getLocalData(){
@@ -163,14 +180,14 @@ extension SPProductSearchVC {
             self.productVC?.keywords = text
             self.productVC?.sp_searchRequest()
             self.listBtn.isHidden = false
+            let listBtnItem = UIBarButtonItem(customView: self.listBtn )
+            self.navigationItem.rightBarButtonItem = listBtnItem
             sp_saveSearchText(text: text)
+            self.searchView.searchTextFiled.text = sp_getString(string: text)
         }else{
             sp_showTextAlert(tips: "请输入商品关键字")
         }
-        
-      
     }
-    
     fileprivate func sp_setupVC(){
         if self.productVC == nil {
             self.productVC = SPProductListVC()
@@ -202,4 +219,12 @@ extension SPProductSearchVC {
         self.dataAray?.removeAll()
         self.collectionView.reloadData()
     }
+}
+extension SPProductSearchVC {
+    
+    /// 键盘升起
+    @objc fileprivate func sp_keyboardShow(){
+        self.sp_addSearchBtn()
+    }
+    
 }
