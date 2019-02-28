@@ -64,9 +64,8 @@ class SPCapitalDetDetTableCell: UITableViewCell {
             maker.height.equalTo(20)
             maker.width.greaterThanOrEqualTo(0)
         }
-        
         self.contentLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.titleLabel.snp.right).offset(18)
+            maker.left.equalTo(self.contentView.snp.left).offset(108)
             maker.right.equalTo(self.contentView).offset(-11)
             maker.top.equalTo(self.contentView.snp.top).offset(15)
             maker.height.greaterThanOrEqualTo(20)
@@ -74,9 +73,10 @@ class SPCapitalDetDetTableCell: UITableViewCell {
         self.lineView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.contentView).offset(0)
             maker.top.equalTo(self.contentLabel.snp.bottom).offset(15)
-            maker.bottom.equalTo(self.contentView).offset(0)
             maker.height.equalTo(sp_lineHeight)
+            maker.bottom.equalTo(self.contentView.snp.bottom).offset(0)
         }
+       
     }
     deinit {
         

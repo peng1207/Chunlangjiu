@@ -60,7 +60,7 @@ class SPCapitalDetDetVC: SPBaseVC {
         self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "订单编号", content: sp_getString(string: self.detModel?.id)))
         if sp_getString(string: self.detModel?.type) == SP_FUNDS_BILL_TYPE_CASH{
             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "申请时间", content: sp_getString(string: self.detModel?.showTime)))
-//             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "到帐时间", content: ""))
+             self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "到帐时间", content: "一般2-3个工作日，具体到账时间以银行为准"))
         }else{
               self.dataArray.append(SPCapitalDetDetModel.sp_init(title: "创建时间", content: sp_getString(string: self.detModel?.showTime)))
         }
