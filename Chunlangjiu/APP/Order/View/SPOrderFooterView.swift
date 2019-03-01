@@ -55,6 +55,7 @@ class SPOrderFooterView:  UIView{
     fileprivate var refundTop : Constraint!
     fileprivate var payTop : Constraint!
     fileprivate var commissionTop : Constraint!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -114,6 +115,10 @@ class SPOrderFooterView:  UIView{
         }else{
             self.commissionTop.update(offset: 0)
         }
+        
+        
+        
+        
         
     }
     /// 添加UI

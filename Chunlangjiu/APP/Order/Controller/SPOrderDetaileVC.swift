@@ -17,7 +17,7 @@ class SPOrderDetaileVC: SPBaseVC {
 //    }()
     fileprivate lazy var headerView : SPOrderHeaderView = {
         let view = SPOrderHeaderView()
-        view.frame = CGRect(x: 0, y: 0, width: 0, height: sp_lineHeight)
+        view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenHeight())
         view.isHidden = true
         return view
     }()
@@ -69,8 +69,10 @@ class SPOrderDetaileVC: SPBaseVC {
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
         self.tableView.rowHeight = 125
+        self.tableView.beginUpdates()
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
+        self.tableView.endUpdates()
         self.tableView.showsVerticalScrollIndicator = false
         self.tableView.backgroundColor = self.view.backgroundColor
         self.view.addSubview(self.tableView)
@@ -93,14 +95,18 @@ class SPOrderDetaileVC: SPBaseVC {
                  maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-       
-        
-        self.headerView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview()
-            maker.left.right.equalTo(view)
-            maker.centerX.equalToSuperview()
-            maker.height.greaterThanOrEqualTo(0).priority(.high)
+        if #available(iOS 11.0, *) {
+            self.headerView.snp.makeConstraints { (maker) in
+                maker.width.equalTo(self.tableView)
+            }
         }
+       
+//        self.headerView.snp.makeConstraints { (maker) in
+//            maker.top.equalToSuperview()
+//            maker.left.right.equalTo(view)
+//            maker.centerX.equalToSuperview()
+//            maker.height.greaterThanOrEqualTo(0).priority(.high)
+//        }
 //        self.footerView.snp.makeConstraints { (maker) in
 //            maker.bottom.equalToSuperview()
 //            maker.left.right.equalTo(view)
@@ -318,8 +324,7 @@ extension SPOrderDetaileVC{
         self.footerView.isHidden = false
         self.headerView.detaileModel = self.orderDetaileModel
         self.footerView.detaileModel = self.orderDetaileModel
-        self.tableView.sp_layoutHeaderView()
-        self.tableView.sp_layoutFooterView()
+     
         self.bottomView.orderDetaile = self.orderDetaileModel
         let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: self.orderDetaileModel)
         self.bottomView.isHidden = bottomIsHidden
@@ -327,7 +332,8 @@ extension SPOrderDetaileVC{
         if sp_getString(string: orderDetaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_0 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION ) || (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_1 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION){
              sp_addTimeNotification()
         }
-        
+        self.tableView.sp_layoutHeaderView()
+        self.tableView.sp_layoutFooterView()
     }
 }
 // MARK: - action

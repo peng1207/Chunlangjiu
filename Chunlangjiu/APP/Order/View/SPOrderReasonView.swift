@@ -1,30 +1,36 @@
 //
-//  SPOrderContentView.swift
+//  SPOrderReasonView.swift
 //  Chunlangjiu
 //
-//  Created by 黄树鹏 on 2018/8/30.
-//  Copyright © 2018年 Chunlang. All rights reserved.
+//  Created by 黄树鹏 on 2019/2/28.
+//  Copyright © 2019 Chunlang. All rights reserved.
 //
 
 import Foundation
 import UIKit
 import SnapKit
-class SPOrderContentView:  UIView{
+class SPOrderReasonView:  UIView{
+    
     lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.font = sp_getFontSize(size: 14)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        label.textAlignment = .left
         return label
     }()
     lazy var contentLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 15)
+        label.font = sp_getFontSize(size: 14)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.preferredMaxLayoutWidth = sp_getScreenWidth()
-       
+        label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
-   fileprivate var titleLeft : Constraint!
+    var content : String? {
+        didSet{
+            self.sp_setupData()
+        }
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -32,8 +38,9 @@ class SPOrderContentView:  UIView{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func sp_updateTitle(left : CGFloat){
-        self.titleLeft.update(offset: left)
+    /// 赋值
+    fileprivate func sp_setupData(){
+        self.contentLabel.text = sp_getString(string: contentLabel)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -45,21 +52,20 @@ class SPOrderContentView:  UIView{
     fileprivate func sp_addConstraint(){
         self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.titleLabel.snp.makeConstraints { (maker) in
-          self.titleLeft = maker.left.equalTo(self).offset(22).constraint
-            maker.top.equalTo(self).offset(0)
+            maker.left.equalTo(self).offset(11)
+            maker.top.equalTo(self.snp.top).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.width.greaterThanOrEqualTo(0)
         }
         self.contentLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.contentLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.right).offset(0)
-            maker.top.equalTo(self).offset(0)
+            maker.right.lessThanOrEqualTo(self.snp.right).offset(-11)
             maker.width.greaterThanOrEqualTo(0)
-            maker.right.lessThanOrEqualTo(self.snp.right).offset(-8)
+            maker.top.equalTo(self.titleLabel.snp.top).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(0)
         }
-       
     }
     deinit {
         

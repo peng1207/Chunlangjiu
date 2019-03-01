@@ -124,9 +124,14 @@ class SPOrderHandle : NSObject {
             if SPAPPManager.sp_isBusiness(){
                 
             }else{
-                if btnIndex == 0 {
-                    sp_delete(order: model, viewController: vc, complete: complete)
+                if sp_getString(string: model.type) == SP_AUCTION{
+                      sp_toPay(orderModel: model, viewController: vc, complete: complete)
+                }else{
+                    if btnIndex == 0 {
+                        sp_delete(order: model, viewController: vc, complete: complete)
+                    }
                 }
+              
             }
         case SP_STATUS_3:
             

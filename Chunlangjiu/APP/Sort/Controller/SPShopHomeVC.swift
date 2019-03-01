@@ -30,6 +30,10 @@ class SPShopHomeVC: SPBaseVC {
         let view = SPShopConditionView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.sp_cornerRadius(cornerRadius: 5)
+        view.defaultBlock = { [weak self]in
+            self?.currentPage = 1
+            self?.sp_sendProductRequest()
+        }
         return view
     }()
     fileprivate lazy var listBtn  : UIButton = {
@@ -268,14 +272,14 @@ extension SPShopHomeVC {
         parm.updateValue(self.currentPage, forKey: "page_no")
         parm.updateValue(10, forKey: "page_size")
         
-//        if let price = self.conditionView.selectprice {
-//            if sp_getString(string: price.maxPrice).count > 0 {
-//                parm.updateValue(sp_getString(string: price.maxPrice), forKey: "max_price")
-//            }
-//            if sp_getString(string: price.minPrice).count > 0 {
-//                parm.updateValue(sp_getString(string: price.minPrice), forKey: "min_price")
-//            }
-//        }
+        if let price = self.conditionView.selectprice {
+            if sp_getString(string: price.maxPrice).count > 0 {
+                parm.updateValue(sp_getString(string: price.maxPrice), forKey: "max_price")
+            }
+            if sp_getString(string: price.minPrice).count > 0 {
+                parm.updateValue(sp_getString(string: price.minPrice), forKey: "min_price")
+            }
+        }
         //        if self.btnType == .comprehensive {
         //            parm.updateValue("", forKey: "orderBy")
         //        }else if self.btnType == .new {

@@ -45,6 +45,7 @@ enum SPMineType : Int {
     case customServer     = 33          // 我的客服
     case fans             = 34          // 粉丝推荐
     case set              = 35          // 设置
+    case shop             = 36          // 店铺
 }
 
 class SPMineData {
@@ -139,11 +140,21 @@ class SPMineData {
 //            array.append(sp_get_set())
 //            model.rowCount = 3
 //        }
-        array.append(self.sp_get_collect())
+        if SPAPPManager.sp_isBusiness() {
+            array.append(sp_get_shop())
+          
+        }else{
+//            array.append(self.sp_get_collect())
+//            array.append(sp_get_valuation())
+//            array.append(sp_get_customServer())
+//            array.append(sp_get_fans())
+//            array.append(sp_get_set())
+        }
         array.append(sp_get_valuation())
-        array.append(sp_get_customServer())
+        array.append(self.sp_get_collect())
         array.append(sp_get_fans())
-        array.append(sp_get_set())
+        array.append(sp_get_customServer())
+//
         model.rowCount = 3
         model.dataArray = array
         return model
@@ -341,6 +352,13 @@ class SPMineData {
         model.title = "我的估值"
         model.image = UIImage(named: "public_valuation")
         model.mintType = .valuation
+        return model
+    }
+    fileprivate class func sp_get_shop()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "我的店铺"
+        model.image = UIImage(named: "mine_shop")
+        model.mintType = .shop
         return model
     }
     fileprivate class func sp_get_customServer()->SPMineModel {

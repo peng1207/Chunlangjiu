@@ -77,7 +77,8 @@ class SPBondSuccessVC: SPBaseVC {
             self.canceBtn.setTitle("取消撤销申请", for: UIControlState.normal)
             let att = NSMutableAttributedString()
             att.append(NSAttributedString(string: "您的撤销保证金申请已提交成功！\n", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
-            att.append(NSAttributedString(string: "平台处理时间为1~3个工作日，请您耐心等待！", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+            att.append(NSAttributedString(string: "平台处理时间为1~3个工作日，请您耐心等待！\n", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+              att.append(NSAttributedString(string: "撤销的保证金将直接退回到您的可用余额！", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
             let paragraphStyle:NSMutableParagraphStyle = NSMutableParagraphStyle()
             
             paragraphStyle.lineSpacing = 5 //大小调整

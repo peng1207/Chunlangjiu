@@ -17,5 +17,6 @@ class SPMemberModel : SPBaseModel {
     var grade_name : String?
     var head_portrait : String?
     var shop_name : String?
-    var company_name : String? 
+    var company_name : String?
+    var shop_id : Int?
 }

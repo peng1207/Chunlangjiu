@@ -208,9 +208,12 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-//                 donetext = "删除订单"
-                isHidden = true
-              
+                if sp_getString(string: orderModel?.type) == SP_AUCTION {
+                    donetext = "付款"
+                    isHidden = false
+                }else{
+                      isHidden = true
+                }
             }
            
         case SP_STATUS_3:
@@ -288,7 +291,16 @@ class SPOrderBtnManager {
                 isHidden = true
             }
         case SP_STATUS_0:
-            isHidden = false
+            if SPAPPManager.sp_isBusiness() {
+                 isHidden = false
+            }else{
+                if sp_getString(string: orderModel?.type) == SP_AUCTION{
+                     isHidden = false
+                }else{
+                    isHidden = true
+                }
+            }
+           
         case SP_STATUS_1 :
             if SPAPPManager.sp_isBusiness(){
                 if sp_getString(string: orderModel?.progress) == SP_PROGRESS_2 {
@@ -302,13 +314,23 @@ class SPOrderBtnManager {
                 }else{
                     if sp_getString(string: orderModel?.progress ) == SP_PROGRESS_2 {
                         isHidden = true
-                    }else{
+                    }else if  sp_getString(string: orderModel?.progress) == SP_PROGRESS_1{
                         isHidden = false
+                    }else{
+                        isHidden = true
                     }
                 }
             }
         case SP_STATUS_2:
-            isHidden = true
+            if SPAPPManager.sp_isBusiness(){
+                isHidden = true
+            }else{
+                if sp_getString(string: orderModel?.type) == SP_AUCTION {
+                    isHidden = false
+                }else{
+                    isHidden = true
+                }
+            }
         case SP_STATUS_3:
             isHidden = true
         case SP_WAIT_CHECK:

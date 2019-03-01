@@ -27,6 +27,12 @@ class SPMineVC: SPBaseVC {
         }
         return view
     }()
+    fileprivate lazy var setBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_set"), for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_clickSet), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     fileprivate var dataArray : [SPMineSectionModel]?
   
     fileprivate var pushVC : Bool = false
@@ -80,6 +86,7 @@ class SPMineVC: SPBaseVC {
         self.tableView.tableHeaderView = self.headerView
         self.tableView.bounces = false
         self.view.addSubview(self.tableView)
+        self.view.addSubview(self.setBtn)
         if #available(iOS 11.0, *) {
             self.tableView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -97,6 +104,12 @@ class SPMineVC: SPBaseVC {
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.setBtn.snp.makeConstraints { (maker) in
+            maker.width.equalTo(30)
+            maker.height.equalTo(30)
+            maker.right.equalTo(self.view).offset(-10)
+            maker.top.equalTo(self.view).offset( sp_getstatusBarHeight() + 6)
         }
         
     }
@@ -241,6 +254,8 @@ extension SPMineVC {
             sp_pushCustomServer()
         case .fans?:
             sp_pushFans()
+        case .shop?:
+            sp_clickShop()
         case .none:
             sp_log(message: "none")
         case .some(_):
@@ -416,7 +431,14 @@ extension SPMineVC {
          self.dataArray = SPMineData.sp_getMineAllData()
         self.tableView.reloadData()
     }
-    
+    fileprivate func sp_clickShop(){
+        let shopVC = SPShopHomeVC()
+        let shopModel = SPShopModel()
+        shopModel.shop_name = SPAPPManager.instance().memberModel?.shop_name
+        shopModel.shop_id = SPAPPManager.instance().memberModel?.shop_id
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
+    }
     fileprivate func sp_pushOrderVC(orderState : SPOrderStatus = .all){
         self.pushVC = true
         if SPAPPManager.sp_isBusiness() {

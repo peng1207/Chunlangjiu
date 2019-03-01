@@ -53,6 +53,8 @@ class SPOrderModel : SPBaseModel {
     var info : String?
     var commission : String?   // 佣金
     var shop_payment : String?  // 店铺实收
+    var shop_explanation : String?  // 商家拒绝原因
+    var sysaftersales : String?     // 用户申请原因
     func sp_set(s:Int){
         if let second = self.second {
             self.second = second - s

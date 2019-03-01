@@ -907,8 +907,8 @@ extension SPProductAddVC{
         }
     }
     fileprivate func sp_dealCheckTip(tips:String,deposit:String){
-        SPProductTipView.sp_show(title: tips, canceComplete: { [weak self]in
-           self?.navigationController?.popViewController(animated: true)
+        SPProductTipView.sp_show(title: tips, canceComplete: { /*[weak self]in*/
+//           self?.navigationController?.popViewController(animated: true)
         }) { [weak self]in
             let rechargerVC = SPRechargeVC()
             rechargerVC.isBond = true

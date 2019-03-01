@@ -306,6 +306,7 @@
 		9ECB7C5021248C54009E843B /* SPDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4F21248C54009E843B /* SPDataBase.swift */; };
 		9ECE7BDD221FA33900FE6BCD /* SPNetWorkFailureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BDC221FA33900FE6BCD /* SPNetWorkFailureVC.swift */; };
 		9ECE7BDF2223B9DC00FE6BCD /* SPCapitalDetContentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BDE2223B9DC00FE6BCD /* SPCapitalDetContentModel.swift */; };
+		9ECE7C1A2228205700FE6BCD /* SPOrderReasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7C192228205600FE6BCD /* SPOrderReasonView.swift */; };
 		9ED254AC21CBE70400A3166A /* SPProductAuctionCollectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254AB21CBE70400A3166A /* SPProductAuctionCollectCell.swift */; };
 		9ED254AE21CD3FF100A3166A /* SPDetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254AD21CD3FF100A3166A /* SPDetView.swift */; };
 		9ED254B021CE81DB00A3166A /* SPMineCollectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED254AF21CE81DB00A3166A /* SPMineCollectCell.swift */; };
@@ -759,6 +760,7 @@
 		9ECB7C4F21248C54009E843B /* SPDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDataBase.swift; sourceTree = "<group>"; };
 		9ECE7BDC221FA33900FE6BCD /* SPNetWorkFailureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNetWorkFailureVC.swift; sourceTree = "<group>"; };
 		9ECE7BDE2223B9DC00FE6BCD /* SPCapitalDetContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetContentModel.swift; sourceTree = "<group>"; };
+		9ECE7C192228205600FE6BCD /* SPOrderReasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderReasonView.swift; sourceTree = "<group>"; };
 		9ED254AB21CBE70400A3166A /* SPProductAuctionCollectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductAuctionCollectCell.swift; sourceTree = "<group>"; };
 		9ED254AD21CD3FF100A3166A /* SPDetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDetView.swift; sourceTree = "<group>"; };
 		9ED254AF21CE81DB00A3166A /* SPMineCollectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPMineCollectCell.swift; sourceTree = "<group>"; };
@@ -1003,6 +1005,7 @@
 				561C74EA21CE2B1800132D88 /* SPOrderImgeTableCell.swift */,
 				56F47F3521D0E65300613BBA /* SPOrderHomeHeadView.swift */,
 				9E194D6821DBC2D10080B72D /* SPCommissionView.swift */,
+				9ECE7C192228205600FE6BCD /* SPOrderReasonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2435,6 +2438,7 @@
 				56107EF121C3B16F0012CFB9 /* SPTableDataSource.swift in Sources */,
 				9EC5143D210AE770006869B3 /* SPWineryListHeaderView.swift in Sources */,
 				9EF4C6BC20EF431D007E9909 /* SPCityVC.swift in Sources */,
+				9ECE7C1A2228205700FE6BCD /* SPOrderReasonView.swift in Sources */,
 				9EF4C6F420F2401B007E9909 /* SPWineryListTableCell.swift in Sources */,
 				9EA86C792219BAA500088AD8 /* SPFansShareModel.swift in Sources */,
 				9E5F7AA121B9791E00A9EF35 /* SPFansVC.swift in Sources */,
