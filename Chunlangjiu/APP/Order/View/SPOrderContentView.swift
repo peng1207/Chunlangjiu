@@ -20,8 +20,8 @@ class SPOrderContentView:  UIView{
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.preferredMaxLayoutWidth = sp_getScreenWidth()
-       
+//        label.preferredMaxLayoutWidth = sp_getScreenWidth()
+        label.numberOfLines = 0
         return label
     }()
    fileprivate var titleLeft : Constraint!
@@ -43,12 +43,14 @@ class SPOrderContentView:  UIView{
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
+        
         self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.titleLabel.snp.makeConstraints { (maker) in
           self.titleLeft = maker.left.equalTo(self).offset(22).constraint
             maker.top.equalTo(self).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.width.greaterThanOrEqualTo(0)
+           
         }
         self.contentLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.contentLabel.snp.makeConstraints { (maker) in

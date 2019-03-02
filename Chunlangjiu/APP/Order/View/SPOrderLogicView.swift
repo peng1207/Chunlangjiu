@@ -61,7 +61,7 @@ class SPOrderLogicView:  UIView{
         self.nameView.snp.makeConstraints { (maker ) in
             maker.left.right.equalTo(self).offset(0)
             maker.top.equalTo(self).offset(14)
-            maker.height.greaterThanOrEqualTo(0)
+            maker.height.greaterThanOrEqualTo(18)
         }
         self.codeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.nameView).offset(0)

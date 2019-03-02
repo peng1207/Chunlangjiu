@@ -209,8 +209,13 @@ class SPOrderBtnManager {
                 isHidden = true
             }else{
                 if sp_getString(string: orderModel?.type) == SP_AUCTION {
-                    donetext = "付款"
-                    isHidden = false
+                    if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_PAY{
+                        donetext = "付款"
+                        isHidden = false
+                    }else{
+                        isHidden = true
+                    }
+                   
                 }else{
                       isHidden = true
                 }
@@ -220,7 +225,13 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-                 isHidden = true
+                if sp_getString(string: orderModel?.type) == SP_AUCTION {
+                    isHidden = true
+                }else{
+                    isHidden = false
+                    donetext = "平台接入"
+                }
+
             }
         case SP_WAIT_CHECK:
             if SPAPPManager.sp_isBusiness(){
@@ -326,13 +337,26 @@ class SPOrderBtnManager {
                 isHidden = true
             }else{
                 if sp_getString(string: orderModel?.type) == SP_AUCTION {
-                    isHidden = false
+                    if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_PAY {
+                         isHidden = false
+                    }else{
+                        isHidden = true
+                    }
+                   
                 }else{
                     isHidden = true
                 }
             }
         case SP_STATUS_3:
-            isHidden = true
+            if SPAPPManager.sp_isBusiness() {
+                isHidden = true
+            }else{
+                if sp_getString(string: orderModel?.type) == SP_AUCTION{
+                    isHidden = true
+                }else{
+                    isHidden = false
+                }
+            }
         case SP_WAIT_CHECK:
             isHidden = false
         default:

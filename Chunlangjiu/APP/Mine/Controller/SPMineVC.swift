@@ -432,6 +432,7 @@ extension SPMineVC {
         self.tableView.reloadData()
     }
     fileprivate func sp_clickShop(){
+        self.pushVC = true
         let shopVC = SPShopHomeVC()
         let shopModel = SPShopModel()
         shopModel.shop_name = SPAPPManager.instance().memberModel?.shop_name

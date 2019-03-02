@@ -39,6 +39,7 @@ class SPOrderDetaileVC: SPBaseVC {
         view.isHidden = true
         return view
     }()
+ 
     fileprivate var tableView : UITableView!
     fileprivate var orderDetaileModel : SPOrderDetaileModel?
     fileprivate var bottomHeight : Constraint!
@@ -77,6 +78,7 @@ class SPOrderDetaileVC: SPBaseVC {
         self.tableView.backgroundColor = self.view.backgroundColor
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.bottomView)
+     
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -334,6 +336,7 @@ extension SPOrderDetaileVC{
         }
         self.tableView.sp_layoutHeaderView()
         self.tableView.sp_layoutFooterView()
+        
     }
 }
 // MARK: - action

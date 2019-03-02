@@ -65,7 +65,9 @@ class SPRevokeBondTipVC: SPBaseVC {
         let paragraphStyle:NSMutableParagraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 5 //大小调整
         let att = NSMutableAttributedString()
-        att.append(NSAttributedString(string: "撤销保证金后：\n1、您的卖家账户变成普通卖家，失去星级卖家的相关特权；\n2、您的撤销申请经平台审核后，保证金将从冻结金额转入账户余额， 您即可进行资金提现；撤销申请时间约为1~3个工作日；\n3、如您的撤销申请审核失败，请致电400-788-9550咨询原因，感谢您的理解与支持。\n", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+        att.append(NSAttributedString(string: "撤销保证金后：\n1、您的卖家账户变成普通卖家，失去星级卖家的相关特权；\n", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+        att.append(NSAttributedString(string: "2、若撤销保证金系统将随机下架您的商品至3个以内！\n", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+          att.append(NSAttributedString(string: "3、您的撤销申请经平台审核后，保证金将从冻结金额转入账户余额， 您即可进行资金提现；撤销申请时间约为1~3个工作日；\n4、如您的撤销申请审核失败，请致电400-788-9550咨询原因，感谢您的理解与支持。\n", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
         att.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, att.length))
         label.attributedText = att
         return label

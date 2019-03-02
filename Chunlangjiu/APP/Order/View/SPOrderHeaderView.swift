@@ -21,35 +21,35 @@ class SPOrderHeaderView:  UIView{
     }()
   
     // 取消原因
-    fileprivate lazy var canceView : SPOrderContentView = {
-        let view = SPOrderContentView()
+    fileprivate lazy var canceView : SPOrderReasonView = {
+        let view = SPOrderReasonView()
         view.contentLabel.numberOfLines = 0
         view.titleLabel.text = "取消原因："
         view.isHidden = true
-        view.sp_updateTitle(left: 11)
+//        view.sp_updateTitle(left: 11)
         view.titleLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         view.titleLabel.font = sp_getFontSize(size: 14)
         view.contentLabel.font = sp_getFontSize(size: 14)
         return view
     }()
     // 申请原因
-    fileprivate lazy var applyView : SPOrderContentView = {
-        let view = SPOrderContentView()
+    fileprivate lazy var applyView : SPOrderReasonView = {
+        let view = SPOrderReasonView()
         view.contentLabel.numberOfLines = 0
         view.titleLabel.text = "申请理由："
         view.isHidden = true
-        view.sp_updateTitle(left: 11)
+//        view.sp_updateTitle(left: 11)
          view.titleLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         view.titleLabel.font = sp_getFontSize(size: 14)
         return view
     }()
     // 拒绝原因
-    fileprivate lazy var refuseView : SPOrderContentView = {
-        let view = SPOrderContentView()
+    fileprivate lazy var refuseView : SPOrderReasonView = {
+        let view = SPOrderReasonView()
         view.contentLabel.numberOfLines = 0
         view.titleLabel.text = "拒绝原因："
         view.isHidden = true
-        view.sp_updateTitle(left: 11)
+//        view.sp_updateTitle(left: 11)
          view.titleLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
          view.titleLabel.font = sp_getFontSize(size: 14)
         return view
@@ -81,13 +81,13 @@ class SPOrderHeaderView:  UIView{
         self.stateView.detaileModel = detaileModel
         self.infoView.content = sp_getString(string: detaileModel?.info)
         self.infoView.isHidden = sp_getString(string: detaileModel?.info).count > 0  ? false : true
-     
+       
         var isValues = false
-        if sp_getString(string: detaileModel?.cancel_reason).count > 0 || sp_getString(string: detaileModel?.shop_explanation).count > 0 || sp_getString(string: detaileModel?.sysaftersales).count > 0 {
+        if sp_getString(string: detaileModel?.cancel_reason).count > 0 || sp_getString(string: detaileModel?.shop_explanation).count > 0 || sp_getString(string: detaileModel?.reason).count > 0 {
             isValues = true
         }
         self.canceView.contentLabel.text = "\(sp_getString(string: detaileModel?.cancel_reason))"
-        self.applyView.contentLabel.text = sp_getString(string: detaileModel?.sysaftersales)
+        self.applyView.contentLabel.text = sp_getString(string: detaileModel?.reason)
         self.refuseView.contentLabel.text = sp_getString(string: detaileModel?.shop_explanation)
  
         if sp_getString(string: detaileModel?.cancel_reason).count > 0  {
@@ -95,7 +95,7 @@ class SPOrderHeaderView:  UIView{
         }else{
             self.canceView.isHidden = true
         }
-        if sp_getString(string: detaileModel?.sysaftersales).count > 0  {
+        if sp_getString(string: detaileModel?.reason).count > 0  {
             self.applyView.isHidden = false
         }else{
             self.applyView.isHidden = true
@@ -107,15 +107,20 @@ class SPOrderHeaderView:  UIView{
         }
         self.canceTop.update(offset: isValues ? 0 : 0 )
       
-        if sp_getString(string: detaileModel?.cancel_reason).count > 0 , sp_getString(string: detaileModel?.sysaftersales).count > 0 {
+        if sp_getString(string: detaileModel?.cancel_reason).count > 0 , sp_getString(string: detaileModel?.reason).count > 0 {
             self.applyTop.update(offset: 10)
         }else{
             self.applyTop.update(offset: 0)
         }
-        if sp_getString(string: detaileModel?.sysaftersales).count > 0 , sp_getString(string: detaileModel?.shop_explanation).count > 0 {
+        if sp_getString(string: detaileModel?.reason).count > 0 , sp_getString(string: detaileModel?.shop_explanation).count > 0 {
             self.refuseTop.update(offset: 10)
         }else{
-            self.refuseTop.update(offset: 0)
+            if sp_getString(string: detaileModel?.cancel_reason).count > 0 , sp_getString(string: detaileModel?.shop_explanation).count > 0 {
+                 self.refuseTop.update(offset: 10)
+            }else{
+                 self.refuseTop.update(offset: 0)
+            }
+           
         }
           self.reasonBottom.update(offset: isValues ? -10 : 0)
     }

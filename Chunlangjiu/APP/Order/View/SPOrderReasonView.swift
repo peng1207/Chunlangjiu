@@ -24,6 +24,7 @@ class SPOrderReasonView:  UIView{
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
         label.numberOfLines = 0
+        label.preferredMaxLayoutWidth = sp_getScreenWidth() - 94
         return label
     }()
     var content : String? {
@@ -50,18 +51,17 @@ class SPOrderReasonView:  UIView{
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.titleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
+ 
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self).offset(11)
             maker.top.equalTo(self.snp.top).offset(0)
             maker.height.greaterThanOrEqualTo(0)
-            maker.width.greaterThanOrEqualTo(0)
+            maker.width.equalTo(72)
         }
-        self.contentLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
+ 
         self.contentLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.right).offset(0)
-            maker.right.lessThanOrEqualTo(self.snp.right).offset(-11)
-            maker.width.greaterThanOrEqualTo(0)
+            maker.right.equalTo(self.snp.right).offset(-11)
             maker.top.equalTo(self.titleLabel.snp.top).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(0)

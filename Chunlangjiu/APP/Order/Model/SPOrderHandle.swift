@@ -118,8 +118,6 @@ class SPOrderHandle : NSObject {
                 }
               
             }
-            
-           
         case SP_STATUS_2:
             if SPAPPManager.sp_isBusiness(){
                 
@@ -131,12 +129,11 @@ class SPOrderHandle : NSObject {
                         sp_delete(order: model, viewController: vc, complete: complete)
                     }
                 }
-              
             }
         case SP_STATUS_3:
-            
             if btnIndex == 0{
-                sp_delete(order: model, viewController: vc, complete: complete)
+                 sp_openTel(text: "400-788-9550")
+//                sp_delete(order: model, viewController: vc, complete: complete)
             }
         case SP_TRADE_CLOSED_BY_SYSTEM:
             if btnIndex == 0 {
