@@ -8,7 +8,8 @@
 
 import Foundation
 import HandyJSON
-class SPProductModel : HandyJSON {
+ 
+class SPProductModel :  HandyJSON {
     /// 商品ID
     var item_id : Int! = 0
     /// 分类ID

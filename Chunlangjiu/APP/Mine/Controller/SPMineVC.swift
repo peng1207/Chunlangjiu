@@ -224,8 +224,10 @@ extension SPMineVC {
         case .deliver?:
             sp_pushOrderVC(orderState: SPOrderStatus.deliver)
         case .saleProduct?:
+//            sp_clickSale()
             sp_pushWebVC(url: "\(SP_GET_ONSALE_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "在售商品管理")
         case .warehouseProduct?:
+//            sp_clickWarehouse()
             sp_pushWebVC(url: "\(SP_GET_INSTOCK_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "仓库商品管理")
         case .member?:
             if SPAPPManager.sp_isBusiness() {
@@ -241,8 +243,10 @@ extension SPMineVC {
         case .bank_card?:
             sp_pushWebVC(url: "\(SP_GET_BANK_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "银行卡管理")
         case .auctionProduct?:
+//            sp_clickProductAuction()
             sp_pushWebVC(url: "\(SP_GET_AUCTION_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "竞拍商品管理")
         case .reviewProduct?:
+//            sp_clickReview()
             sp_pushWebVC(url: "\(SP_GET_PEND_WEB_UEL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "审核商品管理")
         case .cance?:
             sp_clickCanceOrder()
@@ -472,6 +476,8 @@ extension SPMineVC {
         self.navigationController?.pushViewController(orderVC, animated: true)
     }
     fileprivate func sp_pushProductManager(){
+        self.pushVC = true
+//        sp_clickProductManager()
         sp_pushWebVC(url: "\(SP_GET_ITECEMTER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))", title: "商品管理")
         
     }
@@ -518,6 +524,32 @@ extension SPMineVC {
         }
         self.pushVC = true
     }
+    fileprivate func sp_clickProductManager(){
+        let managerVC = SPProductManagerVC()
+        self.navigationController?.pushViewController(managerVC, animated: true)
+    }
+    fileprivate func sp_clickSale(){
+        let vc = SPShopProductVC()
+        vc.title = "在售商品"
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    fileprivate func sp_clickWarehouse(){
+        let vc = SPShopProductVC()
+        vc.title = "仓库商品"
+        vc.type = .warehouse
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    fileprivate func sp_clickReview(){
+        let vc = SPReviewProductVC()
+        vc.title = "审核商品"
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    fileprivate func sp_clickProductAuction(){
+        let vc = SPProductAuctionVC()
+        vc.title = "竞拍商品"
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     /// 取消订单
     fileprivate func sp_clickCanceOrder(){
         let orderListVC = SPOrderListVC()

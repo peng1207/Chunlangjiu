@@ -291,6 +291,145 @@ class SPProductRequest : SPAppRequest {
             }
         }
     }
+    /// 获取店铺商品列表
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getShopProductList(requestModel:SPRequestModel,complete:SPRequestCompletList?){
+        requestModel.url = SP_GET_SHOP_PRODUCTLIST_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var dataArray : [SPProductModel] = [SPProductModel]()
+                var totalPage : Int = 1
+                if errorcode == SP_Request_Code_Success {
+                    let item_list : [Any]? = data?["item_list"] as? [Any]
+                    if sp_getArrayCount(array: item_list) > 0 {
+                        for tmpDic in item_list! {
+                            if let dic : [String : Any] = tmpDic as? [String : Any] {
+                                let model = SPProductModel.sp_deserialize(from: dic)
+                                if let m = model {
+                                    dataArray.append(m)
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    if let page = Int(sp_getString(string: data?["totalPage"])) {
+                         totalPage = page
+                    }else{
+                         totalPage = 0 
+                    }
+                   
+                    
+                }
+                
+                if let block = complete {
+                        block(errorcode,dataArray,nil,totalPage)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil,0)
+                }
+            }
+        }
+    }
+    /// 获取商品竞拍列表
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getShopProductAuctionList(requestModel:SPRequestModel,complete:SPRequestCompletList?){
+        requestModel.url = SP_GET_SHOP_PRODUCTAUCTIONLIST_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var dataArray : [SPProductModel] = [SPProductModel]()
+                var totalPage : Int = 1
+                if errorcode == SP_Request_Code_Success {
+                    let item_list : [Any]? = data?["item_list"] as? [Any]
+                    if sp_getArrayCount(array: item_list) > 0 {
+                        for tmpDic in item_list! {
+                            if let dic : [String : Any] = tmpDic as? [String : Any] {
+                                let model = SPProductModel.sp_deserialize(from: dic)
+                                if let m = model {
+                                    dataArray.append(m)
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    if let page = Int(sp_getString(string: data?["totalPage"])) {
+                        totalPage = page
+                    }else{
+                        totalPage = 0
+                    }
+                    
+                    
+                }
+                if let block = complete {
+                    block(errorcode,dataArray,nil,totalPage)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Code_Success,nil,nil,0)
+                }
+            }
+        }
+    }
+    /// 更改商品状态
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getShopChangeProductStatus(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_SHOP_CHANGEPRODUCTSTATUS_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                    block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"请求失败",nil)
+                }
+            }
+        }
+    }
+    /// 设置竞拍商品
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getShopSetAuction(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_SHOP_SETAUCTIONPRODUCT_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                    block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"设置竞拍商品失败",nil)
+                }
+            }
+        }
+    }
     /// 检查用户是否达到最大发布商品的权限
     ///
     /// - Parameters:

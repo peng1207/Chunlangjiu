@@ -60,6 +60,8 @@ func sp_getRequestStatues(toolModel : SPOrderToolModel?)-> String{
         state = SP_AUCTION_2
     case .falling_mark:
         state = SP_AUCTION_3
+    case .auction_receipt:
+        state = SP_AUCTION_4
     default:
         state = ""
     }
@@ -129,21 +131,21 @@ private func sp_getDefaultOrderType(orderType : SPOrderType)->[SPOrderToolModel]
 /// - Returns: 竞拍订单状态数据
 private func sp_getAuctionOrderType(orderType : SPOrderType)->[SPOrderToolModel]{
     var list = [SPOrderToolModel]()
-    let all = SPOrderToolModel()
-    all.status = .all
-    all.statusString = "全部"
-    all.orderType = orderType
-    list.append(all)
+//    let all = SPOrderToolModel()
+//    all.status = .all
+//    all.statusString = "全部"
+//    all.orderType = orderType
+//    list.append(all)
     let pendPay = SPOrderToolModel()
     pendPay.statusString = "待付定金"
     pendPay.status = .paydown
     pendPay.orderType = orderType
     list.append(pendPay)
-    let receipt = SPOrderToolModel()
-    receipt.status = .auction_ing
-    receipt.statusString = "竞拍中"
-    receipt.orderType = orderType
-    list.append(receipt)
+    let auction_ing = SPOrderToolModel()
+    auction_ing.status = .auction_ing
+    auction_ing.statusString = "竞拍中"
+    auction_ing.orderType = orderType
+    list.append(auction_ing)
     let finish = SPOrderToolModel()
     finish.status = .winning_bid
     finish.statusString = "已中标"
@@ -154,6 +156,12 @@ private func sp_getAuctionOrderType(orderType : SPOrderType)->[SPOrderToolModel]
     cance.statusString = "落标"
     cance.orderType = orderType
     list.append(cance)
+    // auction_receipt
+    let receipt = SPOrderToolModel()
+    receipt.status = .auction_receipt
+    receipt.statusString = "待收货"
+    receipt.orderType = orderType
+    list.append(receipt)
     return list
 }
 /// 获取售后订单

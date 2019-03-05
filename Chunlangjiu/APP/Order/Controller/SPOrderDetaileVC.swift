@@ -24,6 +24,7 @@ class SPOrderDetaileVC: SPBaseVC {
     fileprivate lazy var footerView : SPOrderFooterView = {
         let view = SPOrderFooterView()
         view.isHidden = true
+        view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenHeight())
         view.priceView.offerView.btn.addTarget(self, action: #selector(sp_clickEditPrice), for: UIControlEvents.touchUpInside)
         return view
     }()

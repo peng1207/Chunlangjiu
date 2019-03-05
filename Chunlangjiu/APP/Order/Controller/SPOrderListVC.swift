@@ -228,9 +228,7 @@ extension SPOrderListVC {
                 }else{
                     sp_sendShopOrderRequest()
                 }
-                
             }
-           
         }else{
             if self.toolModel?.orderType == SPOrderType.afterSaleType {
                 sp_sendAfterSalesRequest()

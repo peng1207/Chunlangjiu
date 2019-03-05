@@ -123,7 +123,11 @@ class SPOrderHandle : NSObject {
                 
             }else{
                 if sp_getString(string: model.type) == SP_AUCTION{
-                      sp_toPay(orderModel: model, viewController: vc, complete: complete)
+                    if sp_getString(string: model.trade_ststus) == SP_WAIT_BUYER_PAY {
+                         sp_toPay(orderModel: model, viewController: vc, complete: complete)
+                    }else if sp_getString(string: model.trade_ststus) == SP_WAIT_BUYER_CONFIRM_GOODS{
+                        sp_confirmOrder(orderModel: model, viewController: vc, complete: complete)
+                    }
                 }else{
                     if btnIndex == 0 {
                         sp_delete(order: model, viewController: vc, complete: complete)

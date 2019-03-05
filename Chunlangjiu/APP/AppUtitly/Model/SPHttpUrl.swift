@@ -10,8 +10,8 @@ import Foundation
 
 
 /// 域名
-//let SP_MAIN_DOMAIN_NAME  =   "http://mall.chunlangjiu.com"
-let SP_MAIN_DOMAIN_NAME  =   "http://test.chunlangjiu.com"
+let SP_MAIN_DOMAIN_NAME  =   "http://mall.chunlangjiu.com"
+//let SP_MAIN_DOMAIN_NAME  =   "http://test.chunlangjiu.com"
 /// 保存域名对应的key
 let SP_MAIN_DOMAIN_NAME_KEY = "SP_MAIN_DOMAIN_NAME_KEY"
 
@@ -223,6 +223,14 @@ let SP_GET_PLATFORMALCOHOL_URL = "\(SPNetWorkManager.instance().sp_getDomainName
 let SP_GET_SHOPUPLOAD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=image.upload"
 ///  添加商品
 let SP_GET_SHOPADDPRODUCT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.create"
+/// 获取商品列表
+let SP_GET_SHOP_PRODUCTLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.list"
+/// 获取商品竞拍列表
+let SP_GET_SHOP_PRODUCTAUCTIONLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.auction.list"
+/// 更改商品的状态
+let SP_GET_SHOP_CHANGEPRODUCTSTATUS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.status"
+/// 设置竞拍商品
+let SP_GET_SHOP_SETAUCTIONPRODUCT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.auction"
 /// 获取商家订单列表
 let SP_GET_SHOPORDELIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=trade.list"
 /// 获取商家订单详情

@@ -77,6 +77,12 @@ class SPActivityVC: SPBaseVC {
         }
         self.tableView.reloadData()
         self.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.835)
+        var top : CGFloat = 0.0
+        if sp_getArrayCount(array: self.activityModel?.list) > 0 {
+            top = 41.0
+        }
+        self.footerView.frame =  CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.533 + top)
+        self.footerView.sp_updateTop(top: top)
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
         
@@ -107,8 +113,10 @@ class SPActivityVC: SPBaseVC {
             self.noData.isHidden = false
             self.noData.text = "暂时没有活动哦!"
             self.view.bringSubview(toFront: self.noData)
+            self.tableView.isHidden = true
         }else{
             self.noData.isHidden = true
+            self.tableView.isHidden = false
         }
     }
     /// 添加约束

@@ -14,10 +14,15 @@ class SPActivityFooterView:  UIView{
         let view = UIImageView()
         return view
     }()
+    fileprivate var top : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
     }
+    func sp_updateTop(top:CGFloat){
+        self.top.update(offset: top)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,7 +35,7 @@ class SPActivityFooterView:  UIView{
     fileprivate func sp_addConstraint(){
         self.imgView.snp.makeConstraints { (maker) in
             maker.left.right.bottom.equalTo(self).offset(0)
-            maker.top.equalTo(self.snp.top).offset(41)
+           self.top = maker.top.equalTo(self.snp.top).offset(41).constraint
         }
     }
     deinit {

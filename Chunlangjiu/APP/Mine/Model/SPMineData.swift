@@ -385,30 +385,65 @@ class SPMineData {
     class func sp_getItemCount(mineModel:SPMineModel?,countModel:SPMineCountModel?) -> String{
         var count = ""
         if let mine = mineModel ,let cModel = countModel {
-            switch mine.mintType {
-            case .pend_pay? :
-                count = sp_getString(string: cModel.wait_pay_num)
-            case .pend_receipt? :
-                count = sp_getString(string: cModel.wait_confirm_goods_num)
-            case .evaluated? :
-                count = sp_getString(string: cModel.notrate_num)
-            case .deliver? :
-                count = sp_getString(string: cModel.wait_send_goods_num)
-            case .cance? :
-                count = sp_getString(string: cModel.canceled_num)
-            case .after_sale? :
-                count = sp_getString(string: cModel.after_sale_num)
-            case .warehouseProduct? :
-                count = sp_getString(string: cModel.instock_num)
-            case .reviewProduct? :
-                count = sp_getString(string: cModel.pending_num)
-            case .none:
-                count = ""
-            case .some(_):
-                  count = ""
-            }
+            count = self.sp_getCount(to: mine.mintType, countModel: cModel)
+//            switch mine.mintType {
+//            case .pend_pay? :
+//                count = sp_getString(string: cModel.wait_pay_num)
+//            case .pend_receipt? :
+//                count = sp_getString(string: cModel.wait_confirm_goods_num)
+//            case .evaluated? :
+//                count = sp_getString(string: cModel.notrate_num)
+//            case .deliver? :
+//                count = sp_getString(string: cModel.wait_send_goods_num)
+//            case .cance? :
+//                count = sp_getString(string: cModel.canceled_num)
+//            case .after_sale? :
+//                count = sp_getString(string: cModel.after_sale_num)
+//            case .warehouseProduct? :
+//                count = sp_getString(string: cModel.instock_num)
+//            case .reviewProduct? :
+//                count = sp_getString(string: cModel.pending_num)
+//            case .none:
+//                count = ""
+//            case .some(_):
+//                  count = ""
+//            }
         }
         
+        return count
+    }
+    class func sp_getCount(to mintType : SPMineType, countModel : SPMineCountModel?,isShowZero : Bool = false )->String{
+       var count = ""
+        if let cModel = countModel {
+            switch mintType {
+            case .pend_pay :
+                count = sp_getString(string: cModel.wait_pay_num)
+            case .pend_receipt:
+                count = sp_getString(string: cModel.wait_confirm_goods_num)
+            case .evaluated:
+                count = sp_getString(string: cModel.notrate_num)
+            case .deliver:
+                count = sp_getString(string: cModel.wait_send_goods_num)
+            case .cance:
+                count = sp_getString(string: cModel.canceled_num)
+            case .after_sale:
+                count = sp_getString(string: cModel.after_sale_num)
+            case .warehouseProduct:
+                count = sp_getString(string: cModel.instock_num)
+            case .reviewProduct:
+                count = sp_getString(string: cModel.pending_num)
+            case .saleProduct:
+                count = sp_getString(string: cModel.onsale_num)
+            case .auctionProduct:
+                count = sp_getString(string: cModel.auction_num)
+            default:
+                count = ""
+            }
+            
+        }
+        if isShowZero , count.count == 0 {
+            count = "0"
+        }
         return count
     }
     

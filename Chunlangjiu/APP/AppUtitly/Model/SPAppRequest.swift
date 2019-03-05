@@ -1367,6 +1367,7 @@ class SPAppRequest {
                             productModel?.auctionitem_id = sp_getString(string: auction?["auctionitem_id"])
                             productModel?.pledge = sp_getString(string: auction?["pledge"])
                             productModel?.is_pay = sp_getString(string: auction?["is_pay"])
+                            productModel?.auction_status = sp_getString(string: auction?["auction_status"])
                         }
                         
                         

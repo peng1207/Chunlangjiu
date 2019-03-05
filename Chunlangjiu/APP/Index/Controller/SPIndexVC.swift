@@ -637,7 +637,7 @@ extension SPIndexVC{
         }
        
         if sp_getArrayCount(array: self.dataArray) > 0 {
-            sp_simpleSQueues {
+//            sp_simpleSQueues {
                 if sp_getArrayCount(array: self.auctionGood.dataArray) > 0 {
                     var list = [SPProductModel]()
                     for model in self.auctionGood.dataArray! {
@@ -651,7 +651,7 @@ extension SPIndexVC{
                         sp_dealDataArray(all: false)
 //                    }
                 }
-            }
+//            }
         }
     }
     @objc fileprivate func sp_editPrice(){

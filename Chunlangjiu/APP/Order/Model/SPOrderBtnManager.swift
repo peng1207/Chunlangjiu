@@ -212,6 +212,9 @@ class SPOrderBtnManager {
                     if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_PAY{
                         donetext = "付款"
                         isHidden = false
+                    }else if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_CONFIRM_GOODS{
+                        donetext = "商品签单"
+                        isHidden = false
                     }else{
                         isHidden = true
                     }
@@ -339,6 +342,8 @@ class SPOrderBtnManager {
                 if sp_getString(string: orderModel?.type) == SP_AUCTION {
                     if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_PAY {
                          isHidden = false
+                    }else if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_CONFIRM_GOODS{
+                        isHidden = false
                     }else{
                         isHidden = true
                     }

@@ -170,9 +170,9 @@ class SPProductContentView:  UIView{
             maker.height.greaterThanOrEqualTo(0)
         }
         self.shopCartBtn.snp.makeConstraints { (maker) in
-            maker.width.equalTo(22)
+            maker.width.equalTo(0)
             maker.height.equalTo(21)
-            maker.right.equalTo(self).offset(-15)
+            maker.right.equalTo(self).offset(-6)
             maker.bottom.equalTo(self).offset(-14)
         }
         self.signImgView.snp.makeConstraints { (maker) in
@@ -199,7 +199,7 @@ class SPProductContentView:  UIView{
       
         self.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
-            maker.right.equalTo(self.shopCartBtn.snp.left).offset(-8)
+            maker.right.equalTo(self.shopCartBtn.snp.left).offset(0)
             maker.bottom.equalTo(self.signImgView.snp.top).offset(-5)
             maker.height.greaterThanOrEqualTo(0)
         }

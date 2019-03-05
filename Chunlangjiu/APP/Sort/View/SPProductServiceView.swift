@@ -78,7 +78,6 @@ extension SPProductServiceView {
         self.serviceImgView.sp_cache(string: sp_getString(string: self.imgUrl), plImage: nil) { [weak self](image) in
             if let i = image {
                 sp_log(message: "\(i)")
-//                self?.serviceImgView.im
                 let scale = i.size.height / i.size.width
             self?.sp_updateImgLayout(scale: scale)
 

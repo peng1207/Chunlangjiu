@@ -107,6 +107,8 @@ let SP_AUCTION_1  = "1"
 let SP_AUCTION_2  = "2"
 /// 落标
 let SP_AUCTION_3  = "3"
+/// 竞拍订单 待收货
+let SP_AUCTION_4  = "4"
 /// 订单类型 竞拍
 let SP_AUCTION = "auction"
 /// 顶部
