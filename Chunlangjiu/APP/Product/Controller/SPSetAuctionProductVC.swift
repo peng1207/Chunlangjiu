@@ -8,6 +8,8 @@
 
 import Foundation
 import SnapKit
+typealias SPSetAuctionSuccessBlock = (_ model : SPProductModel?)->Void
+
 class SPSetAuctionProductVC: SPBaseVC {
 
     fileprivate lazy var scrollView : UIScrollView = {
@@ -67,7 +69,9 @@ class SPSetAuctionProductVC: SPBaseVC {
     }()
     fileprivate lazy var brightBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("明拍", for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_unselect"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_select_red_solid"), for: UIControlState.selected)
+        btn.setTitle(" 明拍", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.isSelected = true
         btn.titleLabel?.font = sp_getFontSize(size: 15)
@@ -76,7 +80,9 @@ class SPSetAuctionProductVC: SPBaseVC {
     }()
     fileprivate lazy var darkBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("暗拍", for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_unselect"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_select_red_solid"), for: UIControlState.selected)
+        btn.setTitle(" 暗拍", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
        
         btn.titleLabel?.font = sp_getFontSize(size: 15)
@@ -135,6 +141,8 @@ class SPSetAuctionProductVC: SPBaseVC {
     fileprivate var startDate : Date?
     fileprivate var endDate : Date?
     var model : SPProductModel?
+    var successBlock : SPSetAuctionSuccessBlock?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -296,16 +304,18 @@ extension SPSetAuctionProductVC {
         self.darkBtn.isSelected = true
     }
     fileprivate func sp_clickStartTime(){
-        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: Date(), maxDate: nil) { [weak self](date) in
+        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: Date(), maxDate: nil, currentDate: self.startDate != nil ? self.startDate! : Date()) { [weak self](date) in
             self?.startDate = date
             self?.sp_dealTime()
         }
+     
     }
     fileprivate func sp_clickEndTime(){
-        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: self.startDate != nil ? self.startDate :  Date(), maxDate: nil) { [weak self](date) in
+        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: self.startDate != nil ? self.startDate :  Date(), maxDate: nil, currentDate: self.endDate != nil ? self.endDate! :  Date()) { [weak self](date)  in
             self?.endDate = date
             self?.sp_dealTime()
         }
+       
     }
     fileprivate func sp_dealTime(){
         self.startTimeView.content = sp_getString(string: SPDateManager.sp_string(to: self.startDate))
@@ -315,7 +325,6 @@ extension SPSetAuctionProductVC {
     @objc fileprivate func sp_clickSubmit(){
         if sp_getString(string: self.startPriceView.textFiled.text).count == 0 {
             sp_showTextAlert(tips: "请输入起拍价")
-            
             return
         }
         if self.startDate == nil {
@@ -331,6 +340,12 @@ extension SPSetAuctionProductVC {
             return
         }
         sp_sendSubmitRequest()
+    }
+    fileprivate func sp_dealComplete(){
+        guard let block = self.successBlock else {
+            return
+        }
+        block(self.model)
     }
 }
 extension SPSetAuctionProductVC {
@@ -384,6 +399,7 @@ extension SPSetAuctionProductVC {
             sp_hideAnimation(view: self?.view)
             sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? msg : code == SP_Request_Code_Success ? "设置竞拍商品成功" : "设置竞拍商品失败")
             if code == SP_Request_Code_Success {
+                self?.sp_dealComplete()
                 self?.navigationController?.popViewController(animated: true)
             }
         }

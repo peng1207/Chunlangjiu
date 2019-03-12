@@ -30,6 +30,7 @@ class SPShopProductVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_sendRequest()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -50,7 +51,15 @@ class SPShopProductVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
+        self.tableView.estimatedRowHeight = 0
+        self.tableView.estimatedSectionFooterHeight = 0
+        self.tableView.estimatedSectionHeaderHeight = 0
         self.tableView.backgroundColor = self.view.backgroundColor
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         self.tableView.sp_headerRefesh {[weak self] in
             self?.currentPage = 1
             self?.sp_sendRequest()
@@ -98,7 +107,7 @@ class SPShopProductVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPShopProductVC : UITableViewDelegate,UITableViewDataSource {
@@ -130,10 +139,47 @@ extension SPShopProductVC : UITableViewDelegate,UITableViewDataSource {
         }else{
             return 0
         }
-      
     }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if sp_canDelete() {
+            return .delete
+        }
+        return UITableViewCellEditingStyle.none
+    }
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "删除"
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+                let model = self.dataArray?[indexPath.row]
+                if self.type == .warehouse {
+                    sp_sendProductDelete(model: model)
+                }else if  self.type == .auction_noStart || self.type == .auction_end {
+                    sp_sendProductAuctionDelete(model: model)
+                }
+                
+            }
+        }
+    }
+    /// 是否删除
+    ///
+    /// - Returns: true 删除 false 不能删除
+    fileprivate func sp_canDelete()->Bool{
+        if self.type == .warehouse || self.type == .auction_noStart || self.type == .auction_end{
+            return true
+        }
+        return false
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) , self.type == .sale{
             sp_pushDet(model: self.dataArray?[indexPath.row])
         }
     }
@@ -148,8 +194,13 @@ extension SPShopProductVC : UITableViewDelegate,UITableViewDataSource {
         }
         var height : CGFloat = 125 + 10
         if sp_getString(string: productModel.approve_status) == SP_Product_Type.warehouse.rawValue {
-            if sp_getScreenWidth() < 375 {
-                height = height + 30
+            if sp_isLargeScreen() == false{
+                 height = height + 30
+            }
+           
+        }else if productModel.isAuction {
+            if sp_getString(string: productModel.status) == SP_Product_Auction_Status.active.rawValue {
+                 height = height + 25
             }
         }
         return height
@@ -167,15 +218,75 @@ extension SPShopProductVC {
         let addVC = SPProductAddVC()
         addVC.edit = true
         addVC.item_id = sp_getString(string: model?.item_id)
+        addVC.successBlock = { [weak self] (item_id) in
+            self?.sp_dealAddSuccess(item_id: item_id)
+        }
         self.navigationController?.pushViewController(addVC, animated: true)
     }
+    fileprivate func sp_dealAddSuccess(item_id : String?){
+        if sp_getArrayCount(array: self.dataArray) > 0 {
+            
+            var data = [SPProductModel]()
+            for m in self.dataArray! {
+                if m.item_id !=  Int(sp_getString(string: item_id)) {
+                    data.append(m)
+                }
+            }
+            self.dataArray = data
+            sp_dealNoData()
+        }
+        if self.type == .revice_refuse {
+            NotificationCenter.default.post(name: NSNotification.Name(SP_PRODUCT_REVIEW_NOTIFICATION), object: nil)
+        }
+        
+    }
     fileprivate func sp_pushSetAuctionVC(model : SPProductModel?){
+        if let count = Int(sp_getString(string: model?.store)) , count <= 0 {
+            sp_showTextAlert(tips: "库存为0，请先设置库存之后再设置为竞拍商品")
+            return
+        }
+        
         let vc = SPSetAuctionProductVC()
         vc.model = model
+        vc.successBlock = { [weak self] (productModel) in
+            self?.sp_dealSetAuctionComplete(model: productModel)
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    /// 处理设置竞拍成功的回调
+    ///
+    /// - Parameter model: 数据源
+    fileprivate func sp_dealSetAuctionComplete(model : SPProductModel?){
+        sp_removeProduct(mdoel: model)
+    }
+    fileprivate func sp_removeProduct(mdoel : SPProductModel?){
+        guard let tempModel = mdoel else {
+            return
+        }
+        if sp_getArrayCount(array: self.dataArray) > 0  {
+            var data = [SPProductModel]()
+            for productModel in self.dataArray!{
+                if productModel.isAuction {
+                    if sp_getString(string: productModel.auctionitem_id) != sp_getString(string: tempModel.auctionitem_id){
+                          data.append(productModel)
+                    }
+                }else{
+                    if productModel.item_id != tempModel.item_id {
+                        data.append(productModel)
+                    }
+                }
+               
+            }
+            self.dataArray = data
+            sp_dealNoData()
+        }
+    }
     fileprivate func sp_lookReason(model : SPProductModel?){
-        
+        let alertController = UIAlertController(title: "提示", message: sp_getString(string: model?.reason), preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
+            
+        }))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @objc fileprivate func sp_clickTime(){
@@ -215,12 +326,15 @@ extension SPShopProductVC {
         
         }
     }
-    
+    func sp_refesh(){
+        self.currentPage = 1
+        self.sp_sendRequest()
+    }
     
 }
 extension SPShopProductVC {
     fileprivate func sp_sendRequest(){
-        if self.type == .auction_ing || self.type == .auction_end {
+        if self.type == .auction_ing || self.type == .auction_end || self.type == .auction_noStart {
             sp_sendAuctionRequest()
         }else{
              sp_sendProductRequest()
@@ -245,7 +359,11 @@ extension SPShopProductVC {
     }
     fileprivate func sp_sendAuctionRequest(){
         var parm = [String : Any]()
-        parm.updateValue(sp_getString(string: self.type.rawValue), forKey: "status")
+        if self.type == .auction_noStart {
+            parm.updateValue(sp_getString(string: SP_Product_Auction_Status.pending.rawValue), forKey: "status")
+        }else{
+             parm.updateValue(sp_getString(string: self.type.rawValue), forKey: "status")
+        }
         parm.updateValue(self.currentPage, forKey: "pages_no")
         parm.updateValue(10, forKey: "page_size")
         if let date = self.selectDate {
@@ -318,6 +436,11 @@ extension SPShopProductVC {
         guard let productModel = model else {
             return
         }
+        if let count = Int(sp_getString(string: productModel.store)), count <= 0 {
+            sp_showTextAlert(tips: "库存为0，请先设置库存之后再上架商品")
+            return
+        }
+        
         var parm = [String : Any]()
         if let item_id = productModel.item_id {
             parm.updateValue(item_id, forKey: "item_id")
@@ -336,22 +459,81 @@ extension SPShopProductVC {
             }
         }
     }
-    fileprivate func sp_removeProduct(mdoel : SPProductModel?){
-        guard let tempModel = mdoel else {
+   
+    /// 商品删除
+    ///
+    /// - Parameter model: 商品
+    fileprivate func sp_sendProductDelete(model : SPProductModel?){
+        guard let productModel = model else {
             return
         }
-        if sp_getArrayCount(array: self.dataArray) > 0  {
-            var data = [SPProductModel]()
-            for productModel in self.dataArray!{
-                if productModel.item_id != tempModel.item_id {
-                    data.append(productModel)
-                }
+        var parm = [String:Any]()
+       parm.updateValue(productModel.item_id, forKey: "item_id")
+        let request = SPRequestModel()
+        request.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
+        SPProductRequest.sp_getShopProductDelete(requestModel: request) { [weak self](code, msg, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? msg : code == SP_Request_Code_Success ? "删除成功" : "删除失败")
+            if code == SP_Request_Code_Success {
+                self?.sp_removeProduct(mdoel: productModel)
             }
-            self.dataArray = data
-            sp_dealNoData()
+        }
+    }
+    ///  竞拍商品删除
+    ///
+    /// - Parameter model: 商品
+    fileprivate func sp_sendProductAuctionDelete(model : SPProductModel?){
+        guard let productModel = model else {
+            return
+        }
+        var parm = [String:Any]()
+        if let id = Int(sp_getString(string: productModel.auctionitem_id)) {
+              parm.updateValue(id, forKey: "auctionitem_id")
+        }
+        let request = SPRequestModel()
+        request.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
+        SPProductRequest.sp_getShopProductAuctionDelete(requestModel: request) {  [weak self](code, msg , errorModel) in
+            sp_hideAnimation(view: self?.view)
+            sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? msg : code == SP_Request_Code_Success ? "删除成功" : "删除失败")
+            if code == SP_Request_Code_Success {
+                self?.sp_removeProduct(mdoel: productModel)
+            }
+        }
+    }
+}
+extension SPShopProductVC{
+    
+    /// 添加通知
+    fileprivate func sp_addNotification(){
+        if self.type == .auction_ing{
+            NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
+        }
+        if self.type == .review_pending {
+            NotificationCenter.default.addObserver(self, selector: #selector(sp_reviewNotification), name: NSNotification.Name(SP_PRODUCT_REVIEW_NOTIFICATION), object: nil)
         }
         
-      
     }
-    
+    @objc fileprivate func sp_timeRun(notification:Notification){
+        var second = 1
+        if notification.object is [String : Any] {
+            let dic : [String : Any] = notification.object as! [String : Any]
+            second = dic["timer"] as! Int
+        }
+        
+        if sp_getArrayCount(array: self.dataArray) > 0 {
+            for model in self.dataArray!{
+                 model.sp_set(second: second)
+                if model.second <= 0 {
+                    model.status = SP_Product_Auction_Status.stop.rawValue
+                }
+            }
+            self.tableView.reloadData()
+        }
+    }
+    @objc fileprivate func sp_reviewNotification(){
+        self.currentPage = 1
+        self.sp_sendRequest()
+    }
 }

@@ -64,12 +64,12 @@ class SPProductDetaileVC: SPBaseVC {
     
     fileprivate lazy var shareBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_share_white"), for: UIControlState.selected)
+        btn.setImage(UIImage(named: "public_share_white"), for: UIControlState.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        btn.sp_cornerRadius(cornerRadius: 15)
+//        btn.sp_cornerRadius(cornerRadius: 15)
         btn.addTarget(self, action: #selector(sp_clickShareAction), for: UIControlEvents.touchUpInside)
-        btn.setImage(UIImage(named: "public_share_alpha"), for: UIControlState.normal)
-        btn.isHidden = true
+//        btn.setImage(UIImage(named: "public_share_alpha"), for: UIControlState.normal)
+//        btn.isHidden = false
         return btn
     }()
     
@@ -113,7 +113,7 @@ class SPProductDetaileVC: SPBaseVC {
         self.view.addSubview(self.detaileView)
         self.view.addSubview(self.bottomView)
 //        self.scrollView.addSubview(self.detaileView)
-//       self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.shareBtn)
+       self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.shareBtn)
         self.sp_addConstraint()
     }
     /// 添加约束

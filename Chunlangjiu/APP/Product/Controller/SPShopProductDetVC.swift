@@ -12,6 +12,7 @@ class SPShopProductDetVC: SPBaseVC {
     
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
+        view.isHidden = true
         return view
     }()
     
@@ -30,7 +31,9 @@ class SPShopProductDetVC: SPBaseVC {
     }()
     lazy var productView : SPProductView = {
         let view = SPProductView()
+        view.isShop = true
         view.backgroundColor = UIColor.white
+        view.lookDetaile.addTarget(self, action: #selector(sp_pushLookAuction), for: UIControlEvents.touchUpInside)
         return view
     }()
     lazy var tipsView : SPProductTipsView = {
@@ -48,12 +51,19 @@ class SPShopProductDetVC: SPBaseVC {
     fileprivate lazy var priceView : SPShopProductAuctionPriceView = {
         let view = SPShopProductAuctionPriceView()
         view.backgroundColor = UIColor.white
+        view.clickBlock = { [weak self]in
+            self?.sp_pushLookAuction()
+        }
         return view
+        
     }()
     lazy var auctionInfoView : SPAuctionInfoView = {
         let view = SPAuctionInfoView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.isHidden = true
+        view.clickBlock = { [weak self] in
+            self?.sp_pushMoreAuctionInfo()
+        }
         return view
     }()
     lazy var serviceView : SPProductServiceView = {
@@ -65,7 +75,7 @@ class SPShopProductDetVC: SPBaseVC {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("去看其他竞拍商品 >>", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.normal)
-  
+        btn.isHidden = true
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickOther), for: UIControlEvents.touchUpInside)
         return btn
@@ -73,7 +83,6 @@ class SPShopProductDetVC: SPBaseVC {
      fileprivate var tipsTop : Constraint!
     fileprivate var auctionInfoTop : Constraint!
     fileprivate var auctionInfoHeight : Constraint!
-    fileprivate var priceTop : Constraint!
     fileprivate var productModel : SPProductModel?
     var item_id : Int?
     override func viewDidLoad() {
@@ -95,7 +104,7 @@ class SPShopProductDetVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.navigationItem.title = "详情"
+        self.navigationItem.title = "商品详情"
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.bannerView)
         self.scrollView.addSubview(self.productView)
@@ -139,8 +148,8 @@ class SPShopProductDetVC: SPBaseVC {
         
         self.priceView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
-            maker.height.greaterThanOrEqualTo(0)
-            self.priceTop = maker.top.equalTo(self.tipsView.snp.bottom).offset(0).constraint
+            maker.height.equalTo(0)
+            maker.top.equalTo(self.tipsView.snp.bottom).offset(0)
         }
         self.detView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
@@ -154,7 +163,7 @@ class SPShopProductDetVC: SPBaseVC {
         }
         self.serviceView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
-            maker.top.equalTo(self.auctionInfoView.snp.bottom).offset(0)
+            maker.top.equalTo(self.auctionInfoView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.otherBtn.snp.makeConstraints { (maker) in
@@ -165,7 +174,8 @@ class SPShopProductDetVC: SPBaseVC {
         }
     }
     deinit {
-        
+        sp_removeTimeNotification()
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPShopProductDetVC {
@@ -186,29 +196,42 @@ extension SPShopProductDetVC {
         }
         if let isAuction = self.productModel?.isAuction,isAuction == true {
             self.auctionInfoView.isHidden = false
+             self.otherBtn.isHidden = false
             self.auctionInfoTop.update(offset: 10)
-             self.auctionInfoHeight.update(offset: 140.0 + sp_lineHeight)
-          
+            self.auctionInfoHeight.update(offset: 140.0 + sp_lineHeight)
             var isMing = false
             let auction_status : Bool? = Bool(sp_getString(string: self.productModel?.auction_status))
             if let status = auction_status , status == true {
                 isMing = true
             }
             if isMing {
-                  self.priceView.isHidden = false
-                self.priceTop.update(offset: 5)
+                self.priceView.isHidden = false
+                sp_updateAuctionPrice(isShow: true)
             }else{
-                 self.priceTop.update(offset: 0)
-                  self.priceView.isHidden = true
+                self.priceView.isHidden = true
+                sp_updateAuctionPrice(isShow: false)
             }
-            
-            
+           
         }else{
             self.auctionInfoView.isHidden = true
+            self.otherBtn.isHidden = true
             self.auctionInfoTop.update(offset: 0)
             self.auctionInfoHeight.update(offset:0)
             self.priceView.isHidden = true
-            self.priceTop.update(offset: 0)
+             sp_updateAuctionPrice(isShow: false)
+        }
+    }
+    fileprivate func sp_updateAuctionPrice(isShow:Bool){
+        self.priceView.snp.remakeConstraints { (maker) in
+            maker.left.right.equalTo(self.scrollView).offset(0)
+            if isShow {
+                  maker.height.greaterThanOrEqualTo(0)
+                maker.top.equalTo(self.tipsView.snp.bottom).offset(5)
+            }else{
+                maker.top.equalTo(self.tipsView.snp.bottom).offset(0)
+                maker.height.equalTo(0)
+            }
+
         }
     }
     /// 处理图片轮播的数据
@@ -238,8 +261,16 @@ extension SPShopProductDetVC {
             auctionVC = SPProductAuctionVC()
             self.navigationController?.pushViewController(auctionVC!, animated: true)
         }
-        
-        
+    }
+    /// 跳到查看出价列表
+   @objc fileprivate func sp_pushLookAuction(){
+        let vc = SPLookAuctionVC()
+        vc.auctionitem_id = self.productModel?.auctionitem_id
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    fileprivate func sp_pushMoreAuctionInfo(){
+        let auctionInfoVC = SPAuctionInfoVC()
+        self.navigationController?.pushViewController(auctionInfoVC, animated: true)
     }
 }
 extension SPShopProductDetVC {
@@ -249,13 +280,70 @@ extension SPShopProductDetVC {
             parm.updateValue(i_id, forKey: "item_id")
         }
         self.requestModel.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
         SPProductRequest.sp_getProductDet(requestModel: self.requestModel) { [weak self](code, model, errorModel) in
+            sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
+                self?.scrollView.isHidden = false
                 self?.productModel = model
                 self?.sp_setupData()
+                self?.sp_sendAuctionPriceRequest()
+                self?.sp_AddTimeNotification()
+            }
+        }
+    }
+    fileprivate func sp_sendAuctionPriceRequest(){
+        var isMing = false
+        let auction_status : Bool? = Bool(sp_getString(string: self.productModel?.auction_status))
+        if let status = auction_status , status == true {
+            isMing = true
+        }
+   
+        if  let isAuction = self.productModel?.isAuction,isAuction == true, isMing{
+            let request = SPRequestModel()
+            var parm = [String : Any]()
+            parm.updateValue(sp_getString(string: self.productModel?.auctionitem_id), forKey: "auctionitem_id")
+            
+            request.parm = parm
+            
+            SPAppRequest.sp_getAuctionPriceList(requestModel: request) { [weak self](code , list, errorModel, total) in
+                
+                if code == SP_Request_Code_Success {
+                    self?.priceView.sp_update(list: list as? [SPAuctionPrice], total: total)
+                }else{
+                    
+                }
             }
         }
         
+       
     }
     
+}
+extension SPShopProductDetVC{
+    
+    /// 添加计时器的通知
+    fileprivate func sp_AddTimeNotification(){
+        if  let isAuction = self.productModel?.isAuction,isAuction == true{
+            NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
+            
+        }else{
+            sp_removeTimeNotification()
+        }
+    }
+    /// 移除计时器的通知
+    fileprivate func sp_removeTimeNotification(){
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
+    }
+    @objc fileprivate func sp_timeRun(notification:Notification){
+        var second = 1
+        if notification.object is [String : Any] {
+            let dic : [String : Any] = notification.object as! [String : Any]
+            second = dic["timer"] as! Int
+        }
+        if self.productModel != nil{
+            self.productModel?.sp_set(second: second)
+            self.productView.productModel = self.productModel
+        }
+    }
 }

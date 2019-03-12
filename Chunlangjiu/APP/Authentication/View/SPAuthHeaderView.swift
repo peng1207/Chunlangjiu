@@ -28,7 +28,7 @@ class SPAuthHeaderView:  UIView{
         label.font = sp_getFontSize(size: 12)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.textAlignment = .left
-        label.text = "立即实名认证享受更多特权服务"
+        label.text = "实名认证享受更多特权服务"
         return label
     }()
     var memberModel : SPMemberModel?{

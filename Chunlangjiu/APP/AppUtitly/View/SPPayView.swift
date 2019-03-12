@@ -149,9 +149,8 @@ extension SPPayView : UITableViewDelegate,UITableViewDataSource {
             if sp_getString(string: payModel?.app_rpc_id) == SPPayType.balance.rawValue{
                 if let status = self.balanceStatus {
                     if let isPwd : Bool = status.password , isPwd == false{
-                        cell?.payContentLabel.text = "(没有设置密码)"
+                        cell?.payContentLabel.text = "(未设置支付密码，请先设置)"
                     }
-                    
                 }
             }
             

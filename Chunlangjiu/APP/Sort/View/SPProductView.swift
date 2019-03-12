@@ -59,7 +59,7 @@ class SPProductView:  UIView{
         label.textAlignment = .right
         return label
     }()
-    
+    var isShop : Bool = false
     var productModel : SPProductModel?{
         didSet{
             self.sp_setupData()
@@ -149,7 +149,11 @@ extension SPProductView {
           let priceAtt = NSMutableAttributedString()
         priceAtt.append(NSAttributedString(string: "\(SP_CHINE_MONEY)", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 14)]))
         if let isAuction = self.productModel?.isAuction, isAuction == true {
-          priceAtt.append(NSAttributedString(string: sp_getString(string: self.productModel?.auction_starting_price), attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 18)]))
+            if sp_getString(string: self.productModel?.status) != SP_Product_Auction_Status.stop.rawValue || self.isShop == true{
+                 priceAtt.append(NSAttributedString(string: sp_getString(string: self.productModel?.auction_starting_price), attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 18)]))
+            }else{
+                 priceAtt.append(NSAttributedString(string:  "竞拍已结束，成交价格\(SP_CHINE_MONEY)\(sp_getString(string: self.productModel?.max_price))", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 18)]))
+            }
         }else{
              priceAtt.append(NSAttributedString(string: sp_getString(string: self.productModel?.price), attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 18)]))
         }
@@ -198,7 +202,7 @@ extension SPProductView {
             }
             self.timeTop.update(offset: 5)
             self.timeHeight.update(offset: 12)
-            self.lookDetTop.update(offset: 8)
+            self.lookDetTop.update(offset: 10)
             self.typeTop.update(offset: 10)
         }else{
             self.typeLabel.attributedText = nil

@@ -143,15 +143,56 @@ class SPProductAddSuccessVC: SPBaseVC {
 }
 extension SPProductAddSuccessVC{
     @objc fileprivate func sp_review(){
-        let webVC = SPWebVC()
-        webVC.url = URL(string: "\(SP_GET_PEND_WEB_UEL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))")
-        webVC.title = "审核商品管理"
-        self.navigationController?.pushViewController(webVC, animated: true)
+//        let webVC = SPWebVC()
+//        webVC.url = URL(string: "\(SP_GET_PEND_WEB_UEL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))")
+//        webVC.title = "审核商品管理"
+//        self.navigationController?.pushViewController(webVC, animated: true)
+        sp_pushReviewVC()
     }
     @objc fileprivate func sp_product(){
-        let webVC = SPWebVC()
-        webVC.url = URL(string: "\(SP_GET_ITECEMTER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))")
-        webVC.title = "商品管理"
-        self.navigationController?.pushViewController(webVC, animated: true)
+//        let webVC = SPWebVC()
+//        webVC.url = URL(string: "\(SP_GET_ITECEMTER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))")
+//        webVC.title = "商品管理"
+//        self.navigationController?.pushViewController(webVC, animated: true)
+        sp_pushManagerVC()
     }
+    /// 跳到商品管理
+    fileprivate func sp_pushManagerVC(){
+         var managerVC : SPProductManagerVC?
+        if sp_getArrayCount(array: self.navigationController?.viewControllers) > 0 {
+            for vc in (self.navigationController?.viewControllers)! {
+                if vc.isKind(of: SPProductManagerVC.classForCoder()){
+                    managerVC = vc as? SPProductManagerVC
+                    break
+                }
+            }
+        }
+        if let vc = managerVC {
+             self.navigationController?.popToViewController(vc, animated: true)
+        }else{
+            managerVC = SPProductManagerVC()
+            self.navigationController?.pushViewController(managerVC!, animated: true)
+        }
+        
+    }
+    /// 跳到审核商品管理
+    fileprivate func sp_pushReviewVC(){
+        var managerVC : SPReviewProductVC?
+        if sp_getArrayCount(array: self.navigationController?.viewControllers) > 0 {
+            for vc in (self.navigationController?.viewControllers)! {
+                if vc.isKind(of: SPReviewProductVC.classForCoder()){
+                    managerVC = vc as? SPReviewProductVC
+                    break
+                }
+            }
+        }
+        if let vc = managerVC {
+            vc.sp_refesh()
+            self.navigationController?.popToViewController(vc, animated: true)
+        }else{
+            managerVC = SPReviewProductVC()
+            self.navigationController?.pushViewController(managerVC!, animated: true)
+        }
+    }
+    
 }

@@ -33,7 +33,7 @@ class  SPShopHomeView:  UIView{
         label.font = sp_getFontSize(size: 11)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.textAlignment = .left
-        label.text = " 个人认证 "
+        label.text = "  个人认证  "
         label.sp_cornerRadius(cornerRadius: 7.5)
         label.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue), width: sp_lineHeight)
         return label
@@ -55,6 +55,11 @@ class  SPShopHomeView:  UIView{
     fileprivate func sp_setupData(){
         self.shopIconImageView.sp_cache(string: sp_getString(string: shopModel?.shop_logo), plImage: sp_getLogoImg())
         self.nameLabel.text = sp_getString(string: shopModel?.shop_name)
+        if sp_getString(string: self.shopModel?.authentication).count > 0  {
+            self.authLabel.text = "  \(sp_getString(string: self.shopModel?.authentication))  "
+        }else{
+            self.authLabel.text = "  个人认证  "
+        }
         if sp_getString(string: self.shopModel?.grade) == SP_GRADE_2 {
             self.typeImgView.image = sp_getPartnerImg()
         }else if sp_getString(string: self.shopModel?.grade) == SP_GRADE_1 {

@@ -118,7 +118,7 @@ class SPConfrimFooterView:  UIView{
            
             let attributedString:NSMutableAttributedString = NSMutableAttributedString()
             attributedString.append(NSAttributedString(string: "说明：\n", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
-            attributedString.append(NSAttributedString(string: "1.“出价金额”为竞拍叫价，叫价期间无需进行支付操作，请慎重出价，若您中标，则需支付扣除定金外的尾款；\n2.买家中标后不支付竞拍尾款，平台将有权不返还定金，\n3.竞拍结束，若落标，定金将在三个工作日内进行退还。", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+            attributedString.append(NSAttributedString(string: "1.“出价金额”为竞拍叫价，叫价期间无需进行支付操作，请慎重出价；\n2.若您中标，则需支付商品货款，支付完成，定金退回至您的【可用余额】；\n3.买家中标后不支付竞拍货款，平台将有权不返还定金；\n4.竞拍结束，若落标，定金将及时退还到您的【可用余额】。\n", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
             let paragraphStyle:NSMutableParagraphStyle = NSMutableParagraphStyle()
             
             paragraphStyle.lineSpacing = 5 //大小调整

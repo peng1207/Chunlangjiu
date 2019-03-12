@@ -67,7 +67,7 @@ class SPOrderFooterView:  UIView{
     fileprivate func sp_setupData(){
         self.codeView.detaileModel = self.detaileModel
         self.payView.detaileModel = self.detaileModel
-        self.addressView.detaileModel = self.detaileModel
+       
         self.priceView.detaileModel = self.detaileModel
         self.refundView.detaileModel = self.detaileModel
         self.logicView.logicModel = self.detaileModel?.logi
@@ -108,12 +108,15 @@ class SPOrderFooterView:  UIView{
                 maker.height.greaterThanOrEqualTo(0)
             }
         }
+        self.addressView.detaileModel = self.detaileModel
         self.refundTop.update(offset: isRefund ? 10 : 0)
         self.commissionView.detaileModel = self.detaileModel
         if sp_getString(string: self.detaileModel?.commission).count > 0  || sp_getString(string: self.detaileModel?.shop_payment).count > 0  {
             self.commissionTop.update(offset: 10)
+            self.commissionView.isHidden = false
         }else{
             self.commissionTop.update(offset: 0)
+             self.commissionView.isHidden = true
         }
         
         

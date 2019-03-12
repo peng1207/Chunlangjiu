@@ -17,6 +17,7 @@ class SPCapitalDetDetVC: SPBaseVC {
     fileprivate var dataArray : [SPCapitalDetDetModel] = [SPCapitalDetDetModel]()
     var model : SPCapitalDetModel?
     fileprivate var detModel : SPCapitalDetContentModel?
+    var tyep : String?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -128,12 +129,35 @@ extension SPCapitalDetDetVC: UITableViewDelegate,UITableViewDataSource {
 extension SPCapitalDetDetVC {
     
     fileprivate func sp_sendRequest(){
+        if sp_getString(string: self.tyep) == SP_FUNDS_BILL_TYPE_FROZEN {
+            sp_sendFreezeRequest()
+        }else{
+            var parm = [String : Any]()
+            if let id = self.model?.log_id {
+                parm.updateValue(id, forKey: "log_id")
+            }
+            self.requestModel.parm = parm
+            SPFundsRequest.sp_getCapitalDetDet(requestModel: self.requestModel) { [weak self](code ,detModel, errorModel) in
+                sp_hideAnimation(view: self?.view)
+                if code == SP_Request_Code_Success {
+                    self?.detModel = detModel
+                    self?.sp_setupData()
+                }else{
+                    
+                }
+            }
+        }
+        
+      
+    }
+    /// 发送冻结金额的请求
+    fileprivate func sp_sendFreezeRequest(){
         var parm = [String : Any]()
         if let id = self.model?.log_id {
             parm.updateValue(id, forKey: "log_id")
         }
         self.requestModel.parm = parm
-        SPFundsRequest.sp_getCapitalDetDet(requestModel: self.requestModel) { [weak self](code ,detModel, errorModel) in
+        SPFundsRequest.sp_getFreezeDet(requestModel: self.requestModel) { [weak self](code, detModel, errorModel) in
             sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
                 self?.detModel = detModel

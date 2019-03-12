@@ -98,6 +98,9 @@ extension SPReviewProductVC {
     fileprivate func sp_setScrollViewOffset(){
         self.scrollView.setContentOffset(CGPoint(x: self.scrollView.frame.size.width * CGFloat(self.btnView.sp_getSelectIndex()), y: 0), animated: true)
     }
-    
+    func sp_refesh(){
+        self.pendingVC.sp_refesh()
+        self.refuseVC.sp_refesh()
+    }
     
 }

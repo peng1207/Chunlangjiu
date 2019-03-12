@@ -15,6 +15,8 @@ class SPShopModel : HandyJSON {
     var shop_name : String?
     /// 店铺描述
     var shop_descript : String?
+    /// 店铺简介
+    var bulletin : String?
     /// 店铺logo
     var shop_logo : String?
     /// 店铺类型
@@ -41,6 +43,8 @@ class SPShopModel : HandyJSON {
     var openTime : String? 
     /// 店铺等级
     var grade : String?
+    /// 认证方式
+    var authentication : String?
     /// 商品数据
     var productArray : [SPProductModel]?
     required init() {}

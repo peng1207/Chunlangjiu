@@ -254,6 +254,38 @@ class SPProductRequest : SPAppRequest {
                 if sp_isDic(dic: data) , errorcode == SP_Request_Code_Success{
                     if let item : [String : Any] = data?["item"] as? [String : Any]{
                         detailModel = SPProductModel.sp_deserialize(from: item)
+                        var auction : [String:Any]? = item["auction"] as? [String : Any]
+                        if sp_isDic(dic: auction) {
+                            let auctionData = sp_getString(string: auction?["data"])
+                            if let isAuction = Bool(auctionData), isAuction == false {
+                                detailModel?.isAuction = false
+                            }else{
+                                detailModel?.auction_status = sp_getString(string: auction?["auction_status"])
+                                if let store : Int = auction?["store"] as? Int {
+                                    detailModel?.auction_store = store
+                                }else{
+                                    detailModel?.auction_store = 0
+                                }
+                                if let number : Int = auction?["number"] as? Int {
+                                    detailModel?.auction_number = number
+                                }else{
+                                    detailModel?.auction_number = 0
+                                }
+                                detailModel?.auction_end_time = sp_getString(string: auction?["end_time"] )
+                                detailModel?.auction_begin_time = sp_getString(string: auction?["begin_time"])
+                                detailModel?.auction_starting_price = sp_getString(string: auction?["starting_price"])
+                                detailModel?.payment_id = sp_getString(string: auction?["payment_id"])
+                                detailModel?.isAuction = true
+                                detailModel?.max_price = sp_getString(string: auction?["max_price"])
+                                detailModel?.check = sp_getString(string: auction?["check"])
+                                detailModel?.auctionitem_id = sp_getString(string: auction?["auctionitem_id"])
+                                detailModel?.pledge = sp_getString(string: auction?["pledge"])
+                                detailModel?.is_pay = sp_getString(string: auction?["is_pay"])
+                                detailModel?.original_bid = sp_getString(string: auction?["original_bid"])
+                                detailModel?.status = sp_getString(string: auction?["status"])
+                                detailModel?.sp_getSecond()
+                            }
+                        }
                     }
                     
                     
@@ -339,6 +371,50 @@ class SPProductRequest : SPAppRequest {
             }
         }
     }
+    /// 商品删除
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getShopProductDelete(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_SHOP_PRODUCTDELETE_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                    block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"删除失败",nil)
+                }
+            }
+        }
+    }
+    /// 竞拍商品删除
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getShopProductAuctionDelete(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_SHOP_PRODUCTAUCTONDELETE_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                      block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                      block(SP_Request_Error,"删除失败",nil)
+                }
+            }
+        }
+    }
     /// 获取商品竞拍列表
     ///
     /// - Parameters:
@@ -354,15 +430,17 @@ class SPProductRequest : SPAppRequest {
                 var dataArray : [SPProductModel] = [SPProductModel]()
                 var totalPage : Int = 1
                 if errorcode == SP_Request_Code_Success {
-                    let item_list : [Any]? = data?["item_list"] as? [Any]
+                    let item_list : [Any]? = data?["list"] as? [Any]
                     if sp_getArrayCount(array: item_list) > 0 {
                         for tmpDic in item_list! {
                             if let dic : [String : Any] = tmpDic as? [String : Any] {
                                 let model = SPProductModel.sp_deserialize(from: dic)
                                 if let m = model {
+                                    m.isAuction = true
+                                    m.sp_getSecond()
                                     dataArray.append(m)
                                 }
-                                
+
                             }
                             
                         }

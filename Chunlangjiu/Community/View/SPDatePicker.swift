@@ -44,11 +44,12 @@ class SPDatePicker:  UIView{
         return view
     }()
     fileprivate var complete : SPDateComplete?
-    class func sp_show(datePickerMode : UIDatePicker.Mode = UIDatePicker.Mode.date , minDate : Date? = nil,maxDate : Date? = nil,complete : SPDateComplete?){
+    class func sp_show(datePickerMode : UIDatePicker.Mode = UIDatePicker.Mode.date , minDate : Date? = nil,maxDate : Date? = nil, currentDate : Date = Date(),complete : SPDateComplete?){
         let view = SPDatePicker()
         view.datePicker.datePickerMode = datePickerMode
         view.datePicker.minimumDate = minDate
         view.datePicker.maximumDate = maxDate
+        view.datePicker.date = currentDate
         view.complete = complete
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue).withAlphaComponent(0.3)
         let appDelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate

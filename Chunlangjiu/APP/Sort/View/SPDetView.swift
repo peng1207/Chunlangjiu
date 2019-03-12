@@ -35,6 +35,13 @@ class SPDetView:  UIView{
     }
     /// 赋值
     fileprivate func sp_setupData(){
+        if let isAuction = productModel?.isAuction, isAuction {
+            self.titleLabel.text = "拍品详情"
+        }else {
+             self.titleLabel.text = "详情"
+        }
+        
+        
         var array = [[String :Any]]()
         array.append(["title":"商品名称","value":sp_getString(string: self.productModel?.title)])
        

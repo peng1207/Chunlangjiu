@@ -38,6 +38,8 @@ class SPBalanceVC: SPBaseVC {
         let view = UIView()
         view.backgroundColor = UIColor.white
         view.sp_cornerRadius(cornerRadius: 5)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickTap(sender:)))
+        view.addGestureRecognizer(tap)
         return view
     }()
     fileprivate lazy var useLabel : UILabel = {
@@ -58,7 +60,7 @@ class SPBalanceVC: SPBaseVC {
     fileprivate lazy var frozenLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.textAlignment = .center
         return label
     }()
@@ -179,6 +181,19 @@ extension SPBalanceVC {
         let rechargeVC = SPRechargeVC()
         rechargeVC.navigationItem.title = "充值"
         self.navigationController?.pushViewController(rechargeVC, animated: true)
+    }
+    @objc fileprivate func sp_clickTap(sender : UITapGestureRecognizer){
+        let point =     sender.location(in: self.contentView)
+        if point.x > self.contentView.frame.size.width / 2.0 {
+            // 点击冻结金额
+            sp_pushFreezeList()
+        }
+    }
+    fileprivate func sp_pushFreezeList(){
+        let vc = SPCapitalDetList()
+        vc.type = SP_FUNDS_BILL_TYPE_FROZEN
+        vc.navigationItem.title = "冻结资金"
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 }

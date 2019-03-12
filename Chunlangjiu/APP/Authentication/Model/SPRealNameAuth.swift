@@ -13,5 +13,6 @@ class SPRealNameAuth : SPBaseModel{
     var dentity : String?
     var dentity_front : String?
     var dentity_reverse : String?
+    var mobile : String?
     var status : String? 
 }

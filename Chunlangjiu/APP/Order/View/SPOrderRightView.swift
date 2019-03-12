@@ -60,6 +60,7 @@ class SPOrderRightView:  UIView{
             maker.left.equalTo(self).offset(122)
             maker.top.bottom.equalTo(self).offset(0)
             maker.width.greaterThanOrEqualTo(0)
+            maker.right.lessThanOrEqualTo(self.snp.right).offset(-5)
         }
         self.btn.snp.makeConstraints { (maker) in
             maker.height.equalTo(20)

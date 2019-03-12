@@ -15,13 +15,18 @@ class SPProductAuctionVC : SPBaseVC {
     }()
     fileprivate lazy var btnView : SPShopProductBtnView = {
         let view = SPShopProductBtnView()
-        view.titleArray = ["竞拍中","已结束"]
+        view.titleArray = ["未开始","竞拍中","已结束"]
         view.clickBlock = { [weak self] in
             self?.sp_setScrollViewOffset()
         }
         return view
     }()
-    
+    fileprivate lazy var pendVC : SPShopProductVC = {
+        let vc = SPShopProductVC()
+        vc.type = SP_Product_Type.auction_noStart
+        self.addChildViewController(vc)
+        return vc
+    }()
     fileprivate lazy var auctionIngVC : SPShopProductVC = {
         let vc = SPShopProductVC()
         vc.type = SP_Product_Type.auction_ing
@@ -58,6 +63,7 @@ class SPProductAuctionVC : SPBaseVC {
         self.navigationItem.title = "竞拍商品"
         self.view.addSubview(self.btnView)
         self.view.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.pendVC.view)
         self.scrollView.addSubview(self.auctionIngVC.view)
         self.scrollView.addSubview(self.auctionEndVC.view)
         self.sp_addConstraint()
@@ -81,8 +87,14 @@ class SPProductAuctionVC : SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-        self.auctionIngVC.view.snp.makeConstraints { (maker) in
+        self.pendVC.view.snp.makeConstraints { (maker) in
             maker.left.top.equalTo(self.scrollView).offset(0)
+            maker.width.height.equalTo(self.scrollView).offset(0)
+            maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
+        }
+        self.auctionIngVC.view.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.pendVC.view.snp.right).offset(0)
+            maker.top.equalTo(self.scrollView).offset(0)
             maker.width.height.equalTo(self.scrollView).offset(0)
             maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
         }

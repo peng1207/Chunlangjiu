@@ -8,6 +8,8 @@
 
 import Foundation
 import SnapKit
+typealias SPAddProductSuccessBlock = (_ item_id : String?)->Void
+
 class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     fileprivate lazy var scrollView : UIScrollView =  UIScrollView()
     fileprivate lazy var baseView : SPProductBaseView = {
@@ -141,6 +143,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     fileprivate var typeArray : [SPTypeModel]?
     fileprivate var alcoholArray : [SPAlcoholDegree]?
     var item_id : String?
+    var successBlock : SPAddProductSuccessBlock?
     var edit : Bool! = false
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -369,10 +372,11 @@ extension SPProductAddVC {
         }
         for image in imageArray {
             let uploadImage = sp_fixOrientation(aImage: image)
-            let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-            guard let d = data else{
-                continue
-            }
+//            let data = UIImageJPEGRepresentation(uploadImage, 1.0)
+//            guard let d = data else{
+//                continue
+//            }
+            let d = sp_resetImgSize(sourceImage: uploadImage)
             if i < sp_getArrayCount(array: selectImage) {
                 if sp_getString(string: selectImage[i]).count > 0 {
                     i = i + 1
@@ -652,7 +656,13 @@ extension SPProductAddVC {
         
         
     }
-    
+    /// 处理添加成功的回调
+    fileprivate func sp_dealSuccessComplete(){
+        guard let block = self.successBlock else {
+            return
+        }
+        block(sp_getString(string: self.item_id))
+    }
 }
 extension SPProductAddVC{
     fileprivate func sp_sendRequest(complete:SPBtnClickBlock? = nil){
@@ -751,6 +761,7 @@ extension SPProductAddVC{
                 if code == SP_Request_Code_Success{
                     let sucessVC = SPProductAddSuccessVC()
                     self?.navigationController?.pushViewController(sucessVC, animated: true)
+                    self?.sp_dealSuccessComplete()
                 }else{
                     sp_showTextAlert(tips: msg)
                 }

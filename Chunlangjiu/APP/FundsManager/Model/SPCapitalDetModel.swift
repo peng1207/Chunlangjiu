@@ -17,6 +17,9 @@ class SPCapitalDetModel : HandyJSON {
     var message : String?
     var logtime : Int?
     var time : String?
+    var remark : String?
+    var status : String?
+    var id : String?
  
     required init() {}
     func mapping(mapper: HelpingMapper) {

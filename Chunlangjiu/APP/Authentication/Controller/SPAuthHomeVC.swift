@@ -27,20 +27,28 @@ class SPAuthHomeVC: SPBaseVC {
     fileprivate lazy var realNameView : SPAuthView = {
         let view = SPAuthView()
         view.titleLabel.text = "个人实名认证"
+        view.applyBtn.setTitle("  个人实名认证  ", for: UIControlState.normal)
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.imgView.image = UIImage(named: "public_realAuth")
         view.clickBlock = { [weak self]in
             self?.sp_clickReal()
+        }
+        view.updateBlock = { [weak self]in
+            self?.sp_clickReal(isUpdate: true)
         }
         return view
     }()
     fileprivate lazy var companyView : SPAuthView = {
         let view = SPAuthView()
         view.titleLabel.text = "企业实名认证"
+         view.applyBtn.setTitle("  企业实名认证  ", for: UIControlState.normal)
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.imgView.image = UIImage(named: "public_companyAuth")
         view.clickBlock = { [weak self] in
             self?.sp_clickCompany()
+        }
+        view.updateBlock = { [weak self] in
+            self?.sp_clickCompany(isUpdate: true)
         }
         return view
     }()
@@ -51,36 +59,20 @@ class SPAuthHomeVC: SPBaseVC {
         return view
     }()
     /// 企业认证状态
-    private var companyAuth : SPCompanyAuth?{
-        didSet{
-            if sp_getString(string: companyAuth?.status) == SP_STATUS_FINISH {
-                companyView.applyBtn.isEnabled = false
-            }else{
-                companyView.applyBtn.isEnabled = true
-               
-            }
-        }
-    }
-    private var realNameAuth : SPRealNameAuth?{
-        didSet{
-            if sp_getString(string: realNameAuth?.status) == SP_STATUS_FINISH {
-                realNameView.applyBtn.isEnabled = false
-            }else{
-                realNameView.applyBtn.isEnabled = true
-            }
-        }
-    }
+    private var companyAuth : SPCompanyAuth?
+    private var realNameAuth : SPRealNameAuth?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_setupData()
-        sp_showAnimation(view: self.view, title: nil)
+      
        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        sp_sendRealNameAuth()
-        sp_sendCompanyAuthStatus()
+         sp_sendRequest()
+//        sp_sendRealNameAuth()
+//        sp_sendCompanyAuthStatus()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -155,33 +147,114 @@ class SPAuthHomeVC: SPBaseVC {
     }
 }
 extension SPAuthHomeVC {
-    fileprivate func sp_clickReal(){
+    fileprivate func sp_clickReal(isUpdate : Bool = false){
         if sp_getString(string: self.realNameAuth?.status) ==  SP_STATUS_LOCKED{
               sp_showTextAlert(tips: "您的认证正在审核中，我们会尽快处理的")
         }else{
-            if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FAILING{
+            if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FAILING || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODEFIERFAIL{
                 sp_showTextAlert(tips: "您的认证被驳回，请重新提交资料审核")
             }
             let realVC = SPRealNameAuthenticationVC()
+            realVC.isUpdate = isUpdate
             self.navigationController?.pushViewController(realVC, animated: true)
         }
-        
-       
     }
-    fileprivate func sp_clickCompany(){
+    fileprivate func sp_clickCompany(isUpdate : Bool = false){
         if sp_getString(string: self.companyAuth?.status) == SP_STATUS_LOCKED {
             sp_showTextAlert(tips: "您的认证正在审核中，我们会尽快处理的")
         }else{
-            if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING{
+            if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODEFIERFAIL{
                  sp_showTextAlert(tips: "您的认证被驳回，请重新提交资料审核")
             }
             let companyVC = SPCompanyAuthenticationVC()
+            companyVC.isUpdate = isUpdate
             self.navigationController?.pushViewController(companyVC, animated: true)
         }
     
     }
 }
 extension SPAuthHomeVC {
+    
+    
+    fileprivate func sp_sendRequest(){
+        sp_showAnimation(view: self.view, title: nil)
+        let workGroup = DispatchGroup()
+        let request = SPRequestModel()
+        workGroup.enter()
+        SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                self?.companyAuth = model
+                
+            }
+            workGroup.leave()
+        }
+        let realRequest = SPRequestModel()
+        workGroup.enter()
+        SPAppRequest.sp_getRealNameAuth(requestModel: realRequest) { [weak self](code , model , errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                self?.realNameAuth = model
+                
+            }
+            workGroup.leave()
+        }
+        workGroup.notify(queue: DispatchQueue(label: "getAuthStatusQueue")) { [weak self] in
+            sp_mainQueue {
+                self?.sp_setupAuthData()
+                sp_hideAnimation(view: self?.view)
+            }
+        }
+    }
+    fileprivate func sp_setupAuthData(){
+        sp_mainQueue {
+            self.realNameView.applyBtn.isEnabled = false
+            self.realNameView.updateBtn.isHidden = true
+            self.companyView.applyBtn.isEnabled = false
+            self.companyView.updateBtn.isHidden = false
+            self.realNameView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)), for: UIControlState.disabled)
+            self.companyView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)), for: UIControlState.disabled)
+            if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODIFIER || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODEFIERFAIL{
+                self.companyView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.disabled)
+                if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODEFIERFAIL || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER{
+                    self.realNameView.updateBtn.isHidden = false
+                    self.realNameView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.disabled)
+                }
+                
+            }else{
+                if sp_getString(string: self.companyAuth?.status) == SP_STATUS_ACTIVE {
+                    self.companyView.updateBtn.isHidden = true
+                    self.companyView.applyBtn.isEnabled = true
+                }else if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING{
+                    self.companyView.updateBtn.isHidden = false
+                    self.companyView.applyBtn.isEnabled = false
+                    self.companyView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.disabled)
+                }else{
+                    self.companyView.applyBtn.isEnabled = true
+                }
+                if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_ACTIVE {
+                    self.realNameView.updateBtn.isHidden = true
+                    self.realNameView.applyBtn.isEnabled = true
+                }else if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING{
+                    self.realNameView.updateBtn.isHidden = false
+                    self.realNameView.applyBtn.isEnabled = false
+                    self.realNameView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.disabled)
+                }else if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODEFIERFAIL || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER{
+                    self.realNameView.updateBtn.isHidden = false
+                    self.realNameView.applyBtn.isEnabled = false
+                     self.realNameView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.disabled)
+                }
+                else {
+                    self.realNameView.applyBtn.isEnabled = true
+                }
+            }
+            
+            
+        }
+       
+    }
+    
+    
     fileprivate func sp_sendCompanyAuthStatus(){
         let request = SPRequestModel()
         SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in

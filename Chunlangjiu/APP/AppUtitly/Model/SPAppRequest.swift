@@ -518,6 +518,9 @@ class SPAppRequest {
                 let msg = sp_getString(string: json[SP_Request_Msg_Key])
                 var dataList = [SPAuctionPrice]()
                 var totalPage = 0
+                if let total : Int = json["total"] as? Int {
+                    totalPage = total
+                }
                 if sp_isArray(array: data),errorcode == SP_Request_Code_Success {
                     let list : [Any]? = data
                     if sp_isArray(array: list) {
@@ -530,6 +533,7 @@ class SPAppRequest {
                             }
                         }
                     }
+                    
 //                    let pagers : [String:Any]? = data!["pagers"] as? [String : Any]
 //                    if sp_isDic(dic: pagers){
 //                        totalPage = pagers!["total"] as! Int
@@ -1022,6 +1026,28 @@ class SPAppRequest {
             }else{
                 if let block = complete {
                     block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
+    /// 更新用户资料
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getUpdateInfo(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_UPDATEINFO_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                    block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"修改失败",nil)
                 }
             }
         }
@@ -1769,6 +1795,32 @@ class SPAppRequest {
             }
         }
     }
+    /// 个人认证详细信息
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getAuthonDet(requestModel:SPRequestModel,complete:SPRealNameAuthComplete?){
+        requestModel.url = SP_GET_AUTONYMDET_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPRealNameAuth?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPRealNameAuth.sp_deserialize(from: data)
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
     /// 企业认证
     ///
     /// - Parameters:
@@ -1787,6 +1839,32 @@ class SPAppRequest {
             }else{
                 if let block = complete {
                      block(SP_Request_Error,"上传企业认证失败",nil)
+                }
+            }
+        }
+    }
+    /// 获取企业认证详细信息
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getCompanyAuthDet(requestModel:SPRequestModel,complete:SPCompanyAuthComplete?){
+        requestModel.url = SP_GET_COMPANYAUTHDET_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var companyModel : SPCompanyAuth?
+                if errorcode == SP_Request_Code_Success {
+                    companyModel = SPCompanyAuth.sp_deserialize(from: data)
+                }
+                if let block = complete {
+                    block(errorcode,companyModel,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
                 }
             }
         }

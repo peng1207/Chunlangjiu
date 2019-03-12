@@ -52,6 +52,8 @@ let SP_GET_REGION_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_
 let SP_GET_MEMBER_COUNT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.index"
 /// 获取会员信息
 let SP_GET_MEMBER_INFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.basics.get"
+/// 更新用户资料
+let SP_GET_UPDATEINFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.basics.update"
 /// 酒庄分类
 let SP_GET_WINERSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=category.chateauCat"
 /// 酒庄列表
@@ -130,6 +132,8 @@ let SP_GET_DELETEORDER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key
 let SP_GET_USERHEADIMG_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.setImg"
 ///  实名认证
 let SP_GET_AUTONYM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.autonym"
+///  实名认证
+let SP_GET_AUTONYMDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.autonym.detail"
 /// 商品估价
 let SP_GET_VALUATION_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.evaluate"
 /// 竞拍 创建押金支付单
@@ -142,6 +146,8 @@ let SP_GET_SHOP_AUCTIONLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainNam
 let SP_GET_FORGETPWD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.forgot.resetpassword"
 /// 企业认证
 let SP_GET_COMPANYAUTH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.enterprise"
+/// 企业认证详细信息
+let SP_GET_COMPANYAUTHDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.enterprise.detail"
 /// 获取企业认证状态
 let SP_GET_COMPANYAUTHSTATUS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.get.enterprise"
 /// 获取个人认证状态
@@ -180,6 +186,10 @@ let SP_GET_FUNDS_CASH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key:
 let SP_GET_CAPITALDETLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fund"
 /// 资金明细详情
 let SP_GET_CAPITALDETDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fundInfo"
+/// 冻结资金明细
+let SP_GET_FREEZELIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.freeze"
+/// 冻结资金明细详情
+let SP_GET_FREEZEDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.freezeInfo"
 /// 创建保证金订单
 let SP_GET_DEPOSITCREATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.depositCreate"
 /// 撤销保证金
@@ -225,6 +235,10 @@ let SP_GET_SHOPUPLOAD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key:
 let SP_GET_SHOPADDPRODUCT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.create"
 /// 获取商品列表
 let SP_GET_SHOP_PRODUCTLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.list"
+/// 商品删除
+let SP_GET_SHOP_PRODUCTDELETE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.delete"
+/// 竞拍商品删除
+let SP_GET_SHOP_PRODUCTAUCTONDELETE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.auction.delete"
 /// 获取商品竞拍列表
 let SP_GET_SHOP_PRODUCTAUCTIONLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.auction.list"
 /// 更改商品的状态

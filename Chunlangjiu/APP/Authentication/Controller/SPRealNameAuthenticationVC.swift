@@ -48,7 +48,14 @@ class SPRealNameAuthenticationVC: SPBaseVC {
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.text = "认证说明：\n1、实名认证后，用户可发布酒类商品进行销售(最大数量为3件)；\n2、订单成交成功后，平台将抽取交易总额的3%作为平台佣金。\n3、升级成为星级卖家及城市合伙人，将获得更多的权益及优惠。"
+        let att = NSMutableAttributedString()
+        att.append(NSAttributedString(string: "1、为保障双方利益，在平台发布商品需要进行实名认证；\n2、作为卖家若成功售出商品后，平台将收取订单总额的", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)]))
+         att.append(NSAttributedString(string: "3.5%", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+         att.append(NSAttributedString(string: "作为平台佣金！", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)]))
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 5.0
+        att.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: att.length))
+        label.attributedText = att
         return label
     }()
     fileprivate lazy var nameView : SPAddressEditView = {
@@ -139,11 +146,16 @@ class SPRealNameAuthenticationVC: SPBaseVC {
     fileprivate var positiveUrl : String?
     fileprivate var oppositeUrl : String?
     fileprivate var holdUrl : String?
+    fileprivate var realNameAuth : SPRealNameAuth?
+     var isUpdate : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "个人认证信息"
         self.sp_setupUI()
         sp_addNotification()
+        if isUpdate {
+            sp_sendGetDetRequest()
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -156,7 +168,6 @@ class SPRealNameAuthenticationVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -335,15 +346,15 @@ extension SPRealNameAuthenticationVC{
             sp_showTextAlert(tips: "请输入有效电话")
             return
         }
-        guard self.positiveView.imgView.image != nil else {
+        guard self.positiveView.imgView.image != nil || sp_getString(string: self.positiveUrl).count > 0  else {
             sp_showTextAlert(tips: "请上传身份证正面")
             return
         }
-        guard self.oppositeView.imgView.image != nil else {
+        guard self.oppositeView.imgView.image != nil || sp_getString(string: self.oppositeUrl).count > 0 else {
             sp_showTextAlert(tips: "请上传身份证反面")
             return
         }
-        guard self.holdView.imgView.image != nil else {
+        guard self.holdView.imgView.image != nil || sp_getString(string: self.holdUrl).count > 0  else {
             sp_showTextAlert(tips: "请上传手持本人身份证")
             return
         }
@@ -458,7 +469,6 @@ extension SPRealNameAuthenticationVC{
         self.requestModel.parm = parm
         SPAppRequest.sp_getAuthonYm(requestModel: self.requestModel) { [weak self](code, msg, errorModel) in
             sp_hideAnimation(view: nil)
-          
             if code == SP_Request_Code_Success{
                 sp_showTextAlert(tips: "提交成功")
                 sp_asyncAfter(time: 2, complete: {
@@ -468,5 +478,27 @@ extension SPRealNameAuthenticationVC{
                   sp_showTextAlert(tips: msg)
             }
         }
+    }
+    fileprivate func sp_sendGetDetRequest(){
+        sp_showAnimation(view: self.view, title: nil)
+        SPAppRequest.sp_getAuthonDet(requestModel: SPRequestModel()) { [weak self](code, model, errorModel) in
+            if code == SP_Request_Code_Success {
+                self?.realNameAuth = model
+                self?.sp_setupData()
+            }
+            sp_hideAnimation(view: self?.view)
+        }
+    }
+    
+    fileprivate func sp_setupData(){
+        self.nameView.textFiled.text = sp_getString(string: self.realNameAuth?.name)
+        self.numView.textFiled.text = sp_getString(string: self.realNameAuth?.idcard)
+        self.holdUrl = sp_getString(string: self.realNameAuth?.dentity)
+        self.holdView.imgView.sp_cache(string: self.holdUrl, plImage: nil)
+        self.positiveUrl = sp_getString(string: self.realNameAuth?.dentity_front)
+        self.positiveView.imgView.sp_cache(string: sp_getString(string: self.positiveUrl), plImage: nil)
+        self.oppositeUrl = sp_getString(string: self.realNameAuth?.dentity_reverse)
+        self.oppositeView.imgView.sp_cache(string: sp_getString(string: self.oppositeUrl), plImage: nil)
+        self.phoneView.textFiled.text = sp_getString(string: self.realNameAuth?.mobile)
     }
 }

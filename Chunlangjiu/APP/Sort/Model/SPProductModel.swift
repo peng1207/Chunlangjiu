@@ -99,7 +99,7 @@ class SPProductModel :  HandyJSON {
     var pledge : String? 
     /// 竞拍状态
     var auction_status : String?  // 明拍还是暗拍 true 明 false 暗
-    ///
+    /// 竞拍数量
     var auction_store : Int!
     /// 竞拍开始时间
     var auction_begin_time : String?
@@ -109,7 +109,9 @@ class SPProductModel :  HandyJSON {
     var auction_number : Int! = 0
     /// 竞拍ID
     var auctionitem_id : String?
-    var original_bid : String? 
+    var original_bid : String?
+    /// 竞拍活动状态  pending 未开始 stop 停止 active 进行中
+    var status : String?
     var desc : String?
     /// 秒数
     var second : Int! = 0
@@ -139,6 +141,7 @@ class SPProductModel :  HandyJSON {
     var rate  : String?
     /// 服务保障图片地址
     var service_url : String?
+    
     required init() {}
     func mapping(mapper: HelpingMapper) {
         mapper.specify(property: &showCartPrice, name: "price.price") { (rawString) -> String in

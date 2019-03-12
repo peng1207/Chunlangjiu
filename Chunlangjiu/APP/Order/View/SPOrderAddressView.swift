@@ -55,6 +55,7 @@ class SPOrderAddressView:  UIView{
         self.nameLabel.text = sp_getString(string: detaileModel?.receiver_name)
         self.phoneLabel.text = sp_getString(string: detaileModel?.receiver_mobile)
         self.addressLabel.text = "\(sp_getString(string: detaileModel?.receiver_state))\(sp_getString(string: detaileModel?.receiver_city))\(sp_getString(string: detaileModel?.receiver_address))"
+    
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

@@ -32,7 +32,7 @@ class SPCashVC: SPBaseVC {
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.text = "*单笔提现金额最大为50000.00元"
+        label.text = "*单笔提现现额最大为50000.00元，最小为100.00元。"
         return label
     }()
     fileprivate lazy var submitBtn : UIButton = {
@@ -71,7 +71,7 @@ class SPCashVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.priceView.textFiled.placeholder = "最多可提现\(sp_getString(string: self.price))"
+        self.priceView.textFiled.placeholder = "可提余额（\(SP_CHINE_MONEY)\(sp_getString(string: self.price))）"
     }
     /// 创建UI
     override func sp_setupUI() {

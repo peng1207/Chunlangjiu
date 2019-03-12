@@ -15,3 +15,7 @@ let SP_STATUS_LOCKED = "locked"
 let SP_STATUS_FAILING = "failing"
 /// 审核通过
 let SP_STATUS_FINISH = "finish"
+/// 更新中
+let SP_STATUS_MODIFIER = "modifier"
+/// 更新驳回
+let SP_STATUS_MODEFIERFAIL = "modefierfail"

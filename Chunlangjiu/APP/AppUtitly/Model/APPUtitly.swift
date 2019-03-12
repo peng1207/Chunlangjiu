@@ -30,8 +30,14 @@ let SP_FUNDS_BILL_TYPE_DEFAULT = "sell"
 let SP_FUNDS_BILL_TYPE_RECHARGE = "add"
 /// 账单类型 提现
 let SP_FUNDS_BILL_TYPE_CASH = "expense"
-/// 账单类型 提现
+/// 账单类型 退款
 let SP_FUNDS_BILL_TYPE_REFUND = "refund"
+/// 账单类型 冻结
+let SP_FUNDS_BILL_TYPE_FROZEN = "frozen"
+/// 账单类型 冻结之交易
+let SP_FUNDS_BILL_TYPE_FROZEN_SELL = "sell"
+/// 账单类型 冻结之保证金
+let SP_FUNDS_BILL_TYPE_FROZEN_DEPOSIT  = "deposit"
 /// 获取默认的图片
 ///
 /// - Returns: 图片

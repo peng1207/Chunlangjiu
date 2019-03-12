@@ -60,7 +60,12 @@ class SPAuctionInfoView:  UIView{
         let imgView = UIImageView(image: img)
         view.addSubview(imgView)
         let label = UILabel()
-        label.font = sp_getFontSize(size: 13)
+        if  sp_isLargeScreen() {
+             label.font = sp_getFontSize(size: 13)
+        }else{
+             label.font = sp_getFontSize(size: 10)
+        }
+       
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .center
         label.text = sp_getString(string: title)

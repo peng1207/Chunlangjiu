@@ -177,11 +177,13 @@ extension SPSetVC {
         self.navigationController?.pushViewController(bankCard, animated: true)
     }
     fileprivate func sp_pushInfo(){
-        if SPAPPManager.sp_isBusiness() {
-            sp_pushWebVC(url: "\(SP_GER_SELLERINFO_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
-        }else{
-            sp_pushWebVC(url: "\(SP_GET_USER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
-        }
+        let vc = SPPersonalInfoVC()
+        self.navigationController?.pushViewController(vc, animated: true)
+//        if SPAPPManager.sp_isBusiness() {
+//            sp_pushWebVC(url: "\(SP_GER_SELLERINFO_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
+//        }else{
+//            sp_pushWebVC(url: "\(SP_GET_USER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
+//        }
     }
     fileprivate func sp_pushWebVC(url : String,title:String? = nil){
         let webVC = SPWebVC()

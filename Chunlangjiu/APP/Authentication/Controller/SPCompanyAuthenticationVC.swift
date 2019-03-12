@@ -32,6 +32,24 @@ class SPCompanyAuthenticationVC: SPBaseVC {
         label.text = "请确认以上信息准确无误"
         return label
     }()
+    fileprivate lazy var infoLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 10)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        let att = NSMutableAttributedString()
+        att.append(NSAttributedString(string: "1、为保障双方利益，在平台发布商品需要进行实名认证；\n2、作为卖家若成功售出商品后，平台将收取订单总额的", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)]))
+        att.append(NSAttributedString(string: "3.5%", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+        att.append(NSAttributedString(string: "作为平台佣金！", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 11),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)]))
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 5.0
+        att.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: att.length))
+        label.attributedText = att
+        
+        
+        return label
+    }()
     fileprivate lazy var companyNameView : SPAddressEditView = {
         let view = sp_createEditView(title: "企业名称", placeholder: "请输入企业（公司）名称")
         return view
@@ -148,11 +166,16 @@ class SPCompanyAuthenticationVC: SPBaseVC {
     fileprivate var oppositeUrl : String?
     fileprivate var licenceUrl : String?
     fileprivate var tempAddImageView : SPAuthAddImgView?
+    fileprivate var companyAuthModel : SPCompanyAuth?
+    var isUpdate : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "企业认证信息"
         self.sp_setupUI()
         sp_addNotification()
+        if isUpdate{
+            self.sp_sendGetRequest()
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -184,6 +207,7 @@ class SPCompanyAuthenticationVC: SPBaseVC {
         self.scrollView.addSubview(self.oppositeView)
         self.scrollView.addSubview(self.licenceImageView)
         self.scrollView.addSubview(self.confirmTipLabel)
+        self.scrollView.addSubview(self.infoLabel)
         self.scrollView.addSubview(self.submitBtn)
         self.sp_addConstraint()
     }
@@ -276,10 +300,16 @@ class SPCompanyAuthenticationVC: SPBaseVC {
             maker.height.greaterThanOrEqualTo(0)
             maker.top.equalTo(self.licenceImageView.snp.bottom).offset(20)
         }
+        self.infoLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(33)
+            maker.right.equalTo(self.scrollView.snp.right).offset(-33)
+            maker.top.equalTo(self.confirmTipLabel.snp.bottom).offset(45)
+            maker.height.greaterThanOrEqualTo(0)
+        }
         self.submitBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.scrollView).offset(10)
             maker.right.equalTo(self.scrollView).offset(-10)
-            maker.top.equalTo(self.confirmTipLabel.snp.bottom).offset(10)
+            maker.top.equalTo(self.infoLabel.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(40)
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-10)
         }
@@ -308,6 +338,8 @@ extension SPCompanyAuthenticationVC :UIImagePickerControllerDelegate,UINavigatio
                 self.cardUrl = nil
             }else if view == self.licenceImageView {
                 self.licenceUrl = nil
+            }else if view == self.oppositeView {
+                self.oppositeUrl = nil
             }
             view.sp_update(image: image)
         }
@@ -380,19 +412,19 @@ extension SPCompanyAuthenticationVC {
 //            sp_showTextAlert(tips: "请输入固定电话")
 //            return
 //        }
-        guard businessImageView.imgView.image != nil else {
+        guard businessImageView.imgView.image != nil || sp_getString(string: self.businessUrl).count > 0  else {
             sp_showTextAlert(tips: "请上传营业执照副本照片")
             return
         }
-        guard cardImageView.imgView.image != nil else {
+        guard cardImageView.imgView.image != nil || sp_getString(string: self.cardUrl).count > 0 else {
             sp_showTextAlert(tips: "请上传法人身份证正面面照")
             return
         }
-        guard oppositeView.imgView.image != nil else {
+        guard oppositeView.imgView.image != nil || sp_getString(string: self.oppositeUrl).count > 0  else {
             sp_showTextAlert(tips: "请上传法人身份证反面照")
             return
         }
-        guard licenceImageView.imgView.image != nil else {
+        guard licenceImageView.imgView.image != nil || sp_getString(string: self.licenceUrl).count > 0  else {
             sp_showTextAlert(tips: "请上传食品流通许可证/酒水流通许可证")
             return
         }
@@ -403,7 +435,7 @@ extension SPCompanyAuthenticationVC {
 extension SPCompanyAuthenticationVC {
     fileprivate func sp_uploadImg(){
         sp_showAnimation(view: self.view, title: nil)
-        if sp_getString(string: self.businessUrl).count == 0 || sp_getString(string: self.cardUrl).count == 0 || sp_getString(string: self.licenceUrl).count == 0 {
+        if sp_getString(string: self.businessUrl).count == 0 || sp_getString(string: self.cardUrl).count == 0 || sp_getString(string: self.licenceUrl).count == 0 || sp_getString(string: self.oppositeUrl).count == 0 {
             let group = DispatchGroup()
             
             if sp_getString(string: self.businessUrl).count == 0{
@@ -544,5 +576,29 @@ extension SPCompanyAuthenticationVC {
                   sp_showTextAlert(tips: msg)
             }
         }
+    }
+    fileprivate func sp_sendGetRequest(){
+        sp_showAnimation(view: self.view, title: nil)
+        let request = SPRequestModel()
+        SPAppRequest.sp_getCompanyAuthDet(requestModel: request) { [weak self](code, model, errorModel) in
+            if code == SP_Request_Code_Success {
+                self?.companyAuthModel = model
+                self?.sp_setupData()
+            }
+            sp_hideAnimation(view: self?.view)
+        }
+    }
+    fileprivate func sp_setupData(){
+        self.companyNameView.textFiled.text = sp_getString(string: self.companyAuthModel?.company_name)
+        self.nameView.textFiled.text = sp_getString(string: self.companyAuthModel?.representative)
+        self.cardView.textFiled.text = sp_getString(string: self.companyAuthModel?.idcard)
+        self.businessUrl = sp_getString(string: self.companyAuthModel?.license_img)
+        self.businessImageView.imgView.sp_cache(string: self.businessUrl, plImage: nil)
+        self.cardUrl = sp_getString(string: self.companyAuthModel?.shopuser_identity_img_z)
+        self.cardImageView.imgView.sp_cache(string: self.cardUrl, plImage: nil)
+        self.licenceUrl = sp_getString(string: self.companyAuthModel?.food_or_wine_img)
+        self.licenceImageView.imgView.sp_cache(string: self.licenceUrl, plImage: nil)
+        self.oppositeUrl = sp_getString(string: self.companyAuthModel?.shopuser_identity_img_f)
+        self.oppositeView.imgView.sp_cache(string: self.oppositeUrl, plImage: nil)
     }
 }

@@ -18,7 +18,7 @@ class SPIndexCollectHeaderView: UICollectionReusableView {
     }()
     lazy var moreBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("更多推荐 >", for: UIControlState.normal)
+        btn.setTitle("更多竞拍 >", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 12)
         btn.isHidden = true

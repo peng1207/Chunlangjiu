@@ -134,6 +134,11 @@ class SPIndexVC: SPBaseVC {
         self.collectionView.register(SPIndexCollectHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.alwaysBounceVertical = true
+        if #available(iOS 11.0, *) {
+            self.collectionView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         self.view.addSubview(self.collectionView)
          self.view.addSubview(self.noNetLabel)
         self.view.addSubview(self.nodataBtn)
@@ -759,8 +764,9 @@ extension SPIndexVC{
                   self.collectionView.reloadData()
             }else {
                 UIView.performWithoutAnimation {
-                     self.collectionView.reloadSections([1])
+                    self.collectionView.reloadSections([1])
                 }
+               
             }
           
             self.isScroll = false

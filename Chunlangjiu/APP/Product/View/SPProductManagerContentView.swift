@@ -99,8 +99,8 @@ class SPProductManagerContentView:  UIView{
         self.warehouseView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.saleView.snp.right).offset(0)
             maker.right.equalTo(self.snp.right).offset(0)
-            maker.top.height.equalTo(self.warehouseView).offset(0)
-            maker.height.equalTo(self.saleView.snp.height).offset(0)
+            maker.top.height.equalTo(self.saleView).offset(0)
+           
         }
         self.reviewView.snp.makeConstraints { (maker) in
             maker.left.width.height.equalTo(self.saleView).offset(0)

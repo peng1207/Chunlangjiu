@@ -35,7 +35,9 @@ class SPOrderPriceView:  UIView{
     }()
     fileprivate lazy var paymentView : SPOrderRightView = {
         let view = SPOrderRightView()
+        view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: 44)
         view.titleLabel.text = "实付金额："
+        view.contentLabel.numberOfLines = 0
         view.contentLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return view
     }()
@@ -89,8 +91,12 @@ class SPOrderPriceView:  UIView{
 //            let payValue = NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
 //            payAtt.append(payValue)
             self.paymentView.titleLabel.text = isPay ? "已付定金：" :"应付定金："
-            self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))"
-            
+           
+            if sp_getString(string: detaileModel?.status) == SP_AUCTION_3 , isPay {
+                 self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))（定金已按原路退回，请注意查收！）"
+            }else{
+                 self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))"
+            }
             if sp_getString(string: detaileModel?.status) == SP_AUCTION_0 || sp_getString(string: detaileModel?.status) == SP_AUCTION_1{
                 self.offerView.btn.isHidden = false
             }else{
@@ -154,12 +160,12 @@ class SPOrderPriceView:  UIView{
         self.totalView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
             self.totalTop = maker.top.equalTo(self).offset(0).constraint
-            self.totalHeight = maker.height.equalTo(44).constraint
+            self.totalHeight = maker.height.equalTo(40).constraint
         }
         self.freeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.totalView).offset(0)
-            self.freeTop = maker.top.equalTo(self.totalView.snp.bottom).offset(8).constraint
-            self.freeHeight = maker.height.equalTo(44).constraint
+            self.freeTop = maker.top.equalTo(self.totalView.snp.bottom).offset(0).constraint
+            self.freeHeight = maker.height.equalTo(40).constraint
         }
         self.offerView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
@@ -174,7 +180,8 @@ class SPOrderPriceView:  UIView{
         self.paymentView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.totalView).offset(0)
             maker.top.equalTo(self.lineView.snp.bottom).offset(0)
-            maker.height.equalTo(40)
+            maker.height.equalTo(44)
+//            maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self).offset(0)
         }
         

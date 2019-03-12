@@ -129,29 +129,57 @@ class SPShopProductAuctionPriceView:  UIView{
         view.image = UIImage(named: "public_rightBack")
         return view
     }()
+    var clickBlock : SPBtnClickBlock?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
     }
     
-    func sp_update(list : [SPAuctionPrice]?,total : Int){
-//        for view in self.subviews {
-//            if view.isKind(of: SPShopProductAuctionPriceContentView.classForCoder()){
-//                view.removeFromSuperview()
-//            }
-//        }
-        if sp_getArrayCount(array: list) > 0  {
+    func sp_update(list : [SPAuctionPrice]?,total : Int,isEnd:Bool = false){
+        for view in self.subviews {
+            if view.isKind(of: SPShopProductAuctionPriceContentView.classForCoder()){
+                view.removeFromSuperview()
+            }
+        }
+        var dataList = [SPAuctionPrice]()
+        if sp_getArrayCount(array: list) > 2 {
+            dataList.append(list![0])
+            dataList.append(list![1])
+        }else{
+            if sp_getArrayCount(array: list) > 0 {
+                dataList = list!
+            }
+        }
+        self.titleLabel.text = "当前出价记录（\(total)）条"
+        self.titleView.snp.remakeConstraints { (maker) in
+            maker.left.right.top.equalTo(self).offset(0)
+            maker.height.equalTo(35)
+            if sp_getArrayCount(array: dataList) == 0 {
+                maker.bottom.equalTo(self.snp.bottom).offset(0)
+            }
+        }
+        if sp_getArrayCount(array: dataList) > 0  {
             var index = 0
             var tmpView : UIView?
             
-            for model in list! {
+            for model in dataList {
                 let contenctView = SPShopProductAuctionPriceContentView()
                 contenctView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
                 contenctView.model = model
                 if index == 0 {
-                    contenctView.statusLabel.text = "领先"
+                    if isEnd {
+                         contenctView.statusLabel.text = "成交"
+                    }else{
+                         contenctView.statusLabel.text = "领先"
+                    }
+                   contenctView.statusLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
                 }else{
-                    contenctView.statusLabel.text = "落后"
+                    if isEnd {
+                        contenctView.statusLabel.text = "出局"
+                    }else{
+                         contenctView.statusLabel.text = "落后"
+                    }
+                    contenctView.statusLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
                 }
                 self.addSubview(contenctView)
                 contenctView.snp.makeConstraints { (maker) in
@@ -183,6 +211,8 @@ class SPShopProductAuctionPriceView:  UIView{
         self.addSubview(self.titleView)
         self.titleView.addSubview(self.titleLabel)
         self.titleView.addSubview(self.nextImgView)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickTap))
+        self.titleView.addGestureRecognizer(tap)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -208,3 +238,13 @@ class SPShopProductAuctionPriceView:  UIView{
     }
 }
 
+extension SPShopProductAuctionPriceView {
+    
+    @objc fileprivate func sp_clickTap(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block()
+    }
+    
+}

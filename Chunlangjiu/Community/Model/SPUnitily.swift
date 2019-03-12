@@ -43,6 +43,14 @@ func sp_getScreenHeight() -> CGFloat{
 func sp_getstatusBarHeight() -> CGFloat{
     return UIApplication.shared.statusBarFrame.size.height
 }
+func sp_isLargeScreen()->Bool{
+    if sp_getScreenWidth() < 375{
+        return false
+    }else{
+        return true
+    }
+    
+}
 /// 获取不同像素同样高度不同的比例
 ///
 /// - Parameter height: 高度

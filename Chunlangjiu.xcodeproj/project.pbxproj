@@ -312,6 +312,14 @@
 		9EC5144F210C609A006869B3 /* SPWineryPictureTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC5144E210C609A006869B3 /* SPWineryPictureTableCell.swift */; };
 		9EC51451210CB128006869B3 /* SPNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC51450210CB128006869B3 /* SPNavigationBar.swift */; };
 		9EC51453210CD9AE006869B3 /* SPShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC51452210CD9AE006869B3 /* SPShareManager.swift */; };
+		9ECABC982232BF6900F546CA /* SPPersonalInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABC972232BF6900F546CA /* SPPersonalInfoVC.swift */; };
+		9ECABC9A2232BF9900F546CA /* SPPersonalHeadImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABC992232BF9900F546CA /* SPPersonalHeadImg.swift */; };
+		9ECABC9C2232C46600F546CA /* SPPersonalSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABC9B2232C46600F546CA /* SPPersonalSelectView.swift */; };
+		9ECABC9E2232C61C00F546CA /* SPPersonalManyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABC9D2232C61C00F546CA /* SPPersonalManyView.swift */; };
+		9ECABCA02232C82300F546CA /* SPPersonalEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABC9F2232C82300F546CA /* SPPersonalEditVC.swift */; };
+		9ECABCA22232C8E000F546CA /* SPPersonAuthInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABCA12232C8E000F546CA /* SPPersonAuthInfoView.swift */; };
+		9ECABCA42232C91500F546CA /* SPPersonCompanyAuthInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABCA32232C91500F546CA /* SPPersonCompanyAuthInfoView.swift */; };
+		9ECABCA62232CDC700F546CA /* SPPersonalAdaptationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECABCA52232CDC700F546CA /* SPPersonalAdaptationView.swift */; };
 		9ECB7C4C2121F038009E843B /* WEIPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4B2121F037009E843B /* WEIPageControl.swift */; };
 		9ECB7C4E2123498D009E843B /* SPSearchRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4D2123498D009E843B /* SPSearchRecord.swift */; };
 		9ECB7C5021248C54009E843B /* SPDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECB7C4F21248C54009E843B /* SPDataBase.swift */; };
@@ -778,6 +786,14 @@
 		9EC5144E210C609A006869B3 /* SPWineryPictureTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPWineryPictureTableCell.swift; sourceTree = "<group>"; };
 		9EC51450210CB128006869B3 /* SPNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNavigationBar.swift; sourceTree = "<group>"; };
 		9EC51452210CD9AE006869B3 /* SPShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShareManager.swift; sourceTree = "<group>"; };
+		9ECABC972232BF6900F546CA /* SPPersonalInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonalInfoVC.swift; sourceTree = "<group>"; };
+		9ECABC992232BF9900F546CA /* SPPersonalHeadImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonalHeadImg.swift; sourceTree = "<group>"; };
+		9ECABC9B2232C46600F546CA /* SPPersonalSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonalSelectView.swift; sourceTree = "<group>"; };
+		9ECABC9D2232C61C00F546CA /* SPPersonalManyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonalManyView.swift; sourceTree = "<group>"; };
+		9ECABC9F2232C82300F546CA /* SPPersonalEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonalEditVC.swift; sourceTree = "<group>"; };
+		9ECABCA12232C8E000F546CA /* SPPersonAuthInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonAuthInfoView.swift; sourceTree = "<group>"; };
+		9ECABCA32232C91500F546CA /* SPPersonCompanyAuthInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonCompanyAuthInfoView.swift; sourceTree = "<group>"; };
+		9ECABCA52232CDC700F546CA /* SPPersonalAdaptationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPersonalAdaptationView.swift; sourceTree = "<group>"; };
 		9ECB7C4B2121F037009E843B /* WEIPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEIPageControl.swift; sourceTree = "<group>"; };
 		9ECB7C4D2123498D009E843B /* SPSearchRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSearchRecord.swift; sourceTree = "<group>"; };
 		9ECB7C4F21248C54009E843B /* SPDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDataBase.swift; sourceTree = "<group>"; };
@@ -1442,6 +1458,8 @@
 			children = (
 				9EF4C67520EC7391007E9909 /* SPMineVC.swift */,
 				9E5F7AF721C6A54400A9EF35 /* SPCustomerServiceVC.swift */,
+				9ECABC972232BF6900F546CA /* SPPersonalInfoVC.swift */,
+				9ECABC9F2232C82300F546CA /* SPPersonalEditVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1469,6 +1487,12 @@
 				9E34F6AE20F9DA8500D59ABD /* SPMineSectionHeaderView.swift */,
 				9E324D02217F836600F9AB5F /* SPMineEditView.swift */,
 				561C74E821CE1F5700132D88 /* SPMineTableCell.swift */,
+				9ECABC992232BF9900F546CA /* SPPersonalHeadImg.swift */,
+				9ECABC9B2232C46600F546CA /* SPPersonalSelectView.swift */,
+				9ECABC9D2232C61C00F546CA /* SPPersonalManyView.swift */,
+				9ECABCA12232C8E000F546CA /* SPPersonAuthInfoView.swift */,
+				9ECABCA32232C91500F546CA /* SPPersonCompanyAuthInfoView.swift */,
+				9ECABCA52232CDC700F546CA /* SPPersonalAdaptationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2421,6 +2445,7 @@
 				9E7A1FB02144D39900C9BFD2 /* SPAddPriceView.swift in Sources */,
 				9EF4C67A20EC73AD007E9909 /* SPSortVC.swift in Sources */,
 				9E5F7AEC21C632F500A9EF35 /* SPPartnerVC.swift in Sources */,
+				9ECABCA02232C82300F546CA /* SPPersonalEditVC.swift in Sources */,
 				9E22EAC02132432600B196D5 /* SPOrderPayModel.swift in Sources */,
 				9EF4C70A20F35E5B007E9909 /* SPEvaluateTableCell.swift in Sources */,
 				9E0C8B7220E640BF00BD9743 /* SPRequestManager.swift in Sources */,
@@ -2503,6 +2528,7 @@
 				9E22EABC2131A76E00B196D5 /* SPProductNumView.swift in Sources */,
 				9E12FDBD21206F0B0040CAE1 /* SPFilterHeaderModel.swift in Sources */,
 				9E5F7AD821C4E3B100A9EF35 /* SPCapitalDetDetTableCell.swift in Sources */,
+				9ECABC982232BF6900F546CA /* SPPersonalInfoVC.swift in Sources */,
 				9E5F7ADC21C4ECAD00A9EF35 /* SPCashVC.swift in Sources */,
 				9EF4C72120F4AED8007E9909 /* SPProductEvaluateView.swift in Sources */,
 				9E5F7AE021C4ECF400A9EF35 /* SPBalanceVC.swift in Sources */,
@@ -2524,6 +2550,7 @@
 				9EF4C6D620EF7C10007E9909 /* APPUtitly.swift in Sources */,
 				9E324CFF217E1E7E00F9AB5F /* SPProductRuleView.swift in Sources */,
 				5610337F21380CBA009DB376 /* SPOrderPriceView.swift in Sources */,
+				9ECABCA42232C91500F546CA /* SPPersonCompanyAuthInfoView.swift in Sources */,
 				9EF733CB21F0700200ECCC48 /* SPRevokeBondVC.swift in Sources */,
 				9EF7933221EF7C3700E956BC /* SPPartnerRequest.swift in Sources */,
 				9E5F7B0021C7F8A500A9EF35 /* SPAuthView.swift in Sources */,
@@ -2671,6 +2698,7 @@
 				9E5F7AD021C4098F00A9EF35 /* SPCapitalDetListTableCell.swift in Sources */,
 				9E194D7021DC69100080B72D /* SPBundle.swift in Sources */,
 				9EF4C71720F48FF3007E9909 /* SPProductView.swift in Sources */,
+				9ECABC9C2232C46600F546CA /* SPPersonalSelectView.swift in Sources */,
 				9E34F6AF20F9DA8500D59ABD /* SPMineSectionHeaderView.swift in Sources */,
 				9E129F442102CB3100218A33 /* SPProductDetailTopView.swift in Sources */,
 				9EF4C6C420EF4C9D007E9909 /* SPCitySectionHeadView.swift in Sources */,
@@ -2695,6 +2723,7 @@
 				9E34F6DF2101D9C800D59ABD /* SPProductDetaileWebVC.swift in Sources */,
 				9ED254CC21D7CA7B00A3166A /* SPAuctionInfoView.swift in Sources */,
 				9E8140B7211B52880063A6E4 /* SPMineCountModel.swift in Sources */,
+				9ECABC9A2232BF9900F546CA /* SPPersonalHeadImg.swift in Sources */,
 				9E020E192114BF0F0028ED50 /* SPHttpUrl.swift in Sources */,
 				9ECE7BDF2223B9DC00FE6BCD /* SPCapitalDetContentModel.swift in Sources */,
 				9ED254C621D27D4800A3166A /* SPAppImg.swift in Sources */,
@@ -2767,6 +2796,7 @@
 				9EAF179A222BBAD300247BE1 /* SPShopProductDetVC.swift in Sources */,
 				9EC514352108220E006869B3 /* SPPayView.swift in Sources */,
 				562C7164215CE0B80039EFD0 /* SPShopTypeView.swift in Sources */,
+				9ECABCA22232C8E000F546CA /* SPPersonAuthInfoView.swift in Sources */,
 				9EFD1271222E786000476D19 /* SPShopProductAuctionPriceView.swift in Sources */,
 				9E5F7AF021C6330F00A9EF35 /* SPPartnerModel.swift in Sources */,
 				9E5F7AB621C2AE8B00A9EF35 /* SPAuthHomeVC.swift in Sources */,
@@ -2788,6 +2818,7 @@
 				9EAF1790222B8AF400247BE1 /* SPShopProductTableCell.swift in Sources */,
 				56D6813821CC91F0003E49AB /* SPIndexHeadHeaderView.swift in Sources */,
 				9E7DAAD7213D93A70044C5FD /* SPOrderAddView.swift in Sources */,
+				9ECABCA62232CDC700F546CA /* SPPersonalAdaptationView.swift in Sources */,
 				9EAF17A0222C191800247BE1 /* SPShopProductBtnView.swift in Sources */,
 				9ED254B421CF10EF00A3166A /* SPActivityModel.swift in Sources */,
 				9E0E17F5218B580E001B8E00 /* SPOrderInfoView.swift in Sources */,
@@ -2797,6 +2828,7 @@
 				9E12FDC32120934A0040CAE1 /* SPIndexTitleView.swift in Sources */,
 				9E0C8B6C20E63F9300BD9743 /* SPBaseVC.swift in Sources */,
 				9EF4C70420F352A8007E9909 /* SPIndexBrandView.swift in Sources */,
+				9ECABC9E2232C61C00F546CA /* SPPersonalManyView.swift in Sources */,
 				9EF4C68620EC7F9D007E9909 /* SPEnum.swift in Sources */,
 				9E8140AB2117402A0063A6E4 /* SPProductDetailModel.swift in Sources */,
 				9EF4C72920F75CBE007E9909 /* SPIndexSectionAHeaderView.swift in Sources */,

@@ -224,11 +224,11 @@ extension SPMineVC {
         case .deliver?:
             sp_pushOrderVC(orderState: SPOrderStatus.deliver)
         case .saleProduct?:
-//            sp_clickSale()
-            sp_pushWebVC(url: "\(SP_GET_ONSALE_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "在售商品管理")
+            sp_clickSale()
+//            sp_pushWebVC(url: "\(SP_GET_ONSALE_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "在售商品管理")
         case .warehouseProduct?:
-//            sp_clickWarehouse()
-            sp_pushWebVC(url: "\(SP_GET_INSTOCK_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "仓库商品管理")
+            sp_clickWarehouse()
+//            sp_pushWebVC(url: "\(SP_GET_INSTOCK_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "仓库商品管理")
         case .member?:
             if SPAPPManager.sp_isBusiness() {
                 sp_pushWebVC(url: "\(SP_GER_SELLERINFO_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "会员资料")
@@ -243,11 +243,11 @@ extension SPMineVC {
         case .bank_card?:
             sp_pushWebVC(url: "\(SP_GET_BANK_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "银行卡管理")
         case .auctionProduct?:
-//            sp_clickProductAuction()
-            sp_pushWebVC(url: "\(SP_GET_AUCTION_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "竞拍商品管理")
+            sp_clickProductAuction()
+//            sp_pushWebVC(url: "\(SP_GET_AUCTION_WEB_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "竞拍商品管理")
         case .reviewProduct?:
-//            sp_clickReview()
-            sp_pushWebVC(url: "\(SP_GET_PEND_WEB_UEL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "审核商品管理")
+            sp_clickReview()
+//            sp_pushWebVC(url: "\(SP_GET_PEND_WEB_UEL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))",title: "审核商品管理")
         case .cance?:
             sp_clickCanceOrder()
         case .valuation?:
@@ -296,7 +296,7 @@ extension SPMineVC {
 //            return
 //        }
 //
-        if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH{
+        if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER || sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODIFIER {
             if isPush {
                 if sp_getString(string: userModel.identity) == SP_IS_ENTERPRISE {
                     SPAPPManager.sp_change(identity: "")
@@ -477,8 +477,8 @@ extension SPMineVC {
     }
     fileprivate func sp_pushProductManager(){
         self.pushVC = true
-//        sp_clickProductManager()
-        sp_pushWebVC(url: "\(SP_GET_ITECEMTER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))", title: "商品管理")
+        sp_clickProductManager()
+//        sp_pushWebVC(url: "\(SP_GET_ITECEMTER_URL)?apitoken=\(sp_getString(string: SPAPPManager.instance().userModel?.accessToken))", title: "商品管理")
         
     }
     fileprivate func sp_pushAuctionVC(orderState : SPOrderStatus = .all){
@@ -570,10 +570,17 @@ extension SPMineVC {
     }
     fileprivate func sp_dealHeaderView(){
         
-        if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH {
+        if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODIFIER || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER {
             self.headerView.sp_isAuth(isAuth: true)
         }else{
             self.headerView.sp_isAuth(isAuth: false)
+            if sp_getString(string: SPAPPManager.instance().userModel?.identity) == SP_IS_ENTERPRISE {
+                  SPAPPManager.sp_change(identity: "")
+                self.sp_getData()
+                self.sp_sendCountRequest()
+                self.sp_sendMemberInfoRequest()
+                self.headerView.sp_setupData()
+            }
         }
     }
 }
@@ -589,7 +596,7 @@ extension SPMineVC{
             return
         }
         let uploadImage = sp_fixOrientation(aImage: uImage)
-        let data = UIImageJPEGRepresentation(uploadImage, 0.5)
+        let data = UIImageJPEGRepresentation(uploadImage, 1.0)
         if let d = data {
             let imageRequestModel = SPRequestModel()
             imageRequestModel.data = [d]
@@ -688,7 +695,6 @@ extension SPMineVC{
         SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in
             if code == SP_Request_Code_Success{
                 self?.companyAuth = model
-                
             }
         }
     }

@@ -207,6 +207,46 @@ class SPFundsRequest : SPAppRequest {
             }
         }
     }
+    /// 获取冻结资金明细列表
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getFreezeList(requestModel:SPRequestModel,complete:SPRequestCompletList?){
+        requestModel.url = SP_GET_FREEZELIST_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var listArray : [SPCapitalDetModel] = [SPCapitalDetModel]()
+                if errorcode == SP_Request_Code_Success , let dic = data {
+                    let list : [Any]? = dic["list"] as? [Any]
+                    if sp_getArrayCount(array: list) > 0 ,let array = list{
+                        for listDic in array {
+                            if let listD : [String : Any] = listDic as? [String : Any] {
+                                let model = SPCapitalDetModel.sp_deserialize(from: listD)
+                                if let m = model {
+                                    if let time : Int = m.logtime {
+                                        m.time = SPDateManager.sp_string(to: TimeInterval(time))
+                                    }
+                                    listArray.append(m)
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+                if let block = complete {
+                    block(errorcode,listArray,nil,1)
+                }
+            }else{
+                if let block = complete {
+                      block(SP_Request_Error,nil,nil,1)
+                }
+            }
+        }
+    }
     /// 获取资金明细详情
     ///
     /// - Parameters:
@@ -214,6 +254,35 @@ class SPFundsRequest : SPAppRequest {
     ///   - complete: 回调
     class func sp_getCapitalDetDet(requestModel:SPRequestModel,complete:SPCapitalDetDetComplete?){
         requestModel.url = SP_GET_CAPITALDETDET_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPCapitalDetContentModel?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPCapitalDetContentModel.sp_deserialize(from: data)
+                    if let time : Int = model?.time{
+                        model?.showTime = SPDateManager.sp_string(to: TimeInterval(time))
+                    }
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
+    /// 获取冻结资金详情
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getFreezeDet(requestModel:SPRequestModel,complete:SPCapitalDetDetComplete?){
+        requestModel.url = SP_GET_FREEZEDET_URL
         sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
             if let json = dataJson {
                 let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])

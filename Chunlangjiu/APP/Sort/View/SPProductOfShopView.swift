@@ -56,7 +56,7 @@ class SPProductOfShopView:  UIView{
     fileprivate func sp_setupData(){
         self.iconImageView.sp_cache(string: self.shopModel?.shop_logo, plImage: sp_getLogoImg())
         self.nameLabel.text = sp_getString(string: self.shopModel?.shop_name)
-        self.contentLabel.text = "店铺简介:\(sp_getString(string: self.shopModel?.shop_descript))"
+        self.contentLabel.text = "店铺简介:\(sp_getString(string: self.shopModel?.bulletin))"
         if sp_getString(string: self.shopModel?.grade) == SP_GRADE_2 {
             self.typeImgView.image = sp_getPartnerImg()
         }else if sp_getString(string: self.shopModel?.grade) == SP_GRADE_1 {

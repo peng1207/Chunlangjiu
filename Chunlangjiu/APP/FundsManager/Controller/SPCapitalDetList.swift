@@ -101,6 +101,7 @@ extension SPCapitalDetList : UITableViewDelegate,UITableViewDataSource {
         if indexPath.section < sp_getArrayCount(array: self.dataArray) {
             let detVC = SPCapitalDetDetVC()
             detVC.model = self.dataArray?[indexPath.section]
+            detVC.tyep = self.type
             self.navigationController?.pushViewController(detVC, animated: true)
         }
     }
@@ -127,14 +128,28 @@ extension SPCapitalDetList : UITableViewDelegate,UITableViewDataSource {
 extension SPCapitalDetList {
     
     fileprivate func sp_sendRequest(){
+        if sp_getString(string: type) == SP_FUNDS_BILL_TYPE_FROZEN {
+            sp_sendFreezeReequesst()
+        }else{
+            var parm = [String : Any]()
+            parm.updateValue(self.currentPage, forKey: "page_no")
+            parm.updateValue(sp_getString(string: self.type), forKey: "type")
+            self.requestModel.parm = parm
+            SPFundsRequest.sp_getCapitalDetList(requestModel: self.requestModel) { [weak self](code, list, errorModel,total) in
+                self?.sp_dealSuccess(code: code, list: list, errorModel: errorModel, total: total)
+            }
+        }
+    }
+    /// 发送冻结金额的请求
+    fileprivate func sp_sendFreezeReequesst(){
         var parm = [String : Any]()
         parm.updateValue(self.currentPage, forKey: "page_no")
-        parm.updateValue(sp_getString(string: self.type), forKey: "type")
         self.requestModel.parm = parm
-        SPFundsRequest.sp_getCapitalDetList(requestModel: self.requestModel) { [weak self](code, list, errorModel,total) in
+        SPFundsRequest.sp_getFreezeList(requestModel: self.requestModel) { [weak self](code , list, errorModel, total) in
             self?.sp_dealSuccess(code: code, list: list, errorModel: errorModel, total: total)
         }
     }
+    
     fileprivate func sp_dealSuccess(code : String,list : [Any]?,errorModel : SPRequestError?,total:Int){
         if code == SP_Request_Code_Success {
             if self.currentPage <= 1 {

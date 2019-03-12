@@ -337,7 +337,7 @@ class SPOrderHandle : NSObject {
             }
             for image in imageArray {
                 let uploadImage = sp_fixOrientation(aImage: image)
-                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
+                let data = UIImageJPEGRepresentation(uploadImage, 1.0)
                 guard let d = data else{
                     continue
                 }
