@@ -14,4 +14,7 @@ class SPBankCardModel : SPBaseModel {
     var bank : String?
     var card : String?
     var mobile : String?
+    var logo : String?
+    var cardname : String?
+    var abbreviation : String?      // 简称
 }

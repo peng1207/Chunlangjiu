@@ -60,6 +60,9 @@ class SPAdvertVC : SPBaseVC{
     /// 赋值
     fileprivate func sp_setupData(){
         self.advertImg.image = UIImage(contentsOfFile: sp_getString(string: model?.sp_getLocalPath()))
+        if self.advertImg.image == nil {
+            self.advertImg.sp_cache(string: sp_getString(string: model?.imagesrc), plImage: nil)
+        }
     }
     
     /// 添加UI

@@ -267,6 +267,8 @@
 		9E9404CD21E4757F00AC3313 /* SPSetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9404CC21E4757F00AC3313 /* SPSetRequest.swift */; };
 		9E9404CF21E4758D00AC3313 /* SPFansRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9404CE21E4758D00AC3313 /* SPFansRequest.swift */; };
 		9E9404D121E4796C00AC3313 /* SPInputBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9404D021E4796C00AC3313 /* SPInputBtnView.swift */; };
+		9E9615F1223951D1002EF0EC /* SPMineAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9615F0223951D0002EF0EC /* SPMineAlertView.swift */; };
+		9E9615F322395AB9002EF0EC /* SPMineAuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9615F222395AB9002EF0EC /* SPMineAuthModel.swift */; };
 		9EA86C792219BAA500088AD8 /* SPFansShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA86C782219BAA500088AD8 /* SPFansShareModel.swift */; };
 		9EAE840E2194893E00847B82 /* KiClipperHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAE840B2194893E00847B82 /* KiClipperHelper.swift */; };
 		9EAE840F2194893E00847B82 /* KiImageClipperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAE840C2194893E00847B82 /* KiImageClipperViewController.swift */; };
@@ -741,6 +743,8 @@
 		9E9404CC21E4757F00AC3313 /* SPSetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSetRequest.swift; sourceTree = "<group>"; };
 		9E9404CE21E4758D00AC3313 /* SPFansRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansRequest.swift; sourceTree = "<group>"; };
 		9E9404D021E4796C00AC3313 /* SPInputBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPInputBtnView.swift; sourceTree = "<group>"; };
+		9E9615F0223951D0002EF0EC /* SPMineAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineAlertView.swift; sourceTree = "<group>"; };
+		9E9615F222395AB9002EF0EC /* SPMineAuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineAuthModel.swift; sourceTree = "<group>"; };
 		9EA86C782219BAA500088AD8 /* SPFansShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFansShareModel.swift; sourceTree = "<group>"; };
 		9EAE840B2194893E00847B82 /* KiClipperHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KiClipperHelper.swift; sourceTree = "<group>"; };
 		9EAE840C2194893E00847B82 /* KiImageClipperViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KiImageClipperViewController.swift; sourceTree = "<group>"; };
@@ -1474,6 +1478,7 @@
 				9E8140B8211B56A60063A6E4 /* SPMemberModel.swift */,
 				9E4AAED2214E570100336892 /* SPMineHeadModel.swift */,
 				9E70D7502155E77700CC6376 /* SPMineHeader.swift */,
+				9E9615F222395AB9002EF0EC /* SPMineAuthModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1493,6 +1498,7 @@
 				9ECABCA12232C8E000F546CA /* SPPersonAuthInfoView.swift */,
 				9ECABCA32232C91500F546CA /* SPPersonCompanyAuthInfoView.swift */,
 				9ECABCA52232CDC700F546CA /* SPPersonalAdaptationView.swift */,
+				9E9615F0223951D0002EF0EC /* SPMineAlertView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2456,6 +2462,7 @@
 				56C4D668215BB0FE00C30A2B /* SPAlcoholDegree.swift in Sources */,
 				9ED254B621CF114300A3166A /* SPActivityHeaderView.swift in Sources */,
 				9E8140A7211732F70063A6E4 /* SPShopModel.swift in Sources */,
+				9E9615F1223951D1002EF0EC /* SPMineAlertView.swift in Sources */,
 				9E324D03217F836600F9AB5F /* SPMineEditView.swift in Sources */,
 				9E34F6B720FB1B2100D59ABD /* SPSortTableCell.swift in Sources */,
 				9E22EAEE2135A86C00B196D5 /* SPOrderListVC.swift in Sources */,
@@ -2560,6 +2567,7 @@
 				9ED254BA21CF116B00A3166A /* SPActivitySectionView.swift in Sources */,
 				9EC51449210C5CF0006869B3 /* SPWineryScoreHeaderView.swift in Sources */,
 				9EFC5973217B0F6E0002B4BE /* SPLogiModel.swift in Sources */,
+				9E9615F322395AB9002EF0EC /* SPMineAuthModel.swift in Sources */,
 				9ECB7C5021248C54009E843B /* SPDataBase.swift in Sources */,
 				567ECD58213E724300F254E4 /* SPShopCategory.swift in Sources */,
 				9E48D58421E7009D0043D764 /* GTMBase64.m in Sources */,

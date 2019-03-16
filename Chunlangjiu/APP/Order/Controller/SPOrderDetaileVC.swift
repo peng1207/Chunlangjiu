@@ -332,7 +332,7 @@ extension SPOrderDetaileVC{
         let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: self.orderDetaileModel)
         self.bottomView.isHidden = bottomIsHidden
         self.bottomHeight.update(offset: bottomIsHidden ? 0 : 44)
-        if sp_getString(string: orderDetaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_0 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION ) || (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_1 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION){
+        if sp_getString(string: orderDetaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_0 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION ) || (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_1 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION) || (sp_getString(string: orderDetaileModel?.type) == SP_AUCTION && sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_2 && sp_getString(string: orderDetaileModel?.trade_ststus) == SP_WAIT_BUYER_PAY){
              sp_addTimeNotification()
         }
         self.tableView.sp_layoutHeaderView()

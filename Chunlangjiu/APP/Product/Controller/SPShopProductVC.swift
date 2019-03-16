@@ -217,6 +217,7 @@ extension SPShopProductVC {
     fileprivate func sp_pushAdd(model : SPProductModel?){
         let addVC = SPProductAddVC()
         addVC.edit = true
+        addVC.navigationItem.title = "编辑商品"
         addVC.item_id = sp_getString(string: model?.item_id)
         addVC.successBlock = { [weak self] (item_id) in
             self?.sp_dealAddSuccess(item_id: item_id)
@@ -319,8 +320,10 @@ extension SPShopProductVC {
             sp_pushSetAuctionVC(model: model)
         case .lower:
             sp_sendLowerRequest(model: model)
+           
         case .upper:
-            sp_sendUpperRequesst(model: model)
+//            sp_sendUpperRequesst(model: model)
+             sp_sendCheckRequest(model: model)
         case .reason:
             sp_lookReason(model: model)
         
@@ -501,6 +504,49 @@ extension SPShopProductVC {
                 self?.sp_removeProduct(mdoel: productModel)
             }
         }
+    }
+    /// 发送检查的请求
+    fileprivate func sp_sendCheckRequest(model: SPProductModel?){
+        sp_showAnimation(view: self.view, title: nil)
+        let request = SPRequestModel()
+        request.parm = [String : Any]()
+        SPProductRequest.sp_getCheckProduct(requestModel: request) { [weak self](code, data, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                if sp_isDic(dic: data) {
+                    if let dic : [String : Any] = data {
+                        let status = sp_getString(string: dic["status"])
+                        let tips = sp_getString(string: dic["tips"])
+                        let deposit = sp_getString(string: dic["deposit"])
+                        if let isCheck : Bool = Bool(status), isCheck == false {
+                            self?.sp_dealCheckTip(tips: tips,deposit: deposit)
+                        }else{
+                            self?.sp_sendUpperRequesst(model: model)
+                        }
+                    }
+                }
+            }else{
+                if sp_isDic(dic: data) {
+                    if let dic : [String : Any] = data {
+                        let msg = dic[SP_Request_Msg_Key]
+                        sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? sp_getString(string: msg) : "上架失败")
+                    }
+                }else{
+                    sp_showTextAlert(tips: "上架失败")
+                }
+            }
+        }
+    }
+    fileprivate func sp_dealCheckTip(tips:String,deposit:String){
+        SPProductTipView.sp_show(title: tips, canceComplete: { /*[weak self]in*/
+            //           self?.navigationController?.popViewController(animated: true)
+        }) { [weak self]in
+            let rechargerVC = SPRechargeVC()
+            rechargerVC.isBond = true
+            rechargerVC.price = deposit
+            rechargerVC.navigationItem.title = "缴纳保证金"
+            self?.navigationController?.pushViewController(rechargerVC, animated: true)
+        };
     }
 }
 extension SPShopProductVC{

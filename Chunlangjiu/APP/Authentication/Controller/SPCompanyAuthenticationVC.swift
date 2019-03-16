@@ -569,6 +569,8 @@ extension SPCompanyAuthenticationVC {
           
             if code == SP_Request_Code_Success {
                 sp_showTextAlert(tips: "提交成功")
+                SPRealmTool.sp_insertAuthFaile(isAlert: true)
+                SPRealmTool.sp_insertAuthSuccess(isAlert: true)
                 sp_asyncAfter(time: 2, complete: {
                     self?.navigationController?.popViewController(animated: true)
                 })

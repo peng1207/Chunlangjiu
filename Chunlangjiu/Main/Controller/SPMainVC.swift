@@ -124,7 +124,7 @@ extension SPMainVC {
                 advertVC.view.snp.makeConstraints { (maker) in
                     maker.left.right.top.bottom.equalTo(appdelegate.window!).offset(0)
                 }
-            } 
+            }
         }
         
     }

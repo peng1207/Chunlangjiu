@@ -33,6 +33,7 @@ class SPActivityVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_showAnimation(view: self.view, title: nil)
         self.sp_sendRequest()
         self.sp_addNotification()
     }
@@ -246,6 +247,7 @@ extension SPActivityVC {
     fileprivate func sp_sendRequest(){
         
         SPAppRequest.sp_getActivityList(requestModel: self.requestModel) { [weak self](code, model, errorModel) in
+            sp_hideAnimation(view: self?.view)
             self?.activityModel = model
             self?.sp_setupData()
         }

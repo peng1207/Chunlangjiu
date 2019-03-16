@@ -422,10 +422,11 @@ extension SPAPPManager {
         let enString = urlString.MD5String
         let cachePath = sp_getCachePath()
         let filePath =  "\(sp_getString(string: cachePath))/\(sp_getString(string: enString)).jpg"
+     
         let isExist : Bool =  FileManager.default.fileExists(atPath: filePath)
         if isExist == false {
             let downloader = ImageDownloader.default
-            downloader.sessionConfiguration = URLSessionConfiguration.default
+//            downloader.sessionConfiguration = URLSessionConfiguration.default
             downloader.downloadTimeout = 30
             downloader.downloadImage(with: URL(string: sp_getString(string: urlString))!, retrieveImageTask: nil, options: nil, progressBlock: nil) { (image, error, url, data) in
                 

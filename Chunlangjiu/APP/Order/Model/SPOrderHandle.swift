@@ -136,7 +136,8 @@ class SPOrderHandle : NSObject {
             }
         case SP_STATUS_3:
             if btnIndex == 0{
-                 sp_openTel(text: "400-788-9550")
+//                 sp_openTel(text: "400-788-9550")
+                sp_orderComplaintAlert(order: model, viewController: vc, complete: complete)
 //                sp_delete(order: model, viewController: vc, complete: complete)
             }
         case SP_TRADE_CLOSED_BY_SYSTEM:
@@ -337,10 +338,12 @@ class SPOrderHandle : NSObject {
             }
             for image in imageArray {
                 let uploadImage = sp_fixOrientation(aImage: image)
-                let data = UIImageJPEGRepresentation(uploadImage, 1.0)
-                guard let d = data else{
-                    continue
-                }
+//                let data = UIImageJPEGRepresentation(uploadImage, 1.0)
+//                guard let d = data else{
+//                    continue
+//                }
+                let d = sp_resetImgSize(sourceImage: uploadImage)
+               
                 group.enter() // 将以下任务添加进group
                 let imageRequestModel = SPRequestModel()
                 imageRequestModel.data = [d]
@@ -671,6 +674,40 @@ class SPOrderHandle : NSObject {
                 sp_dealComplete(isSuccess: false, complete: complete)
             }
             sp_showTextAlert(tips: msg)
+        }
+    }
+    class func sp_orderComplaintAlert(order orderModel :SPOrderModel,viewController: UIViewController,complete: SPOrderHandleComplete?){
+        let alertController = UIAlertController(title: "提示", message: "是否投诉该订单", preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "投诉", style: UIAlertActionStyle.default, handler: { (action) in
+            sp_orderComplaintRequest(order: orderModel, complete: complete)
+        }))
+        alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
+            
+        }))
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
+    }
+    /// 发送 订单投诉请求
+    ///
+    /// - Parameters:
+    ///   - orderModel: 订单数据
+    ///   - complete: 回调
+    class func sp_orderComplaintRequest(order orderModel :SPOrderModel,complete: SPOrderHandleComplete?){
+        sp_showAnimation(view: nil, title: nil)
+        let request = SPRequestModel()
+        var parm = [String : Any]()
+        parm.updateValue(orderModel.oid, forKey: "oid")
+        request.parm = parm
+        SPOrderRequest.sp_getOrderComplaint(requestModel: request) { (code, msg, errorModel) in
+            sp_hideAnimation(view: nil)
+            if code == SP_Request_Code_Success {
+                sp_dealComplete(isSuccess: true, complete: complete)
+            }else{
+                sp_dealComplete(isSuccess: false, complete: complete)
+            }
+            sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? sp_getString(string: msg) : code == SP_Request_Code_Success ? "提交投诉成功，请耐心等待" : "提交投诉失败")
         }
     }
 }

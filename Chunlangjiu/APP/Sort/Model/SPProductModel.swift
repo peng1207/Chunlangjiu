@@ -241,7 +241,7 @@ class SPProductModel :  HandyJSON {
          let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: sp_getString(string: self.title))
         let paragraphStyle:NSMutableParagraphStyle = NSMutableParagraphStyle()
         
-        paragraphStyle.lineSpacing = 5 //大小调整
+        paragraphStyle.lineSpacing = 4 //大小调整
         
         attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, sp_getString(string: self.title).count))
         return attributedString

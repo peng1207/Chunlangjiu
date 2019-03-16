@@ -238,7 +238,7 @@ extension SPAuthHomeVC {
                 }else if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING{
                     self.realNameView.updateBtn.isHidden = false
                     self.realNameView.applyBtn.isEnabled = false
-                    self.realNameView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.disabled)
+                   self.realNameView.applyBtn.setBackgroundImage(UIImage.sp_getImageWithColor(color:  SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue)), for: UIControlState.disabled)
                 }else if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODEFIERFAIL || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER{
                     self.realNameView.updateBtn.isHidden = false
                     self.realNameView.applyBtn.isEnabled = false

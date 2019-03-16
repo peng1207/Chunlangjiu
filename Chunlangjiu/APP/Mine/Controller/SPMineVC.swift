@@ -40,16 +40,8 @@ class SPMineVC: SPBaseVC {
     private var countModel : SPMineCountModel?
     
     /// 企业认证状态
-    private var companyAuth : SPCompanyAuth?{
-        didSet{
-            sp_dealHeaderView()
-        }
-    }
-    private var realNameAuth : SPRealNameAuth?{
-        didSet{
-            sp_dealHeaderView()
-        }
-    }
+    private var companyAuth : SPCompanyAuth?
+    private var realNameAuth : SPRealNameAuth?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -583,6 +575,42 @@ extension SPMineVC {
             }
         }
     }
+    fileprivate func sp_dealAuthAlert(){
+        if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH {
+            // 认证成功
+            
+            if SPRealmTool.sp_getIsAlert(isSuccess: true) == true {
+                SPMineAlertView.sp_showView(title:  sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH ? "您的企业认证已通过！" : "您的个人认证已通过！", content: "恭喜您可以在醇狼平台发布商品啦！\n若交易成功，平台每单将收取3.5%的佣金。", btnTitle: "去发布商品", isSuccess: true) { [weak self] in
+                    self?.sp_pushAddProduct()
+                }
+                SPRealmTool.sp_insertAuthSuccess(isAlert: false)
+            }
+            
+           
+            
+        }else if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODEFIERFAIL || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FAILING || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODEFIERFAIL {
+            if SPRealmTool.sp_getIsAlert(isSuccess: false) == true {
+                // 认证失败
+                var title = ""
+                if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FAILING || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODEFIERFAIL {
+                    title = "您的企业认证未通过！"
+                }else{
+                    title = "您的个人认证未通过！"
+                }
+                SPMineAlertView.sp_showView(title:  title, content: "距离发布商品还差一点点哦，我们期待您再次提交。", btnTitle: "重新提交认证", isSuccess: false) { [weak self] in
+                    self?.sp_pushAuthHomeVC()
+                }
+                SPRealmTool.sp_insertAuthFaile(isAlert: false)
+            }
+           
+        }else {
+            if sp_getString(string: self.companyAuth?.status) == SP_STATUS_LOCKED || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODIFIER || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_LOCKED || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER {
+                SPRealmTool.sp_insertAuthFaile(isAlert: true)
+                SPRealmTool.sp_insertAuthSuccess(isAlert: true)
+            }
+        }
+        
+    }
 }
 
 // MARK: - 请求 数据
@@ -596,30 +624,31 @@ extension SPMineVC{
             return
         }
         let uploadImage = sp_fixOrientation(aImage: uImage)
-        let data = UIImageJPEGRepresentation(uploadImage, 1.0)
-        if let d = data {
-            let imageRequestModel = SPRequestModel()
-            imageRequestModel.data = [d]
-            imageRequestModel.name = "image"
-            imageRequestModel.fileName = ["proudct.jpg"]
-            imageRequestModel.mineType = "image/jpg"
-            var parm = [String:Any]()
-            parm.updateValue("rate", forKey: "image_type")
-            parm.updateValue("proudct.jpg", forKey: "image_input_title")
-            parm.updateValue("binary", forKey: "upload_type")
-            
-            imageRequestModel.parm = parm
-            sp_showAnimation(view: nil, title: nil)
-            SPAppRequest.sp_getUserUploadImg(requestModel: imageRequestModel) { [weak self](code, msg, uploadImageModel, errorModel) in
-                if code == SP_Request_Code_Success, let upload = uploadImageModel{
-                    self?.sp_sendSet(img:sp_getString(string: upload.url))
-                }else{
-                    sp_showTextAlert(tips: msg)
-                    sp_hideAnimation(view: nil)
-                }
-                
+        let d = sp_resetImgSize(sourceImage: uploadImage)
+        //        let data = UIImageJPEGRepresentation(uploadImage, 1.0)
+        //        if let d = data {
+        let imageRequestModel = SPRequestModel()
+        imageRequestModel.data = [d]
+        imageRequestModel.name = "image"
+        imageRequestModel.fileName = ["proudct.jpg"]
+        imageRequestModel.mineType = "image/jpg"
+        var parm = [String:Any]()
+        parm.updateValue("rate", forKey: "image_type")
+        parm.updateValue("proudct.jpg", forKey: "image_input_title")
+        parm.updateValue("binary", forKey: "upload_type")
+        
+        imageRequestModel.parm = parm
+        sp_showAnimation(view: nil, title: nil)
+        SPAppRequest.sp_getUserUploadImg(requestModel: imageRequestModel) { [weak self](code, msg, uploadImageModel, errorModel) in
+            if code == SP_Request_Code_Success, let upload = uploadImageModel{
+                self?.sp_sendSet(img:sp_getString(string: upload.url))
+            }else{
+                sp_showTextAlert(tips: msg)
+                sp_hideAnimation(view: nil)
             }
+            
         }
+        //        }
     }
     fileprivate func sp_sendSet(img imgUrl : String){
         let request = SPRequestModel()
@@ -647,8 +676,7 @@ extension SPMineVC{
         }
         self.sp_sendCountRequest()
         self.sp_sendMemberInfoRequest()
-        self.sp_sendCompanyAuthStatus()
-        sp_sendRealNameAuth()
+        sp_sendAuthRequest()
     }
     
     /// 获取数据统计请求
@@ -690,23 +718,34 @@ extension SPMineVC{
                 self.headerView.memberModel = SPAPPManager.instance().memberModel
             }
     }
-    fileprivate func sp_sendCompanyAuthStatus(){
-        let request = SPRequestModel()
-        SPAppRequest.sp_getCompanyAuthStatus(requestModel: request) { [weak self](code , model, errorModel) in
+    
+    /// 发送认证的请求
+    fileprivate func sp_sendAuthRequest(){
+        
+        let group = DispatchGroup()
+        group.enter()
+        SPAppRequest.sp_getCompanyAuthStatus(requestModel: SPRequestModel()) { [weak self](code , model, errorModel) in
             if code == SP_Request_Code_Success{
                 self?.companyAuth = model
             }
+            group.leave()
         }
-    }
-    fileprivate func sp_sendRealNameAuth(){
-        let request = SPRequestModel()
-        SPAppRequest.sp_getRealNameAuth(requestModel: request) { [weak self](code , model , errorModel) in
+        group.enter()
+        SPAppRequest.sp_getRealNameAuth(requestModel: SPRequestModel()) { [weak self](code , model , errorModel) in
             if code == SP_Request_Code_Success{
                 self?.realNameAuth = model
-              
+                
+            }
+            group.leave()
+        }
+        group.notify(queue: DispatchQueue(label: "getAuthStatusQueue")) { [weak self] in
+            sp_mainQueue {
+                self?.sp_dealHeaderView()
+                self?.sp_dealAuthAlert()
             }
         }
     }
+    
     fileprivate func sp_sendUpdateShop(name:String){
         sp_showAnimation(view: self.view, title: nil)
         let request = SPRequestModel()

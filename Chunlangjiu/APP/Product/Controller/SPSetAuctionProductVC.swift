@@ -327,6 +327,11 @@ extension SPSetAuctionProductVC {
             sp_showTextAlert(tips: "请输入起拍价")
             return
         }
+        if let price = Float(sp_getString(string: self.startPriceView.textFiled.text)), price < 1.0{
+            sp_showTextAlert(tips: "起拍价不能低于1元")
+            return
+        }
+        
         if self.startDate == nil {
             sp_showTextAlert(tips: "请选择竞拍开始时间")
             return

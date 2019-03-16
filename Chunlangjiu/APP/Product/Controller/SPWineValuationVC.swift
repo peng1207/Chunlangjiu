@@ -113,11 +113,19 @@ extension SPWineValuationVC {
             sp_showTextAlert(tips: "请输入所属系列")
             return
         }
-        let imageArray = self.addImgView.sp_getImgs()
-        if sp_getArrayCount(array: imageArray) >= 6  {
-            sp_send(uploadImg: imageArray)
+//        let imageArray = self.addImgView.sp_getImgs()
+         let imageArray = self.addImgView.sp_getSelect()
+        if sp_getArrayCount(array: imageArray) >= 5  {
+            var imgList = [UIImage]()
+            for value in imageArray {
+                if value is UIImage{
+                    imgList.append(value as! UIImage)
+                }
+            }
+            
+            sp_send(uploadImg: imgList)
         }else{
-            sp_showTextAlert(tips: "请添加商品图片,至少6张")
+            sp_showTextAlert(tips: "请添加商品图片,至少5张")
         }
     }
     ///  点击添加图片事件

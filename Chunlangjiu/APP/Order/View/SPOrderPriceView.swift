@@ -93,7 +93,7 @@ class SPOrderPriceView:  UIView{
             self.paymentView.titleLabel.text = isPay ? "已付定金：" :"应付定金："
            
             if sp_getString(string: detaileModel?.status) == SP_AUCTION_3 , isPay {
-                 self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))（定金已按原路退回，请注意查收！）"
+                 self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))（定金退回至可用余额，请注意查收！）"
             }else{
                  self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))"
             }

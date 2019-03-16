@@ -231,8 +231,14 @@ class SPOrderBtnManager {
                 if sp_getString(string: orderModel?.type) == SP_AUCTION {
                     isHidden = true
                 }else{
-                    isHidden = false
-                    donetext = "平台接入"
+                    isHidden = true
+                    let itemModel = orderModel?.order?.first
+                    if let item = itemModel {
+                        if sp_getString(string: item.complaints_status) == SP_NOT_COMPLAINTS {
+                            isHidden = false
+                            donetext = "投诉"
+                        }
+                    }
                 }
 
             }
@@ -359,7 +365,13 @@ class SPOrderBtnManager {
                 if sp_getString(string: orderModel?.type) == SP_AUCTION{
                     isHidden = true
                 }else{
-                    isHidden = false
+                      isHidden = true
+                    let itemModel = orderModel?.order?.first
+                    if let item = itemModel {
+                        if sp_getString(string: item.complaints_status) == SP_NOT_COMPLAINTS {
+                            isHidden = false
+                        }
+                    }
                 }
             }
         case SP_WAIT_CHECK:

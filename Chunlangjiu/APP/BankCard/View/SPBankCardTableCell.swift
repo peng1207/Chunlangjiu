@@ -12,7 +12,7 @@ import SnapKit
 class SPBankCardTableCell: UITableViewCell {
     fileprivate lazy var cellView : UIView = {
         let view = UIView()
-        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
@@ -25,14 +25,14 @@ class SPBankCardTableCell: UITableViewCell {
     fileprivate lazy var nameLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
         return label
     }()
     fileprivate lazy var typeLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 12)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         label.textAlignment = .left
         label.text = "储蓄卡"
         return label
@@ -40,7 +40,7 @@ class SPBankCardTableCell: UITableViewCell {
     fileprivate lazy var cardLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 24)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
         return label
     }()
@@ -61,7 +61,17 @@ class SPBankCardTableCell: UITableViewCell {
     /// 赋值
     fileprivate func sp_setupData(){
         self.nameLabel.text = sp_getString(string: self.model?.name)
+        if sp_getString(string: self.model?.cardname).count > 0 {
+            self.typeLabel.text = sp_getString(string: self.model?.cardname)
+        }else{
+            self.typeLabel.text = "储蓄卡"
+        }
+        self.logoImgView.image = UIImage(named: sp_getString(string: self.model?.abbreviation))
+        
         self.cardLabel.text = sp_getString(string: self.model?.card).replaceBankCard()
+        if self.logoImgView.image == nil {
+            self.logoImgView.sp_cache(string: self.model?.logo, plImage: sp_getLogoImg())
+        }
         
     }
     /// 添加UI

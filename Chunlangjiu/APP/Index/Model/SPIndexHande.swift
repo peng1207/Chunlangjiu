@@ -112,40 +112,20 @@ class SPIndexHande : NSObject {
         
         group.notify(queue: .main) {
             sp_hideAnimation(view: viewController.view)
-            if sp_getString(string: realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: companyAuth?.status) == SP_STATUS_FINISH {
+            if sp_getString(string: realNameAuth?.status) == SP_STATUS_FINISH  || sp_getString(string: realNameAuth?.status) == SP_STATUS_MODIFIER || sp_getString(string: companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: companyAuth?.status) == SP_STATUS_MODIFIER {
                 let addProduct = SPProductAddVC()
                 addProduct.title = "添加商品"
                 viewController.navigationController?.pushViewController(addProduct, animated: true)
             }else{
-                if realNameAuth == nil{
-                    sp_pushRealNameVC(viewController: viewController)
-                }else if sp_getString(string: realNameAuth?.status) == SP_STATUS_ACTIVE{
-                    sp_showTextAlert(tips: "您还没有进行实名认证，请先认证！")
-                    sp_pushRealNameVC(viewController: viewController)
-                }else if sp_getString(string: realNameAuth?.status) == SP_STATUS_FAILING{
-                       sp_showTextAlert(tips: "您的认证被驳回，请重新提交资料审核")
-                    sp_pushRealNameVC(viewController: viewController)
-                }else if sp_getString(string: realNameAuth?.status) == SP_STATUS_LOCKED{
-                    let alertController = UIAlertController(title: "提示", message: "您的认证正在审核中，我们会尽快处理的", preferredStyle: UIAlertControllerStyle.alert)
-                    alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
-                        
-                    }))
-                    sp_mainQueue {
-                        viewController.present(alertController, animated: true, completion: nil)
-                    }
-                    
-                }
-                
-                
+                 sp_pushRealNameVC(viewController: viewController)
             }
-            
-            
+
         }
     }
     class func sp_pushRealNameVC(viewController:UIViewController){
         
-        // 个人认证
-        let realVC = SPRealNameAuthenticationVC()
+        //
+        let realVC = SPAuthHomeVC()
         viewController.navigationController?.pushViewController(realVC, animated: true)
     }
     /// 跳到城市合伙人界面

@@ -113,6 +113,8 @@ let SP_AUCTION_4  = "4"
 let SP_AUCTION = "auction"
 /// 顶部
 let SP_HEADER   = "header"
+/// 没有申请投诉
+let SP_NOT_COMPLAINTS  = "NOT_COMPLAINTS"
 /// 是否展示取消原因或申请售后的原因
 ///
 /// - Parameter statue: 订单状态

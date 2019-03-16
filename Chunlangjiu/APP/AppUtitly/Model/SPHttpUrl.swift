@@ -98,7 +98,8 @@ let SP_GET_ORDERDETAILE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(ke
 let SP_GET_CANCEORDER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=trade.cancel.create"
 /// 确认收货
 let SP_GET_ORDERCONFIRM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=trade.confirm"
-/// 获取取消原因列表
+/// 投诉订单
+let SP_GET_ORDERCOMPLAINT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.complaints.create"/// 获取取消原因列表
 let SP_GET_ORDERCANCEREASON_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=trade.cancel.reason.get"
 /// 创建支付订单
 let SP_GET_CREATEPAYORDER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.create"

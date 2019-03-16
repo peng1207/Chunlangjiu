@@ -38,13 +38,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         view.backgroundColor = UIColor.white
         return view
     }()
-//    fileprivate lazy var showImageView : SPProductAddImgContentView = {
-//        let view = SPProductAddImgContentView()
-//        view.clickAddComplete = { [weak self](addView) in
-//            self?.sp_clickAddView(addView: addView)
-//        }
-//        return view
-//    }()
+ 
     fileprivate lazy var addImgView : SPProductAddImgView = {
         let view = SPProductAddImgView()
         view.clickAddBlock = { [weak self] (addView) in
@@ -350,39 +344,60 @@ extension SPProductAddVC {
             return
         }
         
-        
-        let imageArray = self.addImgView.sp_getImgs()
-        if sp_getArrayCount(array: imageArray) >= 6 {
+ 
+//        let imageArray = self.addImgView.sp_getImgs()
+         let imageArray = self.addImgView.sp_getSelect()
+        if sp_getArrayCount(array: imageArray) >= 5 {
             sp_getSelectImage(imageArray: imageArray)
         }else{
-            sp_showTextAlert(tips: "请添加商品图片,至少6张")
+            sp_showTextAlert(tips: "请添加商品图片,至少5张")
         }
     }
-    fileprivate func sp_getSelectImage(imageArray : [UIImage]){
+    fileprivate func sp_getSelectImage(imageArray : [Any]){
         let group = DispatchGroup() //创建group
         sp_showAnimation(view: self.view, title: nil)
         var i = 0
         var selectImage = [String]()
         if self.edit {
-            selectImage = self.addImgView.sp_getImgPath()
+            for value in imageArray{
+                if value is UIImage {
+                 selectImage.append("")
+                }else{
+                    selectImage.append(sp_getString(string: value))
+                }
+            }
+//            selectImage = self.addImgView.sp_getImgPath()
         }else{
             for _  in imageArray{
                 selectImage.append("")
             }
         }
         for image in imageArray {
-            let uploadImage = sp_fixOrientation(aImage: image)
+            let tempImg : UIImage?
+            if image is UIImage {
+                tempImg = image as? UIImage
+            }else {
+                i = i + 1
+                continue
+            }
+            
+            if tempImg == nil {
+                i = i + 1
+                continue
+            }
+            
+            let uploadImage = sp_fixOrientation(aImage: tempImg!)
 //            let data = UIImageJPEGRepresentation(uploadImage, 1.0)
 //            guard let d = data else{
 //                continue
 //            }
             let d = sp_resetImgSize(sourceImage: uploadImage)
-            if i < sp_getArrayCount(array: selectImage) {
-                if sp_getString(string: selectImage[i]).count > 0 {
-                    i = i + 1
-                    continue
-                }
-            }
+//            if i < sp_getArrayCount(array: selectImage) {
+//                if sp_getString(string: selectImage[i]).count > 0 {
+//                    i = i + 1
+//                    continue
+//                }
+//            }
             group.enter() // 将以下任务添加进group
             let imageRequestModel = SPRequestModel()
             imageRequestModel.data = [d]

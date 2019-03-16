@@ -60,7 +60,7 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
         textField.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         textField.font = sp_getFontSize(size: 16)
         textField.textAlignment = .right
-        textField.keyboardType = UIKeyboardType.numberPad
+        textField.keyboardType = UIKeyboardType.decimalPad
         textField.clearButtonMode = UITextFieldViewMode.whileEditing
         textField.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {[weak self]in
             self?.sp_dealPrice()

@@ -306,7 +306,7 @@ extension SPPersonalInfoVC {
     fileprivate func sp_setupData(){
         var isAuth : Bool = false
         
-        if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH{
+        if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODIFIER{
             isAuth = true
         }
         sp_dealLayout(isAuth: isAuth)
@@ -322,6 +322,38 @@ extension SPPersonalInfoVC {
         self.selectSex = sp_getString(string: SPAPPManager.instance().memberModel?.sex)
         self.personAuthView.sp_setupData()
         self.companyAuthView.sp_setupData()
+        if sp_getString(string: self.realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.realNameAuth?.status) == SP_STATUS_MODIFIER {
+            self.personAuthView.snp.remakeConstraints { (maker) in
+                maker.left.right.equalTo(self.phoneView).offset(0)
+                maker.top.equalTo(self.phoneView.snp.bottom).offset(0)
+                maker.height.greaterThanOrEqualTo(0)
+            }
+        }else{
+            self.personAuthView.snp.remakeConstraints { (maker) in
+                maker.left.right.equalTo(self.phoneView).offset(0)
+                maker.top.equalTo(self.phoneView.snp.bottom).offset(0)
+                maker.height.equalTo(0)
+            }
+        }
+        if sp_getString(string: self.companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: self.companyAuth?.status) == SP_STATUS_MODIFIER {
+            self.companyAuthView.snp.remakeConstraints { (maker) in
+                maker.left.right.equalTo(self.personAuthView).offset(0)
+                maker.top.equalTo(self.personAuthView.snp.bottom).offset(0)
+                maker.height.greaterThanOrEqualTo(0)
+                if isAuth {
+                    maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
+                }
+            }
+        }else{
+            self.companyAuthView.snp.remakeConstraints { (maker) in
+                maker.left.right.equalTo(self.personAuthView).offset(0)
+                maker.top.equalTo(self.personAuthView.snp.bottom).offset(0)
+                maker.height.equalTo(0)
+                if isAuth {
+                    maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
+                }
+            }
+        }
     }
     
     fileprivate func sp_getSexString(sex : String? )->String{
@@ -347,30 +379,31 @@ extension SPPersonalInfoVC {
             return
         }
         let uploadImage = sp_fixOrientation(aImage: uImage)
-        let data = UIImageJPEGRepresentation(uploadImage, 1.0)
-        if let d = data {
-            let imageRequestModel = SPRequestModel()
-            imageRequestModel.data = [d]
-            imageRequestModel.name = "image"
-            imageRequestModel.fileName = ["proudct.jpg"]
-            imageRequestModel.mineType = "image/jpg"
-            var parm = [String:Any]()
-            parm.updateValue("rate", forKey: "image_type")
-            parm.updateValue("proudct.jpg", forKey: "image_input_title")
-            parm.updateValue("binary", forKey: "upload_type")
-            
-            imageRequestModel.parm = parm
-            sp_showAnimation(view: nil, title: nil)
-            SPAppRequest.sp_getUserUploadImg(requestModel: imageRequestModel) { [weak self](code, msg, uploadImageModel, errorModel) in
-                if code == SP_Request_Code_Success, let upload = uploadImageModel{
-                    self?.sp_sendSet(img:sp_getString(string: upload.url))
-                }else{
-                    sp_showTextAlert(tips: msg)
-                    sp_hideAnimation(view: nil)
-                }
-                
+        let d = sp_resetImgSize(sourceImage: uploadImage)
+        //        let data = UIImageJPEGRepresentation(uploadImage, 1.0)
+        //        if let d = data {
+        let imageRequestModel = SPRequestModel()
+        imageRequestModel.data = [d]
+        imageRequestModel.name = "image"
+        imageRequestModel.fileName = ["proudct.jpg"]
+        imageRequestModel.mineType = "image/jpg"
+        var parm = [String:Any]()
+        parm.updateValue("rate", forKey: "image_type")
+        parm.updateValue("proudct.jpg", forKey: "image_input_title")
+        parm.updateValue("binary", forKey: "upload_type")
+        
+        imageRequestModel.parm = parm
+        sp_showAnimation(view: nil, title: nil)
+        SPAppRequest.sp_getUserUploadImg(requestModel: imageRequestModel) { [weak self](code, msg, uploadImageModel, errorModel) in
+            if code == SP_Request_Code_Success, let upload = uploadImageModel{
+                self?.sp_sendSet(img:sp_getString(string: upload.url))
+            }else{
+                sp_showTextAlert(tips: msg)
+                sp_hideAnimation(view: nil)
             }
+            
         }
+        //        }
     }
     fileprivate func sp_sendSet(img imgUrl : String){
         let request = SPRequestModel()

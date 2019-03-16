@@ -36,6 +36,13 @@ class SPProductContentView:  UIView{
         label.numberOfLines = 2
         return label
     }()
+    fileprivate lazy var startPriceLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 10)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textAlignment = .left
+        return label
+    }()
     lazy var salePriceLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 18)
@@ -118,10 +125,15 @@ class SPProductContentView:  UIView{
             self.maxPriceLabel.isHidden = false
             self.salePriceLabel.isHidden = true
             self.auctionImageView.isHidden = false
+            self.startPriceLabel.isHidden = false
+            self.startPriceLabel.text = "起拍价：\(SP_CHINE_MONEY)\(sp_getString(string: self.productModel?.auction_starting_price))"
+        
         }else{
             self.maxPriceLabel.isHidden = true
             self.salePriceLabel.isHidden = false
             self.auctionImageView.isHidden = true
+            self.startPriceLabel.isHidden = true
+            self.startPriceLabel.text = ""
         }
         self.labelView.listArray = self.productModel?.sp_getLabel()
         self.shopNameLabel.text = sp_getString(string: self.productModel?.shop_name);
@@ -143,6 +155,7 @@ class SPProductContentView:  UIView{
         
         self.addSubview(self.shopCartBtn)
         self.addSubview(self.tipsLabel)
+        self.addSubview(self.startPriceLabel)
         self.addSubview(self.maxPriceLabel)
         self.addSubview(self.shopNameLabel)
         self.addSubview(self.entShopBtn)
@@ -203,12 +216,13 @@ class SPProductContentView:  UIView{
             maker.bottom.equalTo(self.signImgView.snp.top).offset(-5)
             maker.height.greaterThanOrEqualTo(0)
         }
+       
         self.salePriceLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.salePriceLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
             maker.width.greaterThanOrEqualTo(0)
 //            maker.top.equalTo(self.originPriceLabel.snp.bottom).offset(5)
-            maker.bottom.equalTo(self.tipsLabel.snp.top).offset(-10);
+            maker.bottom.equalTo(self.tipsLabel.snp.top).offset(-5);
             maker.height.greaterThanOrEqualTo(0)
         }
         
@@ -225,12 +239,17 @@ class SPProductContentView:  UIView{
             maker.bottom.equalTo(self.snp.bottom).offset(-sp_lineHeight)
             maker.height.equalTo(sp_lineHeight)
         }
-        
+        self.startPriceLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.maxPriceLabel).offset(0)
+            maker.width.greaterThanOrEqualTo(0)
+            maker.right.lessThanOrEqualTo(self.titleLabel.snp.right).offset(0)
+            maker.bottom.equalTo(self.maxPriceLabel.snp.top).offset(-2)
+        }
         self.maxPriceLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
             maker.width.greaterThanOrEqualTo(0)
             maker.right.equalTo(self.titleLabel.snp.right).offset(0)
-            maker.top.equalTo(self.salePriceLabel.snp.top).offset(0)
+            maker.bottom.equalTo(self.salePriceLabel.snp.bottom).offset(0)
         }
     }
     deinit {

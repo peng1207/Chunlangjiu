@@ -55,7 +55,7 @@ class SPConfrimFooterView:  UIView{
 //        view.titleLabel.text = "应付定金 （若落标，定金则原路退回）"
         let att = NSMutableAttributedString()
         att.append(NSAttributedString(string: "应付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 15)]))
-        att.append(NSAttributedString(string: "（若落标，定金则原路退回）", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue),NSAttributedStringKey.font:sp_getFontSize(size: 12)]))
+        att.append(NSAttributedString(string: "（若落标，定金则退回可用余额）", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue),NSAttributedStringKey.font:sp_getFontSize(size: 12)]))
         view.titleLabel.attributedText = att
         view.isHidden = true
         return view

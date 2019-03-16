@@ -68,9 +68,9 @@ class SPOrderStateView:  UIView{
 //            self.topConstraint.update(offset: 0)
 //            self.bottomConstraint.update(offset:0)
         }
-        if sp_getString(string: detaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: detaileModel?.status) == SP_AUCTION_0 && sp_getString(string: detaileModel?.type) == SP_AUCTION ) || (sp_getString(string: detaileModel?.status) == SP_AUCTION_1 && sp_getString(string: detaileModel?.type) == SP_AUCTION) {
+        if sp_getString(string: detaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: detaileModel?.status) == SP_AUCTION_0 && sp_getString(string: detaileModel?.type) == SP_AUCTION ) || (sp_getString(string: detaileModel?.status) == SP_AUCTION_1 && sp_getString(string: detaileModel?.type) == SP_AUCTION) || (sp_getString(string: detaileModel?.type) == SP_AUCTION && sp_getString(string: detaileModel?.status) == SP_AUCTION_2 && sp_getString(string: detaileModel?.trade_ststus) == SP_WAIT_BUYER_PAY){
             
-            if sp_getString(string: detaileModel?.type) == SP_AUCTION{
+            if sp_getString(string: detaileModel?.type) == SP_AUCTION && sp_getString(string: detaileModel?.status) == SP_AUCTION_1{
                 self.countDownView.titleLabel.text = "剩余竞拍时间"
             }else{
                 self.countDownView.titleLabel.text = "剩余支付时间"

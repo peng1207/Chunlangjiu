@@ -107,6 +107,7 @@ extension SPBankCardVC : UITableViewDelegate,UITableViewDataSource {
         var cell : SPBankCardTableCell? = tableView.dequeueReusableCell(withIdentifier: bankCardCellID) as? SPBankCardTableCell
         if cell == nil {
             cell = SPBankCardTableCell(style: UITableViewCellStyle.default, reuseIdentifier: bankCardCellID)
+            cell?.contentView.backgroundColor = self.view.backgroundColor
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             cell?.model = self.dataArray?[indexPath.row]
@@ -146,6 +147,7 @@ extension SPBankCardVC {
         SPFundsRequest.sp_getBankCardList(requestModel: self.requestModel) { [weak self](code , list, errorModel, total) in
             if code == SP_Request_Code_Success {
                 self?.dataArray = list as? [SPBankCardModel]
+                self?.sp_sendAllInfoRequest()
             }
             self?.sp_dealNoData()
             self?.tableView.reloadData()
@@ -176,5 +178,44 @@ extension SPBankCardVC {
         }
         
     }
+    
+    fileprivate func sp_sendAllInfoRequest(){
+        if sp_getArrayCount(array: self.dataArray) > 0 {
+            for model in self.dataArray! {
+                sp_getBankCardInfo(card: sp_getString(string: model.card))
+            }
+        }
+        
+    }
+    
+    fileprivate func sp_getBankCardInfo(card:String){
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string:card), forKey: "card")
+        let request = SPRequestModel()
+        request.parm = parm
+        SPFundsRequest.sp_getBankCardInfo(requestModel: request) { [weak self](code , model, msg, errorModel) in
+            if code == SP_Request_Code_Success {
+               self?.sp_dealSuccess(model: model, card: card)
+            }else{
+                
+            }
+        }
+    }
+    
+    fileprivate func sp_dealSuccess(model : SPBankCardInfoModel?,card : String){
+        if let infoModel = model {
+            if sp_getArrayCount(array: self.dataArray) > 0 {
+                for cardModel in self.dataArray! {
+                    if sp_getString(string: cardModel.card) == card{
+                        cardModel.logo = sp_getString(string: infoModel.bankimage)
+                        cardModel.cardname = sp_getString(string: infoModel.cardname)
+                        cardModel.abbreviation = sp_getString(string: infoModel.abbreviation)
+                    }
+                }
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     
 }
