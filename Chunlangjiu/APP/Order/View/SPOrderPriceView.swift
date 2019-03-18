@@ -131,7 +131,14 @@ class SPOrderPriceView:  UIView{
             self.freeView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.post_fee))"
             
             self.paymentView.titleLabel.text = isAs ? "退款金额：" :"实付金额："
-            self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.payment))"
+            var price = ""
+            if isAs , let model = self.detaileModel?.refunds, sp_getString(string: model.refund_money).count > 0 {
+                price = sp_getString(string: model.refund_money)
+            }else{
+                price = sp_getString(string: detaileModel?.payment)
+            }
+            
+            self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: price))"
             
 //            let payAtt = NSMutableAttributedString()
 //            let payTitle = NSAttributedString(string: isAs ? "退款金额：" :"实付金额：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)])

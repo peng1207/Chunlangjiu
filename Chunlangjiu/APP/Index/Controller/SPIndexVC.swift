@@ -749,6 +749,7 @@ extension SPIndexVC{
       
     }
     fileprivate func sp_dealDataArray(all : Bool = true){
+       
         self.dataArray?.removeAll()
         
         self.dataArray.append(self.headerModel)
@@ -766,7 +767,6 @@ extension SPIndexVC{
                 UIView.performWithoutAnimation {
                     self.collectionView.reloadSections([1])
                 }
-               
             }
           
             self.isScroll = false

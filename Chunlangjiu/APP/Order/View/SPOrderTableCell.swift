@@ -178,7 +178,11 @@ class SPOrderProductView  :  UIView{
                     self.afterSaleBtn.isSelected = false
                 }
                 if sp_getString(string: orderItem?.aftersales_status) == SP_SELLER_REFUSE_BUYER || sp_getString(string: orderItem?.aftersales_status) == SP_ReFUND_SUCCESS{
-                    self.afterSaleBtn.isHidden = true
+                    if sp_getString(string: orderItem?.aftersales_status) == SP_SELLER_REFUSE_BUYER && sp_getString(string: orderItem?.complaints_status) == SP_FINISHED {
+                          self.afterSaleBtn.isHidden = false
+                    }else{
+                          self.afterSaleBtn.isHidden = true
+                    }
                 }else{
                     self.afterSaleBtn.isHidden = false
                 }

@@ -54,29 +54,14 @@ class SPActivityVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        var dataArray = [SPActivityHeaderModel]()
-        if SP_ISSHOW_AUCTION {
-            if sp_getArrayCount(array: self.activityModel?.auction) > 0 {
-                let auctionModel = SPActivityHeaderModel.sp_init(type: SP_AUCTION)
-                auctionModel.dataArray = self.activityModel?.auction
-                dataArray.append(auctionModel)
-            }
-          
-        }
-        if sp_getArrayCount(array: self.activityModel?.item) > 0  {
-            let goodModel = SPActivityHeaderModel.sp_init(type: "")
-            goodModel.dataArray = self.activityModel?.item
-            dataArray.append(goodModel)
-        }
-        
-        self.dataArray = dataArray
+       
         self.headerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.top_img), plImage: sp_getDefaultImg())
         self.footerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.bottom_img), plImage: sp_getDefaultImg())
         if sp_getString(string: self.activityModel?.color).count > 0  {
             self.view.backgroundColor = SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
              self.tableView.backgroundColor = self.view.backgroundColor
         }
-        self.tableView.reloadData()
+      
         self.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.835)
         var top : CGFloat = 0.0
         if sp_getArrayCount(array: self.activityModel?.list) > 0 {
@@ -86,7 +71,35 @@ class SPActivityVC: SPBaseVC {
         self.footerView.sp_updateTop(top: top)
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
+         sp_dealData()
         
+    }
+    fileprivate func sp_dealData(all : Bool = true){
+        var dataArray = [SPActivityHeaderModel]()
+        if SP_ISSHOW_AUCTION {
+            if sp_getArrayCount(array: self.activityModel?.auction) > 0 {
+                let auctionModel = SPActivityHeaderModel.sp_init(type: SP_AUCTION)
+                auctionModel.dataArray = self.activityModel?.auction
+                dataArray.append(auctionModel)
+            }
+            
+        }
+        if sp_getArrayCount(array: self.activityModel?.item) > 0  {
+            let goodModel = SPActivityHeaderModel.sp_init(type: "")
+            goodModel.dataArray = self.activityModel?.item
+            dataArray.append(goodModel)
+        }
+        
+        self.dataArray = dataArray
+        if all {
+             self.tableView.reloadData()
+        }else{
+            UIView.performWithoutAnimation {
+                  self.tableView.reloadSections([0], with: UITableViewRowAnimation.none)
+            }
+           
+        }
+       
         self.sp_dealNoData()
     }
     /// 创建UI
@@ -281,7 +294,7 @@ extension SPActivityVC {
             second = dic["timer"] as! Int
         }
         if sp_getArrayCount(array: self.activityModel?.auction) > 0  {
-            sp_simpleSQueues {
+//            sp_simpleSQueues {
                 var list = [SPProductModel]()
                 for model in (self.activityModel?.auction)! {
                     model.sp_set(second: second)
@@ -290,8 +303,10 @@ extension SPActivityVC {
                     }
                 }
                 self.activityModel?.auction = list
-                self.sp_setupData()
-            }
+//                sp_mainQueue {
+                   self.sp_dealData(all: false)
+//                }
+//            }
         }
         
         

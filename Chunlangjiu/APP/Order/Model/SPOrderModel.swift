@@ -50,6 +50,7 @@ class SPOrderModel : SPBaseModel {
     var auction_status : String?
     var cancel_id : String?
     var logi : SPLogiModel?
+    var refunds : SPOrderRefundsModel? 
     var info : String?
     var commission : String?   // 佣金
     var shop_payment : String?  // 店铺实收

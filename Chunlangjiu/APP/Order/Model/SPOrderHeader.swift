@@ -63,6 +63,8 @@ let SP_CANCE_WAIT_PROCESS = "WAIT_PROCESS"
 let SP_NO_APPLY_CANCEL = "NO_APPLY_CANCEL"
 /// 等待评价
 let SP_WAIT_RATE = "WAIT_RATE"
+/// 完成
+let SP_FINISHED = "FINISHED"
 /// 失败
 let SP_FAILS = "FAILS"
 /// 等待商家处理
