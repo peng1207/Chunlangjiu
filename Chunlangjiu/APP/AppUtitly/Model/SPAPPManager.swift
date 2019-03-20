@@ -198,6 +198,10 @@ class SPAPPManager : NSObject{
     }
     class func sp_appVersion(){
         let request = SPRequestModel()
+        var parm = [String : Any]()
+        parm.updateValue("ios", forKey: "app_type")
+        parm.updateValue("chunlang", forKey: "platform")
+        request.parm = parm
         SPAppRequest.sp_getAPPVersion(requestModel: request) { (code, model, errorModel) in
             if code == SP_Request_Code_Success {
                 sp_log(message: "获取版本信息\(sp_getString(string: model?.versions))  下载链接\(sp_getString(string: model?.url))")
