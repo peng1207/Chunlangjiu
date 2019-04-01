@@ -43,14 +43,14 @@ class SPShopProductCollectCell: UICollectionViewCell {
         }
         self.productView.titleLabel.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self.productView.snp.left).offset(3)
-            maker.top.equalTo(self.productView.productImageView.snp.bottom).offset(10)
+            maker.top.equalTo(self.productView.productImageView.snp.bottom).offset(4)
             maker.height.greaterThanOrEqualTo(0)
             maker.right.equalTo(self.productView.snp.right).offset(-6)
         }
         self.productView.salePriceLabel.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
             maker.width.greaterThanOrEqualTo(0)
-            //            maker.top.equalTo(self.originPriceLabel.snp.bottom).offset(5)
+           
             maker.bottom.equalTo(self.productView.tipsLabel.snp.top).offset(-2);
             maker.height.greaterThanOrEqualTo(0)
         }
@@ -58,7 +58,7 @@ class SPShopProductCollectCell: UICollectionViewCell {
             maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
             maker.right.equalTo(self.productView.titleLabel.snp.right).offset(0)
             maker.height.greaterThanOrEqualTo(0)
-            maker.bottom.equalTo(self.productView.snp.bottom).offset(-6)
+            maker.bottom.equalTo(self.productView.snp.bottom).offset(-4)
         }
     }
     deinit {

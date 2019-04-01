@@ -94,10 +94,13 @@ class SPActivityVC: SPBaseVC {
         if all {
              self.tableView.reloadData()
         }else{
-            UIView.performWithoutAnimation {
-                  self.tableView.reloadSections([0], with: UITableViewRowAnimation.none)
+            if sp_getArrayCount(array: self.dataArray) > 0 {
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadSections([0], with: UITableViewRowAnimation.none)
+                }
+            }else{
+                self.tableView.reloadData()
             }
-           
         }
        
         self.sp_dealNoData()

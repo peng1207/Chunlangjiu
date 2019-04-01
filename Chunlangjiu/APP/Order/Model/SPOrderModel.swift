@@ -7,7 +7,8 @@
 //
 
 import Foundation
-class SPOrderModel : SPBaseModel {
+import HandyJSON
+class SPOrderModel : HandyJSON {
     
     var tid : Int! = 0          // 订单ID
     var shop_id : Int! = 0      // 店铺ID
@@ -42,7 +43,7 @@ class SPOrderModel : SPBaseModel {
     var auctionitem_id : String?
     var is_pay : String?
     var pledge : String?
-     var max_price : String?
+    var max_price : String?
     var starting_price : String?
     var original_bid : String?
     var auction_begin_time : String?
@@ -56,6 +57,22 @@ class SPOrderModel : SPBaseModel {
     var shop_payment : String?  // 店铺实收
     var shop_explanation : String?  // 商家拒绝原因
     var trade_ststus : String?      // 竞拍订单尾款状态
+    var evidence_pic : String?      // 申请售后图片
+    var description_str : String?   // 申请售后备注
+    required init() {}
+    func mapping(mapper: HelpingMapper) {
+        mapper.specify(property: &description_str, name: "description") { (rawString) -> String in
+            return sp_getString(string: rawString)
+        }
+    }
+    
+    class func sp_deserialize(from:String) -> Self?  {
+        return self.deserialize(from: from)
+    }
+    class func sp_deserialize(from : [String : Any]?) -> Self?  {
+        return self.deserialize(from: from)
+    }
+    
     func sp_set(s:Int){
         if let second = self.second {
             self.second = second - s

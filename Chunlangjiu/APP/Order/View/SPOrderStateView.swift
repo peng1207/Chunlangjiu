@@ -114,7 +114,7 @@ class SPOrderStateView:  UIView{
         }
         self.stateTitle.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.stateTitle.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.contentView).offset(11)
+            maker.left.equalTo(self.contentView).offset(22)
             maker.top.equalTo(self.contentView).offset(10)
             maker.height.greaterThanOrEqualTo(0)
             maker.width.greaterThanOrEqualTo(0)

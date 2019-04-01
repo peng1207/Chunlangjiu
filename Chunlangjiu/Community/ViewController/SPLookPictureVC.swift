@@ -137,12 +137,12 @@ extension SPLookPictureVC :  UICollectionViewDelegate,UICollectionViewDataSource
                 cell.imageView.sp_cache(string: sp_getString(string: data), plImage: sp_getDefaultImg())
             }else if data is UIImage {
                 cell.imageView.image = data as? UIImage
+            }else if data is Data {
+                cell.imageView.image = UIImage(data: data as! Data)
             }else  {
                 cell.imageView.image = nil
             }
-        
         }
-        
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

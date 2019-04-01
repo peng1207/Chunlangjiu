@@ -432,6 +432,7 @@
 		9EFC5975217B11CF0002B4BE /* SPOrderLogicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFC5974217B11CF0002B4BE /* SPOrderLogicView.swift */; };
 		9EFC5977217B33C00002B4BE /* SPEventHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFC5976217B33C00002B4BE /* SPEventHeader.swift */; };
 		9EFD1271222E786000476D19 /* SPShopProductAuctionPriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFD1270222E786000476D19 /* SPShopProductAuctionPriceView.swift */; };
+		9EFD5C4B224A33CE002C630D /* SPOrderImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFD5C4A224A33CD002C630D /* SPOrderImgView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -909,6 +910,7 @@
 		9EFC5974217B11CF0002B4BE /* SPOrderLogicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderLogicView.swift; sourceTree = "<group>"; };
 		9EFC5976217B33C00002B4BE /* SPEventHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPEventHeader.swift; sourceTree = "<group>"; };
 		9EFD1270222E786000476D19 /* SPShopProductAuctionPriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShopProductAuctionPriceView.swift; sourceTree = "<group>"; };
+		9EFD5C4A224A33CD002C630D /* SPOrderImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderImgView.swift; sourceTree = "<group>"; };
 		B4481583628CC684E055CD35 /* Pods_Chunlangjiu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chunlangjiu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA2FCA36B27B3819E3348361 /* Pods-ChunlangjiuTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChunlangjiuTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChunlangjiuTests/Pods-ChunlangjiuTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C2327141CF19ADDC36CDAF9C /* Pods-Chunlangjiu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chunlangjiu.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu.release.xcconfig"; sourceTree = "<group>"; };
@@ -1053,6 +1055,7 @@
 				56F47F3521D0E65300613BBA /* SPOrderHomeHeadView.swift */,
 				9E194D6821DBC2D10080B72D /* SPCommissionView.swift */,
 				9ECE7C192228205600FE6BCD /* SPOrderReasonView.swift */,
+				9EFD5C4A224A33CD002C630D /* SPOrderImgView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2485,6 +2488,7 @@
 				9EC51447210C59A1006869B3 /* SPWineryScoreTableCell.swift in Sources */,
 				9EF4C6D420EF7A2C007E9909 /* SPConfrimTableCell.swift in Sources */,
 				9E0C8B6E20E63FCE00BD9743 /* SPBaseNavVC.swift in Sources */,
+				9EFD5C4B224A33CE002C630D /* SPOrderImgView.swift in Sources */,
 				9EF4C6A420EE0016007E9909 /* SPShopCartTableCell.swift in Sources */,
 				9E8D0F282110C559007168D6 /* SPFilterView.swift in Sources */,
 				9E129F462102CD5B00218A33 /* SPProductDetaileBottomView.swift in Sources */,

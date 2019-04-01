@@ -80,6 +80,7 @@ class SPAddAdressVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         self.sp_setupData()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -148,7 +149,7 @@ class SPAddAdressVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 // MARK: - 请求事件 事件
@@ -286,5 +287,31 @@ extension SPAddAdressVC {
     }
     
     
+    
+}
+extension SPAddAdressVC {
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_keyBoardWillShow(obj:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_keyBoardWillHidden), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    @objc private func sp_keyBoardWillShow(obj : Notification){
+         let height = sp_getKeyBoardheight(notification: obj)
+        sp_dealScrollViewlayout(height: height)
+    }
+    
+    @objc private func sp_keyBoardWillHidden(){
+        sp_dealScrollViewlayout(height: 0)
+    }
+    fileprivate func sp_dealScrollViewlayout(height:CGFloat){
+        self.scrollView.snp.remakeConstraints { (maker) in
+            maker.left.top.right.equalTo(self.view).offset(0)
+            if height > 0 {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(-height)
+            }else{
+                  maker.bottom.equalTo(self.saveBtn.snp.top).offset(0)
+            }
+          
+        }
+    }
     
 }

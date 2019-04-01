@@ -246,13 +246,15 @@ extension SPShopProductVC {
             sp_showTextAlert(tips: "库存为0，请先设置库存之后再设置为竞拍商品")
             return
         }
-        
-        let vc = SPSetAuctionProductVC()
-        vc.model = model
-        vc.successBlock = { [weak self] (productModel) in
-            self?.sp_dealSetAuctionComplete(model: productModel)
+        sp_sendCheckRequest(alertMsg: "无法设置商品为竞拍") { [weak self] in
+            let vc = SPSetAuctionProductVC()
+            vc.model = model
+            vc.successBlock = { [weak self] (productModel) in
+                self?.sp_dealSetAuctionComplete(model: productModel)
+            }
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
-        self.navigationController?.pushViewController(vc, animated: true)
+      
     }
     /// 处理设置竞拍成功的回调
     ///
@@ -323,7 +325,10 @@ extension SPShopProductVC {
            
         case .upper:
 //            sp_sendUpperRequesst(model: model)
-             sp_sendCheckRequest(model: model)
+//             sp_sendCheckRequest(model: model)
+            sp_sendCheckRequest(alertMsg: "上架失败") { [weak self] in
+                 self?.sp_sendUpperRequesst(model: model)
+            }
         case .reason:
             sp_lookReason(model: model)
         
@@ -506,7 +511,7 @@ extension SPShopProductVC {
         }
     }
     /// 发送检查的请求
-    fileprivate func sp_sendCheckRequest(model: SPProductModel?){
+    fileprivate func sp_sendCheckRequest(alertMsg:String,complete:SPBtnClickBlock?){
         sp_showAnimation(view: self.view, title: nil)
         let request = SPRequestModel()
         request.parm = [String : Any]()
@@ -521,7 +526,9 @@ extension SPShopProductVC {
                         if let isCheck : Bool = Bool(status), isCheck == false {
                             self?.sp_dealCheckTip(tips: tips,deposit: deposit)
                         }else{
-                            self?.sp_sendUpperRequesst(model: model)
+                            if let block = complete {
+                                block()
+                            }
                         }
                     }
                 }
@@ -529,10 +536,10 @@ extension SPShopProductVC {
                 if sp_isDic(dic: data) {
                     if let dic : [String : Any] = data {
                         let msg = dic[SP_Request_Msg_Key]
-                        sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? sp_getString(string: msg) : "上架失败")
+                        sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? sp_getString(string: msg) : alertMsg)
                     }
                 }else{
-                    sp_showTextAlert(tips: "上架失败")
+                    sp_showTextAlert(tips: alertMsg)
                 }
             }
         }

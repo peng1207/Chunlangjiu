@@ -99,8 +99,7 @@ let SP_PROGRESS_0 = "0"
 let SP_PROGRESS_1 = "1"
 /// 消费者回寄，等待商家收货确认
 let SP_PROGRESS_2 = "2"
-/// 
-let SP_PROGRESS_8 = "8"
+
 /// 待付定金
 let SP_AUCTION_0  = "0"
 /// 竞拍中

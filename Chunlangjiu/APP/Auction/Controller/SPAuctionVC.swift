@@ -90,9 +90,15 @@ class SPAuctionVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
+        self.tableView.estimatedRowHeight = 0
         self.tableView.estimatedSectionHeaderHeight = 0
         self.tableView.estimatedSectionFooterHeight = 0
         self.tableView.backgroundColor = self.view.backgroundColor
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         self.view.addSubview(self.tableView)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.searchBtn)
         self.view.addSubview(self.topBtn)
@@ -100,10 +106,12 @@ class SPAuctionVC: SPBaseVC {
             self?.currentPage = 1
             self?.sp_sendRequest()
         }
-//        self.tableView.sp_footerRefresh {
-//            self.currentPage = self.currentPage + 1
-//            self.sp_sendRequest()
-//        }
+        self.tableView.sp_footerRefresh { [weak self] in
+            if let page = self?.currentPage {
+                self?.currentPage = page + 1
+                self?.sp_sendRequest()
+            }
+        }
         self.sp_addConstraint()
     }
     /// 处理没有数据的展示
@@ -367,7 +375,16 @@ extension SPAuctionVC{
                 self.dataArray = list
                 sp_mainQueue {
                     if self.isScroll == false {
-                         self.tableView.reloadData()
+                        UIView.performWithoutAnimation {
+                            if sp_getArrayCount(array: self.dataArray) > 0 {
+                                 self.tableView.reloadSections([0], with: UITableViewRowAnimation.none)
+                            }else{
+                                 self.tableView.reloadData()
+                            }
+                            
+                        }
+                       
+                       
                         self.isScroll = false
                     }
                 }

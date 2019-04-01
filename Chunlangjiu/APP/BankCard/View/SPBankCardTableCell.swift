@@ -39,7 +39,7 @@ class SPBankCardTableCell: UITableViewCell {
     }()
     fileprivate lazy var cardLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 24)
+        label.font = sp_getFontSize(size: sp_isLargeScreen() ? 24 : 20)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = .left
         return label
@@ -66,7 +66,12 @@ class SPBankCardTableCell: UITableViewCell {
         }else{
             self.typeLabel.text = "储蓄卡"
         }
-        self.logoImgView.image = UIImage(named: sp_getString(string: self.model?.abbreviation))
+        if sp_getString(string: self.model?.abbreviation).count > 0 {
+             self.logoImgView.image = UIImage(named: sp_getString(string: self.model?.abbreviation))
+        }else{
+            self.logoImgView.image = nil
+        }
+       
         
         self.cardLabel.text = sp_getString(string: self.model?.card).replaceBankCard()
         if self.logoImgView.image == nil {

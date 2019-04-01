@@ -31,6 +31,56 @@ class ChunlangjiuUITests: XCTestCase {
     func testExample() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        let app = XCUIApplication()
+        
+        
+        let tabBarsQuery = app.tabBars
+        
+        let button4 = tabBarsQuery.buttons["首页"]
+        button4.tap()
+        let button = tabBarsQuery.buttons["全部"]
+        button.tap()
+        
+        let button2 = tabBarsQuery.buttons["竞拍"]
+        button2.tap()
+        
+        let button3 = tabBarsQuery.buttons["我的"]
+        button3.tap()
+        
+      
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button4.tap()
+        button.tap()
+        button2.tap()
+        
+        let button5 = tabBarsQuery.buttons["购物车"]
+        button5.tap()
+        button3.tap()
+        button2.tap()
+        button5.tap()
+        button3.tap()
+       
+        button3.tap()
+        tabBarsQuery.buttons["我的"].tap()
+        button3.tap()
+        button2.tap()
+        button.tap()
+        tabBarsQuery.buttons["首页"].tap()
+        
+       
+        
     }
     
 }

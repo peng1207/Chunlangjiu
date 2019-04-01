@@ -9,16 +9,14 @@
 import Foundation
 import SnapKit
 class SPOrderDetaileVC: SPBaseVC {
-//    fileprivate lazy var headerView : SPOrderStateView = {
-//        let view = SPOrderStateView()
-//        view.frame = CGRect(x: 0, y: 0, width: 0, height: sp_lineHeight)
-//        view.isHidden = true
-//        return view
-//    }()
+ 
     fileprivate lazy var headerView : SPOrderHeaderView = {
         let view = SPOrderHeaderView()
         view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenHeight())
         view.isHidden = true
+        view.imgView.clickBlock = { [weak self] (index,list) in
+                self?.sp_clickShowImg(index: index, list: list)
+        }
         return view
     }()
     fileprivate lazy var footerView : SPOrderFooterView = {
@@ -359,6 +357,12 @@ extension SPOrderDetaileVC {
                 self.sp_request()
             }
         }
+    }
+    fileprivate func sp_clickShowImg(index:Int,list:[Any]?){
+        let lookPictureVC = SPLookPictureVC()
+        lookPictureVC.dataArray =  list
+        lookPictureVC.selectIndex = index
+        self.present(lookPictureVC, animated: true, completion: nil)
     }
 }
 extension SPOrderDetaileVC{

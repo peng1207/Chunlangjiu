@@ -13,53 +13,53 @@ import SnapKit
 class SPUpdateView : UIView {
     fileprivate lazy var contentView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white
+ 
         return view
     }()
     fileprivate lazy var topImgView : UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "public_update")
+        view.image = UIImage(named: "public_update")?.resizableImage(withCapInsets: UIEdgeInsetsMake(130, 0, 42, 0), resizingMode: UIImageResizingMode.stretch)
+        return view
+    }()
+    fileprivate lazy var scrollViewContentView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.white
+        view.layer.shadowColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue).cgColor
+        view.layer.shadowOpacity = 1
+        view.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view.layer.shadowRadius = 5
+        view.layer.cornerRadius = 6
         return view
     }()
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
+        view.sp_cornerRadius(cornerRadius: 6)
         return view
     }()
-    fileprivate lazy var titleLabel : UILabel = {
-        let label = UILabel()
-        label.font = sp_getFontSize(size: 16)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.textAlignment = .center
-        label.text = "检测到新版本"
-        return label
-    }()
-    
+ 
     fileprivate lazy var messageLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 16)
+        label.font = sp_getFontSize(size: 10)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.numberOfLines = 0
         return label
     }()
     fileprivate lazy var canceBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("取消", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_e74540.rawValue)
-        btn.titleLabel?.font = sp_getFontSize(size: 16)
+        btn.setImage(UIImage(named: "public_close_cor"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_cance), for: UIControlEvents.touchUpInside)
         btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     fileprivate lazy var doneBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("升级", for: UIControlState.normal)
+        btn.setTitle("立即更新", for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_e74540.rawValue)
-        btn.titleLabel?.font = sp_getFontSize(size: 16)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.titleLabel?.font = sp_getFontSize(size: 12)
         btn.addTarget(self, action: #selector(sp_done), for: UIControlEvents.touchUpInside)
-          btn.sp_cornerRadius(cornerRadius: 5)
+          btn.sp_cornerRadius(cornerRadius: 14)
         return btn
     }()
     fileprivate var model : SPUpdateModel?{
@@ -118,75 +118,83 @@ class SPUpdateView : UIView {
     }
     
     fileprivate func sp_setupData(){
-        self.messageLabel.text = sp_getString(string: self.model?.message)
+        let att = NSMutableAttributedString()
+    
+        att.append(NSAttributedString(string: sp_getString(string: self.model?.message), attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 10),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+        let par = NSMutableParagraphStyle()
+        par.lineSpacing = 5
+        att.addAttributes([NSAttributedStringKey.paragraphStyle : par], range: NSRange(location: 0, length: att.length))
+        self.messageLabel.attributedText = att
         self.canceBtn.isHidden = sp_isForce() ? true : false
-        let frame =  self.messageLabel.textRect(forBounds: CGRect(x: 0, y: 0, width: sp_getScreenWidth() - 84, height: 100000), limitedToNumberOfLines: 0)
-        self.height.update(offset: frame.size.height)
+        let frame =  self.messageLabel.textRect(forBounds: CGRect(x: 0, y: 0, width: 140, height: 100000), limitedToNumberOfLines: 0)
+        self.height.update(offset: frame.size.height + 44.0)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.contentView)
         self.contentView.addSubview(self.topImgView)
-        self.contentView.addSubview(self.titleLabel)
+       
+        self.contentView.addSubview(self.scrollViewContentView)
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.messageLabel)
-        self.contentView.addSubview(self.canceBtn)
+        self.addSubview(self.canceBtn)
         self.contentView.addSubview(self.doneBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.contentView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(30)
-            maker.right.equalTo(self).offset(-30)
+            maker.width.equalTo(216)
+            maker.centerX.equalTo(self.snp.centerX).offset(0)
             maker.top.greaterThanOrEqualTo(self).offset(sp_getstatusBarHeight() + 40 )
             maker.centerY.equalTo(self).offset(0)
-            maker.bottom.lessThanOrEqualTo(self.snp.bottom).offset(-SP_TABBAR_HEIGHT)
+            maker.bottom.lessThanOrEqualTo(self.snp.bottom).offset(-SP_TABBAR_HEIGHT - 30)
             maker.height.greaterThanOrEqualTo(0)
         }
         
         self.topImgView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.contentView).offset(0)
-            maker.height.equalTo(self.topImgView.snp.width).multipliedBy(0.45)
-            maker.top.equalTo(self.contentView).offset(-40)
+ 
+            maker.top.equalTo(self.contentView).offset(0)
+            maker.bottom.equalTo(self.doneBtn.snp.bottom).offset(20)
         }
-        self.titleLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.contentView).offset(12)
-            maker.right.equalTo(self.contentView).offset(-12)
-            maker.top.equalTo(self.topImgView.snp.bottom).offset(0)
-            maker.height.equalTo(40)
+ 
+        self.scrollViewContentView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.scrollView).offset(0)
+            maker.height.equalTo(self.scrollView).offset(0)
         }
         self.scrollView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.titleLabel).offset(0)
+           maker.left.equalTo(self.contentView).offset(18)
+            maker.right.equalTo(self.contentView).offset(-18)
            self.height = maker.height.equalTo(10).constraint
-            maker.top.equalTo(self.titleLabel.snp.bottom).offset(0)
+            maker.top.equalTo(self.contentView.snp.top).offset(86)
         }
-        let isForce = sp_isForce()
+       
         self.canceBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.titleLabel).offset(0)
-            maker.top.equalTo(self.scrollView.snp.bottom).offset(20)
-            if isForce == false {
-                maker.width.equalTo(self.doneBtn.snp.width).offset(0)
-            }else{
-                maker.width.equalTo(0)
-            }
-            maker.height.equalTo(40)
+            maker.centerX.equalTo(self.snp.centerX).offset(0)
+            maker.top.equalTo(self.contentView.snp.bottom).offset(18)
+            maker.width.equalTo(30)
+            maker.height.equalTo(30)
         }
         self.doneBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.canceBtn.snp.right).offset(isForce ? 0 : 20)
-            maker.right.equalTo(self.titleLabel.snp.right).offset(0)
-            maker.top.height.equalTo(self.canceBtn).offset(0)
+            maker.left.equalTo(self.contentView).offset(18)
+            maker.right.equalTo(self.contentView).offset(-18)
+            maker.top.equalTo(self.scrollView.snp.bottom).offset(55)
+            maker.height.equalTo(28)
             maker.bottom.equalTo(self.contentView.snp.bottom).offset(-20)
         }
         self.messageLabel.snp.makeConstraints { (maker) in
-            maker.width.equalTo(self.scrollView.snp.width).offset(0)
-            maker.top.equalTo(self.scrollView).offset(0)
+            maker.width.equalTo(self.scrollView.snp.width).offset(-40)
+            maker.top.equalTo(self.scrollView).offset(23)
             maker.height.greaterThanOrEqualTo(0)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
-            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
+            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-21)
         }
     }
-    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+//        self.scrollViewContentView.layer.shadowPath = UIBezierPath(rect: self.scrollViewContentView.bounds).cgPath
+    }
     deinit {
         
     }

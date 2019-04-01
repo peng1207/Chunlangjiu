@@ -91,11 +91,17 @@ class SPMineHeaderView:  UICollectionReusableView{
         self.entBtn.isSelected = SPAPPManager.sp_isBusiness() ? true : false
         self.titleLabel.text = SPAPPManager.sp_isBusiness() ? "卖家中心" : "买家中心"
         self.logoImgView.sp_cache(string: sp_getString(string: self.memberModel?.head_portrait), plImage: sp_getLogoImg())
-        self.nameLabel.text = sp_getString(string: self.memberModel?.shop_name)
+        self.nameLabel.text = sp_getString(string: self.memberModel?.company_name)
         if sp_getString(string: self.nameLabel.text).count <= 0 {
-            self.nameLabel.text = sp_getString(string: memberModel?.login_account)
+            self.nameLabel.text = sp_getString(string: self.memberModel?.shop_name)
+            if sp_getString(string: self.nameLabel.text).count <= 0 {
+                if SPAPPManager.sp_isBusiness() {
+                    self.nameLabel.text = "设置店铺名称"
+                }else{
+                    self.nameLabel.text = sp_getString(string: memberModel?.login_account)
+                }
+            }
         }
-
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

@@ -43,6 +43,9 @@ func sp_getScreenHeight() -> CGFloat{
 func sp_getstatusBarHeight() -> CGFloat{
     return UIApplication.shared.statusBarFrame.size.height
 }
+/// 是否大屏幕
+///
+/// - Returns: True 大屏幕 false 小屏幕
 func sp_isLargeScreen()->Bool{
     if sp_getScreenWidth() < 375{
         return false

@@ -53,7 +53,7 @@ class SPOrderReasonView:  UIView{
     fileprivate func sp_addConstraint(){
  
         self.titleLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(11)
+            maker.left.equalTo(self).offset(22)
             maker.top.equalTo(self.snp.top).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.width.equalTo(72)

@@ -65,7 +65,6 @@ class SPIndexVC: SPBaseVC {
     fileprivate var dataArray : [SPIndexGoods]! = [SPIndexGoods]()
     fileprivate var currentPage : Int = 1
     fileprivate var indexModel : SPIndexModel?
-    fileprivate var isScroll : Bool! = false
     fileprivate var isEditPrice : Bool! = false
     fileprivate let collectVCellID = "collectVCellID"
     fileprivate let collectHAuctionCellID = "collectHAuctionCellID"
@@ -484,27 +483,6 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
             }
         }
     } */
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-          self.isScroll = true
-         sp_log(message: "滚动开始")
-    }
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        self.isScroll = true
-        sp_log(message: "滚动开始")
-    }
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-    }
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    
-        let  scrollToScrollStop : Bool = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
-        if scrollToScrollStop {
-            sp_asyncAfter(time: 0.5) {
-                self.isScroll = false
-                sp_log(message: "滚动结束")
-            }
-        }
-    }
 
   
 }
@@ -749,27 +727,30 @@ extension SPIndexVC{
       
     }
     fileprivate func sp_dealDataArray(all : Bool = true){
-       
-        self.dataArray?.removeAll()
+        var list = [SPIndexGoods]()
         
-        self.dataArray.append(self.headerModel)
+        list.append(self.headerModel)
         
         if sp_getArrayCount(array: self.auctionGood.dataArray) > 0 {
-            self.dataArray?.append(self.auctionGood)
+            list.append(self.auctionGood)
         }
         if sp_getArrayCount(array: self.defaultGood.dataArray) > 0 {
-            self.dataArray?.append(self.defaultGood)
+            list.append(self.defaultGood)
         }
         sp_mainQueue {
+            self.dataArray = list
             if all {
                   self.collectionView.reloadData()
             }else {
-                UIView.performWithoutAnimation {
-                    self.collectionView.reloadSections([1])
+                if sp_getArrayCount(array: self.auctionGood.dataArray) > 0 {
+                    UIView.performWithoutAnimation {
+                        self.collectionView.reloadSections([1])
+                    }
+                }else{
+                    self.collectionView.reloadData()
                 }
             }
-          
-            self.isScroll = false
+
             
         }
     }
