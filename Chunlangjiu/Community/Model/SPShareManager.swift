@@ -85,13 +85,18 @@ class SPShareManager {
             messageObject.text = shareDataModel?.descr
         }
         UMSocialManager.default().share(to: platformType, messageObject: messageObject, currentViewController: shareDataModel?.currentViewController) { (result, error ) in
-            let errors : NSError = error! as NSError
-            if errors.code == UMSocialPlatformErrorType.shareFailed.rawValue {
-                shareDataModel?.thumbImage = shareDataModel?.placeholderImage
-                self.sp_share(platformType: platformType, shareDataModel: shareDataModel, complete: complete)
+            let errors : NSError? = error as NSError?
+            if let e = errors {
+                if e.code == UMSocialPlatformErrorType.shareFailed.rawValue {
+                    shareDataModel?.thumbImage = shareDataModel?.placeholderImage
+                    self.sp_share(platformType: platformType, shareDataModel: shareDataModel, complete: complete)
+                }else{
+                    sp_dealShareComplete(result: result, error: e, complete: complete)
+                }
             }else{
                 sp_dealShareComplete(result: result, error: error, complete: complete)
             }
+          
         }
     
     }
@@ -217,14 +222,6 @@ class SPShareManager {
                 }
             }
         })
-//        UMSocialManager.default()?.getUserInfo(with: UMSocialPlatformType.wechatSession, currentViewController: viewController, completion: { (result, error) in
-//            sp_log(message: error)
-//            if error != nil {
-//
-//            }else{
-//
-//            }
-//        })
     }
     /// 第三方回调
     ///
