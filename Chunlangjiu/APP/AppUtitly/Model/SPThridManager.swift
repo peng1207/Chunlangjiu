@@ -58,7 +58,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         SPThridManager.instance().sp_addNotification()
         UMSocialGlobal.shareInstance()?.isUsingHttpsWhenShareContent = false
         UMConfigure.initWithAppkey(SP_UM_APPKEY, channel: nil)
-        MobClick.setCrashReportEnabled(false)
+        MobClick.setCrashReportEnabled(true)
     }
     
     class func sp_startLocation(){
@@ -136,7 +136,10 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         if !result {
              result = sp_dealWX(url: url)
         }
-       
+        if !result {
+            result =  SPShareManager.sp_handleOpen(url: url)
+        }
+        
         return result
     }
     private class func sp_dealApiPay(url :URL) ->Bool{
@@ -183,8 +186,14 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     private class func sp_dealWX(url:URL)->Bool{
         // sp_getString(string: url.host) == "pay"
         if sp_getString(string: url.scheme) == SP_WX_APPID  {
-             SPThridManager.instance().clientCallback = true
-            return WXApi.handleOpen(url, delegate: SPThridManager.instance())
+            let urlString = "\(sp_getString(string: url.absoluteString))"
+           
+            if  urlString.contains("pay") {
+                SPThridManager.instance().clientCallback = true
+                let isSuccess = WXApi.handleOpen(url, delegate: SPThridManager.instance())
+                return isSuccess
+            }
+          
         }
         return false
     }
