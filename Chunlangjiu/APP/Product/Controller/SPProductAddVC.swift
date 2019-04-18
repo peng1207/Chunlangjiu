@@ -8,6 +8,8 @@
 
 import Foundation
 import SnapKit
+typealias SPAddProductSuccessBlock = (_ item_id : String?)->Void
+
 class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     fileprivate lazy var scrollView : UIScrollView =  UIScrollView()
     fileprivate lazy var baseView : SPProductBaseView = {
@@ -26,9 +28,9 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         view.typeView.selectBlock = { [weak self]() in
             self?.sp_clickType()
         }
-        view.alcoholDegreeView.selectBlock = {  [weak self]() in
-            self?.sp_clickAlcohol()
-        }
+//        view.alcoholDegreeView.selectBlock = {  [weak self]() in
+//            self?.sp_clickAlcohol()
+//        }
         return view
     }()
     fileprivate lazy var priceView : SPProductPriceView = {
@@ -36,13 +38,30 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         view.backgroundColor = UIColor.white
         return view
     }()
-    fileprivate lazy var showImageView : SPProductAddImgContentView = {
-        let view = SPProductAddImgContentView()
-        view.clickAddComplete = { [weak self](addView) in
+ 
+    fileprivate lazy var addImgView : SPProductAddImgView = {
+        let view = SPProductAddImgView()
+        view.clickAddBlock = { [weak self] (addView) in
             self?.sp_clickAddView(addView: addView)
         }
         return view
     }()
+   fileprivate lazy var titleView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.titleLabel.text = "商品标题"
+        view.textFiled.placeholder = "请填写"
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
+   fileprivate lazy var labelView : SPAddressEditView = {
+        let view = SPAddressEditView()
+        view.titleLabel.text = "商品标签"
+        view.textFiled.placeholder = "例：产地，品牌，年份"
+        view.lineView.isHidden = true
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
+    
     fileprivate lazy var explainView : SPProductExplainView = {
         let view = SPProductExplainView()
         view.backgroundColor = UIColor.white
@@ -55,9 +74,9 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     }()
     fileprivate lazy var saveBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("保存并发送", for: UIControlState.normal)
+        btn.setTitle("保存并提交审核", for: UIControlState.normal)
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 18)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.addTarget(self, action: #selector(sp_clickSaveAction), for: UIControlEvents.touchUpInside)
         return btn
@@ -110,7 +129,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     fileprivate var typeModel : SPTypeModel?
     fileprivate var alcoholModel : SPAlcoholDegree?
     fileprivate var sortArray : [SPSortLv3Model]?
-    fileprivate var tempAddView : SPProductAddImageView?
+    fileprivate var tempAddView : SPAddImageView?
     fileprivate var selectSort : SPSortRootModel?
     fileprivate var brandArray : [SPBrandModel]?
     fileprivate var shopCategoryArray : [SPShopCategory]?
@@ -118,6 +137,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     fileprivate var typeArray : [SPTypeModel]?
     fileprivate var alcoholArray : [SPAlcoholDegree]?
     var item_id : String?
+    var successBlock : SPAddProductSuccessBlock?
     var edit : Bool! = false
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,11 +148,13 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }else{
              self.sp_sendRequest()
         }
-        
+       
+       
        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+         sp_sendCheckRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -146,10 +168,13 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     /// 创建UI
     override func sp_setupUI() {
         self.view.addSubview(self.scrollView)
-        self.view.addSubview(self.saveBtn)
+        self.scrollView.addSubview(self.saveBtn)
         self.scrollView.addSubview(self.baseView)
         self.scrollView.addSubview(self.priceView)
-        self.scrollView.addSubview(self.showImageView)
+//        self.scrollView.addSubview(self.showImageView)
+        self.scrollView.addSubview(self.addImgView)
+        self.scrollView.addSubview(self.titleView)
+        self.scrollView.addSubview(self.labelView)
         self.scrollView.addSubview(self.explainView)
         self.scrollView.addSubview(self.parmView)
         self.view.addSubview(self.brandView)
@@ -163,17 +188,21 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     fileprivate func sp_addConstraint(){
         self.scrollView.snp.makeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.saveBtn.snp.top).offset(0)
-        }
-        self.saveBtn.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.view).offset(0)
-            maker.height.equalTo(48)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
+//        self.saveBtn.snp.makeConstraints { (maker) in
+//            maker.left.right.equalTo(self.view).offset(0)
+//            maker.height.equalTo(48)
+//            if #available(iOS 11.0, *) {
+//                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+//            } else {
+//                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+//            }
+//        }
         self.baseView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.scrollView).offset(0)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
@@ -181,24 +210,39 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }
         self.priceView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
-            maker.top.equalTo(self.baseView.snp.bottom).offset(10)
+            maker.top.equalTo(self.labelView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
-        self.showImageView.snp.makeConstraints { (maker) in
+        self.addImgView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
             maker.height.greaterThanOrEqualTo(0)
-            maker.top.equalTo(self.priceView.snp.bottom).offset(10)
+            maker.top.equalTo(self.baseView.snp.bottom).offset(10)
+        }
+        self.titleView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.scrollView).offset(0)
+            maker.height.equalTo(40)
+            maker.top.equalTo(self.addImgView.snp.bottom).offset(10)
+        }
+        self.labelView.snp.makeConstraints { (maker) in
+            maker.left.right.height.equalTo(self.titleView).offset(0)
+            maker.top.equalTo(self.titleView.snp.bottom).offset(0)
         }
         self.explainView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
-            maker.top.equalTo(self.showImageView.snp.bottom).offset(10)
+            maker.top.equalTo(self.priceView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.parmView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.scrollView).offset(0)
             maker.top.equalTo(self.explainView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
-            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-20)
+        }
+        self.saveBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(10)
+            maker.right.equalTo(self.scrollView).offset(-10)
+            maker.height.equalTo(40)
+            maker.top.equalTo(self.parmView.snp.bottom).offset(10)
+             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-10)
         }
         self.sortView.snp.makeConstraints { (maker ) in
             maker.left.right.equalTo(self.view).offset(0)
@@ -242,7 +286,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }
         self.alcoholView.snp.makeConstraints { (maker ) in
             maker.left.right.equalTo(self.view).offset(0)
-            maker.top.equalTo(self.baseView.alcoholDegreeView.snp.bottom).offset(0)
+//            maker.top.equalTo(self.baseView.alcoholDegreeView.snp.bottom).offset(0)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {
@@ -267,7 +311,7 @@ extension SPProductAddVC {
             return
         }
         
-        guard sp_getString(string: self.baseView.titleView.textFiled.text).count > 0  else {
+        guard sp_getString(string: self.titleView.textFiled.text).count > 0  else {
             sp_showTextAlert(tips: "请输入商品标题")
             return
         }
@@ -300,38 +344,60 @@ extension SPProductAddVC {
             return
         }
         
-        
-        let imageArray = self.showImageView.sp_getImage()
+ 
+//        let imageArray = self.addImgView.sp_getImgs()
+         let imageArray = self.addImgView.sp_getSelect()
         if sp_getArrayCount(array: imageArray) >= 5 {
             sp_getSelectImage(imageArray: imageArray)
         }else{
             sp_showTextAlert(tips: "请添加商品图片,至少5张")
         }
     }
-    fileprivate func sp_getSelectImage(imageArray : [UIImage]){
+    fileprivate func sp_getSelectImage(imageArray : [Any]){
         let group = DispatchGroup() //创建group
         sp_showAnimation(view: self.view, title: nil)
         var i = 0
         var selectImage = [String]()
         if self.edit {
-            selectImage = self.showImageView.sp_getImgPath()
+            for value in imageArray{
+                if value is UIImage {
+                 selectImage.append("")
+                }else{
+                    selectImage.append(sp_getString(string: value))
+                }
+            }
+//            selectImage = self.addImgView.sp_getImgPath()
         }else{
             for _  in imageArray{
                 selectImage.append("")
             }
         }
         for image in imageArray {
-            let uploadImage = sp_fixOrientation(aImage: image)
-            let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-            guard let d = data else{
+            let tempImg : UIImage?
+            if image is UIImage {
+                tempImg = image as? UIImage
+            }else {
+                i = i + 1
                 continue
             }
-            if i < sp_getArrayCount(array: selectImage) {
-                if sp_getString(string: selectImage[i]).count > 0 {
-                    i = i + 1
-                    continue
-                }
+            
+            if tempImg == nil {
+                i = i + 1
+                continue
             }
+            
+            let uploadImage = sp_fixOrientation(aImage: tempImg!)
+//            let data = UIImageJPEGRepresentation(uploadImage, 1.0)
+//            guard let d = data else{
+//                continue
+//            }
+            let d = sp_resetImgSize(sourceImage: uploadImage)
+//            if i < sp_getArrayCount(array: selectImage) {
+//                if sp_getString(string: selectImage[i]).count > 0 {
+//                    i = i + 1
+//                    continue
+//                }
+//            }
             group.enter() // 将以下任务添加进group
             let imageRequestModel = SPRequestModel()
             imageRequestModel.data = [d]
@@ -400,11 +466,12 @@ extension SPProductAddVC {
     ///  点击添加图片事件
     ///
     /// - Parameter addView: 添加对象view
-    fileprivate func sp_clickAddView(addView : SPProductAddImageView){
+    fileprivate func sp_clickAddView(addView : SPAddImageView){
         tempAddView = addView
         sp_thrSelectImg(viewController: self, nav: self.navigationController) { [weak self](img) in
             if let view = self?.tempAddView {
-                self?.showImageView.sp_update(image: img, addImageView: view)
+//                self?.showImageView.sp_update(image: img, addImageView: view)
+                self?.addImgView.sp_update(view: view, img: img)
             }
         }
         //        sp_showSelectImage(viewController: self, delegate: self)
@@ -501,16 +568,16 @@ extension SPProductAddVC {
     }
     fileprivate func sp_dealAlcohol(model: SPAlcoholDegree?){
         self.alcoholModel = model
-        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
+//        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
     }
     /// 赋值
     fileprivate func sp_setupData(){
         
-        self.baseView.titleView.textFiled.text = sp_getString(string: self.productModel?.title)
-        self.baseView.subTitleView.textFiled.text = sp_getString(string: self.productModel?.sub_title)
+        self.titleView.textFiled.text = sp_getString(string: self.productModel?.title)
+//        self.baseView.subTitleView.textFiled.text = sp_getString(string: self.productModel?.sub_title)
         self.priceView.priceView.textFiled.text = sp_getString(string: self.productModel?.price)
         self.priceView.stockView.textFiled.text = sp_getString(string: self.productModel?.store)
-        self.baseView.labelView.textFiled.text = sp_getString(string: self.productModel?.label)
+        self.labelView.textFiled.text = sp_getString(string: self.productModel?.label)
         if sp_getArrayCount(array: self.sortArray) > 0  {
             for lv3Model in self.sortArray! {
                 if let cat_id = Int(sp_getString(string: self.productModel?.cat_id)),let lv3Id = lv3Model.cat_id{
@@ -565,8 +632,9 @@ extension SPProductAddVC {
         self.baseView.brandView.content = sp_getString(string: self.brandModel?.brand_name)
         self.baseView.placeView.content = sp_getString(string: self.placeModel?.area_name)
         self.baseView.typeView.content = sp_getString(string: self.typeModel?.odor_name)
-        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
-        self.showImageView.sp_setImage(paths: self.productModel?.images)
+//        self.baseView.alcoholDegreeView.content = sp_getString(string: self.alcoholModel?.alcohol_name)
+        self.addImgView.sp_setimg(paths: self.productModel?.images)
+    
         self.explainView.textView.content = sp_getString(string: self.productModel?.explain)
         if let parmArray : [Any] = sp_stringValueArr(sp_getString(string: self.productModel?.parameter)){
             var index = 0
@@ -603,7 +671,13 @@ extension SPProductAddVC {
         
         
     }
-    
+    /// 处理添加成功的回调
+    fileprivate func sp_dealSuccessComplete(){
+        guard let block = self.successBlock else {
+            return
+        }
+        block(sp_getString(string: self.item_id))
+    }
 }
 extension SPProductAddVC{
     fileprivate func sp_sendRequest(complete:SPBtnClickBlock? = nil){
@@ -638,8 +712,8 @@ extension SPProductAddVC{
         }
         
         parm.updateValue(self.selectSort?.cat_id ?? 0, forKey: "cat_id")
-        parm.updateValue(sp_getString(string: self.baseView.titleView.textFiled.text), forKey: "title")
-        parm.updateValue(sp_getString(string: self.baseView.subTitleView.textFiled.text), forKey: "sub_title")
+        parm.updateValue(sp_getString(string: self.titleView.textFiled.text), forKey: "title")
+//        parm.updateValue(sp_getString(string: self.baseView.subTitleView.textFiled.text), forKey: "sub_title")
         //        let label = self.baseView.labelView.textFiled.text
         parm.updateValue(sp_getString(string: self.priceView.priceView.textFiled.text), forKey: "price")
         parm.updateValue(sp_getString(string: self.priceView.stockView.textFiled.text), forKey: "store")
@@ -662,7 +736,7 @@ extension SPProductAddVC{
         }
         
         //        parm.updateValue(self.shopNextCategory?.cat_id ?? 0, forKey: "shop_cat_id")
-        parm.updateValue(sp_getString(string: self.baseView.labelView.textFiled.text), forKey: "label")
+        parm.updateValue(sp_getString(string: self.labelView.textFiled.text), forKey: "label")
         parm.updateValue(sp_getString(string: self.explainView.textView.textView.text), forKey: "explain")
         var list = [[String : Any]]()
         //        list.append(["title":"类型","value":sp_getString(string: self.parmView.typeView.textFiled.text)])
@@ -702,6 +776,7 @@ extension SPProductAddVC{
                 if code == SP_Request_Code_Success{
                     let sucessVC = SPProductAddSuccessVC()
                     self?.navigationController?.pushViewController(sucessVC, animated: true)
+                    self?.sp_dealSuccessComplete()
                 }else{
                     sp_showTextAlert(tips: msg)
                 }
@@ -835,6 +910,39 @@ extension SPProductAddVC{
         }
     }
     
+    /// 发送检查的请求
+    fileprivate func sp_sendCheckRequest(){
+         sp_showAnimation(view: self.view, title: nil)
+        let request = SPRequestModel()
+        request.parm = [String : Any]()
+        SPProductRequest.sp_getCheckProduct(requestModel: request) { [weak self](code, data, errorModel) in
+            sp_hideAnimation(view: self?.view)
+            if code == SP_Request_Code_Success{
+                if sp_isDic(dic: data) {
+                    if let dic : [String : Any] = data {
+                        let status = sp_getString(string: dic["status"])
+                        let tips = sp_getString(string: dic["tips"])
+                        let deposit = sp_getString(string: dic["deposit"])
+                        if let isCheck : Bool = Bool(status), isCheck == false {
+                             self?.sp_dealCheckTip(tips: tips,deposit: deposit)
+                        }
+                    }
+                }
+               
+            }
+        }
+    }
+    fileprivate func sp_dealCheckTip(tips:String,deposit:String){
+        SPProductTipView.sp_show(title: tips, canceComplete: { /*[weak self]in*/
+//           self?.navigationController?.popViewController(animated: true)
+        }) { [weak self]in
+            let rechargerVC = SPRechargeVC()
+            rechargerVC.isBond = true
+            rechargerVC.price = deposit
+            rechargerVC.navigationItem.title = "缴纳保证金"
+            self?.navigationController?.pushViewController(rechargerVC, animated: true)
+        };
+    }
     
 }
 // MARK: - deletage
@@ -846,7 +954,8 @@ extension SPProductAddVC {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[ UIImagePickerControllerEditedImage] as? UIImage
         if let view = self.tempAddView {
-            self.showImageView.sp_update(image: image, addImageView: view)
+//            self.showImageView.sp_update(image: image, addImageView: view)
+            self.addImgView.sp_update(view: view, img: image)
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -867,7 +976,11 @@ extension SPProductAddVC {
     @objc private func sp_keyBoardWillHidden(){
         self.scrollView.snp.remakeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.saveBtn.snp.top).offset(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
         }
     }
     

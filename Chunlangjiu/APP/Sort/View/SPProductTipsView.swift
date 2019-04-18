@@ -13,16 +13,16 @@ class SPProductTipsView:  UIView{
     
     lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.text = "说明"
+        label.font = sp_getFontSize(size: 11)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.text = "说明:"
         label.isHidden = true
         return label
     }()
     lazy var contentLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.font = sp_getFontSize(size: 11)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         label.numberOfLines = 0
         return label
     }()
@@ -49,7 +49,7 @@ class SPProductTipsView:  UIView{
         self.titleLabel.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self).offset(10)
             if haveData{
-                maker.top.equalTo(self.snp.top).offset(15)
+                maker.top.equalTo(self.snp.top).offset(0)
                 maker.height.greaterThanOrEqualTo(0)
             }else{
                 maker.top.equalTo(self.snp.top).offset(0)
@@ -59,12 +59,12 @@ class SPProductTipsView:  UIView{
         self.contentLabel.snp.remakeConstraints { (maker) in
             if haveData {
                  maker.height.greaterThanOrEqualTo(0)
-                  maker.bottom.equalTo(self.snp.bottom).offset(-10)
+                  maker.bottom.equalTo(self.snp.bottom).offset(-12)
             }else{
                 maker.height.equalTo(0)
                 maker.bottom.equalTo(self.snp.bottom).offset(0)
             }
-            maker.left.equalTo(self.titleLabel.snp.right).offset(19)
+            maker.left.equalTo(self.titleLabel.snp.right).offset(1)
             maker.top.equalTo(self.titleLabel.snp.top).offset(0)
             maker.right.equalTo(self.snp.right).offset(-10)
            

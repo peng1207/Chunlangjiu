@@ -47,9 +47,11 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
     }()
     fileprivate lazy var auctionTitleLabl : UILabel = {
         let label = UILabel()
-        label.text = "出价金额      \(SP_CHINE_MONEY)"
+        let att = NSMutableAttributedString()
+        att.append(NSAttributedString(string: "出价金额", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 15)]))
+        att.append(NSAttributedString(string: " \(SP_CHINE_MONEY)", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 12)]))
+        label.attributedText = att
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.font = sp_getFontSize(size: 16)
         return label
     }()
     fileprivate lazy var auctionTextField : SPTextFiled = {
@@ -58,13 +60,14 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
         textField.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         textField.font = sp_getFontSize(size: 16)
         textField.textAlignment = .right
-        textField.keyboardType = UIKeyboardType.numberPad
+        textField.keyboardType = UIKeyboardType.decimalPad
         textField.clearButtonMode = UITextFieldViewMode.whileEditing
         textField.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {[weak self]in
             self?.sp_dealPrice()
         }, doneBlock: { [weak self] in
             self?.sp_dealPrice()
         })
+        
         return textField
     }()
     fileprivate lazy var auctionLineView : UIView = {
@@ -88,7 +91,26 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
     fileprivate func sp_setupData(){
         self.auctionHeight.update(offset: isAuction ? 40 : 0)
         self.auctionView.isHidden = !isAuction
-        self.auctionTextField.placeholder = "目前最高价\(SP_CHINE_MONEY)\(sp_getString(string: shopModel?.confrim_max_price).count > 0 ? sp_getString(string: shopModel?.confrim_max_price) : sp_getString(string: shopModel?.confirm_start_price))"
+        let att = NSMutableAttributedString()
+        att.append(NSAttributedString(string: "出价金额", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 15)]))
+        att.append(NSAttributedString(string: " \(SP_CHINE_MONEY)", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 12)]))
+        if let status = Bool(sp_getString(string: shopModel?.confirm_auction_status)) , status == true {
+            if let maxPrice = Float(sp_getString(string: shopModel?.confrim_max_price)), maxPrice > 0 {
+                self.auctionTextField.placeholder = "\(SP_CHINE_MONEY)\(sp_getString(string: shopModel?.confrim_max_price).count > 0 ? sp_getString(string: shopModel?.confrim_max_price) : sp_getString(string: shopModel?.confirm_start_price))"
+            }else{
+                self.auctionTextField.placeholder = "\(SP_CHINE_MONEY)\(sp_getString(string: shopModel?.confirm_start_price))"
+            }
+            
+           
+            att.append(NSAttributedString(string: "（出价金额需提高起拍价）", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)]))
+//             att.append(NSAttributedString(string: "（目前最高价\(SP_CHINE_MONEY)\(sp_getString(string: shopModel?.confrim_max_price).count > 0 ? sp_getString(string: shopModel?.confrim_max_price) : sp_getString(string: shopModel?.confirm_start_price))）", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 12)]))
+        }else{
+//            self.auctionTextField.placeholder = "暗拍商品,其他出价保密"
+            self.auctionTextField.placeholder = "\(SP_CHINE_MONEY)\(sp_getString(string: shopModel?.confirm_start_price))"
+            att.append(NSAttributedString(string: "（暗拍商品,其他出价保密）", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_666666.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 12)]))
+        }
+        self.auctionTitleLabl.attributedText = att
+       
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -100,6 +122,7 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
         self.contentView.addSubview(self.remarkLabel)
         self.contentView.addSubview(self.remarkTextField)
         self.contentView.addSubview(self.lineView)
+        self.auctionTextField.addTarget(self, action: #selector(sp_textChange), for: UIControlEvents.editingChanged)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -156,6 +179,10 @@ class SPConfrimSectionFootView:  UITableViewHeaderFooterView{
     }
 }
 extension SPConfrimSectionFootView{
+    
+    @objc fileprivate func  sp_textChange(){
+        self.sp_dealPrice()
+    }
     
     fileprivate func sp_dealDone(){
         self.shopModel?.remark = sp_getString(string: self.remarkTextField.text)

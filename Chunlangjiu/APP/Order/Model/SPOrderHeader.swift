@@ -43,7 +43,7 @@ enum SPPayType : String {
     /// 支付宝
     case aliPay         = "alipayApp"
     /// 余额支付
-    case balance        = "online"
+    case balance        = "deposit"
     /// 大额支付
     case largePayment   = "largePay"
 }
@@ -63,6 +63,8 @@ let SP_CANCE_WAIT_PROCESS = "WAIT_PROCESS"
 let SP_NO_APPLY_CANCEL = "NO_APPLY_CANCEL"
 /// 等待评价
 let SP_WAIT_RATE = "WAIT_RATE"
+/// 完成
+let SP_FINISHED = "FINISHED"
 /// 失败
 let SP_FAILS = "FAILS"
 /// 等待商家处理
@@ -97,8 +99,7 @@ let SP_PROGRESS_0 = "0"
 let SP_PROGRESS_1 = "1"
 /// 消费者回寄，等待商家收货确认
 let SP_PROGRESS_2 = "2"
-/// 
-let SP_PROGRESS_8 = "8"
+
 /// 待付定金
 let SP_AUCTION_0  = "0"
 /// 竞拍中
@@ -107,9 +108,14 @@ let SP_AUCTION_1  = "1"
 let SP_AUCTION_2  = "2"
 /// 落标
 let SP_AUCTION_3  = "3"
+/// 竞拍订单 待收货
+let SP_AUCTION_4  = "4"
 /// 订单类型 竞拍
 let SP_AUCTION = "auction"
-
+/// 顶部
+let SP_HEADER   = "header"
+/// 没有申请投诉
+let SP_NOT_COMPLAINTS  = "NOT_COMPLAINTS"
 /// 是否展示取消原因或申请售后的原因
 ///
 /// - Parameter statue: 订单状态

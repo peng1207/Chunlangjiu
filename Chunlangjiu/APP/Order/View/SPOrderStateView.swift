@@ -29,7 +29,7 @@ class SPOrderStateView:  UIView{
     fileprivate lazy var stateLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         label.preferredMaxLayoutWidth =  sp_getScreenWidth()
         return label
     }()
@@ -68,9 +68,9 @@ class SPOrderStateView:  UIView{
 //            self.topConstraint.update(offset: 0)
 //            self.bottomConstraint.update(offset:0)
         }
-        if sp_getString(string: detaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: detaileModel?.status) == SP_AUCTION_0 && sp_getString(string: detaileModel?.type) == SP_AUCTION ) || (sp_getString(string: detaileModel?.status) == SP_AUCTION_1 && sp_getString(string: detaileModel?.type) == SP_AUCTION) {
+        if sp_getString(string: detaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: detaileModel?.status) == SP_AUCTION_0 && sp_getString(string: detaileModel?.type) == SP_AUCTION ) || (sp_getString(string: detaileModel?.status) == SP_AUCTION_1 && sp_getString(string: detaileModel?.type) == SP_AUCTION) || (sp_getString(string: detaileModel?.type) == SP_AUCTION && sp_getString(string: detaileModel?.status) == SP_AUCTION_2 && sp_getString(string: detaileModel?.trade_ststus) == SP_WAIT_BUYER_PAY){
             
-            if sp_getString(string: detaileModel?.type) == SP_AUCTION{
+            if sp_getString(string: detaileModel?.type) == SP_AUCTION && sp_getString(string: detaileModel?.status) == SP_AUCTION_1{
                 self.countDownView.titleLabel.text = "剩余竞拍时间"
             }else{
                 self.countDownView.titleLabel.text = "剩余支付时间"
@@ -114,7 +114,7 @@ class SPOrderStateView:  UIView{
         }
         self.stateTitle.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.stateTitle.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.contentView).offset(11)
+            maker.left.equalTo(self.contentView).offset(22)
             maker.top.equalTo(self.contentView).offset(10)
             maker.height.greaterThanOrEqualTo(0)
             maker.width.greaterThanOrEqualTo(0)

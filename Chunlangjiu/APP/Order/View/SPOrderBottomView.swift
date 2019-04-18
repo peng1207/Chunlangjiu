@@ -17,15 +17,17 @@ class SPOrderBottomView:  UIView{
         btn.titleLabel?.font = sp_getFontSize(size: 14)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickCance), for: UIControlEvents.touchUpInside)
+         btn.sp_cornerRadius(cornerRadius: 15)
         return btn
     }()
     fileprivate lazy var doneBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("去付款", for: UIControlState.normal)
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 14)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+//        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         btn.addTarget(self, action: #selector(sp_clickDone), for: UIControlEvents.touchUpInside)
+         btn.sp_cornerRadius(cornerRadius: 15)
         return btn
     }()
     var orderDetaile : SPOrderDetaileModel?{
@@ -44,13 +46,16 @@ class SPOrderBottomView:  UIView{
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        let cance : (canceIsHidden : Bool,canceText : String) = SPOrderBtnManager.sp_dealCanceState(orderModel: self.orderDetaile)
-        let done : (doneIsHidden : Bool, doneText: String) = SPOrderBtnManager.sp_dealDoneState(orderModel: self.orderDetaile)
+        let cance : (canceIsHidden : Bool,canceText : String,color:UIColor) = SPOrderBtnManager.sp_dealCanceState(orderModel: self.orderDetaile)
+        let done : (doneIsHidden : Bool, doneText: String,color : UIColor) = SPOrderBtnManager.sp_dealDoneState(orderModel: self.orderDetaile)
         self.canceBtn.isHidden = cance.canceIsHidden
         self.canceBtn.setTitle(sp_getString(string: cance.canceText), for: UIControlState.normal)
         self.doneBtn.isHidden = done.doneIsHidden
         self.doneBtn.setTitle(sp_getString(string: done.doneText), for: UIControlState.normal)
-     
+        self.canceBtn.setTitleColor(cance.color, for: UIControlState.normal)
+        self.canceBtn.sp_border(color: cance.color, width: sp_lineHeight)
+        self.doneBtn.setTitleColor(done.color, for: UIControlState.normal)
+        self.doneBtn.sp_border(color: done.color, width: sp_lineHeight)
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -61,14 +66,15 @@ class SPOrderBottomView:  UIView{
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.canceBtn.snp.makeConstraints { (maker) in
-            maker.right.equalTo(self.doneBtn.snp.left).offset(0)
-            maker.top.bottom.equalTo(self).offset(0)
-            maker.width.equalTo(110)
+            maker.right.equalTo(self.doneBtn.snp.left).offset(-10)
+            maker.height.equalTo(30)
+            maker.centerY.equalTo(self.snp.centerY).offset(0)
+            maker.width.equalTo(80)
         }
         self.doneBtn.snp.makeConstraints { (maker) in
-            maker.right.equalTo(self).offset(0)
-            maker.top.bottom.equalTo(self).offset(0)
-            maker.width.equalTo(110)
+            maker.right.equalTo(self).offset(-8)
+            maker.top.bottom.equalTo(self.canceBtn).offset(0)
+            maker.width.equalTo(80)
         }
     }
     deinit {

@@ -22,7 +22,7 @@ class  SPBaseVC: UIViewController {
     var requestModel : SPRequestModel = SPRequestModel()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
+        self.view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         self.edgesForExtendedLayout = []
         sp_setNoData()
     }
@@ -58,3 +58,4 @@ class  SPBaseVC: UIViewController {
         sp_log(message: "销毁对象")
     }
 }
+ 

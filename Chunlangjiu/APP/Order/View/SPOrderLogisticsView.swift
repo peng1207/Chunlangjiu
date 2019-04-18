@@ -46,15 +46,19 @@ class SPOrderLogisticsView:  UIView{
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 16)
         btn.addTarget(self, action: #selector(sp_clickCance), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 20)
+        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), width: sp_lineHeight)
         return btn
     }()
     fileprivate lazy var doneBtn : UIButton = {
         let btn = UIButton()
         btn.setTitle("确定", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.normal)
+        
         btn.titleLabel?.font = sp_getFontSize(size: 16)
         btn.addTarget(self, action: #selector(sp_clickDone), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 20)
+        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), width: sp_lineHeight)
         return btn
     }()
     fileprivate var orderModel : SPOrderModel?
@@ -116,17 +120,17 @@ class SPOrderLogisticsView:  UIView{
             maker.top.equalTo(self.nameTextField.snp.bottom).offset(10)
         }
         self.canceBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.contentView).offset(0)
+            maker.left.equalTo(self.contentView).offset(10)
             maker.top.equalTo(self.numTextField.snp.bottom).offset(10)
             maker.height.equalTo(40)
             maker.width.equalTo(self.doneBtn.snp.width).offset(0)
         }
         self.doneBtn.snp.makeConstraints { (maker) in
             maker.top.height.equalTo(self.canceBtn).offset(0)
-            maker.left.equalTo(self.canceBtn.snp.right).offset(0)
-            maker.right.equalTo(self.contentView).offset(0)
+            maker.left.equalTo(self.canceBtn.snp.right).offset(10)
+            maker.right.equalTo(self.contentView).offset(-10)
             maker.width.equalTo(self.canceBtn.snp.width).offset(0)
-            maker.bottom.equalTo(self.contentView).offset(0)
+            maker.bottom.equalTo(self.contentView).offset(-10)
         }
     }
     deinit {
@@ -147,6 +151,9 @@ extension SPOrderLogisticsView {
     fileprivate func sp_dealComplete(isSuccess : Bool){
         guard let block = self.complete else {
             return
+        }
+        if isSuccess {
+            SPOrderHandle.sp_dealOrderNotificaton(orderModel: orderModel)
         }
         block(isSuccess)
     }

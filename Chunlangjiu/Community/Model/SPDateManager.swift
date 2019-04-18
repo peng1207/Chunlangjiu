@@ -36,6 +36,17 @@ class  SPDateManager  : NSObject {
             return ""
         }
     }
+    /// date 日期转字符串
+    ///
+    /// - Parameter date: 日期
+    /// - Returns: 字符串
+    class func sp_string(to date : Date?)->String {
+        if  let d = date {
+            return SPDateManager.instance().dataFormatter.string(from: d)
+        }else{
+            return ""
+        }
+    }
     /// 字符串时间转时间戳
     ///
     /// - Parameter string: 字符串时间
@@ -69,7 +80,12 @@ class  SPDateManager  : NSObject {
     ///
     /// - Parameter date: 日期
     /// - Returns: 年月日
-    class func sp_dateString(to date : Date)-> String{
-        return SPDateManager.instance().timeFormatter.string(from: date)
+    class func sp_dateString(to date : Date?)-> String{
+        if  let d = date {
+            return SPDateManager.instance().timeFormatter.string(from: d)
+        }else{
+            return ""
+        }
+        
     }
 }

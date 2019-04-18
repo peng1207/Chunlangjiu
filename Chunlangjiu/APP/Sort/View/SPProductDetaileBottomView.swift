@@ -25,21 +25,22 @@ class SPProductDetaileBottomView:  UIView{
     
     fileprivate lazy var msgBtn : UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "public_msg_black"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "public_callphone"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickMsgAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var collectionBtn : UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "public_collect_black"), for: UIControlState.normal)
-        btn.setImage(UIImage(named: "public_collect_red"), for: UIControlState.selected)
+        btn.setImage(UIImage(named: "public_collect_gray"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "mine_collect"), for: UIControlState.selected)
         btn.addTarget(self, action: #selector(sp_clickCollectionAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var shopCartBtn : UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "public_shopcart_black"), for: UIControlState.normal)
+        btn.setImage(UIImage(named: "tabbar_shopcart"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickShopCartAction), for: UIControlEvents.touchUpInside)
+        btn.isHidden = true
         return btn
     }()
     fileprivate lazy var intoShopCartBtn : UIButton = {
@@ -58,6 +59,7 @@ class SPProductDetaileBottomView:  UIView{
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickBuyAction), for: UIControlEvents.touchUpInside)
+       
         return btn
     }()
     fileprivate lazy var countLabel : UILabel = {
@@ -98,15 +100,24 @@ class SPProductDetaileBottomView:  UIView{
     }
     var countModel : SPShopCarCount? {
         didSet{
-            if let m = countModel {
-                if m.number > 0 {
-                    self.countLabel.isHidden = false
+            if let isAuction = detaileModel?.item?.isAuction , isAuction == true{
+                self.countLabel.isHidden = true
+            }else if detaileModel == nil{
+                self.countLabel.isHidden = true
+            }
+            else{
+                if let m = countModel {
+                    if m.number > 0 {
+                        self.countLabel.isHidden = false
+                    }else{
+                        self.countLabel.isHidden = true
+                    }
                 }else{
                     self.countLabel.isHidden = true
                 }
-            }else{
-                self.countLabel.isHidden = true
             }
+            
+          
             
             self.countLabel.text = sp_getString(string: countModel?.number)
         }
@@ -132,21 +143,27 @@ class SPProductDetaileBottomView:  UIView{
                 self.buyBtn.isHidden = true
                 self.editPriceBtn.isHidden = false
                 self.auctionLabel.isHidden = false
+                self.shopCartBtn.isHidden = true
+                let att = NSMutableAttributedString()
                 if let isCheck : Bool = Bool(sp_getString(string: self.detaileModel?.item?.check)), isCheck == true{
                     
 //                   self.editPriceBtn.isSelected = true
                     if let isPay : Bool = Bool(sp_getString(string: self.detaileModel?.item?.is_pay)),isPay == true{
                         self.editPriceBtn.setTitle("修改出价", for: UIControlState.normal)
-                         self.auctionLabel.text = "已付定金\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))"
+                        att.append(NSAttributedString(string: "已付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
                     }else{
                         self.editPriceBtn.setTitle("去付定金", for: UIControlState.normal)
-                         self.auctionLabel.text = "未付定金\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))"
+                          att.append(NSAttributedString(string: "未付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
                     }
                 }else{
                     self.editPriceBtn.setTitle("立即出价", for: UIControlState.normal)
 //                    self.editPriceBtn.isSelected = false
-                    self.auctionLabel.text = "应付定金\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))"
+                      att.append(NSAttributedString(string: "应付定金", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
                 }
+                att.append(NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: self.detaileModel?.item?.pledge))", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+                self.auctionLabel.attributedText = att
+            }else{
+                self.shopCartBtn.isHidden = false
             }
            
             if let isCollect : Bool = Bool(sp_getString(string: model.item?.is_collect)), isCollect == true {

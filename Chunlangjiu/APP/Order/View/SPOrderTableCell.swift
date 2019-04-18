@@ -150,7 +150,8 @@ class SPOrderProductView  :  UIView{
             if let status = Bool(sp_getString(string: orderItem?.auction_status)) , status == false{
                  maxAtt.append(NSAttributedString(string: "保密出价", attributes:[NSAttributedStringKey.font: sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
             }else{
-                 maxAtt.append(NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: orderItem?.max_price))", attributes:[NSAttributedStringKey.font: sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
+               
+                 maxAtt.append(NSAttributedString(string: "\(SP_CHINE_MONEY)\( sp_getString(string: orderItem?.max_price).count > 0 ? sp_getString(string: orderItem?.max_price) : "0.00")", attributes:[NSAttributedStringKey.font: sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]))
             }
             
            
@@ -177,7 +178,11 @@ class SPOrderProductView  :  UIView{
                     self.afterSaleBtn.isSelected = false
                 }
                 if sp_getString(string: orderItem?.aftersales_status) == SP_SELLER_REFUSE_BUYER || sp_getString(string: orderItem?.aftersales_status) == SP_ReFUND_SUCCESS{
-                    self.afterSaleBtn.isHidden = true
+                    if sp_getString(string: orderItem?.aftersales_status) == SP_SELLER_REFUSE_BUYER && sp_getString(string: orderItem?.complaints_status) == SP_FINISHED {
+                          self.afterSaleBtn.isHidden = false
+                    }else{
+                          self.afterSaleBtn.isHidden = true
+                    }
                 }else{
                     self.afterSaleBtn.isHidden = false
                 }
@@ -198,19 +203,20 @@ class SPOrderProductView  :  UIView{
         self.addSubview(self.numLabel)
         self.addSubview(self.afterSaleBtn)
         self.addSubview(self.lineView)
+        self.lineView.isHidden = true
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.productImageView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(8)
-            maker.top.equalTo(self).offset(5)
-            maker.bottom.equalTo(self).offset(-5)
+            maker.left.equalTo(self).offset(22)
+            maker.top.equalTo(self).offset(13)
+            maker.bottom.equalTo(self).offset(-13)
             maker.width.equalTo(self.productImageView.snp.height).offset(0)
         }
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.productImageView.snp.right).offset(7)
-            maker.top.equalTo(self).offset(8)
+            maker.top.equalTo(self).offset(12)
             maker.right.equalTo(self).offset(-19)
             maker.height.greaterThanOrEqualTo(0)
         }
@@ -236,7 +242,7 @@ class SPOrderProductView  :  UIView{
         self.numLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.numLabel.snp.makeConstraints { (maker) in
             maker.width.greaterThanOrEqualTo(0)
-            maker.right.equalTo(self.snp.right).offset(-8)
+            maker.right.equalTo(self.snp.right).offset(-18)
             maker.bottom.equalTo(self.snp.bottom).offset(-8)
             maker.height.greaterThanOrEqualTo(0)
         }

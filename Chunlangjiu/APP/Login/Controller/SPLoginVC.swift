@@ -24,6 +24,7 @@ class SPLoginVC: SPBaseVC {
         textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
          textFiled.sp_cornerRadius(cornerRadius: 22.5)
         textFiled.placeholder = "请输入您的手机号码"
+        textFiled.keyboardType = UIKeyboardType.numberPad
         let view = UIView()
         view.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
         let imageView = UIImageView()
@@ -295,7 +296,7 @@ extension SPLoginVC{
         let height = sp_getKeyBoardheight(notification: obj)
         self.scrollView.snp.remakeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.view).offset(-height)
+            maker.bottom.equalTo(self.view.snp.bottom).offset(-height)
         }
     }
     @objc private func sp_keyBoardWillHidden(){

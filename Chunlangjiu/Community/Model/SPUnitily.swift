@@ -43,6 +43,17 @@ func sp_getScreenHeight() -> CGFloat{
 func sp_getstatusBarHeight() -> CGFloat{
     return UIApplication.shared.statusBarFrame.size.height
 }
+/// 是否大屏幕
+///
+/// - Returns: True 大屏幕 false 小屏幕
+func sp_isLargeScreen()->Bool{
+    if sp_getScreenWidth() < 375{
+        return false
+    }else{
+        return true
+    }
+    
+}
 /// 获取不同像素同样高度不同的比例
 ///
 /// - Parameter height: 高度
@@ -294,7 +305,10 @@ func sp_showSelectImage(viewController : UIViewController,allowsEditing:Bool = t
     actionSheetVC.addAction(takePhoto)
     actionSheetVC.addAction(photoLib)
     actionSheetVC.addAction(cance)
-    viewController.present(actionSheetVC, animated: true, completion: nil)
+    sp_mainQueue {
+        viewController.present(actionSheetVC, animated: true, completion: nil)
+    }
+    
 }
 
 func sp_showPhotLib(viewController : UIViewController,type:UIImagePickerControllerSourceType,allowsEditing:Bool = true,delegate:(UIImagePickerControllerDelegate & UINavigationControllerDelegate)?){
@@ -338,7 +352,10 @@ func sp_thrSelectImg(viewController : UIViewController,nav : UINavigationControl
     actionSheetVC.addAction(takePhoto)
     actionSheetVC.addAction(photoLib)
     actionSheetVC.addAction(cance)
-    viewController.present(actionSheetVC, animated: true, completion: nil)
+    sp_mainQueue {
+        viewController.present(actionSheetVC, animated: true, completion: nil)
+    }
+    
 }
 func sp_takePhoto(type:UIImagePickerControllerSourceType,nav : UINavigationController?,complete:SPSelectImgComplete?){
     KiClipperHelper.sharedInstance.nav = nav
@@ -366,7 +383,10 @@ func sp_noCameraAuth(viewController : UIViewController){
     }
     alertController.addAction(cance)
     alertController.addAction(setAction)
-    viewController.present(alertController, animated: true, completion: nil)
+    sp_mainQueue {
+        viewController.present(alertController, animated: true, completion: nil)
+    }
+    
 }
 /// 没有相册的权限
 ///
@@ -381,7 +401,10 @@ func sp_noPhotoAuth(viewController : UIViewController){
     }
     alertController.addAction(cance)
     alertController.addAction(setAction)
-    viewController.present(alertController, animated: true, completion: nil)
+    sp_mainQueue {
+        viewController.present(alertController, animated: true, completion: nil)
+    }
+    
 }
 
 /// 跳到系统设置界面
@@ -477,7 +500,10 @@ func sp_showAlertClick(vc : UIViewController?,title:String?,msg:String?,cance:St
         }
         alertVC.addAction(doneAction)
     }
-    vc?.present(alertVC, animated: true, completion: nil)
+    sp_mainQueue {
+        vc?.present(alertVC, animated: true, completion: nil)
+    }
+    
     
     
 }
@@ -558,6 +584,84 @@ func sp_fixOrientation(aImage: UIImage) -> UIImage {
 
     return img
 }
+
+/// 图片压缩方法
+///
+/// - Parameters:
+///   - sourceImage: 图片
+///   - maxImageLenght: 最大的图片长度
+///   - maxSizeKB: 最大的kb
+/// - Returns: data
+func sp_resetImgSize(sourceImage : UIImage,maxImageLenght : CGFloat = 750.0,maxSizeKB : CGFloat = 0.0) -> Data {
+    
+    var maxSize = maxSizeKB
+    
+    var maxImageSize = maxImageLenght
+    
+    
+    
+    if (maxSize <= 0.0) {
+        
+        maxSize = 1024.0;
+        
+    }
+    
+    if (maxImageSize <= 0.0)  {
+        
+        maxImageSize = 1024.0;
+        
+    }
+    
+    //先调整分辨率
+    
+    var newSize = CGSize.init(width: sourceImage.size.width, height: sourceImage.size.height)
+    
+    let tempHeight = newSize.height / maxImageSize;
+    
+    let tempWidth = newSize.width / maxImageSize;
+    
+    if (tempWidth > 1.0 && tempWidth > tempHeight) {
+        
+        newSize = CGSize.init(width: sourceImage.size.width / tempWidth, height: sourceImage.size.height / tempWidth)
+        
+    }
+        
+    else if (tempHeight > 1.0 && tempWidth < tempHeight){
+        
+        newSize = CGSize.init(width: sourceImage.size.width / tempHeight, height: sourceImage.size.height / tempHeight)
+        
+    }
+    
+    UIGraphicsBeginImageContext(newSize)
+    
+    sourceImage.draw(in: CGRect.init(x: 0, y: 0, width: newSize.width, height: newSize.height))
+    
+    let newImage = UIGraphicsGetImageFromCurrentImageContext()
+    
+    UIGraphicsEndImageContext()
+    
+    var imageData = UIImageJPEGRepresentation(newImage!, 1.0)
+    
+    var sizeOriginKB : CGFloat = CGFloat((imageData?.count)!) / 1024.0;
+    
+    //调整大小
+    
+    var resizeRate = 0.9;
+    
+    while (sizeOriginKB > maxSize && resizeRate > 0.1) {
+        
+        imageData = UIImageJPEGRepresentation(newImage!,CGFloat(resizeRate));
+        
+        sizeOriginKB = CGFloat((imageData?.count)!) / 1024.0;
+        
+        resizeRate -= 0.1;
+        
+    }
+    
+    return imageData!
+    
+}
+
 /// 保存数据到UserDefaults
 ///
 /// - Parameters:
@@ -765,4 +869,48 @@ func sp_change(second : Int) ->(String,String,String,String){
     secondStr =  String(format: "%02ld", second % 60)
     return (dayStr,hourStr,minuStr,secondStr)
 }
- 
+/// 复制功能
+///
+/// - Parameter text: 复制内容
+func sp_copy(text :String?)->Void{
+    //就这两句话就实现了
+    let paste = UIPasteboard.general
+    paste.string = sp_getString(string: text)
+    sp_showTextAlert(tips: "复制成功")
+}
+/// 拨打电话
+///
+/// - Parameter text: 号码
+func sp_openTel(text:String?)->Void{
+    if let url = URL(string: "tel://\(sp_getString(string: text))") {
+        UIApplication.shared.openURL(url)
+    }
+}
+
+func sp_getAppIcon()->UIImage?{
+    let infoPlist = Bundle.main.infoDictionary
+    if let dic = infoPlist {
+        let icons : [String :Any]?   = dic["CFBundleIcons"] as? [String : Any]
+        if let iconDic : [String : Any] = icons {
+            let primaryIcon : [String : Any]? = iconDic["CFBundlePrimaryIcon"] as? [String : Any]
+            if let primaryIconDic = primaryIcon {
+                let files : [String]?  = primaryIconDic["CFBundleIconFiles"] as? [String]
+                if sp_getArrayCount(array: files) > 0 {
+                     return UIImage(named: sp_getString(string: files?.last))
+                }
+            }
+        }
+        
+        //            let icons = dic["CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles"]
+        
+    }
+    return nil
+}
+
+/// 获取沙盒cache目录
+///
+/// - Returns: 目录
+func sp_getCachePath()->String{
+     let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+    return sp_getString(string: cachePath)
+}

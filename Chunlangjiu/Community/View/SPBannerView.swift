@@ -82,7 +82,7 @@ class SPBannerView:  UIView{
         self.pageControl.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
             maker.height.equalTo(10)
-            maker.bottom.equalTo(self.snp.bottom).offset(-25)
+            maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }
     }
     deinit {

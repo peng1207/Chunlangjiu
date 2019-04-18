@@ -13,7 +13,7 @@ import SnapKit
 typealias SPDetaileScrollViewDidScrollBlock = (_ scrollView : UIScrollView) -> Void
 
 class SPProductDetaileView:  UIView {
-    fileprivate let SP_KVO_KEY_CONTENTSIZE = "contentSize"
+    
     fileprivate let SP_KVO_KEY_FRAME = "center"
     lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
@@ -68,6 +68,12 @@ class SPProductDetaileView:  UIView {
         view.backgroundColor = UIColor.white
         return view
     }()
+    lazy var detView : SPDetView = {
+        let view = SPDetView()
+        view.isHidden = true
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
     lazy var evaluateView : SPProductEvaluateView = {
         let view = SPProductEvaluateView()
         view.isHidden = true
@@ -76,8 +82,19 @@ class SPProductDetaileView:  UIView {
     }()
     lazy var recommendView : SPRecommendProductView = {
         let view = SPRecommendProductView()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor =  SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         view.isHidden = true
+        return view
+    }()
+    lazy var auctionInfoView : SPAuctionInfoView = {
+        let view = SPAuctionInfoView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.isHidden = true
+        return view
+    }()
+    lazy var serviceView : SPProductServiceView = {
+        let view = SPProductServiceView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()
     lazy var pullUpRefreshView : UIView = {
@@ -86,27 +103,6 @@ class SPProductDetaileView:  UIView {
         return view
     }()
     
-    lazy var refreshLabel : UILabel = {
-        let label = UILabel()
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.font = sp_getFontSize(size: 13)
-        label.text = "继续拖动查看更多商品详情"
-        return label
-    }()
-    lazy var refreshArrow : UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "public_drop_down")
-        return imageView
-    }()
-    
-    lazy var webVC : SPProductDetaileWebVC = {
-        let vc = SPProductDetaileWebVC()
-        vc.showDownView = true
-        vc.finishComlete = { [weak self] in
-            self?.sp_pullDownFinish()
-        }
-        return vc
-    }()
     var didScrollBlock : SPDetaileScrollViewDidScrollBlock?
     var didDetaileBlock : ((_ isDetaile : Bool)->Void)?
     var timeOutBlock : SPBtnClickBlock?
@@ -119,6 +115,8 @@ class SPProductDetaileView:  UIView {
     fileprivate var evaluateTop : Constraint!
     fileprivate var recommendTop : Constraint!
     fileprivate var ruleTop : Constraint!
+    fileprivate var auctionInfoTop : Constraint!
+    fileprivate var auctionInfoHeight : Constraint!
     fileprivate var isLoading :  Bool = false
     fileprivate var isDragging : Bool  = false
     fileprivate var hasMore : Bool = true
@@ -140,11 +138,13 @@ class SPProductDetaileView:  UIView {
         self.productScrollView.addSubview(self.ruleView)
         self.productScrollView.addSubview(self.tipsView)
         self.productScrollView.addSubview(self.shopView)
+        self.productScrollView.addSubview(self.detView)
         self.productScrollView.addSubview(self.evaluateView)
+        self.productScrollView.addSubview(self.auctionInfoView)
+        self.productScrollView.addSubview(self.serviceView)
         self.productScrollView.addSubview(self.recommendView)
         self.productScrollView.addSubview(self.pullUpRefreshView)
-        self.pullUpRefreshView.addSubview(self.refreshLabel)
-        self.pullUpRefreshView.addSubview(self.refreshArrow)
+        
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -158,13 +158,6 @@ class SPProductDetaileView:  UIView {
             maker.height.equalTo(self.scrollView.snp.height).offset(0)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
         }
-//        self.webVC.view.snp.makeConstraints { (maker) in
-//            maker.left.right.equalTo(self.scrollView).offset(0)
-//            maker.top.equalTo(self.productScrollView.snp.bottom).offset(0)
-//            maker.height.equalTo(self.scrollView.snp.height).offset(0)
-//            maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
-//            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
-//        }
         self.bannerView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.productScrollView).offset(0)
             maker.height.equalTo(self.bannerView.snp.width).multipliedBy(SP_PRODUCT_SCALE)
@@ -183,47 +176,54 @@ class SPProductDetaileView:  UIView {
         self.tipsView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
             maker.height.greaterThanOrEqualTo(0)
-           self.tipsTop = maker.top.equalTo(self.ruleView.snp.bottom).offset(1).constraint
-        }
-        self.shopView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.productScrollView).offset(0)
-            maker.top.equalTo(self.tipsView.snp.bottom).offset(10)
-            maker.height.greaterThanOrEqualTo(0)
+           self.tipsTop = maker.top.equalTo(self.ruleView.snp.bottom).offset(0).constraint
         }
         self.evaluateView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
             maker.height.greaterThanOrEqualTo(0)
-           self.evaluateTop = maker.top.equalTo(self.shopView.snp.bottom).offset(10).constraint
+            self.evaluateTop = maker.top.equalTo(self.tipsView.snp.bottom).offset(10).constraint
         }
+        
+        self.shopView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.productScrollView).offset(0)
+            maker.top.equalTo(self.evaluateView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
+        }
+        self.detView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.productScrollView).offset(0)
+            maker.top.equalTo(self.shopView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
+        }
+        self.auctionInfoView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.productScrollView).offset(0)
+            self.auctionInfoHeight = maker.height.equalTo(0).constraint
+            self.auctionInfoTop = maker.top.equalTo(self.detView.snp.bottom).offset(0).constraint
+        }
+        self.serviceView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.productScrollView).offset(0)
+            maker.top.equalTo(self.auctionInfoView.snp.bottom).offset(10)
+            maker.height.greaterThanOrEqualTo(0)
+        }
+        
         self.recommendView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
-            self.recommendTop = maker.top.equalTo(self.evaluateView.snp.bottom).offset(10).constraint
+            self.recommendTop = maker.top.equalTo(self.serviceView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
         }
         self.pullUpRefreshView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.productScrollView).offset(0)
             maker.top.equalTo(self.recommendView.snp.bottom).offset(0)
-            maker.height.equalTo(refresher_heright)
-            maker.bottom.equalTo(self.productScrollView.snp.bottom).offset(0)
+            maker.height.equalTo(0)
+            maker.bottom.equalTo(self.productScrollView.snp.bottom).offset(-10)
         }
-        self.refreshLabel.snp.makeConstraints { (maker) in
-            maker.width.greaterThanOrEqualTo(0)
-            maker.centerX.equalTo(self.pullUpRefreshView.snp.centerX).offset(0)
-            maker.top.bottom.equalTo(self.pullUpRefreshView).offset(0)
-        }
-        self.refreshArrow.snp.makeConstraints { (maker) in
-            maker.right.equalTo(self.refreshLabel.snp.left).offset(-10)
-            maker.width.equalTo(11)
-            maker.height.equalTo(16)
-            maker.centerY.equalTo(self.pullUpRefreshView.snp.centerY).offset(0)
-        }
+        
     }
     deinit {
         self.productScrollView.removeObserver(self, forKeyPath: SP_KVO_KEY_CONTENTSIZE, context: nil)
         self.productScrollView.removeObserver(self, forKeyPath: SP_KVO_KEY_FRAME)
         self.productScrollView.delegate = nil
         self.scrollView.delegate = nil
-        self.webVC.view.removeFromSuperview()
+       
         sp_removeTime()
     }
 }
@@ -236,28 +236,7 @@ extension SPProductDetaileView : UIScrollViewDelegate {
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if let block = self.didScrollBlock {
-            block(scrollView)
-        }
-        if self.isLoading && scrollView.contentOffset.y < 0  {
-            return
-        }
-        if self.hasMore == false {
-            self.refreshLabel.textAlignment = NSTextAlignment.center
-            self.refreshLabel.text = "没有更多了"
-            self.refreshArrow.isHidden = true
-        }else  if self.isDragging && self.sp_contentOffsetBottom(scrollView: scrollView) <= 0 {
-            UIView.beginAnimations(nil, context: nil)
-            self.refreshArrow.isHidden = false
-            if self.sp_contentOffsetBottom(scrollView: scrollView) <= -refresher_heright {
-                self.refreshLabel.text = "可以松开了"
-//                self.refreshArrow.layer.transform = CATransform3DMakeRotation(CGFloat(M_PI), 0, 0, 1)
-            }else{
-                self.refreshLabel.text = " 继续拖动，查看图文详情"
-//                 self.refreshArrow.layer.transform = CATransform3DMakeRotation((CGFloat(M_PI) * 2.0 ), 0, 0, 1)
-            }
-            UIView.commitAnimations()
-        }
+        
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !self.hasMore || self.isLoading {
@@ -286,49 +265,24 @@ extension SPProductDetaileView : UIScrollViewDelegate {
         }
         if keyPath == SP_KVO_KEY_FRAME{
             sp_log(message: " frame 改变\(object)")
-            if self.scrollView.contentOffset.y > 0 {
-                self.scrollView.contentOffset = CGPoint(x: 0, y: self.webVC.view.frame.origin.y)
-            }
+           
         }
     }
     func sp_startLoging(){
-        if (isLoading) {
-            return
-        }
-        self.isLoading = true
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(0.3)
-        self.refreshLabel.text = ""
-        self.refreshArrow.isHidden = true
-        UIView.commitAnimations()
-//        UIView.animate(withDuration: 0.3) {
-//              self.scrollView.contentOffset = CGPoint(x: 0, y: self.webVC.view.frame.origin.y)
-//        }
-        self .sp_stopLoging()
-         sp_deal(isDetaile: true)
+        
     }
     func sp_stopLoging(){
-        self.isLoading = false
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDelegate(self)
-        UIView.setAnimationDuration(0.1)
-        UIView.setAnimationDidStop(#selector(animationDidStop(anim:finished:)))
-        self.refreshArrow.layer.transform = CATransform3DMakeRotation((CGFloat(M_PI) * 2.0 ), 0, 0, 1)
-        UIView.commitAnimations()
+        
     }
     
     @objc func animationDidStop(anim: CAAnimation!, finished flag: Bool){
-        self.refreshLabel.text = "继续拖动，查看图文详情"
-        self.refreshArrow.isHidden = false
+       
     }
     func  sp_contentOffsetBottom(scrollView : UIScrollView) -> CGFloat {
         return scrollView.contentSize.height - (scrollView.contentOffset.y + scrollView.bounds.size.height - scrollView.contentInset.bottom)
     }
     func sp_pullDownFinish(){
-        UIView.animate(withDuration: 0.3) {
-            self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
-        }
-        sp_deal(isDetaile: false)
+        
     }
     /// 赋值
     fileprivate func sp_setupData(){
@@ -337,18 +291,21 @@ extension SPProductDetaileView : UIScrollViewDelegate {
         self.productView.productModel = self.detaileModel?.item
         self.shopView.shopModel = self.detaileModel?.shop
         self.tipsView.content = sp_getString(string: self.detaileModel?.item?.explain)
+        self.detView.productModel = self.detaileModel?.item
+        self.detView.isHidden = false
         self.shopView.isHidden = false
         self.pullUpRefreshView.isHidden = false
         self.ruleView.content = sp_getString(string: self.detaileModel?.item?.rule)
+        self.serviceView.imgUrl = sp_getString(string: self.detaileModel?.item?.service_url)
         if sp_getString(string: self.detaileModel?.item?.explain).count > 0 {
-             self.tipsTop.update(offset: 1)
+             self.tipsTop.update(offset: 0)
             self.tipsView.isHidden = false
         }else{
              self.tipsTop.update(offset: 0)
             self.tipsView.isHidden = true
         }
         if sp_getString(string: self.detaileModel?.item?.rule).count > 0 {
-            self.ruleTop.update(offset: 1)
+            self.ruleTop.update(offset: 0)
             self.ruleView.isHidden = false
         }else{
             self.ruleView.isHidden = true
@@ -357,6 +314,13 @@ extension SPProductDetaileView : UIScrollViewDelegate {
         sp_removeTime()
         if let isAuction = self.detaileModel?.item?.isAuction, isAuction == true{
             sp_addTime()
+            self.auctionInfoView.isHidden = false
+            self.auctionInfoTop.update(offset: 10)
+            self.auctionInfoHeight.update(offset: 140.0 + sp_lineHeight)
+        }else{
+            self.auctionInfoView.isHidden = true
+            self.auctionInfoTop.update(offset: 0)
+            self.auctionInfoHeight.update(offset:0)
         }
       
 //        self.webVC.url = URL(string: sp_getString(string: self.detaileModel?.item?.desc))

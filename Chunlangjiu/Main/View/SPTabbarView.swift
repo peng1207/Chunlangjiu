@@ -56,10 +56,10 @@ class SPTabbarView:  UIView{
     }()
     fileprivate lazy var auctionBtn : UIButton = {
         let btn = self.sp_setupBtn(title: "竞拍", image: UIImage(named: "tabbar_auction"),selectImg: UIImage(named: "tabbar_auction_select"))
-        btn.sp_cornerRadius(cornerRadius: 31)
-        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue), width: sp_lineHeight)
+//        btn.sp_cornerRadius(cornerRadius: 31)
+//        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue), width: sp_lineHeight)
         btn.addTarget(self, action: #selector(sp_clickAuctionAction), for: UIControlEvents.touchUpInside)
-        btn.backgroundColor = UIColor.white
+//        btn.backgroundColor = UIColor.white
         return btn
     }()
     
@@ -140,9 +140,11 @@ class SPTabbarView:  UIView{
         if SP_ISSHOW_AUCTION {
             self.auctionBtn.snp.makeConstraints { (maker) in
                 maker.left.equalTo(self.sortBtn.snp.right).offset(0)
-                maker.bottom.equalTo(self.snp.bottom).offset(-8)
-                maker.height.equalTo((SP_TABBAR_HEIGHT + 2))
-                maker.width.equalTo(self.auctionBtn.snp.height).offset(0)
+                maker.bottom.equalTo(self.snp.bottom).offset(0)
+                maker.top.equalTo(self.snp.top).offset(0)
+                maker.width.equalTo(self.shopCartBtn.snp.width).offset(0)
+//                maker.height.equalTo((SP_TABBAR_HEIGHT + 2))
+//                maker.width.equalTo(self.auctionBtn.snp.height).offset(0)
             }
         }
         

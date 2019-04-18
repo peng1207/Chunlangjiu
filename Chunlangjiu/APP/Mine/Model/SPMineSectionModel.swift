@@ -12,4 +12,5 @@ class SPMineSectionModel: NSObject {
     var title : String!
     var dataArray : Array<SPMineModel>?
     var type : SPMineType!
+    var rowCount : Int! = 5
 }

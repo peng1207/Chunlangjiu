@@ -17,6 +17,18 @@ class SPProductContentView:  UIView{
         let imageView = UIImageView()
         return imageView
     }()
+    lazy var signImgView : UIImageView = {
+        let view = UIImageView()
+        view.image = sp_getDefaultUserImg()
+        return view
+    }()
+    lazy var shopNameLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 11)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textAlignment = .left
+        return label
+    }()
     lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 14)
@@ -24,18 +36,20 @@ class SPProductContentView:  UIView{
         label.numberOfLines = 2
         return label
     }()
+    fileprivate lazy var startPriceLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 10)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textAlignment = .left
+        return label
+    }()
     lazy var salePriceLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_c11f2f.rawValue)
+        label.font = sp_getFontSize(size: 18)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return label
     }()
-    lazy var originPriceLabel : UILabel = {
-        let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-        return label
-    }()
+  
 
     lazy var shopCartBtn : UIButton = {
        let btn = UIButton(type: UIButtonType.custom)
@@ -46,8 +60,8 @@ class SPProductContentView:  UIView{
     }()
     lazy var tipsLabel :UILabel = {
         let label = UILabel()
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-        label.font = sp_getFontSize(size: 12)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        label.font = sp_getFontSize(size: 10)
         return label
     }()
     lazy var maxPriceLabel : UILabel = {
@@ -67,6 +81,15 @@ class SPProductContentView:  UIView{
         imageView.isHidden = true
         return imageView
     }()
+    lazy var entShopBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("进店 >", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.selected)
+        btn.titleLabel?.font = sp_getFontSize(size: 11)
+        btn.addTarget(self, action: #selector(sp_clickShop), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     lazy var lineView : UIView = {
         let view = sp_getLineView()
         view.isHidden = true
@@ -78,6 +101,7 @@ class SPProductContentView:  UIView{
         }
     }
     var addComplete : SPAddProductComplete?
+    var shopBlock : SPAddProductComplete?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
@@ -94,30 +118,47 @@ class SPProductContentView:  UIView{
         self.titleLabel.attributedText = productModel?.sp_getTitleAtt()
         
         self.salePriceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: productModel?.price))"
-        self.tipsLabel.text = "\(sp_getString(string: self.productModel?.view_count))人关注 \(sp_getString(string: self.productModel?.rate_count))条评价"
-        self.originPriceLabel.attributedText = self.productModel?.sp_getdefaultPrice()
+        self.tipsLabel.text = "\(sp_getString(string: self.productModel?.view_count))人关注 \(sp_getString(string: self.productModel?.rate_count))条评价 \(sp_getString(string: productModel?.rate))%好评"
+       
         self.maxPriceLabel.attributedText = self.productModel?.sp_getMaxPrice()
         if let isAuction = self.productModel?.isAuction, isAuction == true {
             self.maxPriceLabel.isHidden = false
             self.salePriceLabel.isHidden = true
             self.auctionImageView.isHidden = false
+            self.startPriceLabel.isHidden = false
+            self.startPriceLabel.text = "起拍价：\(SP_CHINE_MONEY)\(sp_getString(string: self.productModel?.auction_starting_price))"
+        
         }else{
             self.maxPriceLabel.isHidden = true
             self.salePriceLabel.isHidden = false
             self.auctionImageView.isHidden = true
+            self.startPriceLabel.isHidden = true
+            self.startPriceLabel.text = ""
         }
         self.labelView.listArray = self.productModel?.sp_getLabel()
+        self.shopNameLabel.text = sp_getString(string: self.productModel?.shop_name);
+        if sp_getString(string: self.productModel?.grade) == SP_GRADE_2 {
+            self.signImgView.image = sp_getPartnerImg()
+        }else if sp_getString(string: self.productModel?.grade) == SP_GRADE_1{
+            self.signImgView.image = sp_getStartUserImg()
+        }else{
+            self.signImgView.image = sp_getDefaultUserImg()
+        }
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.productImageView)
+        self.addSubview(self.signImgView)
         self.addSubview(self.titleLabel)
         self.addSubview(self.labelView)
         self.addSubview(self.salePriceLabel)
-        self.addSubview(self.originPriceLabel)
+        
         self.addSubview(self.shopCartBtn)
         self.addSubview(self.tipsLabel)
+        self.addSubview(self.startPriceLabel)
         self.addSubview(self.maxPriceLabel)
+        self.addSubview(self.shopNameLabel)
+        self.addSubview(self.entShopBtn)
         self.addSubview(self.auctionImageView)
         self.addSubview(self.lineView)
         self.sp_addConstraint()
@@ -129,57 +170,86 @@ class SPProductContentView:  UIView{
             maker.width.equalTo(35)
             maker.height.equalTo(37)
         }
-      
+        self.productImageView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self).offset(5)
+            maker.top.equalTo(self).offset(10)
+            maker.width.equalTo(130)
+            maker.height.equalTo(self.productImageView.snp.width).multipliedBy(SP_PRODUCT_SCALE)
+        }
+        self.titleLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.productImageView.snp.right).offset(10)
+            maker.right.equalTo(self.snp.right).offset(-10)
+            maker.top.equalTo(self.productImageView.snp.top).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+        }
         self.shopCartBtn.snp.makeConstraints { (maker) in
-            maker.width.equalTo(22)
+            maker.width.equalTo(0)
             maker.height.equalTo(21)
-            maker.right.equalTo(self).offset(-15)
+            maker.right.equalTo(self).offset(-6)
             maker.bottom.equalTo(self).offset(-14)
         }
+        self.signImgView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.titleLabel.snp.left).offset(0)
+            maker.bottom.equalTo(self.snp.bottom).offset(-6)
+            maker.width.equalTo(60)
+            maker.height.equalTo(15)
+        }
+//        self.entShopBtn.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
+        self.entShopBtn.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.snp.right).offset(-12)
+            maker.centerY.equalTo(self.signImgView.snp.centerY).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.width.equalTo(35)
+//            maker.width.greaterThanOrEqualTo(0)
+        }
+//        self.shopNameLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
+        self.shopNameLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.signImgView.snp.right).offset(5)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.centerY.equalTo(self.signImgView.snp.centerY).offset(0)
+            maker.right.equalTo(self.entShopBtn.snp.left).offset(-5)
+        }
+      
         self.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
-            maker.right.equalTo(self.shopCartBtn.snp.left).offset(-8)
-            maker.bottom.equalTo(self.snp.bottom).offset(-13)
+            maker.right.equalTo(self.shopCartBtn.snp.left).offset(0)
+            maker.bottom.equalTo(self.signImgView.snp.top).offset(-5)
             maker.height.greaterThanOrEqualTo(0)
-        }
-        self.labelView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.titleLabel.snp.left).offset(0)
-            maker.right.equalTo(self.titleLabel.snp.right).offset(0)
-//            maker.top.equalTo(self.titleLabel.snp.bottom).offset(6)
-            maker.bottom.equalTo(self.tipsLabel.snp.top).offset(-6)
-            maker.height.equalTo(16)
         }
        
-        self.originPriceLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
-        self.originPriceLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.salePriceLabel.snp.left).offset(0)
-//            maker.top.equalTo(self.labelView.snp.bottom).offset(6)
-            maker.bottom.equalTo(self.salePriceLabel.snp.top).offset(-5);
-            maker.width.greaterThanOrEqualTo(0)
-            maker.height.greaterThanOrEqualTo(0)
-            maker.right.lessThanOrEqualTo(self.titleLabel.snp.right).offset(0)
-        }
-        
         self.salePriceLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.salePriceLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
             maker.width.greaterThanOrEqualTo(0)
 //            maker.top.equalTo(self.originPriceLabel.snp.bottom).offset(5)
-            maker.bottom.equalTo(self.labelView.snp.top).offset(-5);
+            maker.bottom.equalTo(self.tipsLabel.snp.top).offset(-5);
             maker.height.greaterThanOrEqualTo(0)
         }
+        
+        self.labelView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.titleLabel.snp.left).offset(0)
+            maker.right.equalTo(self.titleLabel.snp.right).offset(0)
+            maker.top.equalTo(self.titleLabel.snp.bottom).offset(3)
+            maker.height.equalTo(15)
+        }
+        
         self.lineView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.snp.left).offset(10)
             maker.right.equalTo(self.snp.right).offset(-10)
             maker.bottom.equalTo(self.snp.bottom).offset(-sp_lineHeight)
             maker.height.equalTo(sp_lineHeight)
         }
-        
+        self.startPriceLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.maxPriceLabel).offset(0)
+            maker.width.greaterThanOrEqualTo(0)
+            maker.right.lessThanOrEqualTo(self.titleLabel.snp.right).offset(0)
+            maker.bottom.equalTo(self.maxPriceLabel.snp.top).offset(-2)
+        }
         self.maxPriceLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.left).offset(0)
             maker.width.greaterThanOrEqualTo(0)
             maker.right.equalTo(self.titleLabel.snp.right).offset(0)
-            maker.top.equalTo(self.salePriceLabel.snp.top).offset(0)
+            maker.bottom.equalTo(self.salePriceLabel.snp.bottom).offset(0)
         }
     }
     deinit {
@@ -194,12 +264,20 @@ extension SPProductContentView {
         }
         block(self.productModel)
     }
+    @objc fileprivate func sp_clickShop(){
+        guard let block = self.shopBlock else {
+            return
+        }
+        block(self.productModel)
+    }
 }
 import UIKit
 import SnapKit
 class SPProductListHCell: UICollectionViewCell {
     lazy var productView : SPProductContentView = {
-        return SPProductContentView()
+        let view = SPProductContentView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
     }()
     
     override init(frame: CGRect) {
@@ -218,43 +296,18 @@ class SPProductListHCell: UICollectionViewCell {
         
         self.productView.lineView.isHidden = false
         self.sp_addConstraint()
+        self.productView.layoutIfNeeded()
+        self.productView.sp_setCornerRadius(corner: 5)
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.productView.snp.makeConstraints { (maker) in
-            maker.top.equalTo(self.contentView).offset(0)
-            maker.left.right.equalTo(self.contentView).offset(0)
+            maker.height.equalTo(150)
+            maker.left.equalTo(self.contentView).offset(10)
+            maker.right.equalTo(self.contentView).offset(-10)
             maker.bottom.equalTo(self.contentView).offset(0)
         }
-        self.productView.productImageView.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.productView.snp.left).offset(0)
-            maker.top.equalTo(self.productView.snp.top).offset(15)
-            maker.width.equalTo(SP_PRODUCT_H_WIDTH)
-        maker.height.equalTo(self.productView.productImageView.snp.width).multipliedBy(SP_PRODUCT_SCALE)
-        }
-        self.productView.titleLabel.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.productView.productImageView.snp.right).offset(3)
-            maker.top.equalTo(self.productView.productImageView.snp.top).offset(0)
-            maker.height.greaterThanOrEqualTo(0)
-            maker.right.equalTo(self.productView.snp.right).offset(-10)
-        }
-        self.productView.shopCartBtn.snp.remakeConstraints { (maker) in
-            maker.right.equalTo(self.productView.snp.right).offset(0)
-            maker.width.height.equalTo(21)
-            maker.bottom.equalTo(self.productView.snp.bottom).offset(-11)
-        }
-        self.productView.tipsLabel.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
-            maker.right.equalTo(self.productView.shopCartBtn.snp.right).offset(-4)
-            maker.bottom.equalTo(self.productView.snp.bottom).offset(-11)
-            maker.height.greaterThanOrEqualTo(0)
-        }
-        self.productView.labelView.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
-            maker.right.equalTo(self.productView.titleLabel.snp.right).offset(0)
-            maker.bottom.equalTo(self.productView.tipsLabel.snp.top).offset(-6)
-            maker.height.equalTo(15)
-        }
+       
         
     }
     deinit {
@@ -265,7 +318,9 @@ import UIKit
 import SnapKit
 class SPProductListVCell: UICollectionViewCell {
     lazy var productView : SPProductContentView = {
-        return SPProductContentView()
+        let view = SPProductContentView()
+        view.titleLabel.numberOfLines = 1
+        return view
     }()
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -278,9 +333,10 @@ class SPProductListVCell: UICollectionViewCell {
     fileprivate func sp_setupUI(){
         self.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
         self.contentView.addSubview(self.productView)
-       
+        self.contentView.sp_cornerRadius(cornerRadius: 5)
         self.productView.lineView.isHidden = true
         self.sp_addConstraint()
+      
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -290,19 +346,24 @@ class SPProductListVCell: UICollectionViewCell {
             maker.bottom.equalTo(self.contentView).offset(0)
         }
         self.productView.productImageView.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.productView.snp.left).offset(19)
-            maker.right.equalTo(self.productView.snp.right).offset(-19)
-            maker.top.equalTo(self.productView.snp.top).offset(5)
+            maker.left.right.top.equalTo(self.productView).offset(0)
             maker.height.equalTo(self.productView.productImageView.snp.width).multipliedBy(SP_PRODUCT_SCALE)
         }
         self.productView.titleLabel.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.productView.snp.left).offset(10)
+            maker.left.equalTo(self.productView.snp.left).offset(3)
             maker.top.equalTo(self.productView.productImageView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
-            maker.right.equalTo(self.productView.snp.right).offset(-10)
+            maker.right.equalTo(self.productView.snp.right).offset(-6)
         }
-        
+        self.productView.salePriceLabel.snp.remakeConstraints { (maker) in
+            maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
+            maker.width.greaterThanOrEqualTo(0)
+            //            maker.top.equalTo(self.originPriceLabel.snp.bottom).offset(5)
+            maker.bottom.equalTo(self.productView.tipsLabel.snp.top).offset(-2);
+            maker.height.greaterThanOrEqualTo(0)
+        }
     }
+   
     deinit {
         
     }

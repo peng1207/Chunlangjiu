@@ -156,6 +156,28 @@ class SPOrderRequest  : SPAppRequest {
             }
         }
     }
+    ///  投诉订单
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getOrderComplaint(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_ORDERCOMPLAINT_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                    block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                       block(SP_Request_Error,"提交投诉失败",nil)
+                }
+            }
+        }
+    }
     /// 创建支付订单
     ///
     /// - Parameters:
@@ -767,7 +789,7 @@ class SPOrderRequest  : SPAppRequest {
                         detailModel?.type = sp_getString(string: payments["type"])
                         detailModel?.modified_time = sp_getString(string: payments["modified_time"])
                         detailModel?.tid = Int(sp_getString(string: detailModel?.payment_id))
-                       
+                        detailModel?.payment = sp_getString(string: payments["cur_money"])
                     }
                     
                     

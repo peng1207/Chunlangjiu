@@ -37,7 +37,7 @@ class SPIndexDTableCell: UITableViewCell {
         self.productView.titleLabel.attributedText = productModel?.sp_getTitleAtt()
         self.productView.salePriceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: self.productModel?.price))"
         self.productView.labelView.listArray = self.productModel?.sp_getLabel()
-        self.productView.originPriceLabel.attributedText = self.productModel?.sp_getdefaultPrice()
+        
         self.productView.tipsLabel.text = "\(sp_getString(string: self.productModel?.view_count))人关注 \(sp_getString(string: self.productModel?.rate_count))条评价"
     }
     /// 添加UI
@@ -67,14 +67,7 @@ class SPIndexDTableCell: UITableViewCell {
             maker.right.equalTo(self.productView.snp.right).offset(-29)
             maker.height.greaterThanOrEqualTo(0)
         }
-        self.productView.originPriceLabel.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
-//            maker.top.equalTo(self.productView.titleLabel.snp.bottom).offset(12)
-            maker.bottom.equalTo(self.productView.salePriceLabel.snp.top).offset(-9)
-            maker.width.greaterThanOrEqualTo(0)
-            maker.right.lessThanOrEqualTo(self.productView.titleLabel.snp.right).offset(0)
-            maker.height.greaterThanOrEqualTo(0)
-        }
+      
         self.productView.salePriceLabel.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
 //            maker.top.equalTo(self.productView.originPriceLabel.snp.bottom).offset(9)
@@ -91,7 +84,8 @@ class SPIndexDTableCell: UITableViewCell {
         }
         self.productView.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.productView.titleLabel.snp.left).offset(0)
-            maker.bottom.equalTo(self.productView.productImageView.snp.bottom).offset(0)
+//            maker.bottom.equalTo(self.productView.productImageView.snp.bottom).offset(0)
+            maker.bottom.equalTo(self.productView.signImgView.snp.top).offset(-7)
             maker.height.greaterThanOrEqualTo(0)
             maker.right.equalTo(self.productView.titleLabel.snp.right).offset(0)
         }

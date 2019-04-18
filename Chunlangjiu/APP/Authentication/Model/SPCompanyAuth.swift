@@ -17,5 +17,8 @@ class SPCompanyAuth : SPBaseModel {
     var company_phone : String?
     var license_img : String?
     var shopuser_identity_img_z : String?
-    var status : String? 
+    var shopuser_identity_img_f : String?
+    var food_or_wine_img : String? 
+    var status : String?
+    var idcard : String?
 }

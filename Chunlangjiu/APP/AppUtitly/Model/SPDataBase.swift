@@ -13,7 +13,7 @@ class SPRealmTool : Object {
     /// 配置数据库
      class func configRealm(){
         /// 如果要存储的数据模型属性发生变化,需要配置当前版本号比之前大
-         let dbVersion : UInt64 = 15
+         let dbVersion : UInt64 = 30
         let docPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0] as String
         let dbPath = docPath.appending("/chunlangDB.realm")
         sp_log(message: "数据库地址:\(dbPath)")
@@ -90,6 +90,59 @@ extension SPRealmTool {
         }
         return list
     }
+    
+    class func sp_insertAuthSuccess(isAlert : Bool){
+        let model = SPMineAuthModel()
+        model.isShowAlert = isAlert ? "1" : "0"
+        model.status = "1"
+        model.user_id = sp_getString(string: SPAPPManager.instance().userModel?.user_id)
+        let realm = try! Realm()
+         let predicate = NSPredicate(format: "status = %@ and user_id = %@", "1",sp_getString(string: SPAPPManager.instance().userModel?.user_id))
+        let tem = realm.objects(SPMineAuthModel.self).filter(predicate)
+        try! realm.write {
+            realm.delete(tem)
+            realm.add(model)
+        }
+    }
+    class func sp_insertAuthFaile(isAlert : Bool){
+        let model = SPMineAuthModel()
+        model.isShowAlert =  isAlert ? "1" : "0"
+        model.status = "0"
+        model.user_id = sp_getString(string: SPAPPManager.instance().userModel?.user_id)
+        let realm = try! Realm()
+         let predicate = NSPredicate(format: "status = %@ and user_id = %@", "0",sp_getString(string: SPAPPManager.instance().userModel?.user_id))
+        let tem = realm.objects(SPMineAuthModel.self).filter(predicate)
+        try! realm.write {
+            realm.delete(tem)
+            realm.add(model)
+        }
+    }
+    class func sp_getIsAlert(isSuccess : Bool)->Bool {
+        var isShow : Bool = false
+        let realm = try! Realm()
+        if isSuccess {
+           let predicate =  NSPredicate(format: "status = %@ and user_id = %@", "1",sp_getString(string: SPAPPManager.instance().userModel?.user_id))
+            let tem = realm.objects(SPMineAuthModel.self).filter(predicate)
+            for model in tem {
+                if sp_getString(string: model.isShowAlert) == "1"{
+                    isShow = true
+                    break
+                }
+            }
+        }else {
+            let predicate =  NSPredicate(format: "status = %@ and user_id = %@", "0",sp_getString(string: SPAPPManager.instance().userModel?.user_id))
+            let tem = realm.objects(SPMineAuthModel.self).filter(predicate)
+            for model in tem {
+                if sp_getString(string: model.isShowAlert) == "1"{
+                    isShow = true
+                    break
+                }
+            }
+        }
+        
+        return isShow
+    }
+    
 }
 
 

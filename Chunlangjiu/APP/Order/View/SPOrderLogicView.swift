@@ -61,7 +61,7 @@ class SPOrderLogicView:  UIView{
         self.nameView.snp.makeConstraints { (maker ) in
             maker.left.right.equalTo(self).offset(0)
             maker.top.equalTo(self).offset(14)
-            maker.height.greaterThanOrEqualTo(0)
+            maker.height.greaterThanOrEqualTo(18)
         }
         self.codeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.nameView).offset(0)
@@ -73,7 +73,7 @@ class SPOrderLogicView:  UIView{
             maker.left.equalTo(self.codeView.contentLabel.snp.right).offset(5)
             maker.centerY.equalTo(self.codeView.snp.centerY).offset(0)
             maker.width.equalTo(50)
-            maker.height.equalTo(21)
+            maker.height.equalTo(20)
         }
     }
     deinit {
@@ -83,8 +83,6 @@ class SPOrderLogicView:  UIView{
 extension SPOrderLogicView {
     @objc fileprivate func sp_clickCopyAction(){
         //就这两句话就实现了
-        let paste = UIPasteboard.general
-        paste.string = sp_getString(string: self.logicModel?.logi_no)
-        sp_showTextAlert(tips: "复制成功")
+        sp_copy(text:sp_getString(string: self.logicModel?.logi_no))
     }
 }

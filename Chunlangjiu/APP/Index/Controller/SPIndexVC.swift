@@ -37,28 +37,59 @@ class SPIndexVC: SPBaseVC {
         }
         return view
     }()
-     fileprivate var pushVC : Bool = false
-    fileprivate  var tableView : UITableView!
+    fileprivate lazy var noNetLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 15)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        label.textAlignment = .left
+        label.text = "  当前网络出现问题，请检查您的网络设置"
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickNetFailure))
+        label.addGestureRecognizer(tap)
+        label.isUserInteractionEnabled = true
+        return label
+    }()
+    fileprivate lazy var nodataBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("没有数据，点击重试", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 16)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.sp_cornerRadius(cornerRadius: 20)
+        btn.isHidden = true
+        btn.addTarget(self, action: #selector(sp_clickNoData), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
+    fileprivate var pushVC : Bool = false
+    fileprivate var tableView : UITableView!
+    fileprivate var collectionView : UICollectionView!
     fileprivate var dataArray : [SPIndexGoods]! = [SPIndexGoods]()
     fileprivate var currentPage : Int = 1
     fileprivate var indexModel : SPIndexModel?
-    fileprivate var isScroll : Bool! = false
     fileprivate var isEditPrice : Bool! = false
+    fileprivate let collectVCellID = "collectVCellID"
+    fileprivate let collectHAuctionCellID = "collectHAuctionCellID"
+    fileprivate let collectionHeadHeaderID = "collectionHeadHeaderID"
+    fileprivate let collectionHeaderID = "collectionHeaderID"
     fileprivate lazy var auctionGood : SPIndexGoods = {
         return SPIndexGoods.sp_init(type: SP_AUCTION)
     }()
     fileprivate lazy var defaultGood : SPIndexGoods = {
         return SPIndexGoods.sp_init(type: nil)
     }()
-    
+    fileprivate lazy var headerModel : SPIndexGoods = {
+        let model = SPIndexGoods.sp_init(type: SP_HEADER)
+        return model
+    }()
+    fileprivate var noNetHeight : Constraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_showAnimation(view: self.view, title: nil)
         self.sp_sendRequest()
         self.sp_sendGoodRequest()
-        self.tableView.sp_layoutHeaderView()
+//        self.tableView.sp_layoutHeaderView()
         self.sp_addNotification()
+        sp_netChange()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -86,26 +117,43 @@ class SPIndexVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        
         self.view.addSubview(self.titleView)
-        self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.separatorStyle = .none
-        self.tableView.backgroundColor = self.view.backgroundColor
-        self.tableView.tableHeaderView = self.tableHeaderView
-        self.tableView.estimatedRowHeight = 0
-        self.tableView.estimatedSectionFooterHeight = 0
-        self.tableView.estimatedSectionHeaderHeight = 0
-//        self.tableView.tableFooterView = UIView()
-        self.view.addSubview(self.tableView)
-        self.tableView.sp_headerRefesh { [weak self]() in
+       
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        self.collectionView.backgroundColor = self.view.backgroundColor
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        self.collectionView.register(SPProductListVCell.self, forCellWithReuseIdentifier: collectVCellID)
+        self.collectionView.register(SPProductAuctionCollectCell.self, forCellWithReuseIdentifier: collectHAuctionCellID)
+        self.collectionView.register(SPIndexHeadHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: collectionHeadHeaderID)
+        self.collectionView.register(SPIndexCollectHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
+        self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.alwaysBounceVertical = true
+        if #available(iOS 11.0, *) {
+            self.collectionView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        self.view.addSubview(self.collectionView)
+         self.view.addSubview(self.noNetLabel)
+        self.view.addSubview(self.nodataBtn)
+        self.collectionView.sp_headerRefesh { [weak self]() in
             self?.currentPage = 1
             self?.sp_sendGoodRequest()
             self?.sp_sendRequest()
         }
-        self.tableView.sp_footerRefresh { [weak self]() in
+        self.collectionView.sp_footerRefresh { [weak self]() in
             if let page = self?.currentPage {
-                self?.currentPage = page + 1
+                if sp_getArrayCount(array: self?.defaultGood.dataArray) > 0 {
+                     self?.currentPage = page + 1
+                }else{
+                    self?.currentPage = 1
+                }
+               
                 self?.sp_sendGoodRequest()
             }
         }
@@ -118,8 +166,13 @@ class SPIndexVC: SPBaseVC {
             maker.height.equalTo(SP_NAVGIT_HEIGHT + sp_getstatusBarHeight())
             maker.top.equalTo(self.view).offset(0)
         }
-        self.tableView.snp.makeConstraints { (maker) in
-            maker.top.equalTo(self.titleView.snp.bottom).offset(0)
+        self.noNetLabel.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            self.noNetHeight = maker.height.equalTo(0).constraint
+            maker.top.equalTo(self.titleView.snp.bottom)
+        }
+        self.collectionView.snp.makeConstraints { (maker) in
+            maker.top.equalTo(self.noNetLabel.snp.bottom).offset(0)
             maker.left.right.equalTo(self.view).offset(0)
             if #available(iOS 11.0, *) {
               maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
@@ -127,18 +180,177 @@ class SPIndexVC: SPBaseVC {
                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-        self.tableHeaderView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview()
-            maker.left.right.equalTo(view)
-             maker.centerX.equalToSuperview()
-            maker.height.greaterThanOrEqualTo(0).priority(.high)
+        self.nodataBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(20)
+            maker.right.equalTo(self.view).offset(-20)
+            maker.centerY.equalTo(self.view).offset(0)
+            maker.height.equalTo(40)
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
-extension SPIndexVC : UITableViewDelegate,UITableViewDataSource{
+extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return sp_getArrayCount(array: self.dataArray)
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section < sp_getArrayCount(array: self.dataArray) {
+            if let model : SPIndexGoods = self.dataArray?[section] {
+                if sp_getString(string: model.type) != SP_HEADER {
+                    return sp_getArrayCount(array: model.dataArray)
+                }
+            }
+        }
+        return 0
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var indexModel : SPIndexGoods?
+        
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+            indexModel = self.dataArray?[indexPath.section]
+        }
+        if sp_getString(string: indexModel?.type) == SP_AUCTION {
+            let cell : SPProductAuctionCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHAuctionCellID, for: indexPath) as! SPProductAuctionCollectCell
+            if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray) {
+                cell.auctionView.productModel = indexModel?.dataArray?[indexPath.row]
+                cell.auctionView.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
+                }
+            }
+            return cell
+           
+        }else{
+            let cell : SPProductListVCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectVCellID, for: indexPath) as! SPProductListVCell
+            
+            if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray){
+                cell.productView.productModel = indexModel?.dataArray?[indexPath.row]
+                cell.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
+                }
+            }
+            return cell
+        }
+        
+    }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var indexModel : SPIndexGoods?
+        
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+            indexModel = self.dataArray?[indexPath.section]
+        }
+        if sp_getString(string: indexModel?.type) == SP_HEADER {
+            let headerView : SPIndexHeadHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: collectionHeadHeaderID, for: indexPath) as! SPIndexHeadHeaderView
+            headerView.tableHeaderView.indexModel = self.indexModel
+            headerView.tableHeaderView.iconView.selectblock = { [weak self](model) in
+                self?.sp_dealIconSelect(model: model)
+            }
+            headerView.tableHeaderView.brandView.selectBlock = { [weak self](model) in
+                self?.sp_dealBrandSelect(model: model)
+                SPThridManager.sp_brand()
+            }
+            headerView.tableHeaderView.bannerView.selectBlock = { [weak self](row) in
+                self?.sp_dealBannerSelect(row: row)
+                SPThridManager.sp_banner()
+            }
+            return headerView
+        }else {
+            let headerView : SPIndexCollectHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: collectionHeaderID, for: indexPath) as! SPIndexCollectHeaderView
+            headerView.titleLabel.text = sp_getString(string: indexModel?.name)
+            headerView.moreBtn.isHidden = sp_getString(string: indexModel?.type) == SP_AUCTION ? false : true
+            headerView.moreBtn.addTarget(self, action: #selector(sp_clickMore), for: UIControlEvents.touchUpInside)
+            return headerView
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+            let indexModel : SPIndexGoods? = self.dataArray?[indexPath.section];
+            if sp_getString(string: indexModel?.type) == SP_AUCTION {
+                   return  CGSize(width: collectionView.frame.size.width, height: indexPath.row == 0 ? 175 + 10 : 175 + 5)
+            }else{
+                let width =  NSInteger((collectionView.frame.size.width - 25) / 2.0)
+                return  CGSize(width: CGFloat(width), height:  (CGFloat(width) * SP_PRODUCT_SCALE ) + 115 )
+            }
+        }
+        return CGSize(width: 0, height: 0)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if section < sp_getArrayCount(array: self.dataArray) {
+            let indexModel : SPIndexGoods? = self.dataArray?[section];
+            if sp_getString(string: indexModel?.type) == SP_HEADER {
+                var height : CGFloat = collectionView.frame.size.width *  0.65
+                if sp_getArrayCount(array: self.indexModel?.bannerList) == 0 {
+                    height = 0.0
+                }
+                if sp_getArrayCount(array: self.indexModel?.iconList) > 0 {
+                    height = height + 81.0
+                }
+                if sp_getArrayCount(array: self.indexModel?.brandList) > 0 {
+                    height = height + 210.0
+                }
+                return CGSize(width: collectionView.frame.size.width, height: height)
+            }else{
+                return CGSize(width: collectionView.frame.size.width, height: 54)
+            }
+        }
+        return CGSize(width: 0, height: 0)
+    }
+    // 返回cell 上下左右的间距
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if section < sp_getArrayCount(array: self.dataArray) {
+            let indexModel : SPIndexGoods? = self.dataArray?[section];
+            if sp_getString(string: indexModel?.type) == SP_AUCTION {
+                  return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            }else{
+               
+                return  UIEdgeInsets(top: 5, left:10, bottom: 0, right: 10)
+            }
+        }
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if section < sp_getArrayCount(array: self.dataArray) {
+            let indexModel : SPIndexGoods? = self.dataArray?[section];
+            if sp_getString(string: indexModel?.type) == SP_AUCTION {
+                return 0
+            }else{
+                return 5
+            }
+        }
+        return 0
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        if section < sp_getArrayCount(array: self.dataArray) {
+            let indexModel : SPIndexGoods? = self.dataArray?[section];
+            if sp_getString(string: indexModel?.type) == SP_AUCTION {
+                return 0
+            }else{
+                return 5
+            }
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+            let indexGood = self.dataArray?[indexPath.section]
+            if indexPath.row < sp_getArrayCount(array: indexGood?.dataArray){
+                let model = indexGood?.dataArray?[indexPath.row]
+                let productDetaileVC = SPProductDetaileVC()
+                productDetaileVC.productModel = model
+                self.navigationController?.pushViewController(productDetaileVC, animated: true)
+                self.pushVC = true
+                if sp_getString(string: indexGood?.type) != SP_AUCTION{
+                    if indexPath.row < 6 {
+                        SPThridManager.sp_recommend(index: sp_getString(string: "\(indexPath.row + 1)"))
+                    }
+                }
+            }
+        }
+    }
+    /*
     func numberOfSections(in tableView: UITableView) -> Int {
         return sp_getArrayCount(array: self.dataArray)
     }
@@ -270,28 +482,7 @@ extension SPIndexVC : UITableViewDelegate,UITableViewDataSource{
                 }
             }
         }
-    }
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-          self.isScroll = true
-         sp_log(message: "滚动开始")
-    }
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        self.isScroll = true
-        sp_log(message: "滚动开始")
-    }
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-    }
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    
-        let  scrollToScrollStop : Bool = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
-        if scrollToScrollStop {
-            sp_asyncAfter(time: 0.5) {
-                self.isScroll = false
-                sp_log(message: "滚动结束")
-            }
-        }
-    }
+    } */
 
   
 }
@@ -370,6 +561,42 @@ extension SPIndexVC{
         }
         
     }
+    /// 点击店铺
+    ///
+    /// - Parameter model: 商品model
+    fileprivate func sp_clickShop(model : SPProductModel?){
+        guard let product = model else {
+            return
+        }
+        let shopModel = SPShopModel()
+        shopModel.shop_id = product.shop_id
+        shopModel.shop_name = product.shop_name 
+        let shopVC = SPShopHomeVC()
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
+    }
+    /// 处理没有数据时按钮显示
+    fileprivate func sp_dealNoDataBtn(){
+        if sp_getArrayCount(array: self.indexModel?.brandList) == 0 , sp_getArrayCount(array: self.indexModel?.bannerList) == 0 , sp_getArrayCount(array: self.indexModel?.iconList) == 0 , sp_getArrayCount(array: self.auctionGood.dataArray) == 0 , sp_getArrayCount(array: self.defaultGood.dataArray) == 0{
+            self.nodataBtn.isHidden = false
+        }else{
+            self.nodataBtn.isHidden = true
+        }
+    }
+    /// 点击没有数据
+    @objc fileprivate func sp_clickNoData(){
+        self.sp_sendRequest()
+        self.sp_sendGoodRequest()
+    }
+    /// 点击竞拍更多
+    @objc fileprivate func sp_clickMore(){
+        NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_ISSHOW_AUCTION ? SP_TAB_AUCTION : SP_TAB_SORT)"])
+    }
+    /// 点击网络失败
+    @objc fileprivate func sp_clickNetFailure(){
+        let failureVC = SPNetWorkFailureVC()
+        self.navigationController?.pushViewController(failureVC, animated: true)
+    }
 }
 // MARK: - notification
 extension SPIndexVC{
@@ -379,6 +606,7 @@ extension SPIndexVC{
          NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
     }
     /// 定位成功通知
     @objc fileprivate func sp_locationNotification(){
@@ -392,7 +620,7 @@ extension SPIndexVC{
         }
        
         if sp_getArrayCount(array: self.dataArray) > 0 {
-            sp_simpleSQueues {
+//            sp_simpleSQueues {
                 if sp_getArrayCount(array: self.auctionGood.dataArray) > 0 {
                     var list = [SPProductModel]()
                     for model in self.auctionGood.dataArray! {
@@ -402,17 +630,34 @@ extension SPIndexVC{
                         }
                     }
                     self.auctionGood.dataArray = list
-                    if self.isScroll == false {
-                        sp_dealDataArray()
-                    }
+//                    if self.isScroll == false {
+                        sp_dealDataArray(all: false)
+//                    }
                 }
-            }
+//            }
         }
     }
     @objc fileprivate func sp_editPrice(){
         self.isEditPrice = true
     }
-    
+    @objc fileprivate func sp_netChange(){
+        if SPNetWorkManager.sp_notReachable() {
+            // 没有网络
+            self.noNetHeight.update(offset: 40)
+            if SPNetWorkManager.sp_isOpenWwan() == false {
+                
+            }
+            sp_log(message: "移动网络是否打开\(SPNetWorkManager.sp_isOpenWwan())")
+        }else{
+            // 有网络
+            self.noNetHeight.update(offset: 0)
+            if sp_getArrayCount(array: self.defaultGood.dataArray) <= 0 {
+                self.sp_sendRequest()
+                self.currentPage = 1
+                self.sp_sendGoodRequest()
+            }
+        }
+    }
 }
 extension SPIndexVC{
     
@@ -421,13 +666,17 @@ extension SPIndexVC{
         var parm = [String:Any]()
         parm.updateValue("index", forKey: "tmpl")
         model.parm = parm
-        SPAppRequest.sp_getIndex(requestModel: model) { (code, indexModel, errorModel) in
+        SPAppRequest.sp_getIndex(requestModel: model) { [weak self](code, indexModel, errorModel) in
+            
             if code  == SP_Request_Code_Success {
-                self.indexModel = indexModel
-                self.tableHeaderView.indexModel = indexModel
-                self.tableView.sp_layoutHeaderView()
+                self?.indexModel = indexModel
+                self?.tableHeaderView.indexModel = indexModel
+//                self.tableView.sp_layoutHeaderView()
             }
-            sp_hideAnimation(view: self.view)
+            sp_hideAnimation(view: self?.view)
+            self?.sp_dealDataArray()
+            self?.sp_dealNoDataBtn()
+            
         }
     }
     fileprivate func sp_sendGoodRequest(){
@@ -436,8 +685,9 @@ extension SPIndexVC{
         parm.updateValue(10, forKey: "pagesize")
         parm.updateValue("index", forKey: "tmpl")
         self.requestModel.parm = parm
-        SPAppRequest.sp_getIndexGoods(requestModel: self.requestModel) { (code,auctionList,list, errorModel, total) in
-            self.sp_dealRequest(code: code,auctionList: auctionList, list: list, errorModel: errorModel, total: total)
+        SPAppRequest.sp_getIndexGoods(requestModel: self.requestModel) { [weak self](code,auctionList,list, errorModel, total) in
+            
+            self?.sp_dealRequest(code: code,auctionList: auctionList, list: list, errorModel: errorModel, total: total)
         }
     }
     fileprivate func sp_dealRequest(code:String,auctionList : [SPProductModel]?,list : [SPProductModel]? ,errorModel : SPRequestError?,total : Int){
@@ -466,27 +716,41 @@ extension SPIndexVC{
             }else{
                 self.defaultGood.dataArray = list
             }
-         
+            
         }
         sp_dealDataArray()
+        self.sp_dealNoDataBtn()
         sp_mainQueue {
-            self.tableView.sp_stopHeaderRefesh()
-            self.tableView.sp_stopFooterRefesh()
+            self.collectionView.sp_stopHeaderRefesh()
+            self.collectionView.sp_stopFooterRefesh()
         }
       
     }
-    fileprivate func sp_dealDataArray(){
-        self.dataArray?.removeAll()
+    fileprivate func sp_dealDataArray(all : Bool = true){
+        var list = [SPIndexGoods]()
+        
+        list.append(self.headerModel)
+        
         if sp_getArrayCount(array: self.auctionGood.dataArray) > 0 {
-            self.dataArray?.append(self.auctionGood)
+            list.append(self.auctionGood)
         }
         if sp_getArrayCount(array: self.defaultGood.dataArray) > 0 {
-            self.dataArray?.append(self.defaultGood)
+            list.append(self.defaultGood)
         }
         sp_mainQueue {
-            
-            self.tableView.reloadData()
-            self.isScroll = false
+            self.dataArray = list
+            if all {
+                  self.collectionView.reloadData()
+            }else {
+                if sp_getArrayCount(array: self.auctionGood.dataArray) > 0 {
+                    UIView.performWithoutAnimation {
+                        self.collectionView.reloadSections([1])
+                    }
+                }else{
+                    self.collectionView.reloadData()
+                }
+            }
+
             
         }
     }

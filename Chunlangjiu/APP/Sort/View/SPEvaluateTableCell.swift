@@ -55,20 +55,20 @@ import SnapKit
 class SPEvaluateView:  UIView{
     fileprivate lazy var phoneLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 16)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        label.font = sp_getFontSize(size: 12)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         return label
     }()
     fileprivate lazy var contentLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
+        label.font = sp_getFontSize(size: 11)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         label.numberOfLines = 0
         return label
     }()
     fileprivate lazy var timeLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 12)
+        label.font = sp_getFontSize(size: 10)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         return label
     }()

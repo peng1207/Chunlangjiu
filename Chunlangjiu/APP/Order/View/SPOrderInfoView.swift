@@ -16,7 +16,7 @@ class SPOrderInfoView:  UIView{
     fileprivate lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.numberOfLines = 0
         label.preferredMaxLayoutWidth = sp_getScreenWidth()
         return label

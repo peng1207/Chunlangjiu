@@ -9,15 +9,17 @@
 import Foundation
 class SPOrderBtnManager {
     
-    class func sp_dealCanceState(orderModel : SPOrderModel?) ->(Bool,String){
+    class func sp_dealCanceState(orderModel : SPOrderModel?,showDelete : Bool = true) ->(Bool,String,UIColor){
         var isHidden = false
         var canceText = ""
+        var color : UIColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         switch sp_getString(string: orderModel?.status) {
         case SP_WAIT_BUYER_PAY:
             if SPAPPManager.sp_isBusiness() {
                 isHidden = true
             }else{
                  canceText = "取消订单"
+                color = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
             }
            
         case SP_WAIT_SELLER_SEND_GOODS :
@@ -27,6 +29,7 @@ class SPOrderBtnManager {
                 }else{
                     if sp_getString(string: orderModel?.cancel_status) == SP_NO_APPLY_CANCEL || sp_getString(string: orderModel?.cancel_status) == SP_FAILS{
                         canceText = "无货"
+                        color = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
                     }else{
                         isHidden = true
                     }
@@ -45,10 +48,13 @@ class SPOrderBtnManager {
                 if let isRate = Bool(sp_getString(string: orderModel?.is_buyer_rate)),isRate == true {
                     isHidden = true
                 }else{
-                    canceText = "删除订单"
+                    if showDelete {
+                        canceText = "删除订单"
+                        color = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+                    }else {
+                        isHidden = true
+                    }
                 }
-                
-                
             }
         case SP_TRADE_CLOSED_BY_SYSTEM :
             isHidden = true
@@ -93,11 +99,12 @@ class SPOrderBtnManager {
         default:
            isHidden = true
         }
-        return (isHidden,canceText)
+        return (isHidden,canceText,color)
     }
-    class func sp_dealDoneState(orderModel : SPOrderModel?) ->(Bool,String){
+    class func sp_dealDoneState(orderModel : SPOrderModel?,showDelete : Bool = true) ->(Bool,String,UIColor){
         var isHidden = false
         var donetext = ""
+         var color : UIColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         switch sp_getString(string: orderModel?.status) {
         case SP_WAIT_BUYER_PAY:
             if SPAPPManager.sp_isBusiness() {
@@ -121,6 +128,7 @@ class SPOrderBtnManager {
             }else{
                 if sp_getString(string: orderModel?.cancel_status) == SP_NO_APPLY_CANCEL {
                     donetext = "取消订单"
+                    color = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
                 }else{
                     donetext = ""
                     isHidden = true
@@ -130,7 +138,13 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-                 donetext = "删除订单"
+                if showDelete {
+                    donetext = "删除订单"
+                    color = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+                }else{
+                    isHidden = true
+                }
+                
             }
         case SP_WAIT_BUYER_CONFIRM_GOODS :
             if SPAPPManager.sp_isBusiness() {
@@ -143,7 +157,13 @@ class SPOrderBtnManager {
                 isHidden = true
             }else{
                 if let isRate = Bool(sp_getString(string: orderModel?.is_buyer_rate)),isRate == true {
-                    donetext = "删除订单"
+                    if showDelete {
+                         donetext = "删除订单"
+                         color = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+                    }else{
+                        isHidden = true
+                    }
+                   
                 }else{
                      donetext = "评价"
                 }
@@ -188,16 +208,39 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-//                 donetext = "删除订单"
-                isHidden = true
-              
+                if sp_getString(string: orderModel?.type) == SP_AUCTION {
+                    if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_PAY{
+                        donetext = "付款"
+                        isHidden = false
+                    }else if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_CONFIRM_GOODS{
+                        donetext = "商品签单"
+                        isHidden = false
+                    }else{
+                        isHidden = true
+                    }
+                   
+                }else{
+                      isHidden = true
+                }
             }
            
         case SP_STATUS_3:
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-                 isHidden = true
+                if sp_getString(string: orderModel?.type) == SP_AUCTION {
+                    isHidden = true
+                }else{
+                    isHidden = true
+                    let itemModel = orderModel?.order?.first
+                    if let item = itemModel {
+                        if sp_getString(string: item.complaints_status) == SP_NOT_COMPLAINTS {
+                            isHidden = false
+                            donetext = "投诉"
+                        }
+                    }
+                }
+
             }
         case SP_WAIT_CHECK:
             if SPAPPManager.sp_isBusiness(){
@@ -208,13 +251,13 @@ class SPOrderBtnManager {
         default:
             isHidden = true
         }
-        return (isHidden,donetext)
+        return (isHidden,donetext,color)
     }
     /// 处理订单详情的 底部view的显示或隐藏
     ///
     /// - Parameter orderModel: 订单数据
     /// - Returns: 是否隐藏
-    class func sp_dealDetBtn(orderModel : SPOrderDetaileModel?)-> Bool {
+    class func sp_dealDetBtn(orderModel : SPOrderModel?,showDelete : Bool = true)-> Bool {
         var isHidden = false
         
         switch sp_getString(string: orderModel?.status) {
@@ -241,7 +284,9 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-                
+                if showDelete == false {
+                    isHidden = true
+                }
             }
         case SP_WAIT_BUYER_CONFIRM_GOODS :
             if SPAPPManager.sp_isBusiness() {
@@ -253,7 +298,11 @@ class SPOrderBtnManager {
             if SPAPPManager.sp_isBusiness(){
                 isHidden = true
             }else{
-               
+               if let isRate = Bool(sp_getString(string: orderModel?.is_buyer_rate)),isRate == true {
+                    if showDelete == false {
+                        isHidden = true
+                    }
+                }
             }
         case SP_WAIT_SELLER_AGREE:
             if SPAPPManager.sp_isBusiness(){
@@ -262,7 +311,16 @@ class SPOrderBtnManager {
                 isHidden = true
             }
         case SP_STATUS_0:
-            isHidden = false
+            if SPAPPManager.sp_isBusiness() {
+                 isHidden = false
+            }else{
+                if sp_getString(string: orderModel?.type) == SP_AUCTION{
+                     isHidden = false
+                }else{
+                    isHidden = true
+                }
+            }
+           
         case SP_STATUS_1 :
             if SPAPPManager.sp_isBusiness(){
                 if sp_getString(string: orderModel?.progress) == SP_PROGRESS_2 {
@@ -276,15 +334,46 @@ class SPOrderBtnManager {
                 }else{
                     if sp_getString(string: orderModel?.progress ) == SP_PROGRESS_2 {
                         isHidden = true
-                    }else{
+                    }else if  sp_getString(string: orderModel?.progress) == SP_PROGRESS_1{
                         isHidden = false
+                    }else{
+                        isHidden = true
                     }
                 }
             }
         case SP_STATUS_2:
-            isHidden = true
+            if SPAPPManager.sp_isBusiness(){
+                isHidden = true
+            }else{
+                if sp_getString(string: orderModel?.type) == SP_AUCTION {
+                    if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_PAY {
+                         isHidden = false
+                    }else if sp_getString(string: orderModel?.trade_ststus) == SP_WAIT_BUYER_CONFIRM_GOODS{
+                        isHidden = false
+                    }else{
+                        isHidden = true
+                    }
+                   
+                }else{
+                    isHidden = true
+                }
+            }
         case SP_STATUS_3:
-            isHidden = true
+            if SPAPPManager.sp_isBusiness() {
+                isHidden = true
+            }else{
+                if sp_getString(string: orderModel?.type) == SP_AUCTION{
+                    isHidden = true
+                }else{
+                      isHidden = true
+                    let itemModel = orderModel?.order?.first
+                    if let item = itemModel {
+                        if sp_getString(string: item.complaints_status) == SP_NOT_COMPLAINTS {
+                            isHidden = false
+                        }
+                    }
+                }
+            }
         case SP_WAIT_CHECK:
             isHidden = false
         default:
@@ -292,6 +381,31 @@ class SPOrderBtnManager {
         }
         return isHidden
     }
-    
+    /// 是否显示删除按钮
+    ///
+    /// - Parameter orderModel: 订单数据
+    /// - Returns: 是否显示
+    class func sp_showDelete(orderModel : SPOrderModel?) -> Bool {
+//        var show : Bool = false
+//        switch sp_getString(string: orderModel?.status) {
+//        case SP_TRADE_FINISHED:
+//            if SPAPPManager.sp_isBusiness(){
+//
+//            }else{
+//                  show = true
+//            }
+//        case  SP_TRADE_CLOSED_BY_SYSTEM :
+//            if SPAPPManager.sp_isBusiness(){
+//
+//            }else{
+//                show = true
+//            }
+//        default:
+//            show = false
+//        }
+//
+//        return show
+        return false
+    }
 }
 

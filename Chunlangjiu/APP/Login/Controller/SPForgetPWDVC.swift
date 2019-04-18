@@ -16,7 +16,7 @@ class SPForgetPWDVC : SPBaseVC{
         let textFiled = SPTextFiled()
         textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
         textFiled.sp_cornerRadius(cornerRadius: 22.5)
-        
+        textFiled.keyboardType = UIKeyboardType.numberPad 
         textFiled.placeholder = "请输入您的手机号码"
         let view = UIView()
         view.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)

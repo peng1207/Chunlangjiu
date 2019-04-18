@@ -88,11 +88,8 @@ class SPOrderPayView:  UIView{
             }else{
                 self.payTimeView.titleLabel.text = "支付时间："
             }
-            
-            
-            
             if sp_getString(string: detaileModel?.pay_name).count > 0 {
-                self.payTopConstraint.update(offset: 15)
+                self.payTopConstraint.update(offset: 13)
                 self.payView.isHidden = false
             }else{
                 self.payTopConstraint.update(offset: 0)
@@ -100,7 +97,7 @@ class SPOrderPayView:  UIView{
                 self.payView.contentLabel.text = ""
             }
             if sp_getString(string: detaileModel?.pay_time).count > 0 {
-                self.timeTopConstraint.update(offset: 8)
+                self.timeTopConstraint.update(offset: 26)
                 self.payTimeView.isHidden = false
             }else{
                 self.timeTopConstraint.update(offset: 0)
@@ -109,7 +106,7 @@ class SPOrderPayView:  UIView{
             }
             if sp_getString(string: self.detaileModel?.consign_time).count > 0 {
                 self.deliverTimeView.isHidden = false
-                self.deliverTopConstraint.update(offset: 8)
+                self.deliverTopConstraint.update(offset: 26)
                 self.deliverTimeView.contentLabel.text = sp_getString(string: detaileModel?.consign_time)
             }else{
                 self.deliverTopConstraint.update(offset: 0)
@@ -119,7 +116,7 @@ class SPOrderPayView:  UIView{
             
             if sp_getString(string: self.detaileModel?.end_time).count > 0 {
                 self.finishTimeView.contentLabel.text = sp_getString(string: detaileModel?.end_time)
-                self.finishTopConstraint.update(offset: 8)
+                self.finishTopConstraint.update(offset: 26)
                 self.finishTimeView.isHidden = false
             }else{
                 self.finishTimeView.contentLabel.text = ""

@@ -13,4 +13,6 @@ class SPUserModel : SPBaseModel {
     var user_id : String?
     /// 用户的身份
     var identity : String?
+    /// 是否设置邀请人
+    var referrer : String?
 }

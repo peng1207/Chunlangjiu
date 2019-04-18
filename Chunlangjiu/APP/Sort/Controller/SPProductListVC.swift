@@ -71,6 +71,7 @@ class SPProductListVC: SPBaseVC {
     fileprivate  var dataArray : Array<SPProductModel>?
     fileprivate let collectHCellID = "collectHCellID"
     fileprivate let collectVCellID = "collectVCellID"
+    fileprivate let collectHAuctionCellID = "collectHAuctionCellID"
     fileprivate var currentPage : Int = 1
     fileprivate var btnType : SPConditionBtnType = SPConditionBtnType.comprehensive
     fileprivate var topConstraint : Constraint!
@@ -100,15 +101,15 @@ class SPProductListVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "全部商品"
-//        self.view.backgroundColor = UIColor.white
         self.sp_setupUI()
         self.conditionView.selectBrand = self.brandModel 
         if self.canRequest {
+            sp_showAnimation(view: self.view, title: nil)
             self.sp_sendRequest()
 //            self.sp_sendRequestFilter()
         }
         self.sp_sendRequestSort()
-            sp_addNotification()
+          sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -142,6 +143,7 @@ class SPProductListVC: SPBaseVC {
         self.collectionView.backgroundColor = self.view.backgroundColor
         self.collectionView.register(SPProductListHCell.self, forCellWithReuseIdentifier: collectHCellID)
         self.collectionView.register(SPProductListVCell.self, forCellWithReuseIdentifier: collectVCellID)
+        self.collectionView.register(SPProductAuctionCollectCell.self, forCellWithReuseIdentifier: collectHAuctionCellID)
         self.collectionView.showsVerticalScrollIndicator = false
 
         self.collectionView.sp_headerRefesh { [weak self] in
@@ -228,37 +230,67 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if isH {
-            let cell : SPProductListHCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHCellID, for: indexPath) as! SPProductListHCell
+            var productModel : SPProductModel?
             if indexPath.row < sp_getArrayCount(array: self.dataArray) {
-                cell.productView.productModel = self.dataArray?[indexPath.row]
+                productModel = self.dataArray?[indexPath.row]
             }
-            cell.productView.addComplete = { [weak self](model) in
-                self?.sp_sendAddRequest(model: model)
+            
+            if let m = productModel, m.isAuction == true{
+                let cell : SPProductAuctionCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHAuctionCellID, for: indexPath) as! SPProductAuctionCollectCell
+                cell.contentView.backgroundColor = self.view.backgroundColor
+                cell.auctionView.productModel = m
+                cell.auctionView.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
+                }
+                return cell
+            }else{
+                let cell : SPProductListHCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHCellID, for: indexPath) as! SPProductListHCell
+                cell.contentView.backgroundColor = self.view.backgroundColor
+                   cell.productView.productModel = productModel
+                cell.productView.addComplete = { [weak self](model) in
+                    self?.sp_sendAddRequest(model: model)
+                }
+                cell.productView.shopBlock = { [weak self](model) in
+                    self?.sp_clickShop(model: model)
+                }
+                return cell
             }
-            return cell
         }else{
             let cell : SPProductListVCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectVCellID, for: indexPath) as! SPProductListVCell
+            cell.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
             if indexPath.row < sp_getArrayCount(array: self.dataArray) {
                 cell.productView.productModel = self.dataArray?[indexPath.row]
             }
             cell.productView.addComplete = { [weak self](model) in
                 self?.sp_sendAddRequest(model: model)
+            }
+            cell.productView.shopBlock = { [weak self](model) in
+                self?.sp_clickShop(model: model)
             }
             return cell
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if isH {
-            return  CGSize(width: collectionView.frame.size.width, height: (SP_PRODUCT_H_WIDTH * SP_PRODUCT_SCALE) + 17  )
+            var height : CGFloat = 150.00
+            if indexPath.row < sp_getArrayCount(array: self.dataArray){
+                let model = self.dataArray?[indexPath.row]
+                if let m = model ,m.isAuction == true{
+                    height = 175.00
+                }
+            }
+            return  CGSize(width: collectionView.frame.size.width, height: indexPath.row == 0 ? height + 10 : height + 5)
         }else{
-            let width =  NSInteger((collectionView.frame.size.width - 5) / 2.0)
-            return  CGSize(width: CGFloat(width), height:  (CGFloat(width - 38) * SP_PRODUCT_SCALE ) + 155 )
+            let width =  NSInteger((collectionView.frame.size.width - 25) / 2.0)
+            return  CGSize(width: CGFloat(width), height:  (CGFloat(width) * SP_PRODUCT_SCALE ) + 115 )
         }
     }
     // 返回cell 上下左右的间距
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        return  UIEdgeInsets(top: 0, left: 0, bottom: self.isH ? 0 : 5, right: 0)
+        if self.isH {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+        return  UIEdgeInsets(top: 5, left:10, bottom: 0, right: 10)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if self.isH {
@@ -271,7 +303,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
         if self.isH {
             return 0
         }else{
-            return 5
+            return 0
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -352,6 +384,17 @@ extension SPProductListVC {
         }
         self.isHiddenNav = false
     }
+    fileprivate func sp_clickShop(model : SPProductModel?){
+        guard let product = model else {
+            return
+        }
+        let shopModel = SPShopModel()
+        shopModel.shop_id = product.shop_id
+        shopModel.shop_name = product.shop_name
+        let shopVC = SPShopHomeVC()
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
+    }
    
 }
 // MARK: - 请求
@@ -427,6 +470,7 @@ extension SPProductListVC {
     ///   - errorModel: 错误model
     ///   - totalPage: 总页数
     fileprivate func sp_dealRequest(errorCode:String,list:[Any]?,errorModel:SPRequestError?,totalPage:Int){
+        sp_hideAnimation(view: self.view)
         if errorCode == SP_Request_Code_Success {
             if self.currentPage == 1 {
                 self.dataArray?.removeAll()
@@ -543,6 +587,7 @@ extension SPProductListVC{
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_auctionend(obj:)), name: NSNotification.Name(SP_AUCTIONEND_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
     }
     @objc fileprivate func sp_editPrice(){
         self.isEditPrice = true
@@ -568,11 +613,26 @@ extension SPProductListVC{
                 if isExist, index < sp_getArrayCount(array: self.dataArray){
                     self.dataArray?.remove(at: index)
                 }
-                
                 self.collectionView.reloadData()
                 sp_dealNoData()
             }
             
+        }
+        
+    }
+    @objc fileprivate func sp_timeRun(notification:Notification){
+        var second = 1
+        if notification.object is [String : Any] {
+            let dic : [String : Any] = notification.object as! [String : Any]
+            second = dic["timer"] as! Int
+        }
+        if sp_getArrayCount(array: self.dataArray) > 0  {
+            for model in self.dataArray! {
+                if model.isAuction {
+                     model.sp_set(second: second)
+                }
+            }
+            self.collectionView.reloadData()
         }
         
     }

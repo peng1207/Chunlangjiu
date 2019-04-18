@@ -42,21 +42,25 @@ enum SPMineType : Int {
     case auction_all      = 30          // 竞拍订单 全部订单
     case cance            = 31          // 取消订单
     case valuation        = 32          // 我的估值
+    case customServer     = 33          // 我的客服
+    case fans             = 34          // 粉丝推荐
+    case set              = 35          // 设置
+    case shop             = 36          // 店铺
 }
 
 class SPMineData {
     
     class func sp_getMineAllData() -> Array<SPMineSectionModel>{
         var array : Array<SPMineSectionModel> = Array()
-        array.append(sp_getInfo())
+//        array.append(sp_getInfo())
         array.append(sp_getOrderManager())
        
         if SPAPPManager.sp_isBusiness() {
             array.append(sp_getProductManager())
         }else{
-            if SP_ISSHOW_AUCTION{
-                 array.append(sp_getAuctionOrder())
-            }
+//            if SP_ISSHOW_AUCTION{
+//                 array.append(sp_getAuctionOrder())
+//            }
             
         }
         array.append(sp_getMineManager())
@@ -89,11 +93,15 @@ class SPMineData {
 //        if sp_getString(string: SPAPPManager.instance().userModel?.identity) != SP_IS_ENTERPRISE {
 //              array.append(self.sp_get_evaluatedModel())
 //        }
-        array.append(self.sp_get_after_saleModel())
+       
         if SPAPPManager.sp_isBusiness() {
             array.append(sp_get_cance())
+             array.append(self.sp_get_after_saleModel())
+            model.rowCount = 5
         }else{
-            array.append(self.sp_get_all_order())
+            array.append(self.sp_get_after_saleModel())
+            model.rowCount = 4
+//            array.append(self.sp_get_all_order())
         }
         
         model.dataArray = array
@@ -119,19 +127,35 @@ class SPMineData {
         var array : Array<SPMineModel> = Array()
         array.append(self.sp_get_funds())
         
+//        if SPAPPManager.sp_isBusiness() {
+//             array.append(self.sp_get_share())
+//            array.append(self.sp_get_member())
+//            array.append(self.sp_get_address())
+//            array.append(self.sp_get_bank_card())
+//        }else{
+//             array.append(self.sp_get_collect())
+//             array.append(sp_get_valuation())
+//            array.append(sp_get_customServer())
+//            array.append(sp_get_fans())
+//            array.append(sp_get_set())
+//            model.rowCount = 3
+//        }
         if SPAPPManager.sp_isBusiness() {
-             array.append(self.sp_get_share())
-            array.append(self.sp_get_member())
-            array.append(self.sp_get_address())
-            array.append(self.sp_get_bank_card())
+            array.append(sp_get_shop())
+          
         }else{
-             array.append(self.sp_get_collect())
-            array.append(sp_get_share())
-            array.append(sp_get_member())
-            array.append(sp_get_address())
-            array.append(sp_get_bank_card())
+//            array.append(self.sp_get_collect())
+//            array.append(sp_get_valuation())
+//            array.append(sp_get_customServer())
+//            array.append(sp_get_fans())
+//            array.append(sp_get_set())
         }
         array.append(sp_get_valuation())
+        array.append(self.sp_get_collect())
+        array.append(sp_get_fans())
+        array.append(sp_get_customServer())
+//
+        model.rowCount = 3
         model.dataArray = array
         return model
     }
@@ -141,12 +165,17 @@ class SPMineData {
         model.type = SPMineType.productManager
         var array : Array<SPMineModel> = Array()
         array.append(self.sp_get_addProduct())
+        array.append(self.sp_get_reviewProduct())
+        array.append(self.sp_get_warehouseProduct())
         array.append(self.sp_get_saleProductt())
         if SP_ISSHOW_AUCTION {
             array.append(self.sp_get_auctionProduct())
+            model.rowCount = 5
+        }else{
+            model.rowCount = 4
         }
-        array.append(self.sp_get_warehouseProduct())
-        array.append(self.sp_get_reviewProduct())
+        
+        
         model.dataArray = array
         return model
     }
@@ -161,7 +190,7 @@ class SPMineData {
         let model = SPMineModel()
         model.title = "待发货"
         model.mintType = SPMineType.deliver
-        model.image = UIImage(named: "mine_pend_receipt")
+        model.image = UIImage(named: "mine_pend_deliver")
         return model
     }
     fileprivate class func sp_get_pend_receiptModel() -> SPMineModel{
@@ -278,7 +307,7 @@ class SPMineData {
     }
     fileprivate class func sp_get_addProduct() -> SPMineModel {
         let model  = SPMineModel()
-        model.title = "添加商品"
+        model.title = "上传商品"
         model.image = UIImage(named: "mine_addProduct")
         model.mintType = SPMineType.addProduct
         return model
@@ -314,7 +343,7 @@ class SPMineData {
     fileprivate class func sp_get_cance()-> SPMineModel{
         let model  = SPMineModel()
         model.title = "取消订单"
-        model.image = UIImage(named: "mine_all_order")
+        model.image = UIImage(named: "mine_cance")
         model.mintType = SPMineType.cance
         return model
     }
@@ -325,29 +354,96 @@ class SPMineData {
         model.mintType = .valuation
         return model
     }
+    fileprivate class func sp_get_shop()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "我的店铺"
+        model.image = UIImage(named: "mine_shop")
+        model.mintType = .shop
+        return model
+    }
+    fileprivate class func sp_get_customServer()->SPMineModel {
+        let model = SPMineModel()
+        model.title = "我的客服"
+        model.image = UIImage(named: "mine_customserver")
+        model.mintType = .customServer
+        return model
+    }
+    fileprivate class func sp_get_fans()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "粉丝推荐"
+        model.image = UIImage(named: "mine_fans")
+        model.mintType = .fans
+        return model
+    }
+    fileprivate class func sp_get_set()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "设置"
+        model.image = UIImage(named: "mine_setting")
+        model.mintType = .set
+        return model
+    }
     class func sp_getItemCount(mineModel:SPMineModel?,countModel:SPMineCountModel?) -> String{
         var count = ""
         if let mine = mineModel ,let cModel = countModel {
-            switch mine.mintType {
-            case .pend_pay? :
-                count = sp_getString(string: cModel.wait_pay_num)
-            case .pend_receipt? :
-                count = sp_getString(string: cModel.wait_confirm_goods_num)
-            case .evaluated? :
-                count = sp_getString(string: cModel.notrate_num)
-            case .deliver? :
-                count = sp_getString(string: cModel.wait_send_goods_num)
-            case .cance? :
-                count = sp_getString(string: cModel.canceled_num)
-            case .after_sale? :
-                count = sp_getString(string: cModel.after_sale_num)
-            case .none:
-                count = ""
-            case .some(_):
-                  count = ""
-            }
+            count = self.sp_getCount(to: mine.mintType, countModel: cModel)
+//            switch mine.mintType {
+//            case .pend_pay? :
+//                count = sp_getString(string: cModel.wait_pay_num)
+//            case .pend_receipt? :
+//                count = sp_getString(string: cModel.wait_confirm_goods_num)
+//            case .evaluated? :
+//                count = sp_getString(string: cModel.notrate_num)
+//            case .deliver? :
+//                count = sp_getString(string: cModel.wait_send_goods_num)
+//            case .cance? :
+//                count = sp_getString(string: cModel.canceled_num)
+//            case .after_sale? :
+//                count = sp_getString(string: cModel.after_sale_num)
+//            case .warehouseProduct? :
+//                count = sp_getString(string: cModel.instock_num)
+//            case .reviewProduct? :
+//                count = sp_getString(string: cModel.pending_num)
+//            case .none:
+//                count = ""
+//            case .some(_):
+//                  count = ""
+//            }
         }
         
+        return count
+    }
+    class func sp_getCount(to mintType : SPMineType, countModel : SPMineCountModel?,isShowZero : Bool = false )->String{
+       var count = ""
+        if let cModel = countModel {
+            switch mintType {
+            case .pend_pay :
+                count = sp_getString(string: cModel.wait_pay_num)
+            case .pend_receipt:
+                count = sp_getString(string: cModel.wait_confirm_goods_num)
+            case .evaluated:
+                count = sp_getString(string: cModel.notrate_num)
+            case .deliver:
+                count = sp_getString(string: cModel.wait_send_goods_num)
+            case .cance:
+                count = sp_getString(string: cModel.canceled_num)
+            case .after_sale:
+                count = sp_getString(string: cModel.after_sale_num)
+            case .warehouseProduct:
+                count = sp_getString(string: cModel.instock_num)
+            case .reviewProduct:
+                count = sp_getString(string: cModel.pending_num)
+            case .saleProduct:
+                count = sp_getString(string: cModel.onsale_num)
+            case .auctionProduct:
+                count = sp_getString(string: cModel.auction_num)
+            default:
+                count = ""
+            }
+            
+        }
+        if isShowZero , count.count == 0 {
+            count = "0"
+        }
         return count
     }
     

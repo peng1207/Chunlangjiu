@@ -17,5 +17,21 @@ class SPMemberModel : SPBaseModel {
     var grade_name : String?
     var head_portrait : String?
     var shop_name : String?
-    var company_name : String? 
+    /// 公司名称
+    var company_name : String?
+    var shop_id : Int?
+    /// 店铺简介
+    var bulletin : String?
+    /// 经营地址
+    var company_area : String?
+    /// 法人
+    var representative : String?
+    /// 成立时间
+    var establish_date : String?
+    /// 身份证
+    var idcard : String?
+    /// 店铺d地址
+    var area  : String?
+    /// 联系方式
+    var phone  : String?
 }

@@ -61,7 +61,8 @@ class SPAuctionVC: SPBaseVC {
         self.navigationItem.title = "竞拍专区"
         self.sp_setupUI()
         self.sp_sendRequest()
-        self.sp_sendRequestSort()
+        self.conditionView.sp_sendReqest()
+//        self.sp_sendRequestSort()
         //        self.sp_sendRequestFilter()
         sp_addNotificaton()
     }
@@ -89,10 +90,15 @@ class SPAuctionVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
+        self.tableView.estimatedRowHeight = 0
         self.tableView.estimatedSectionHeaderHeight = 0
         self.tableView.estimatedSectionFooterHeight = 0
-        self.tableView.estimatedRowHeight = 0
-        self.tableView.rowHeight = SP_AUCTION_PRODUCT_WIDTH * SP_PRODUCT_SCALE + 26
+        self.tableView.backgroundColor = self.view.backgroundColor
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         self.view.addSubview(self.tableView)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.searchBtn)
         self.view.addSubview(self.topBtn)
@@ -100,10 +106,12 @@ class SPAuctionVC: SPBaseVC {
             self?.currentPage = 1
             self?.sp_sendRequest()
         }
-//        self.tableView.sp_footerRefresh {
-//            self.currentPage = self.currentPage + 1
-//            self.sp_sendRequest()
-//        }
+        self.tableView.sp_footerRefresh { [weak self] in
+            if let page = self?.currentPage {
+                self?.currentPage = page + 1
+                self?.sp_sendRequest()
+            }
+        }
         self.sp_addConstraint()
     }
     /// 处理没有数据的展示
@@ -156,10 +164,14 @@ extension SPAuctionVC : UITableViewDelegate ,UITableViewDataSource {
         var cell : SPAuctionTableCell? = tableView.dequeueReusableCell(withIdentifier: auctionCellID) as? SPAuctionTableCell
         if cell == nil {
             cell = SPAuctionTableCell(style: UITableViewCellStyle.default, reuseIdentifier: auctionCellID)
+            cell?.contentView.backgroundColor = self.view.backgroundColor
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray){
             let productModel = self.dataArray?[indexPath.row]
             cell?.auctionView.productModel = productModel
+            cell?.auctionView.productView.shopBlock = { [weak self](model) in
+                self?.sp_clickShop(model: model)
+            }
         }
         return cell!
     }
@@ -169,6 +181,12 @@ extension SPAuctionVC : UITableViewDelegate ,UITableViewDataSource {
             detaileVC.productModel = self.dataArray?[indexPath.row]
             self.navigationController?.pushViewController(detaileVC, animated: true)
         }
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 185
+        }
+        return 180
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.isScroll = true
@@ -224,7 +242,17 @@ extension SPAuctionVC {
         self.currentPage = 1
         self.sp_sendRequest()
     }
-  
+    fileprivate func sp_clickShop(model : SPProductModel?){
+        guard let product = model else {
+            return
+        }
+        let shopModel = SPShopModel()
+        shopModel.shop_id = product.shop_id
+        shopModel.shop_name = product.shop_name 
+        let shopVC = SPShopHomeVC()
+        shopVC.shopModel = shopModel
+        self.navigationController?.pushViewController(shopVC, animated: true)
+    }
 }
 extension SPAuctionVC{
     fileprivate func sp_sendRequest(){
@@ -326,6 +354,7 @@ extension SPAuctionVC{
         NotificationCenter.default.addObserver(self, selector: #selector(sp_timeRun(notification:)), name: NSNotification.Name(SP_TIMERUN_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
     }
     @objc fileprivate func sp_timeRun(notification:Notification){
         var second = 1
@@ -346,7 +375,16 @@ extension SPAuctionVC{
                 self.dataArray = list
                 sp_mainQueue {
                     if self.isScroll == false {
-                         self.tableView.reloadData()
+                        UIView.performWithoutAnimation {
+                            if sp_getArrayCount(array: self.dataArray) > 0 {
+                                 self.tableView.reloadSections([0], with: UITableViewRowAnimation.none)
+                            }else{
+                                 self.tableView.reloadData()
+                            }
+                            
+                        }
+                       
+                       
                         self.isScroll = false
                     }
                 }
@@ -357,4 +395,12 @@ extension SPAuctionVC{
         self.isEditPrice = true
     }
     
+    @objc fileprivate func sp_netChange(){
+        if SPNetWorkManager.sp_notReachable() == false {
+            // 有网络
+            if sp_getArrayCount(array: self.dataArray) <= 0 {
+                sp_sendRequest()
+            }
+        }
+    }
 }

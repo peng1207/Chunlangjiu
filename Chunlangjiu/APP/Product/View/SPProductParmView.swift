@@ -13,7 +13,7 @@ class SPProductParmView:  UIView{
     
     lazy var parmTitleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 16)
+        label.font = sp_getFontSize(size: 15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.text = "商品参数"
         return label
@@ -26,7 +26,7 @@ class SPProductParmView:  UIView{
     lazy var capacityView : SPProductParmContentView = {
         let view = SPProductParmContentView()
         view.titleLabel.text = "容量:"
-        view.contentLabel.text = "ML"
+        view.contentLabel.text = ""
         view.textFiled.keyboardType = UIKeyboardType.decimalPad
         return view
     }()
@@ -69,7 +69,7 @@ class SPProductParmView:  UIView{
     }()
     lazy var storageView : SPProductParmContentView = {
         let view = SPProductParmContentView()
-        view.titleLabel.text = "储存条件:"
+        view.titleLabel.text = "储存:"
         return view
     }()
     lazy var enclosureView : SPProductParmContentView = {
@@ -80,7 +80,7 @@ class SPProductParmView:  UIView{
     }()
     lazy var sourceView : SPProductParmContentView = {
         let view = SPProductParmContentView()
-        view.titleLabel.text = "商品来源:"
+        view.titleLabel.text = "来源:"
         view.textFiled.placeholder = "珍藏、朋友赠送、礼品、自购、其他等"
         return view
     }()
@@ -112,79 +112,65 @@ class SPProductParmView:  UIView{
     fileprivate func sp_addConstraint(){
         self.parmTitleLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.parmTitleLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(10)
-            maker.top.equalTo(self.snp.top).offset(14)
-            maker.width.greaterThanOrEqualTo(0)
-            maker.height.greaterThanOrEqualTo(0)
+            maker.left.equalTo(self).offset(16)
+            maker.top.equalTo(self.snp.top).offset(0)
+            maker.height.equalTo(40)
+            maker.right.equalTo(self.snp.right).offset(-16)
         }
-//        self.typeView.snp.makeConstraints { (maker) in
-//            maker.left.equalTo(self.parmTitleLabel.snp.right).offset(16)
-//            maker.top.equalTo(self.snp.top).offset(5)
-//            maker.height.equalTo(35)
-//            maker.width.equalTo(self.capacityView.snp.width).offset(0)
-//        }
         self.capacityView.snp.makeConstraints { (maker) in
-//            maker.left.equalTo(self.typeView.snp.right).offset(10)
-            maker.left.equalTo(self.parmTitleLabel.snp.right).offset(16)
-            maker.top.equalTo(self.snp.top).offset(5)
-            maker.height.equalTo(35)
-            maker.width.equalTo(self.wineryView.snp.width).offset(0)
+            maker.left.equalTo(self.parmTitleLabel.snp.left).offset(0)
+            maker.top.equalTo(self.parmTitleLabel.snp.bottom).offset(0)
+            maker.height.equalTo(40)
+            maker.right.equalTo(self.parmTitleLabel.snp.right).offset(0)
         }
         self.wineryView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.capacityView.snp.right).offset(10)
-//            maker.right.equalTo(self.typeView.snp.right).offset(0)
-            maker.height.top.equalTo(self.capacityView).offset(0)
-            maker.right.equalTo(self.snp.right).offset(-11)
-            maker.width.equalTo(self.capacityView.snp.width).offset(0)
-//            maker.top.equalTo(self.typeView.snp.bottom).offset(0)
-//            maker.height.equalTo(self.typeView.snp.height).offset(0)
+            maker.left.equalTo(self.capacityView.snp.left).offset(0)
+            maker.top.equalTo(self.capacityView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
         }
         self.seriesView.snp.makeConstraints { (maker) in
-//            maker.left.equalTo(self.capacityView.snp.left).offset(0)
-//            maker.right.equalTo(self.capacityView.snp.right).offset(0)
-            maker.left.right.equalTo(self.capacityView).offset(0)
-            maker.top.equalTo(self.capacityView.snp.bottom).offset(0)
-            maker.height.equalTo(self.wineryView.snp.height).offset(0)
+            maker.left.equalTo(self.capacityView.snp.left).offset(0)
+            maker.top.equalTo(self.wineryView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
         }
         self.packView.snp.makeConstraints { (maker) in
-//            maker.left.equalTo(self.wineryView.snp.left).offset(0)
-//            maker.right.equalTo(self.wineryView.snp.right).offset(0)
-            maker.left.right.equalTo(self.wineryView).offset(0)
-//            maker.top.equalTo(self.seriesView.snp.bottom).offset(0)
-            maker.top.equalTo(self.seriesView.snp.top).offset(0)
-            maker.height.equalTo(self.wineryView.snp.height).offset(0)
+            maker.left.equalTo(self.capacityView.snp.left).offset(0)
+            maker.top.equalTo(self.yearView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
            
         }
         self.yearView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.capacityView.snp.left).offset(0)
-            maker.right.equalTo(self.wineryView.snp.right).offset(0)
-            maker.height.equalTo(self.packView.snp.height).offset(0)
-            maker.top.equalTo(self.packView.snp.bottom).offset(0)
+            maker.top.equalTo(self.seriesView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
         }
         self.materialView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.yearView).offset(0)
-            maker.height.equalTo(self.yearView.snp.height).offset(0)
-            maker.top.equalTo(self.yearView.snp.bottom).offset(0)
+            maker.left.equalTo(self.capacityView.snp.left).offset(0)
+            maker.top.equalTo(self.packView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
         }
         self.storageView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.materialView).offset(0)
-            maker.height.equalTo(self.materialView.snp.height).offset(0)
-            maker.top.equalTo(self.materialView.snp.bottom).offset(0)
+            maker.left.equalTo(self.capacityView.snp.left).offset(0)
+            maker.top.equalTo(self.enclosureView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
         }
         self.enclosureView.snp.makeConstraints { (maker) in
-//            maker.left.right.equalTo(self.storageView).offset(0)
-            maker.left.equalTo(self).offset(90)
-            maker.right.equalTo(self).offset(-11)
-            maker.height.equalTo(self.storageView.snp.height).offset(0)
-            maker.top.equalTo(self.storageView.snp.bottom).offset(0)
-//            maker.bottom.equalTo(self.snp.bottom).offset(0)
+            maker.left.equalTo(self.capacityView.snp.left).offset(0)
+            maker.top.equalTo(self.materialView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
         }
         self.sourceView.snp.makeConstraints { (maker) in
-//            maker.left.right.equalTo(self.storageView).offset(0)
-            maker.left.equalTo(self).offset(90)
-            maker.right.equalTo(self).offset(-11)
-            maker.height.equalTo(self.storageView.snp.height).offset(0)
-            maker.top.equalTo(self.enclosureView.snp.bottom).offset(0)
+            maker.left.equalTo(self.capacityView.snp.left).offset(0)
+            maker.top.equalTo(self.storageView.snp.bottom).offset(0)
+            maker.height.equalTo(self.capacityView).offset(0)
+            maker.right.equalTo(self.capacityView.snp.right).offset(0)
             maker.bottom.equalTo(self.snp.bottom).offset(0)
         }
 //        self.degreesView.snp.makeConstraints { (maker) in
@@ -211,7 +197,7 @@ class SPProductParmContentView:  UIView{
     lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.font = sp_getFontSize(size: 14)
+        label.font = sp_getFontSize(size: 15)
         return label
     }()
     lazy var textFiled : SPTextFiled = {
@@ -272,7 +258,7 @@ class SPProductParmContentView:  UIView{
         }
         self.lineView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.bottom.equalTo(self).offset(0)
+            maker.top.equalTo(self).offset(0)
             maker.height.equalTo(sp_lineHeight)
         }
     }

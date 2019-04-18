@@ -32,7 +32,8 @@ enum SP_ShareContentType : Int {
 typealias SPShareComplete = (_ completeModel : SPShareCompleteModel?,_ error : Error?) -> Void
 ///  分享取消
 typealias SPShareDismissComplete = () -> Void
-
+/// 第三方登录回调
+typealias SPThridLoginComplete = (_ loginModel : SPThridLoginCompleteModel?,_ error :Error?)->Void
 class SPShareManager {
     /// 注册第三方的
     ///
@@ -84,14 +85,20 @@ class SPShareManager {
             messageObject.text = shareDataModel?.descr
         }
         UMSocialManager.default().share(to: platformType, messageObject: messageObject, currentViewController: shareDataModel?.currentViewController) { (result, error ) in
-            let errors : NSError = error! as NSError
-            if errors.code == UMSocialPlatformErrorType.shareFailed.rawValue {
-                shareDataModel?.thumbImage = shareDataModel?.placeholderImage
-                self.sp_share(platformType: platformType, shareDataModel: shareDataModel, complete: complete)
+            let errors : NSError? = error as NSError?
+            if let e = errors {
+                if e.code == UMSocialPlatformErrorType.shareFailed.rawValue {
+                    shareDataModel?.thumbImage = shareDataModel?.placeholderImage
+                    self.sp_share(platformType: platformType, shareDataModel: shareDataModel, complete: complete)
+                }else{
+                    sp_dealShareComplete(result: result, error: e, complete: complete)
+                }
             }else{
-                
+                sp_dealShareComplete(result: result, error: error, complete: complete)
             }
+          
         }
+    
     }
     fileprivate class func sp_dealShareComplete(result:Any?,error:Error?,complete:SPShareComplete?){
         if let e = error {
@@ -190,6 +197,43 @@ class SPShareManager {
         }
         return shareObject!
     }
+    class func sp_thridLogin(viewController : UIViewController,shareType : SP_SharePlatformType,complete : SPThridLoginComplete?){
+        UMSocialManager.default()?.auth(with: UMSocialPlatformType.wechatSession, currentViewController: viewController, completion: { (result, error) in
+            sp_log(message: error);
+            if error != nil {
+                if let block = complete {
+                    block(nil,error)
+                }
+            }else {
+                if let model : UMSocialAuthResponse = result as? UMSocialAuthResponse {
+                  
+                    let loginModel = SPThridLoginCompleteModel()
+                    loginModel.uid = model.uid
+                    loginModel.openid = model.openid
+                    loginModel.refreshToken = model.refreshToken
+                    loginModel.expiration = model.expiration
+                    loginModel.accessToken = model.accessToken
+                    loginModel.unionId = model.unionId
+                    loginModel.usid = model.usid
+                    loginModel.originalResponse = model.originalResponse
+                    if let block = complete {
+                        block(loginModel,error)
+                    }
+                }
+            }
+        })
+    }
+    /// 第三方回调
+    ///
+    /// - Parameter url: 第三方返回的链接
+    /// - Returns: 是否成功
+    class func sp_handleOpen(url:URL)->Bool{
+        if let isSuccess = UMSocialManager.default()?.handleOpen(url) {
+            return isSuccess
+        }
+        return false 
+    }
+    
 }
 
 
@@ -215,4 +259,16 @@ class SPShareCompleteModel : NSObject {
     var name : String?
     var iconUrl : String?
     var gender : String?
+}
+
+class SPThridLoginCompleteModel : NSObject {
+    var uid : String?
+    var openid : String?
+    var refreshToken : String?
+    var expiration : Date?
+    var accessToken : String?
+    var unionId : String?
+    var usid : String?
+    var originalResponse : Any?
+    var platformType : SP_SharePlatformType?
 }

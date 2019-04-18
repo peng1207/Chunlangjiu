@@ -25,6 +25,9 @@ class SPKeyboardTopView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickDoneAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate lazy var lineView : UIView = {
+        return sp_getLineView()
+    }()
     var canceBlock : (()->Void)?
     var doneBlock : (()->Void)?
     
@@ -58,10 +61,15 @@ class SPKeyboardTopView:  UIView{
     fileprivate func sp_setupUI(){
         self.addSubview(self.canceBtn)
         self.addSubview(self.doneBtn)
+        self.addSubview(self.lineView)
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
+        self.lineView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self).offset(0)
+            maker.height.equalTo(sp_lineHeight)
+        }
         self.canceBtn.snp.makeConstraints { (maker) in
             maker.left.top.bottom.equalTo(self).offset(0)
             maker.width.equalTo(120)

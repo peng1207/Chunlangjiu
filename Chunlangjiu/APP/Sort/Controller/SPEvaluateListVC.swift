@@ -36,11 +36,14 @@ class SPEvaluateListVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = "评价列表"
         self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.backgroundColor = self.view.backgroundColor
         self.tableView.separatorStyle = .none
+        self.tableView.estimatedRowHeight = 67
+        self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.sp_headerRefesh { [weak self]()in
             self?.currentPage = 1
             self?.sp_sendRequest()

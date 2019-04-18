@@ -17,6 +17,7 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     fileprivate lazy var shopView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
+        view.sp_cornerRadius(cornerRadius: 5)
         return view
     }()
     fileprivate lazy var shopLogoImageView : UIImageView = {
@@ -33,9 +34,22 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     
     lazy var orderStateLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.font = sp_getFontSize(size: 13)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         return label
+    }()
+    lazy var deleteBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_delete_gray"), for: UIControlState.normal)
+        btn.isHidden = true
+        btn.addTarget(self, action: #selector(sp_clickDelete), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
+    fileprivate lazy var auctionImgView : UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "public_unwinningbid")
+        view.isHidden = true 
+        return view
     }()
     fileprivate var lineView : UIView = {
         return sp_getLineView()
@@ -46,7 +60,10 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
         }
     }
     var clickBlock : SPOrderHeaderComplete?
-    
+    var clickDeleteBlock : SPOrderHeaderComplete?
+    fileprivate var leftConstraint : Constraint!
+    fileprivate var rightConstraint : Constraint!
+    fileprivate var deleteRight : Constraint!
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickAction))
@@ -56,11 +73,39 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    func sp_leftRightZero(){
+        self.leftConstraint.update(offset: 0)
+        self.rightConstraint.update(offset: 0)
+    }
     /// 赋值
     fileprivate func sp_setupData(){
         self.shopLogoImageView.sp_cache(string: sp_getString(string: self.orderModel?.shop_logo), plImage:  sp_getLogoImg())
-        self.shopNameLabel.text = sp_getString(string: orderModel?.shopname)
+        self.shopNameLabel.text = "\(sp_getString(string: orderModel?.shopname)) >"
         self.orderStateLabel.text = sp_getString(string: orderModel?.status_desc)
+        self.orderStateLabel.isHidden = false
+        if  sp_getString(string: orderModel?.type) == SP_AUCTION {
+            if sp_getString(string: orderModel?.status) == SP_AUCTION_2 {
+                 self.auctionImgView.isHidden = false
+                self.orderStateLabel.isHidden = true
+                self.auctionImgView.image = UIImage(named: "public_winningbid")
+            }else if sp_getString(string: orderModel?.status) == SP_AUCTION_3{
+                 self.auctionImgView.isHidden = false
+                self.auctionImgView.image = UIImage(named: "public_unwinningbid")
+                 self.orderStateLabel.isHidden = true
+            }else{
+                 self.auctionImgView.isHidden = true
+            }
+            
+        }else{
+            self.auctionImgView.isHidden = true
+        }
+    }
+    /// 处理删除按钮
+    func sp_dealDelete(){
+        let isShow = SPOrderBtnManager.sp_showDelete(orderModel: orderModel)
+        self.deleteBtn.isHidden = isShow ? false : true
+        self.deleteRight.update(offset: isShow ? -5 : 18)
+        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -68,15 +113,18 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
         self.shopView.addSubview(self.shopLogoImageView)
         self.shopView.addSubview(self.shopNameLabel)
         self.shopView.addSubview(self.orderStateLabel)
+        self.shopView.addSubview(self.deleteBtn)
         self.shopView.addSubview(self.lineView)
+        self.contentView.addSubview(self.auctionImgView)
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.shopView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.contentView).offset(0)
+           self.leftConstraint = maker.left.equalTo(self.contentView).offset(10).constraint
+           self.rightConstraint = maker.right.equalTo(self.contentView).offset(-10).constraint
             maker.bottom.equalTo(self.contentView).offset(0)
-            maker.height.equalTo(49)
+            maker.height.equalTo(50)
         }
         self.shopLogoImageView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.shopView).offset(10)
@@ -90,14 +138,26 @@ class SPOrderTableHeaderView:  UITableViewHeaderFooterView{
         }
         self.orderStateLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.orderStateLabel.snp.makeConstraints { (maker) in
-            maker.right.equalTo(self.shopView).offset(-8)
+            maker.right.equalTo(self.deleteBtn.snp.left).offset(-8)
             maker.top.bottom.equalTo(self.shopView).offset(0)
             maker.width.greaterThanOrEqualTo(0)
+        }
+        self.deleteBtn.snp.makeConstraints { (maker) in
+            self.deleteRight = maker.right.equalTo(self.shopView).offset(18).constraint
+            maker.width.equalTo(18)
+            maker.height.equalTo(17)
+            maker.centerY.equalTo(self.shopView).offset(0)
         }
         self.lineView.snp.makeConstraints { (maker) in
             
             maker.left.right.bottom.equalTo(self.shopView).offset(0)
             maker.height.equalTo(sp_lineHeight)
+        }
+        self.auctionImgView.snp.makeConstraints { (maker) in
+            maker.width.equalTo(69)
+            maker.height.equalTo(51)
+            maker.right.equalTo(self.contentView).offset(-21)
+            maker.top.equalTo(self.shopView.snp.top).offset(20)
         }
     }
     deinit {
@@ -111,5 +171,10 @@ extension SPOrderTableHeaderView {
         }
         block(self.orderModel)
     }
-    
+    @objc fileprivate func sp_clickDelete(){
+        guard let block = self.clickDeleteBlock else {
+            return
+        }
+        block(self.orderModel)
+    }
 }

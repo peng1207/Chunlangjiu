@@ -11,6 +11,7 @@ import Foundation
 
 /// 域名
 let SP_MAIN_DOMAIN_NAME  =   "http://mall.chunlangjiu.com"
+//let SP_MAIN_DOMAIN_NAME  =   "http://test.chunlangjiu.com"
 /// 保存域名对应的key
 let SP_MAIN_DOMAIN_NAME_KEY = "SP_MAIN_DOMAIN_NAME_KEY"
 
@@ -51,6 +52,8 @@ let SP_GET_REGION_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_
 let SP_GET_MEMBER_COUNT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.index"
 /// 获取会员信息
 let SP_GET_MEMBER_INFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.basics.get"
+/// 更新用户资料
+let SP_GET_UPDATEINFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.basics.update"
 /// 酒庄分类
 let SP_GET_WINERSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=category.chateauCat"
 /// 酒庄列表
@@ -95,7 +98,8 @@ let SP_GET_ORDERDETAILE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(ke
 let SP_GET_CANCEORDER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=trade.cancel.create"
 /// 确认收货
 let SP_GET_ORDERCONFIRM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=trade.confirm"
-/// 获取取消原因列表
+/// 投诉订单
+let SP_GET_ORDERCOMPLAINT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.complaints.create"/// 获取取消原因列表
 let SP_GET_ORDERCANCEREASON_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=trade.cancel.reason.get"
 /// 创建支付订单
 let SP_GET_CREATEPAYORDER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.create"
@@ -129,6 +133,8 @@ let SP_GET_DELETEORDER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key
 let SP_GET_USERHEADIMG_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.setImg"
 ///  实名认证
 let SP_GET_AUTONYM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.autonym"
+///  实名认证
+let SP_GET_AUTONYMDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.autonym.detail"
 /// 商品估价
 let SP_GET_VALUATION_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.evaluate"
 /// 竞拍 创建押金支付单
@@ -141,6 +147,8 @@ let SP_GET_SHOP_AUCTIONLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainNam
 let SP_GET_FORGETPWD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.forgot.resetpassword"
 /// 企业认证
 let SP_GET_COMPANYAUTH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.enterprise"
+/// 企业认证详细信息
+let SP_GET_COMPANYAUTHDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.enterprise.detail"
 /// 获取企业认证状态
 let SP_GET_COMPANYAUTHSTATUS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.get.enterprise"
 /// 获取个人认证状态
@@ -157,6 +165,58 @@ let SP_GET_TYPE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MA
 let SP_GET_ALCOHOL_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=category.alcohol.get"
 /// 获取分类下的酒精度
 let SP_GET_APPVERSION_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.versions"
+/// 修改登陆密码
+let SP_GET_MODIFY_LOGINPWD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.security.updateLoginPassword"
+/// 修改支付密码
+let SP_GeT_MODIFY_PAYPWD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.security.updatePayPassword"
+/// 密码修改 发送验证码
+let SP_GET_RESETSENDSMS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.resetSendSms"
+/// 获取银行卡列表
+let SP_GET_BANKCARD_LIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.list"
+/// 删除银行卡
+let SP_GET_BANKCARD_DELETE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.delete"
+/// 添加银行卡
+let SP_GET_BANKCARD_ADD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.add"
+/// 根据银行卡号获取相对应银行信息
+let SP_GET_BANKCARD_INFO_URL =  "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.bank.get"
+/// 获取我的资金
+let SP_GET_FUNDS_MONEY_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.money"
+/// 我的资金提现
+let SP_GET_FUNDS_CASH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.cash"
+/// 资金明细列表
+let SP_GET_CAPITALDETLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fund"
+/// 资金明细详情
+let SP_GET_CAPITALDETDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fundInfo"
+/// 冻结资金明细
+let SP_GET_FREEZELIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.freeze"
+/// 冻结资金明细详情
+let SP_GET_FREEZEDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.freezeInfo"
+/// 创建保证金订单
+let SP_GET_DEPOSITCREATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.depositCreate"
+/// 撤销保证金
+let SP_GET_DEPOSITREFUND_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.refund"
+/// 取消申请撤销保证金
+let SP_GET_DEPOSITCANCEL_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.cancel"
+/// 获取保证金信息
+let SP_GET_DEPOSIT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.deposit.get"
+/// 粉丝及佣金汇总
+let SP_Get_fANS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fans.sum"
+/// 粉丝列表
+let SP_GET_fANS_LIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.fans.list"
+/// 创建充值订单
+let SP_GET_RECHARGE_CREATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=payment.pay.storedCreate"
+/// 获取我的邀请码
+let SP_GET_INVITATIONCODE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.code.get"
+/// 输入邀请码
+let SP_GET_INPUT_INVITATIONCODE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.code.set"
+/// 获取城市合伙人
+let SP_GET_PARTNER_URL =  "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=shop.featured"
+/// 获取开屏广告
+let SP_GET_OPENADV_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.open.img"
+/// 获取余额的状态
+let SP_GET_BALANCESTATUS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.pay.status"
+/// 获取活动列表
+let SP_GET_ACTIVITYLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.open.activity"
 /*-----------------------商家的接口--------------------------*/
 /// 获取店铺 的分类
 let SP_GET_SHOPSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=category.shop.get"
@@ -174,6 +234,18 @@ let SP_GET_PLATFORMALCOHOL_URL = "\(SPNetWorkManager.instance().sp_getDomainName
 let SP_GET_SHOPUPLOAD_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=image.upload"
 ///  添加商品
 let SP_GET_SHOPADDPRODUCT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.create"
+/// 获取商品列表
+let SP_GET_SHOP_PRODUCTLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.list"
+/// 商品删除
+let SP_GET_SHOP_PRODUCTDELETE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.delete"
+/// 竞拍商品删除
+let SP_GET_SHOP_PRODUCTAUCTONDELETE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.auction.delete"
+/// 获取商品竞拍列表
+let SP_GET_SHOP_PRODUCTAUCTIONLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.auction.list"
+/// 更改商品的状态
+let SP_GET_SHOP_CHANGEPRODUCTSTATUS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.status"
+/// 设置竞拍商品
+let SP_GET_SHOP_SETAUCTIONPRODUCT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=item.auction"
 /// 获取商家订单列表
 let SP_GET_SHOPORDELIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=trade.list"
 /// 获取商家订单详情
@@ -200,6 +272,9 @@ let SP_GET_CANCEDET_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: S
 let SP_GET_CANCECHECK_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=trade.cencel.shop.check"
 /// 更新店铺信息
 let SP_GET_UPDATESHOP_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=user.update.shop"
+/// 检查用户是否可以发布商品
+let SP_GET_CHECKITEM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=item.check"
+
 /*-----------------------web-------------------------*/
 /// 获取商家销售中的商品数据
 let SP_GET_ONSALE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/onsale.html"
@@ -228,3 +303,4 @@ let SP_GET_MSG_WEB_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP
 let SP_GET_ITECEMTER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/app-itemCenter.html"
 /// 商品管理
 let SP_GET_EVALUATE_WEB_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/app-evaluate.html"
+

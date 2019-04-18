@@ -16,6 +16,8 @@ class SPLabelView:  UIView{
            self.sp_setupUI()
         }
     }
+    var borderColor : UIColor?
+    
     let SP_LABEL_TAG : Int = 1000
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,11 +41,17 @@ class SPLabelView:  UIView{
                     label = UILabel()
                 }
                 label?.tag = index + SP_LABEL_TAG
-                label?.text = "\(sp_getString(string: string))"
+                label?.text = " \(sp_getString(string: string))  "
                 label?.font = sp_getFontSize(size: 11)
-                label?.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+                label?.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
                 label?.textAlignment = NSTextAlignment.center
-                label?.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue).withAlphaComponent(0.8)
+                
+                if let bColor = self.borderColor {
+                    label?.sp_border(color: bColor, width: sp_lineHeight)
+                    
+                }else{
+                    label?.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue).withAlphaComponent(0.8)
+                }
                 self.addSubview(label!)
                 label?.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
                 label?.snp.makeConstraints({ (maker) in

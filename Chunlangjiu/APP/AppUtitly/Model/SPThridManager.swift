@@ -91,14 +91,14 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     }
     class func sp_beginLogPageView(pageName : String){
         MobClick.beginLogPageView(sp_getString(string: pageName))
-        sp_log(message: "beginLogPageView \(pageName)")
+        
     }
     class func sp_endLogPageView(pageName : String){
         MobClick.endLogPageView(sp_getString(string: pageName))
-         sp_log(message: "endLogPageView \(pageName)")
+        
     }
     func geTuiSdkDidRegisterClient(_ clientId: String) {
-            sp_log(message: "获取clientid \(clientId)")
+        
         SPAPPManager.instance().clientId = clientId
         SPAPPManager.sp_uploadPushToken()
     }
@@ -136,7 +136,10 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         if !result {
              result = sp_dealWX(url: url)
         }
-       
+        if !result {
+            result =  SPShareManager.sp_handleOpen(url: url)
+        }
+        
         return result
     }
     private class func sp_dealApiPay(url :URL) ->Bool{
@@ -183,8 +186,14 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     private class func sp_dealWX(url:URL)->Bool{
         // sp_getString(string: url.host) == "pay"
         if sp_getString(string: url.scheme) == SP_WX_APPID  {
-             SPThridManager.instance().clientCallback = true
-            return WXApi.handleOpen(url, delegate: SPThridManager.instance())
+            let urlString = "\(sp_getString(string: url.absoluteString))"
+           
+            if  urlString.contains("pay") {
+                SPThridManager.instance().clientCallback = true
+                let isSuccess = WXApi.handleOpen(url, delegate: SPThridManager.instance())
+                return isSuccess
+            }
+          
         }
         return false
     }

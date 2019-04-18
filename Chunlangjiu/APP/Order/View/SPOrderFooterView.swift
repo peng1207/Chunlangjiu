@@ -42,12 +42,20 @@ class SPOrderFooterView:  UIView{
         view.backgroundColor = UIColor.white
         return view
     }()
+    var commissionView : SPCommissionView = {
+        let view = SPCommissionView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        return view
+    }()
     var detaileModel : SPOrderDetaileModel?{
         didSet{
             self.sp_setupData()
         }
     }
     fileprivate var refundTop : Constraint!
+    fileprivate var payTop : Constraint!
+    fileprivate var commissionTop : Constraint!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -59,7 +67,7 @@ class SPOrderFooterView:  UIView{
     fileprivate func sp_setupData(){
         self.codeView.detaileModel = self.detaileModel
         self.payView.detaileModel = self.detaileModel
-        self.addressView.detaileModel = self.detaileModel
+       
         self.priceView.detaileModel = self.detaileModel
         self.refundView.detaileModel = self.detaileModel
         self.logicView.logicModel = self.detaileModel?.logi
@@ -69,10 +77,12 @@ class SPOrderFooterView:  UIView{
             self.refundView.isHidden = false
             isRefund = true
             self.addressView.isHidden = true
+            self.payTop.update(offset: 0)
         }else{
             self.refundView.isHidden = true
             self.payView.isHidden = false
             self.addressView.isHidden = false
+            self.payTop.update(offset: 10)
         }
         var isLogic = false
         if self.detaileModel?.logi != nil {
@@ -97,11 +107,22 @@ class SPOrderFooterView:  UIView{
             }else{
                 maker.height.greaterThanOrEqualTo(0)
             }
-            
+        }
+        self.addressView.detaileModel = self.detaileModel
+        self.refundTop.update(offset: isRefund ? 10 : 0)
+        self.commissionView.detaileModel = self.detaileModel
+        if sp_getString(string: self.detaileModel?.commission).count > 0  || sp_getString(string: self.detaileModel?.shop_payment).count > 0  {
+            self.commissionTop.update(offset: 10)
+            self.commissionView.isHidden = false
+        }else{
+            self.commissionTop.update(offset: 0)
+             self.commissionView.isHidden = true
         }
         
         
-        self.refundTop.update(offset: isRefund ? 10 : 0)
+        
+        
+        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -111,6 +132,7 @@ class SPOrderFooterView:  UIView{
         self.addSubview(self.addressView)
         self.addSubview(self.logicView)
         self.addSubview(self.priceView)
+        self.addSubview(self.commissionView)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -122,7 +144,7 @@ class SPOrderFooterView:  UIView{
         }
         self.payView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.top.equalTo(self.codeView.snp.bottom).offset(0)
+            self.payTop = maker.top.equalTo(self.codeView.snp.bottom).offset(10).constraint
             maker.height.greaterThanOrEqualTo(0)
         }
         self.refundView.snp.makeConstraints { (maker) in
@@ -144,8 +166,17 @@ class SPOrderFooterView:  UIView{
             maker.left.right.equalTo(self).offset(0)
             maker.top.equalTo(self.logicView.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
+            
+        }
+        self.commissionView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self).offset(0)
+            self.commissionTop = maker.top.equalTo(self.priceView.snp.bottom).offset(0).constraint
+            maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }
+//        self.snp.makeConstraints { (maker) in
+//            maker.bottom.equalTo(self.commissionView.snp.bottom).offset(10)
+//        }
     }
     deinit {
         

@@ -45,9 +45,9 @@ class SPIndexHande : NSObject {
                     productVC.brandModel = brandModel
                      viewController.navigationController?.pushViewController(productVC, animated: true)
                 }
-            
-            
+
         case SPIndexType.winery.rawValue:
+//             sp_pushPartnerVC(viewController: viewController)
             let wineryVC = SPWineryVC()
             viewController.navigationController?.pushViewController(wineryVC, animated: true)
         case SPIndexType.evaluation.rawValue:
@@ -60,9 +60,12 @@ class SPIndexHande : NSObject {
             NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_TAB_SHOPCART)"])
         case SPIndexType.member.rawValue:
             NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_TAB_MINE)"])
-        case SPIndexType.activity.rawValue:
+        case SPIndexType.auction.rawValue:
             
                NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_ISSHOW_AUCTION ? SP_TAB_AUCTION : SP_TAB_SORT)"])
+        case SPIndexType.activity.rawValue:
+            let activityVC = SPActivityVC()
+            viewController.navigationController?.pushViewController(activityVC, animated: true)
         case SPIndexType.h5.rawValue:
             if sp_getString(string: linktarget).count > 0 {
                 let webVC = SPWebVC()
@@ -71,6 +74,8 @@ class SPIndexHande : NSObject {
             }
         case SPIndexType.sellwine.rawValue:
             sp_sellwine(viewController: viewController)
+        case SPIndexType.partner.rawValue:
+            sp_pushPartnerVC(viewController: viewController)
         default:
             sp_log(message: "没有找到 点击没有反应")
         }
@@ -107,39 +112,30 @@ class SPIndexHande : NSObject {
         
         group.notify(queue: .main) {
             sp_hideAnimation(view: viewController.view)
-            if sp_getString(string: realNameAuth?.status) == SP_STATUS_FINISH || sp_getString(string: companyAuth?.status) == SP_STATUS_FINISH {
+            if sp_getString(string: realNameAuth?.status) == SP_STATUS_FINISH  || sp_getString(string: realNameAuth?.status) == SP_STATUS_MODIFIER || sp_getString(string: companyAuth?.status) == SP_STATUS_FINISH || sp_getString(string: companyAuth?.status) == SP_STATUS_MODIFIER {
                 let addProduct = SPProductAddVC()
                 addProduct.title = "添加商品"
                 viewController.navigationController?.pushViewController(addProduct, animated: true)
             }else{
-                if realNameAuth == nil{
-                    sp_pushRealNameVC(viewController: viewController)
-                }else if sp_getString(string: realNameAuth?.status) == SP_STATUS_ACTIVE{
-                    sp_showTextAlert(tips: "您还没有进行实名认证，请先认证！")
-                    sp_pushRealNameVC(viewController: viewController)
-                }else if sp_getString(string: realNameAuth?.status) == SP_STATUS_FAILING{
-                       sp_showTextAlert(tips: "您的认证被驳回，请重新提交资料审核")
-                    sp_pushRealNameVC(viewController: viewController)
-                }else if sp_getString(string: realNameAuth?.status) == SP_STATUS_LOCKED{
-                    let alertController = UIAlertController(title: "提示", message: "您的认证正在审核中，我们会尽快处理的", preferredStyle: UIAlertControllerStyle.alert)
-                    alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { (action) in
-                        
-                    }))
-                    viewController.present(alertController, animated: true, completion: nil)
-                }
-                
-                
+                 sp_pushRealNameVC(viewController: viewController)
             }
-            
-            
+
         }
     }
     class func sp_pushRealNameVC(viewController:UIViewController){
         
-        // 个人认证
-        let realVC = SPRealNameAuthenticationVC()
+        //
+        let realVC = SPAuthHomeVC()
         viewController.navigationController?.pushViewController(realVC, animated: true)
     }
+    /// 跳到城市合伙人界面
+    ///
+    /// - Parameter viewController: 当前控制器
+    class func sp_pushPartnerVC(viewController:UIViewController){
+        let partnerVC = SPPartnerVC()
+        viewController.navigationController?.pushViewController(partnerVC, animated: true)
+    }
+    
     class func sp_getLintTypeName(lineType : String?)->String{
         var name = ""
         switch sp_getString(string: lineType) {

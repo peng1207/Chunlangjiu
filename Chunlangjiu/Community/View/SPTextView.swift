@@ -13,22 +13,27 @@ class SPTextView:  UIView{
     
     lazy var textView : UITextView = {
         let view = UITextView()
-          view.tintColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        view.tintColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         view.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
-            
+
         }, doneBlock: {
-            
+
         })
- 
         return view;
     }()
     lazy var placeholderLabel : UILabel = {
         let label = UILabel()
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-        label.font = sp_getFontSize(size: 14)
+        label.font = sp_getFontSize(size: 11)
+        label.numberOfLines = 0
         return label
     }()
     fileprivate var heightConstraint : Constraint!
+    var minHeight : CGFloat = 30 {
+        didSet{
+            self.heightConstraint.update(offset: minHeight)
+        }
+    }
     var content : String?{
         set{
             self.textView.text = sp_getString(string: newValue)
@@ -60,7 +65,7 @@ class SPTextView:  UIView{
     fileprivate func sp_addConstraint(){
         self.textView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self).offset(0)
-           self.heightConstraint =  maker.height.equalTo(30).constraint
+            self.heightConstraint =  maker.height.equalTo(30).constraint
             maker.bottom.equalTo(self.snp.bottom).offset(0)
         }
         self.placeholderLabel.snp.makeConstraints { (maker) in
@@ -68,6 +73,8 @@ class SPTextView:  UIView{
             maker.right.equalTo(self).offset(-3)
             maker.top.equalTo(self).offset(8)
             maker.height.greaterThanOrEqualTo(0)
+            
+            
         }
     }
     deinit {
@@ -84,8 +91,8 @@ fileprivate extension SPTextView{
         let frame = textView.frame
         let constrainSize = CGSize(width: frame.size.width, height: frame.size.height)
         var size = textView.sizeThatFits(constrainSize)
-        if size.height < 30 {
-            size.height = 30
+        if size.height < minHeight {
+            size.height = minHeight
         }
         self.heightConstraint.update(offset: size.height)
         

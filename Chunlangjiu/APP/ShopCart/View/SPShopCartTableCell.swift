@@ -83,7 +83,7 @@ class SPShopCartTableCell: UITableViewCell {
     fileprivate func sp_setupData(){
         self.productImageView.sp_cache(string: self.productModel?.image_default_id, plImage: sp_getDefaultImg())
         self.titleLabel.text = sp_getString(string: self.productModel?.title)
-        self.priceLabel.text = "¥\(sp_getString(string: self.productModel?.showCartPrice))"
+        self.priceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: self.productModel?.showCartPrice))"
         self.sepecLabel.text =  sp_getString(string: self.productModel?.unit)
         self.numView.numLabel.text = sp_getString(string: self.productModel?.quantity)
         self.selectBtn.isSelected = self.productModel?.is_checked == 0 ? false : true

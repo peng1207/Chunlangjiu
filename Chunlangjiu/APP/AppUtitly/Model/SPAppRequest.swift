@@ -136,11 +136,53 @@ class SPAppRequest {
                     
                 }
                 if let block = complete{
+                    sp_log(message: " 获取商品数据\(listArray)")
                     block(errorcode,auctionList,listArray,nil,1)
                 }
             }else{
                 if let block  = complete {
                     block(SP_Request_Error,nil,nil,nil,0)
+                }
+            }
+        }
+    }
+    /// 获取活动数据
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getActivityList(requestModel:SPRequestModel,complete:SPActivityListComplete?){
+        requestModel.url = SP_GET_ACTIVITYLIST_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPActivityModel?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPActivityModel.sp_deserialize(from: data)
+                
+                    if let m = model {
+                        var auctionArray = [SPProductModel]()
+                        if sp_getArrayCount(array: m.auction) > 0 {
+                            for productModel in m.auction!{
+                                productModel.isAuction = true
+                                productModel.sp_getSecond()
+                                if productModel.second > 0 {
+                                    auctionArray.append(productModel)
+                                }
+                            }
+                        }
+                        m.auction = auctionArray
+                        
+                    }
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
                 }
             }
         }
@@ -180,9 +222,9 @@ class SPAppRequest {
                                 }
                             }
                         }
-                        let allModel = SPSortLv3Model()
-                        allModel.cat_name = "全部"
-                        lv3Array.insert(allModel, at: 0)
+//                        let allModel = SPSortLv3Model()
+//                        allModel.cat_name = "全部"
+//                        lv3Array.insert(allModel, at: 0)
                     }
                 }
                 if let block = complete{
@@ -242,6 +284,7 @@ class SPAppRequest {
                                         p.pledge = sp_getString(string: auction?["pledge"])
                                         p.is_pay = sp_getString(string: auction?["is_pay"])
                                         p.original_bid = sp_getString(string: auction?["original_bid"])
+                                        p.sp_getSecond()
                                     }
                                 }
                                 if SP_ISSHOW_AUCTION {
@@ -475,6 +518,9 @@ class SPAppRequest {
                 let msg = sp_getString(string: json[SP_Request_Msg_Key])
                 var dataList = [SPAuctionPrice]()
                 var totalPage = 0
+                if let total : Int = json["total"] as? Int {
+                    totalPage = total
+                }
                 if sp_isArray(array: data),errorcode == SP_Request_Code_Success {
                     let list : [Any]? = data
                     if sp_isArray(array: list) {
@@ -482,10 +528,12 @@ class SPAppRequest {
                             let dic : [String : Any] = listDic as! [String : Any]
                             let productModel = SPAuctionPrice.sp_deserialize(from: dic)
                             if let p = productModel {
+                                p.showTime = SPDateManager.sp_string(to: TimeInterval(sp_getString(string: p.time)))
                                 dataList.append(p)
                             }
                         }
                     }
+                    
 //                    let pagers : [String:Any]? = data!["pagers"] as? [String : Any]
 //                    if sp_isDic(dic: pagers){
 //                        totalPage = pagers!["total"] as! Int
@@ -583,6 +631,11 @@ class SPAppRequest {
                     let shopInfo : [String :Any]? = data?["shopInfo"] as? [String:Any]
                     if sp_isDic(dic: shopInfo){
                         shopModel = SPShopModel.sp_deserialize(from: shopInfo)
+                        if let time = shopModel?.open_time {
+                            if let date = SPDateManager.sp_date(to: TimeInterval(exactly: time)){
+                                    shopModel?.openTime = SPDateManager.sp_dateString(to: date)
+                            }
+                        }
                     }
                 }
                 if let block = complete {
@@ -743,7 +796,7 @@ class SPAppRequest {
                 if sp_isDic(dic: data) ,errorcode == SP_Request_Code_Success{
                     let userModel = SPUserModel.sp_deserialize(from: data)
                     SPAPPManager.instance().userModel = userModel
-                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
+//                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
                 }
                 if let block = complete {
                     block(errorcode,msg,nil)
@@ -792,7 +845,7 @@ class SPAppRequest {
                 if sp_isDic(dic: data) ,errorcode == SP_Request_Code_Success{
                     let userModel = SPUserModel.sp_deserialize(from: data)
                     SPAPPManager.instance().userModel = userModel
-                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
+//                    NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
                 }
                 if let block = complete {
                     block(errorcode,msg,nil)
@@ -973,6 +1026,28 @@ class SPAppRequest {
             }else{
                 if let block = complete {
                     block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
+    /// 更新用户资料
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getUpdateInfo(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_UPDATEINFO_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if let block = complete {
+                    block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"修改失败",nil)
                 }
             }
         }
@@ -1318,6 +1393,7 @@ class SPAppRequest {
                             productModel?.auctionitem_id = sp_getString(string: auction?["auctionitem_id"])
                             productModel?.pledge = sp_getString(string: auction?["pledge"])
                             productModel?.is_pay = sp_getString(string: auction?["is_pay"])
+                            productModel?.auction_status = sp_getString(string: auction?["auction_status"])
                         }
                         
                         
@@ -1326,6 +1402,7 @@ class SPAppRequest {
                     confirmOrder?.pledge = productModel?.pledge
                     shopModel?.confirm_start_price = productModel?.auction_starting_price 
                     shopModel?.confrim_max_price = productModel?.max_price
+                    shopModel?.confirm_auction_status = productModel?.auction_status
                     if let model = productModel{
                         shopModel?.productArray = [model]
                     }
@@ -1503,6 +1580,10 @@ class SPAppRequest {
     ///   - requestModel: 请求数据
     ///   - complete: 回调
     class func sp_getPayList(requestModel:SPRequestModel,complete:SPRequestCompletList?){
+        var parm = [String:Any]()
+        parm.updateValue("v2", forKey: "v")
+        requestModel.parm = parm
+ 
         requestModel.url = SP_GET_PAYLIST_URL
         sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
             if let json = dataJson {
@@ -1534,6 +1615,37 @@ class SPAppRequest {
             }else{
                 if let block = complete {
                     block(SP_Request_Error,nil,nil,0)
+                }
+            }
+        }
+    }
+    /// 获取余额的状态
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getBalanceStatus(requestModel:SPRequestModel,complete:SPBalanceStatusComplete?){
+        requestModel.url = SP_GET_BALANCESTATUS_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var balanceStatus : SPBalanceStatus?
+                if errorcode == SP_Request_Code_Success {
+                    if let dic = data {
+                        if dic.count > 0 {
+                            balanceStatus = SPBalanceStatus.sp_deserialize(from: dic)
+                        }
+                    }
+                }
+                if let block = complete {
+                    block(errorcode,balanceStatus,nil)
+                    
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
                 }
             }
         }
@@ -1683,6 +1795,32 @@ class SPAppRequest {
             }
         }
     }
+    /// 个人认证详细信息
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getAuthonDet(requestModel:SPRequestModel,complete:SPRealNameAuthComplete?){
+        requestModel.url = SP_GET_AUTONYMDET_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPRealNameAuth?
+                if errorcode == SP_Request_Code_Success {
+                    model = SPRealNameAuth.sp_deserialize(from: data)
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
     /// 企业认证
     ///
     /// - Parameters:
@@ -1701,6 +1839,32 @@ class SPAppRequest {
             }else{
                 if let block = complete {
                      block(SP_Request_Error,"上传企业认证失败",nil)
+                }
+            }
+        }
+    }
+    /// 获取企业认证详细信息
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getCompanyAuthDet(requestModel:SPRequestModel,complete:SPCompanyAuthComplete?){
+        requestModel.url = SP_GET_COMPANYAUTHDET_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var companyModel : SPCompanyAuth?
+                if errorcode == SP_Request_Code_Success {
+                    companyModel = SPCompanyAuth.sp_deserialize(from: data)
+                }
+                if let block = complete {
+                    block(errorcode,companyModel,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
                 }
             }
         }
@@ -1978,6 +2142,39 @@ class SPAppRequest {
                     block(errorcode,model,nil)
                 }
                 
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,nil,nil)
+                }
+            }
+        }
+    }
+    /// 获取开屏广告
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getOpenAdv(requestModel:SPRequestModel,complete:SPOpenAdvComplete?){
+        requestModel.url = SP_GET_INDEX_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var model : SPOpenAdvModel?
+                if errorcode == SP_Request_Code_Success {
+                    if let modules : [Any] = data?["modules"] as? [Any] {
+                        if sp_getArrayCount(array: modules) > 0 {
+                            if let listDic : [String : Any] =  modules.first as? [String : Any] {
+                                model = SPOpenAdvModel.sp_deserialize(from:listDic["params"] as? [String : Any])
+                            }
+                           
+                        }
+                    }
+                }
+                if let block = complete {
+                    block(errorcode,model,nil)
+                }
             }else{
                 if let block = complete {
                     block(SP_Request_Error,nil,nil)

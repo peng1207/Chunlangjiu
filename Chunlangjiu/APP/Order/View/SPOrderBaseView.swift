@@ -59,12 +59,12 @@ class SPOrderBaseView:  UIView{
         if sp_getString(string: detaileModel?.type) == SP_AUCTION {
             if sp_getString(string: detaileModel?.status) == SP_AUCTION_2{
                 self.auctionView.titleLabel.text = "中标时间："
-                self.auctionTop.update(offset: 10)
+                self.auctionTop.update(offset: 26)
                 self.auctionView.contentLabel.text = sp_getString(string: detaileModel?.modified_time)
                 self.auctionView.isHidden = false
             }else if sp_getString(string: detaileModel?.status) == SP_AUCTION_3{
                 self.auctionView.titleLabel.text = "竞拍结束："
-                 self.auctionTop.update(offset: 10)
+                 self.auctionTop.update(offset: 26)
                  self.auctionView.contentLabel.text = sp_getString(string: detaileModel?.modified_time)
                  self.auctionView.isHidden = false
             }else{
@@ -73,12 +73,10 @@ class SPOrderBaseView:  UIView{
                  self.auctionView.isHidden = true
             }
         }else{
-              self.auctionTop.update(offset: 0)
+             self.auctionTop.update(offset: 0)
              self.auctionView.contentLabel.text = ""
              self.auctionView.isHidden = true
         }
-        
-        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -92,18 +90,18 @@ class SPOrderBaseView:  UIView{
     fileprivate func sp_addConstraint(){
         self.codeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.top.equalTo(self).offset(14)
+            maker.top.equalTo(self).offset(13)
            maker.height.greaterThanOrEqualTo(0)
         }
         self.copyBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.codeView.contentLabel.snp.right).offset(5)
             maker.centerY.equalTo(self.codeView.snp.centerY).offset(0)
             maker.width.equalTo(50)
-            maker.height.equalTo(21)
+            maker.height.equalTo(20)
         }
         self.orderTimeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.codeView).offset(0)
-            maker.top.equalTo(self.codeView.snp.bottom).offset(10)
+            maker.top.equalTo(self.codeView.snp.bottom).offset(26)
             maker.height.greaterThanOrEqualTo(0)
         }
         self.auctionView.snp.makeConstraints { (maker) in
@@ -121,9 +119,7 @@ extension SPOrderBaseView {
     
     @objc fileprivate func sp_clickCopyAction(){
         //就这两句话就实现了
-        let paste = UIPasteboard.general
-        paste.string = sp_getString(string: self.detaileModel?.tid)
-        sp_showTextAlert(tips: "复制成功")
+        sp_copy(text: sp_getString(string: self.detaileModel?.tid))
     }
     
 }

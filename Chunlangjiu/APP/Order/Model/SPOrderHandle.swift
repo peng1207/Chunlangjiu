@@ -118,20 +118,27 @@ class SPOrderHandle : NSObject {
                 }
               
             }
-            
-           
         case SP_STATUS_2:
             if SPAPPManager.sp_isBusiness(){
                 
             }else{
-                if btnIndex == 0 {
-                    sp_delete(order: model, viewController: vc, complete: complete)
+                if sp_getString(string: model.type) == SP_AUCTION{
+                    if sp_getString(string: model.trade_ststus) == SP_WAIT_BUYER_PAY {
+                         sp_toPay(orderModel: model, viewController: vc, complete: complete)
+                    }else if sp_getString(string: model.trade_ststus) == SP_WAIT_BUYER_CONFIRM_GOODS{
+                        sp_confirmOrder(orderModel: model, viewController: vc, complete: complete)
+                    }
+                }else{
+                    if btnIndex == 0 {
+                        sp_delete(order: model, viewController: vc, complete: complete)
+                    }
                 }
             }
         case SP_STATUS_3:
-            
             if btnIndex == 0{
-                sp_delete(order: model, viewController: vc, complete: complete)
+//                 sp_openTel(text: "400-788-9550")
+                sp_orderComplaintAlert(order: model, viewController: vc, complete: complete)
+//                sp_delete(order: model, viewController: vc, complete: complete)
             }
         case SP_TRADE_CLOSED_BY_SYSTEM:
             if btnIndex == 0 {
@@ -164,7 +171,9 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
     }
     class func sp_getCanceReason(orderModel : SPOrderModel,viewController: UIViewController,complete: SPOrderHandleComplete?){
         let request = SPRequestModel()
@@ -239,7 +248,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+           viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 确认收货请求
     ///
@@ -257,6 +269,7 @@ class SPOrderHandle : NSObject {
             sp_hideAnimation(view: nil)
             if code == SP_Request_Code_Success {
                 sp_showTextAlert(tips: "商品签单成功")
+                sp_dealOrderNotificaton(orderModel: orderModel)
                 sp_dealComplete(isSuccess: true, complete: complete)
             }else{
                 sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? sp_getString(string: msg) : "商品签单失败")
@@ -264,12 +277,51 @@ class SPOrderHandle : NSObject {
             }
         }
     }
+    /// 回调
     private class  func sp_dealComplete(isSuccess : Bool,complete: SPOrderHandleComplete?){
         guard let block = complete else {
             return
         }
         block(isSuccess)
     }
+    /// 处理订单处理完成
+    ///
+    /// - Parameter orderModel: 订单数据
+    class func sp_dealOrderNotificaton(orderModel : SPOrderModel?)->Void{
+        guard let model = orderModel else {
+            return
+        }
+        switch sp_getString(string: model.status) {
+        case SP_WAIT_BUYER_PAY:
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_ALL_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_SELLER_SEND_GOODS_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_BUYER_PAY_NOTIFICATION), object: nil)
+        case SP_WAIT_SELLER_SEND_GOODS:
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_ALL_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_BUYER_CONFIRM_GOODS_NOTIFICATION), object: nil)
+             NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_SELLER_SEND_GOODS_NOTIFICATION), object: nil)
+        case SP_WAIT_BUYER_CONFIRM_GOODS:
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_FINISH_NOTIFICATION), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_WAIT_BUYER_CONFIRM_GOODS_NOTIFICATION), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_ALL_NOTIFICATION), object: nil)
+        case SP_STATUS_0:
+            if SPAPPManager.sp_isBusiness(){
+                
+            }else{
+                if sp_getString(string: model.type) == SP_AUCTION {
+                    NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_AUCTIIN_PAY), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_AUCTION_ING_NOTIFICATION), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(SP_ORDER_AUCTION_ALL_NOTIFICATION), object: nil)
+                }else{
+                    
+                }
+            }
+        default:
+            sp_log(message: "没有找到")
+        }
+        
+    }
+    
     /// 买家统一的上传图片接口
     ///
     /// - Parameters:
@@ -286,10 +338,12 @@ class SPOrderHandle : NSObject {
             }
             for image in imageArray {
                 let uploadImage = sp_fixOrientation(aImage: image)
-                let data = UIImageJPEGRepresentation(uploadImage, 0.5)
-                guard let d = data else{
-                    continue
-                }
+//                let data = UIImageJPEGRepresentation(uploadImage, 1.0)
+//                guard let d = data else{
+//                    continue
+//                }
+                let d = sp_resetImgSize(sourceImage: uploadImage)
+               
                 group.enter() // 将以下任务添加进group
                 let imageRequestModel = SPRequestModel()
                 imageRequestModel.data = [d]
@@ -379,7 +433,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 拒绝退货退款
     ///
@@ -445,7 +502,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+       
     }
     /// 退款金额
     ///
@@ -482,7 +542,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+           viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 删除订单请求
     ///
@@ -580,7 +643,10 @@ class SPOrderHandle : NSObject {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
             
         }))
-        viewController.present(alertController, animated: true, completion: nil)
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
     }
     /// 处理待发货申请退款的请求处理
     ///
@@ -608,6 +674,40 @@ class SPOrderHandle : NSObject {
                 sp_dealComplete(isSuccess: false, complete: complete)
             }
             sp_showTextAlert(tips: msg)
+        }
+    }
+    class func sp_orderComplaintAlert(order orderModel :SPOrderModel,viewController: UIViewController,complete: SPOrderHandleComplete?){
+        let alertController = UIAlertController(title: "提示", message: "是否投诉该订单", preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "投诉", style: UIAlertActionStyle.default, handler: { (action) in
+            sp_orderComplaintRequest(order: orderModel, complete: complete)
+        }))
+        alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
+            
+        }))
+        sp_mainQueue {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+        
+    }
+    /// 发送 订单投诉请求
+    ///
+    /// - Parameters:
+    ///   - orderModel: 订单数据
+    ///   - complete: 回调
+    class func sp_orderComplaintRequest(order orderModel :SPOrderModel,complete: SPOrderHandleComplete?){
+        sp_showAnimation(view: nil, title: nil)
+        let request = SPRequestModel()
+        var parm = [String : Any]()
+        parm.updateValue(orderModel.oid, forKey: "oid")
+        request.parm = parm
+        SPOrderRequest.sp_getOrderComplaint(requestModel: request) { (code, msg, errorModel) in
+            sp_hideAnimation(view: nil)
+            if code == SP_Request_Code_Success {
+                sp_dealComplete(isSuccess: true, complete: complete)
+            }else{
+                sp_dealComplete(isSuccess: false, complete: complete)
+            }
+            sp_showTextAlert(tips: sp_getString(string: msg).count > 0 ? sp_getString(string: msg) : code == SP_Request_Code_Success ? "提交投诉成功，请耐心等待" : "提交投诉失败")
         }
     }
 }

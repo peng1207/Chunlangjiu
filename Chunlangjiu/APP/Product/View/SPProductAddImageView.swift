@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 typealias SPClickAddProcutBlock = (_ view : SPProductAddImageView)-> Void
+
 class SPProductAddImageView:  UIView{
     
     lazy var titleLabel : UILabel = {
@@ -36,6 +37,7 @@ class SPProductAddImageView:  UIView{
         view.showImageView.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
         view.clickAddBlock = { [weak self](addImage: SPAddImageView) in
             self?.sp_clickAddAction()
+            self?.sp_clickAdd(view: addImage)
         }
         return view
     }()
@@ -57,7 +59,7 @@ class SPProductAddImageView:  UIView{
         }
     }
     var clickAddBlock : SPClickAddProcutBlock?
-    
+    var clickAddComplete : SPClickAddImageBlock?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
@@ -96,8 +98,8 @@ class SPProductAddImageView:  UIView{
             maker.right.equalTo(self.snp.right).offset(-10)
         }
         self.exampleImageView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.titleLabel.snp.left).offset(0)
-            maker.top.equalTo(self.titleLabel.snp.bottom).offset(14)
+            maker.left.equalTo(self.snp.left).offset(5)
+            maker.top.equalTo(self.titleLabel.snp.bottom).offset(13)
             maker.width.equalTo(self.productImageView.snp.width).offset(0)
             maker.height.equalTo(self.exampleImageView.snp.width).offset(0)
         }
@@ -108,11 +110,11 @@ class SPProductAddImageView:  UIView{
             maker.height.equalTo(34)
         }
         self.productImageView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.exampleImageView.snp.right).offset(10)
+            maker.left.equalTo(self.exampleImageView.snp.right).offset(5)
             maker.top.equalTo(self.exampleImageView.snp.top).offset(0)
             maker.right.equalTo(self.titleLabel.snp.right).offset(0)
             maker.height.equalTo(self.productImageView.snp.width).offset(0)
-             maker.bottom.equalTo(self.snp.bottom).offset(-10)
+             maker.bottom.equalTo(self.snp.bottom).offset(-5)
         }
         
 //        self.addView.snp.makeConstraints { (maker) in
@@ -147,5 +149,11 @@ extension SPProductAddImageView {
             return
         }
         block(self)
+    }
+    @objc fileprivate func sp_clickAdd(view : SPAddImageView){
+        guard let block = self.clickAddComplete else {
+            return
+        }
+        block(view)
     }
 }

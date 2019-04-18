@@ -27,7 +27,10 @@ class SPMainVC: UITabBarController {
         self.sp_setTabBarLocationWithLevel(fontLevel: 0)
         self.sp_setupTabBarView()
         self.sp_setupVC()
-      
+        sp_asyncAfter(time: 0.2) { [weak self] in
+            self?.sp_dealOpenAdv()
+        }
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -80,7 +83,7 @@ class SPMainVC: UITabBarController {
         let indexNavVC = SPBaseNavVC(rootViewController: indexVC)
         self.addChildViewController(indexNavVC)
     
-        let sortVC = SPProductListVC()
+        let sortVC = SPSortVC()
         let sortNavVC = SPBaseNavVC(rootViewController: sortVC)
         self.addChildViewController(sortNavVC)
         if SP_ISSHOW_AUCTION {
@@ -104,4 +107,26 @@ extension SPMainVC {
     fileprivate func sp_dealClickAction(index:Int){
         self.selectedIndex = index
     }
+    
+    /// 处理开屏广告
+    fileprivate func sp_dealOpenAdv(){
+        let model = SPAPPManager.sp_getOpenAdv()
+        if let m = model , sp_getString(string: m.imagesrc).count > 0 {
+            let file = sp_getString(string: m.sp_getLocalPath())
+            
+            let img = UIImage(contentsOfFile:file )
+            if img != nil {
+                let advertVC = SPAdvertVC()
+                advertVC.model = m
+                let appdelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                appdelegate.window?.addSubview(advertVC.view)
+                self.addChildViewController(advertVC)
+                advertVC.view.snp.makeConstraints { (maker) in
+                    maker.left.right.top.bottom.equalTo(appdelegate.window!).offset(0)
+                }
+            }
+        }
+        
+    }
+    
 }

@@ -12,10 +12,10 @@ import SnapKit
 class SPIndexSectionAHeaderView:  UITableViewHeaderFooterView{
     var titleLabel : UILabel = {
         let label = UILabel()
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
-        label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
-        label.font = sp_getFontSize(size: 18)
-        label.textAlignment = NSTextAlignment.center
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+//        label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        label.font = sp_getFontSize(size: 15)
+        label.textAlignment = .center
         return label
     }()
     

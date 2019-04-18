@@ -12,11 +12,12 @@ PODS:
   - NVActivityIndicatorView (4.2.1):
     - NVActivityIndicatorView/Presenter (= 4.2.1)
   - NVActivityIndicatorView/Presenter (4.2.1)
-  - Realm (3.7.2):
-    - Realm/Headers (= 3.7.2)
-  - Realm/Headers (3.7.2)
-  - RealmSwift (3.7.2):
-    - Realm (= 3.7.2)
+  - ReachabilitySwift (4.2.1)
+  - Realm (3.10.0):
+    - Realm/Headers (= 3.10.0)
+  - Realm/Headers (3.10.0)
+  - RealmSwift (3.10.0):
+    - Realm (= 3.10.0)
   - SnapKit (4.0.0)
   - UMCAnalytics (5.5.1):
     - UMCCommon
@@ -46,7 +47,8 @@ DEPENDENCIES:
   - Kingfisher
   - MBProgressHUD (~> 1.1.0)
   - NVActivityIndicatorView
-  - RealmSwift
+  - ReachabilitySwift
+  - RealmSwift (~> 3.10.0)
   - SnapKit
   - UMCAnalytics
   - UMCShare/Social/ReducedQQ
@@ -66,6 +68,7 @@ SPEC REPOS:
     - Kingfisher
     - MBProgressHUD
     - NVActivityIndicatorView
+    - ReachabilitySwift
     - Realm
     - RealmSwift
     - SnapKit
@@ -84,13 +87,14 @@ SPEC CHECKSUMS:
   Kingfisher: 976d828df2b24834c6a3f2fc4d82cdbd26552be1
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   NVActivityIndicatorView: 8068ba3ad39cb44cbaab25d89ff2546b3f092681
-  Realm: dd18c3014e8d90df300b83c6da740067436089c5
-  RealmSwift: 79917cae59a0c43ef8118b233a5978891dd50b4a
+  ReachabilitySwift: 35720ffea59c1c76d15f885be77fd33e33985427
+  Realm: 85ab9e4f779d66f6e9ffeb118dc25b7f130c96ac
+  RealmSwift: 69121c8b86d0ae005fb779efdb10e606732e1c74
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   UMCAnalytics: 0aff87e39008e2a650e5917430db0da2de2f8495
   UMCCommon: 4392868ac47ff1b101663106bb114ba616fabbad
   UMCShare: 023886b10d11119331c9c46d8e8a0c31fe67c23e
 
-PODFILE CHECKSUM: ac07b89e550b30727ae611415cb3bd123e88a0a9
+PODFILE CHECKSUM: ce3264f5d10322e0731bde5519b7355d0599bf22
 
 COCOAPODS: 1.5.3

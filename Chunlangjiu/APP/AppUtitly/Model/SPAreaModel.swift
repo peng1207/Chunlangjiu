@@ -29,7 +29,5 @@ class SPAreaModel : SPBaseModel {
         }else{
             textWidth = 0
         }
-        
-        
     }
 }

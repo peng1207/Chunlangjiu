@@ -15,6 +15,11 @@ typealias SPPaySelectComplete = (_ payModel : SPPayModel?)->Void
 
 class SPPayView:  UIView{
     
+    var balanceStatus : SPBalanceStatus?{
+        didSet{
+            self.tableView.reloadData()
+        }
+    }
     fileprivate lazy var contentView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
@@ -131,6 +136,7 @@ extension SPPayView : UITableViewDelegate,UITableViewDataSource {
         if indexPath.row < sp_getArrayCount(array: self.payDataArray) {
             let payModel = self.payDataArray?[indexPath.row]
             cell?.payModel = payModel
+            cell?.payContentLabel.text = ""
             if let select = selectPayModel {
                 if sp_getString(string: select.app_rpc_id) == sp_getString(string: payModel?.app_rpc_id) {
                     cell?.sp_isSelect(select: true)
@@ -140,6 +146,13 @@ extension SPPayView : UITableViewDelegate,UITableViewDataSource {
             }else{
                 cell?.sp_isSelect(select: false)
             }
+            if sp_getString(string: payModel?.app_rpc_id) == SPPayType.balance.rawValue{
+                if let status = self.balanceStatus {
+                    if let isPwd : Bool = status.password , isPwd == false{
+                        cell?.payContentLabel.text = "(未设置支付密码，请先设置)"
+                    }
+                }
+            }
             
         }
         return cell!
@@ -147,6 +160,15 @@ extension SPPayView : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row < sp_getArrayCount(array: self.payDataArray)  {
             let payModel = self.payDataArray?[indexPath.row]
+            if sp_getString(string: payModel?.app_rpc_id) == SPPayType.balance.rawValue{
+                if let status = self.balanceStatus {
+                    if let isPwd : Bool = status.password , isPwd == false{
+                        sp_showTextAlert(tips: "没有设置密码")
+                        return
+                    }
+                }
+            }
+            
             self.selectPayModel = payModel
             tableView.reloadData()
             guard let block = self.selectBlock else {
@@ -171,7 +193,7 @@ class SPPayTableCell: UITableViewCell {
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         return label
     }()
-    fileprivate lazy var payContentLabel : UILabel = {
+    lazy var payContentLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 14)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
@@ -192,6 +214,7 @@ class SPPayTableCell: UITableViewCell {
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = UITableViewCellSelectionStyle.none
         self.sp_setupUI()
     }
     
@@ -214,6 +237,7 @@ class SPPayTableCell: UITableViewCell {
             self.payImageView.image = UIImage(named: "public_pay_ailpy")
         case SPPayType.aliPay.rawValue:
             self.payImageView.image = UIImage(named: "public_pay_transfer")
+    
         default:
             self.payImageView.image = UIImage(named: "public_pay_balance")
         }
@@ -243,6 +267,7 @@ class SPPayTableCell: UITableViewCell {
             maker.top.bottom.equalTo(self.contentView).offset(0)
             maker.width.greaterThanOrEqualTo(0)
         }
+        self.payContentLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.payContentLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.payLabel.snp.right).offset(4)
             maker.top.bottom.equalTo(self.contentView).offset(0)

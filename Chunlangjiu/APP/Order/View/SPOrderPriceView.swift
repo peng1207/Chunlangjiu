@@ -33,13 +33,16 @@ class SPOrderPriceView:  UIView{
     fileprivate lazy var lineView : UIView = {
         return sp_getLineView()
     }()
-    fileprivate lazy var paymemntLabel : UILabel = {
-        let label = UILabel()
-        label.font = sp_getFontSize(size: 14)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-        return label
+    fileprivate lazy var paymentView : SPOrderRightView = {
+        let view = SPOrderRightView()
+        view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: 44)
+        view.titleLabel.text = "实付金额："
+        view.contentLabel.numberOfLines = 0
+        view.contentLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        return view
     }()
-    fileprivate var payMementHeight : Constraint!
+    
+//    fileprivate var payMementHeight : Constraint!
     fileprivate var totalTop  : Constraint!
     fileprivate var totalHeight : Constraint!
     fileprivate var freeTop : Constraint!
@@ -67,7 +70,7 @@ class SPOrderPriceView:  UIView{
             if let status = Bool(sp_getString(string: detaileModel?.auction_status)) ,  status == false{
                  self.freeView.contentLabel.text = "保密出价"
             }else{
-                 self.freeView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.max_price))"
+                 self.freeView.contentLabel.text = "\(SP_CHINE_MONEY)\( sp_getString(string: detaileModel?.max_price).count > 0 ? sp_getString(string: detaileModel?.max_price) : "0.00")"
             }
             self.offerView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.original_bid))"
             self.offerView.isHidden = false
@@ -75,19 +78,25 @@ class SPOrderPriceView:  UIView{
             self.freeView.isHidden = false
             self.totalView.titleLabel.text = "商品起拍价："
             self.freeView.titleLabel.text = "当前最高出价："
-            self.offerTop.update(offset: 8)
-            self.offerHeight.update(offset: 16)
+            self.offerTop.update(offset: 0)
+            self.offerHeight.update(offset: 40)
             var isPay = false
             if let isP = Bool(sp_getString(string: detaileModel?.is_pay)), isP == true{
                 isPay = true
             }
             
-            let payAtt = NSMutableAttributedString()
-            let payTitle = NSAttributedString(string: isPay ? "已付定金：" :"应付定金：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)])
-            payAtt.append(payTitle)
-            let payValue = NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
-            payAtt.append(payValue)
-            self.paymemntLabel.attributedText = payAtt
+//            let payAtt = NSMutableAttributedString()
+//            let payTitle = NSAttributedString(string: isPay ? "已付定金：" :"应付定金：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)])
+//            payAtt.append(payTitle)
+//            let payValue = NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
+//            payAtt.append(payValue)
+            self.paymentView.titleLabel.text = isPay ? "已付定金：" :"应付定金："
+           
+            if sp_getString(string: detaileModel?.status) == SP_AUCTION_3 , isPay {
+                 self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))（定金退回至可用余额，请注意查收！）"
+            }else{
+                 self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.pledge))"
+            }
             if sp_getString(string: detaileModel?.status) == SP_AUCTION_0 || sp_getString(string: detaileModel?.status) == SP_AUCTION_1{
                 self.offerView.btn.isHidden = false
             }else{
@@ -103,11 +112,11 @@ class SPOrderPriceView:  UIView{
                 self.freeHeight.update(offset: 0)
                 self.lineTop.update(offset: 0)
             }else{
-                self.totalTop.update(offset: 13)
-                self.totalHeight.update(offset: 16)
-                self.freeTop.update(offset: 8)
-                self.freeHeight.update(offset: 16)
-                self.lineTop.update(offset: 15)
+                self.totalTop.update(offset: 0)
+                self.totalHeight.update(offset: 40)
+                self.freeTop.update(offset: 0)
+                self.freeHeight.update(offset: 40)
+                self.lineTop.update(offset: 0)
             }
             
             self.totalView.isHidden = isAs
@@ -121,12 +130,23 @@ class SPOrderPriceView:  UIView{
             self.totalView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.total_fee))"
             self.freeView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.post_fee))"
             
-            let payAtt = NSMutableAttributedString()
-            let payTitle = NSAttributedString(string: isAs ? "退款金额：" :"实付金额：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)])
-            payAtt.append(payTitle)
-            let payValue = NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.payment))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
-            payAtt.append(payValue)
-            self.paymemntLabel.attributedText = payAtt
+            self.paymentView.titleLabel.text = isAs ? "退款金额：" :"实付金额："
+            var price = ""
+            if isAs , let model = self.detaileModel?.refunds, sp_getString(string: model.refund_money).count > 0 {
+                price = sp_getString(string: model.refund_money)
+            }else{
+                price = sp_getString(string: detaileModel?.payment)
+            }
+            
+            self.paymentView.contentLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: price))"
+            
+//            let payAtt = NSMutableAttributedString()
+//            let payTitle = NSAttributedString(string: isAs ? "退款金额：" :"实付金额：", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)])
+//            payAtt.append(payTitle)
+//            let payValue = NSAttributedString(string: "\(SP_CHINE_MONEY)\(sp_getString(string: detaileModel?.payment))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.foregroundColor: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
+//            payAtt.append(payValue)
+//
+//            self.paymemntLabel.attributedText = payAtt
         }
         
         
@@ -137,7 +157,8 @@ class SPOrderPriceView:  UIView{
         self.addSubview(self.totalView)
         self.addSubview(self.freeView)
         self.addSubview(self.offerView)
-        self.addSubview(self.paymemntLabel)
+        self.addSubview(self.paymentView)
+       
         self.addSubview(self.lineView)
         self.sp_addConstraint()
     }
@@ -145,13 +166,13 @@ class SPOrderPriceView:  UIView{
     fileprivate func sp_addConstraint(){
         self.totalView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            self.totalTop = maker.top.equalTo(self).offset(13).constraint
-            self.totalHeight = maker.height.equalTo(16).constraint
+            self.totalTop = maker.top.equalTo(self).offset(0).constraint
+            self.totalHeight = maker.height.equalTo(40).constraint
         }
         self.freeView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.totalView).offset(0)
-            self.freeTop = maker.top.equalTo(self.totalView.snp.bottom).offset(8).constraint
-            self.freeHeight = maker.height.equalTo(16).constraint
+            self.freeTop = maker.top.equalTo(self.totalView.snp.bottom).offset(0).constraint
+            self.freeHeight = maker.height.equalTo(40).constraint
         }
         self.offerView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
@@ -160,17 +181,17 @@ class SPOrderPriceView:  UIView{
         }
         self.lineView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.height.equalTo(sp_lineHeight)
-           self.lineTop = maker.top.equalTo(self.offerView.snp.bottom).offset(15).constraint
+            maker.height.equalTo(0)
+           self.lineTop = maker.top.equalTo(self.offerView.snp.bottom).offset(0).constraint
         }
-        self.paymemntLabel.snp.makeConstraints { (maker) in
-             maker.right.equalTo(self).offset(-10)
+        self.paymentView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.totalView).offset(0)
             maker.top.equalTo(self.lineView.snp.bottom).offset(0)
-            self.payMementHeight = maker.height.equalTo(44).constraint
-            maker.width.greaterThanOrEqualTo(0)
-            maker.left.greaterThanOrEqualTo(self.snp.left).offset(11)
+            maker.height.equalTo(44)
+//            maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self).offset(0)
         }
+        
     }
     deinit {
         

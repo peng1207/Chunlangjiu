@@ -9,21 +9,20 @@
 import Foundation
 import SnapKit
 class SPOrderDetaileVC: SPBaseVC {
-//    fileprivate lazy var headerView : SPOrderStateView = {
-//        let view = SPOrderStateView()
-//        view.frame = CGRect(x: 0, y: 0, width: 0, height: sp_lineHeight)
-//        view.isHidden = true
-//        return view
-//    }()
+ 
     fileprivate lazy var headerView : SPOrderHeaderView = {
         let view = SPOrderHeaderView()
-        view.frame = CGRect(x: 0, y: 0, width: 0, height: sp_lineHeight)
+        view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenHeight())
         view.isHidden = true
+        view.imgView.clickBlock = { [weak self] (index,list) in
+                self?.sp_clickShowImg(index: index, list: list)
+        }
         return view
     }()
     fileprivate lazy var footerView : SPOrderFooterView = {
         let view = SPOrderFooterView()
         view.isHidden = true
+        view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenHeight())
         view.priceView.offerView.btn.addTarget(self, action: #selector(sp_clickEditPrice), for: UIControlEvents.touchUpInside)
         return view
     }()
@@ -39,6 +38,7 @@ class SPOrderDetaileVC: SPBaseVC {
         view.isHidden = true
         return view
     }()
+ 
     fileprivate var tableView : UITableView!
     fileprivate var orderDetaileModel : SPOrderDetaileModel?
     fileprivate var bottomHeight : Constraint!
@@ -68,13 +68,16 @@ class SPOrderDetaileVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
-        self.tableView.rowHeight = 70
+        self.tableView.rowHeight = 125
+        self.tableView.beginUpdates()
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
+        self.tableView.endUpdates()
         self.tableView.showsVerticalScrollIndicator = false
         self.tableView.backgroundColor = self.view.backgroundColor
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.bottomView)
+     
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -93,12 +96,18 @@ class SPOrderDetaileVC: SPBaseVC {
                  maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-        self.headerView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview()
-            maker.left.right.equalTo(view)
-            maker.centerX.equalToSuperview()
-            maker.height.greaterThanOrEqualTo(0).priority(.high)
+        if #available(iOS 11.0, *) {
+            self.headerView.snp.makeConstraints { (maker) in
+                maker.width.equalTo(self.tableView)
+            }
         }
+       
+//        self.headerView.snp.makeConstraints { (maker) in
+//            maker.top.equalToSuperview()
+//            maker.left.right.equalTo(view)
+//            maker.centerX.equalToSuperview()
+//            maker.height.greaterThanOrEqualTo(0).priority(.high)
+//        }
 //        self.footerView.snp.makeConstraints { (maker) in
 //            maker.bottom.equalToSuperview()
 //            maker.left.right.equalTo(view)
@@ -130,6 +139,7 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         if cell == nil {
             cell = SPOrderTableCell(style: UITableViewCellStyle.default, reuseIdentifier: orderCellID)
             cell?.showAfterSales = true
+            cell?.contentView.backgroundColor = self.view.backgroundColor
         }
         if let detaile = self.orderDetaileModel {
             if indexPath.row < sp_getArrayCount(array: detaile.orders){
@@ -146,13 +156,15 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         return 59
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 10
+        return 50
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let orderHeaderID = "orderHeaderID"
         var headerView : SPOrderTableHeaderView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: orderHeaderID) as? SPOrderTableHeaderView
         if headerView == nil {
             headerView = SPOrderTableHeaderView(reuseIdentifier: orderHeaderID)
+//            headerView?.sp_leftRightZero()
+//           headerView?.contentView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         }
         if let detaile = self.orderDetaileModel {
             headerView?.orderModel = detaile
@@ -161,7 +173,27 @@ extension SPOrderDetaileVC : UITableViewDelegate,UITableViewDataSource {
         return headerView
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
+        let orderFooterID = "orderFooterID"
+        var footerView : SPOrderTableFooterView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: orderFooterID) as? SPOrderTableFooterView
+        if footerView == nil{
+            footerView = SPOrderTableFooterView(reuseIdentifier: orderFooterID)
+            footerView?.sp_leftRightZero()
+            footerView?.priceColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        }
+        if let detaile = self.orderDetaileModel {
+            footerView?.orderModel = detaile
+            footerView?.sp_hiddenBtn()
+//            footerView?.clickBlock = { [weak self ](model,btnIndex) in
+//                SPOrderHandle.sp_dealOrder(orderModel: model, btnIndex: btnIndex, viewController: self, complete: { (isSuccess) in
+//                    if isSuccess {
+//                        self?.currentPage = 1
+//                        self?.sp_request()
+//                    }
+//                })
+//            }
+        }
+     
+        return footerView
     }
 }
 extension SPOrderDetaileVC{
@@ -293,15 +325,16 @@ extension SPOrderDetaileVC{
         self.footerView.isHidden = false
         self.headerView.detaileModel = self.orderDetaileModel
         self.footerView.detaileModel = self.orderDetaileModel
-        self.tableView.sp_layoutHeaderView()
-        self.tableView.sp_layoutFooterView()
+     
         self.bottomView.orderDetaile = self.orderDetaileModel
         let bottomIsHidden = SPOrderBtnManager.sp_dealDetBtn(orderModel: self.orderDetaileModel)
         self.bottomView.isHidden = bottomIsHidden
         self.bottomHeight.update(offset: bottomIsHidden ? 0 : 44)
-        if sp_getString(string: orderDetaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_0 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION ) || (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_1 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION){
+        if sp_getString(string: orderDetaileModel?.status) == SP_WAIT_BUYER_PAY ||  (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_0 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION ) || (sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_1 && sp_getString(string: orderDetaileModel?.type) == SP_AUCTION) || (sp_getString(string: orderDetaileModel?.type) == SP_AUCTION && sp_getString(string: orderDetaileModel?.status) == SP_AUCTION_2 && sp_getString(string: orderDetaileModel?.trade_ststus) == SP_WAIT_BUYER_PAY){
              sp_addTimeNotification()
         }
+        self.tableView.sp_layoutHeaderView()
+        self.tableView.sp_layoutFooterView()
         
     }
 }
@@ -324,6 +357,12 @@ extension SPOrderDetaileVC {
                 self.sp_request()
             }
         }
+    }
+    fileprivate func sp_clickShowImg(index:Int,list:[Any]?){
+        let lookPictureVC = SPLookPictureVC()
+        lookPictureVC.dataArray =  list
+        lookPictureVC.selectIndex = index
+        self.present(lookPictureVC, animated: true, completion: nil)
     }
 }
 extension SPOrderDetaileVC{

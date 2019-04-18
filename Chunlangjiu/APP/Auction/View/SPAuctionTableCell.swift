@@ -13,7 +13,10 @@ import SnapKit
 let SP_AUCTION_PRODUCT_WIDTH :  CGFloat = 140
 class SPAuctionTableCell: UITableViewCell {
     lazy var auctionView : SPAuctionView = {
-        return SPAuctionView()
+        let view = SPAuctionView()
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.sp_cornerRadius(cornerRadius: 5)
+        return view
     }()
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,19 +33,19 @@ class SPAuctionTableCell: UITableViewCell {
     fileprivate func sp_setupUI(){
         self.contentView.addSubview(self.auctionView)
         self.sp_addConstraint()
+        
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.auctionView.snp.makeConstraints { (maker) in
-            maker.left.right.bottom.top.equalTo(self.contentView).offset(0)
+            maker.left.equalTo(self.contentView).offset(10)
+            maker.right.equalTo(self.contentView).offset(-10)
+            maker.bottom.equalTo(self.contentView).offset(0)
+            maker.height.equalTo(175)
         }
-        self.auctionView.productImageView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.auctionView.snp.left).offset(10)
-            maker.width.equalTo(SP_AUCTION_PRODUCT_WIDTH)
-            maker.height.equalTo(self.auctionView.productImageView.snp.width).multipliedBy(SP_PRODUCT_SCALE)
-        maker.top.equalTo(self.auctionView.snp.top).offset(15)
-        }
+        
     }
+    
     deinit {
         
     }

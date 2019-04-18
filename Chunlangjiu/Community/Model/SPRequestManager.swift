@@ -26,25 +26,44 @@ typealias SPRequestBlock = (_ data : Any? ,_ error: Error?) -> Void
 class SPRequestManager {
     static  fileprivate var requestCacheArr = [DataRequest]()
     
+    public static let netManager : SessionManager = {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        configuration.timeoutIntervalForRequest = 30
+        return Alamofire.SessionManager(configuration: configuration)
+    }()
+    
+//    static func sp_getSessionManager()->SessionManager{
+//        let configuration = URLSessionConfiguration.default
+//        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+//        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+//        return SessionManager(configuration: configuration)
+//    }
+    
     class func sp_get(requestModel : SPRequestModel,requestBlock : SPRequestBlock?) {
         guard let url = requestModel.url else {
+            sp_log(message: "链接为空 不发送请求")
             if  let block = requestBlock {
                 block(nil,nil)
             }
             return
         }
         if SPNetWorkManager.sp_notReachable() {
+            sp_log(message: "没有网络 不发送请求")
             if  let block = requestBlock {
                 block(nil,nil)
             }
             return
         }
         guard let requestUrl = URL(string: url) else {
+            sp_log(message: "连接获取失败 不发送请求")
             if  let block = requestBlock {
                 block(nil,nil)
             }
             return
         }
+        sp_log(message: "发送请求数据")
         var httpMethod : HTTPMethod = .post
         switch requestModel.httpMethod {
         case .get:
@@ -56,9 +75,14 @@ class SPRequestManager {
         case .put :
             httpMethod = .put
         }
+       
+        let dataRequest =  netManager.request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
+        // 忽略本地缓存，重新获取，防止没更新json文件
+        //        SessionManager.default.session.configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        //        SessionManager.default.session.configuration.timeoutIntervalForRequest = 30
+//        let dataRequest = request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
+     
         requestModel.isRequest = true
-        let dataRequest =  request(requestUrl, method: httpMethod, parameters: requestModel.parm, encoding: JSONEncoding.default, headers: nil)
-        
         switch requestModel.reponseFormt {
         case .json:
             dataRequest.responseJSON { (dataResponse : DataResponse) in

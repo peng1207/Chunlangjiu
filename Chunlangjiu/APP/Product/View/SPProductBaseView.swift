@@ -45,32 +45,32 @@ class SPProductBaseView:  UIView{
         view.nextImageView.image = UIImage(named: "public_pulldown_gray")
         return view
     }()
-    lazy var alcoholDegreeView : SPAddressSelectView = {
-        let view = SPAddressSelectView()
-        view.titleLabel.text = "选择酒精度"
-        view.placeholder = "请选择"
-        view.nextImageView.image = UIImage(named: "public_pulldown_gray")
-        return view
-    }()
-    lazy var titleView : SPAddressEditView = {
-        let view = SPAddressEditView()
-        view.titleLabel.text = "商品标题"
-        view.textFiled.placeholder = "请填写"
-        return view
-    }()
-    lazy var subTitleView : SPAddressEditView = {
-        let view = SPAddressEditView()
-        view.titleLabel.text = "商品副标题"
-        view.textFiled.placeholder = "请填写"
-        return view
-    }()
-    lazy var labelView : SPAddressEditView = {
-        let view = SPAddressEditView()
-        view.titleLabel.text = "商品标签"
-        view.textFiled.placeholder = "例：产地，年份，品牌"
-        view.lineView.isHidden = true
-        return view
-    }()
+//    lazy var alcoholDegreeView : SPAddressSelectView = {
+//        let view = SPAddressSelectView()
+//        view.titleLabel.text = "选择酒精度"
+//        view.placeholder = "请选择"
+//        view.nextImageView.image = UIImage(named: "public_pulldown_gray")
+//        return view
+//    }()
+//    lazy var titleView : SPAddressEditView = {
+//        let view = SPAddressEditView()
+//        view.titleLabel.text = "商品标题"
+//        view.textFiled.placeholder = "请填写"
+//        return view
+//    }()
+//    lazy var subTitleView : SPAddressEditView = {
+//        let view = SPAddressEditView()
+//        view.titleLabel.text = "商品副标题"
+//        view.textFiled.placeholder = "请填写"
+//        return view
+//    }()
+//    lazy var labelView : SPAddressEditView = {
+//        let view = SPAddressEditView()
+//        view.titleLabel.text = "商品标签"
+//        view.textFiled.placeholder = "例：产地，年份，品牌"
+//        view.lineView.isHidden = true
+//        return view
+//    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -86,10 +86,10 @@ class SPProductBaseView:  UIView{
         self.addSubview(self.pSortView)
         self.addSubview(self.placeView)
         self.addSubview(self.typeView)
-        self.addSubview(self.alcoholDegreeView)
-        self.addSubview(self.titleView)
-        self.addSubview(self.subTitleView)
-        self.addSubview(self.labelView)
+//        self.addSubview(self.alcoholDegreeView)
+//        self.addSubview(self.titleView)
+//        self.addSubview(self.subTitleView)
+//        self.addSubview(self.labelView)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -133,36 +133,38 @@ class SPProductBaseView:  UIView{
             maker.left.right.equalTo(self).offset(0)
             maker.height.equalTo(self.pSortView.snp.height).offset(0)
             maker.top.equalTo(self.placeView.snp.bottom).offset(0)
+            maker.bottom.equalTo(self.snp.bottom).offset(0)
         }
         self.typeView.nextImageView.snp.updateConstraints { (maker ) in
             maker.width.equalTo(17)
             maker.height.equalTo(9)
         }
-        self.alcoholDegreeView.snp.makeConstraints { (maker ) in
-            maker.left.right.equalTo(self).offset(0)
-            maker.height.equalTo(self.pSortView.snp.height).offset(0)
-            maker.top.equalTo(self.typeView.snp.bottom).offset(0)
-        }
-        self.alcoholDegreeView.nextImageView.snp.updateConstraints { (maker ) in
-            maker.width.equalTo(17)
-            maker.height.equalTo(9)
-        }
-        self.titleView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self).offset(0)
-            maker.height.equalTo(self.pSortView.snp.height).offset(0)
-            maker.top.equalTo(self.alcoholDegreeView.snp.bottom).offset(0)
-        }
-        self.subTitleView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.titleView).offset(0)
-            maker.height.equalTo(self.titleView.snp.height).offset(0)
-            maker.top.equalTo(self.titleView.snp.bottom).offset(0)
-        }
-        self.labelView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.subTitleView).offset(0)
-            maker.top.equalTo(self.subTitleView.snp.bottom).offset(0)
-            maker.height.equalTo(self.subTitleView.snp.height).offset(0)
-            maker.bottom.equalTo(self.snp.bottom).offset(0)
-        }
+//        self.alcoholDegreeView.snp.makeConstraints { (maker ) in
+//            maker.left.right.equalTo(self).offset(0)
+//            maker.height.equalTo(self.pSortView.snp.height).offset(0)
+//            maker.top.equalTo(self.typeView.snp.bottom).offset(0)
+//            maker.bottom.equalTo(self.snp.bottom).offset(0)
+//        }
+//        self.alcoholDegreeView.nextImageView.snp.updateConstraints { (maker ) in
+//            maker.width.equalTo(17)
+//            maker.height.equalTo(9)
+//        }
+//        self.titleView.snp.makeConstraints { (maker) in
+//            maker.left.right.equalTo(self).offset(0)
+//            maker.height.equalTo(self.pSortView.snp.height).offset(0)
+//            maker.top.equalTo(self.alcoholDegreeView.snp.bottom).offset(0)
+//        }
+//        self.subTitleView.snp.makeConstraints { (maker) in
+//            maker.left.right.equalTo(self.titleView).offset(0)
+//            maker.height.equalTo(self.titleView.snp.height).offset(0)
+//            maker.top.equalTo(self.titleView.snp.bottom).offset(0)
+//        }
+//        self.labelView.snp.makeConstraints { (maker) in
+//            maker.left.right.equalTo(self.subTitleView).offset(0)
+//            maker.top.equalTo(self.subTitleView.snp.bottom).offset(0)
+//            maker.height.equalTo(self.subTitleView.snp.height).offset(0)
+//            maker.bottom.equalTo(self.snp.bottom).offset(0)
+//        }
     }
     deinit {
         

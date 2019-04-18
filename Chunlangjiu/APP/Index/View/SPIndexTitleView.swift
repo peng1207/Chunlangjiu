@@ -28,7 +28,7 @@ class SPIndexTitleView:  UIView{
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
+        self.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         self.sp_setupUI()
     }
     required init?(coder aDecoder: NSCoder) {

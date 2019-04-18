@@ -10,16 +10,7 @@
 import Foundation
 import SnapKit
 class SPProductDetaileVC: SPBaseVC {
-    fileprivate lazy var topView : SPProductDetailTopView = {
-        let view = SPProductDetailTopView(frame: CGRect(x: 0, y: 0, width: sp_getScreenWidth() - 80, height: SP_NAVGIT_HEIGHT))
-        //        view.backgroundColor = UIColor.white
-        
-        //        view.isHidden = true
-        view.btnClickBlock = { [weak self](index : Int) in
-            self?.sp_dealTopBtnClick(index: index)
-        }
-        return view
-    }()
+    
     fileprivate lazy var bottomView : SPProductDetaileBottomView = {
         let view = SPProductDetaileBottomView ()
         view.backgroundColor = UIColor.white
@@ -62,62 +53,44 @@ class SPProductDetaileVC: SPBaseVC {
         view.recommendView.selectBlock = { [weak self] (model) in
             self?.sp_select(model: model)
         }
+        view.auctionInfoView.clickBlock = { [weak self] in
+            self?.sp_pushAuctionInfo()
+        }
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_pushShop))
         view.shopView.addGestureRecognizer(tap)
         view.productView.lookDetaile.addTarget(self, action: #selector(sp_lookAuction), for: UIControlEvents.touchUpInside)
         return view
     }()
-    fileprivate lazy var webVC : SPProductDetaileWebVC = {
-        let vc = SPProductDetaileWebVC()
-        vc.showDownView = true
-        vc.finishComlete = { [weak self] in
-            self?.sp_deal(isDetaile: false)
-        }
-        return vc
-    }()
+    
     fileprivate lazy var shareBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_share_white"), for: UIControlState.selected)
+        btn.setImage(UIImage(named: "public_share_white"), for: UIControlState.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        btn.sp_cornerRadius(cornerRadius: 15)
+//        btn.sp_cornerRadius(cornerRadius: 15)
         btn.addTarget(self, action: #selector(sp_clickShareAction), for: UIControlEvents.touchUpInside)
-        btn.setImage(UIImage(named: "public_share_alpha"), for: UIControlState.normal)
-        btn.isHidden = true
+//        btn.setImage(UIImage(named: "public_share_alpha"), for: UIControlState.normal)
+//        btn.isHidden = false
         return btn
     }()
-    fileprivate lazy var evaluateVC : SPEvaluateListVC = {
-        let view = SPEvaluateListVC()
-        view.getDataBlock = {  [weak self](list ,total) in
-            self?.detaileView.sp_setEvaluate(list: list, totalPage: total)
-        }
-        return view
-    }()
-    fileprivate lazy var backBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_back_wither"), for: UIControlState.normal)
-        btn.setImage(UIImage(named: "public_back"), for: UIControlState.selected)
-        btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
-        btn.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
-        btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
-        return btn
-    }()
+    
+   
     fileprivate let topViewHeight : CGFloat = 44
     fileprivate var showDetaile : Bool = false
-    fileprivate var topViewTopConstat : Constraint?
+   
     var productModel : SPProductModel?
     var detaileModel : SPProductDetailModel?
     var countModel : SPShopCarCount?
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         self.sp_setupUI()
         sp_sendRequest()
         sp_sendRecommd()
+        sp_sendEvaluateRequest()
         sp_addNoitification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.sp_star()
+        
         self.detaileView.productScrollView.delegate = self.detaileView
         self.detaileView.scrollViewDidScroll(self.detaileView.productScrollView)
         sp_sendCountRquest()
@@ -127,7 +100,7 @@ class SPProductDetaileVC: SPBaseVC {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.sp_reset()
+        
         self.detaileView.productScrollView.delegate = nil
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -135,30 +108,20 @@ class SPProductDetaileVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        //        self.view.addSubview(self.topView)
-        self.view.addSubview(self.scrollView)
+        self.navigationItem.title = "商品详情"
+     
+        self.view.addSubview(self.detaileView)
         self.view.addSubview(self.bottomView)
-        self.scrollView.addSubview(self.detaileView)
-        self.addChildViewController(self.detaileView.webVC)
-        self.scrollView.addSubview(self.webVC.view)
-        self.addChildViewController(self.webVC)
-        self.scrollView.addSubview(self.evaluateVC.view)
-        self.addChildViewController(self.evaluateVC)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.shareBtn)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.backBtn)
-        self.navigationItem.titleView = self.topView
+//        self.scrollView.addSubview(self.detaileView)
+       self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.shareBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        //        self.topView.snp.makeConstraints { (maker) in
-        //            maker.left.right.equalTo(self.view).offset(0)
-        //            self.topViewTopConstat = maker.top.equalTo(self.view).offset(0).constraint
-        //            maker.height.equalTo(topViewHeight)
-        //        }
-        self.scrollView.snp.makeConstraints { (maker) in
+     
+        self.detaileView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
-            self.topViewTopConstat = maker.top.equalTo(self.view).offset(0).constraint
+            maker.top.equalTo(self.view).offset(0)
             maker.bottom.equalTo(self.bottomView.snp.top).offset(0)
         }
         self.bottomView.snp.makeConstraints { (maker) in
@@ -170,33 +133,23 @@ class SPProductDetaileVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
-        self.detaileView.snp.makeConstraints { (maker) in
-            maker.left.top.bottom.equalTo(self.scrollView).offset(0)
-            maker.width.equalTo(self.scrollView.snp.width).offset(0)
-            maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
-        }
-        self.webVC.view.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.detaileView.snp.right).offset(0)
-            maker.top.bottom.width.equalTo(self.detaileView).offset(0)
-        }
-        self.evaluateVC.view.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.webVC.view.snp.right).offset(0)
-            maker.top.bottom.width.equalTo(self.detaileView).offset(0)
-            //            maker.right.equalTo(self.scrollView.snp.right).offset(0)
-        }
+//        self.detaileView.snp.makeConstraints { (maker) in
+//            maker.left.top.bottom.equalTo(self.scrollView).offset(0)
+//            maker.width.equalTo(self.scrollView.snp.width).offset(0)
+//            maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
+//        }
+        
         
     }
     deinit {
-        self.scrollView.delegate = nil
-        self.webVC.sp_remove()
+//        self.scrollView.delegate = nil
+        NotificationCenter.default.removeObserver(self)
     }
 }
 // MARK: - deletage
 extension SPProductDetaileVC : UIScrollViewDelegate{
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let index = self.scrollView.contentOffset.x / self.scrollView.frame.size.width
-        self.sp_dealTopView(index: Int(index))
-        self.topView.sp_setBtnIndex(index: Int(index))
+ 
     }
 }
 // MARK: - notification
@@ -219,76 +172,30 @@ extension SPProductDetaileVC {
 // MARK: - action push
 extension SPProductDetaileVC {
     fileprivate func sp_didScrollComplete(view : UIScrollView){
-//        guard self.showDetaile == false else {
-//            return
-//        }
-        let aplha = self.navigationController?.navigationBar.sp_change(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), with: view, andValue: (SP_NAVGIT_HEIGHT + sp_getstatusBarHeight()))
-        if let a = aplha {
-            self.sp_dealView(aplha: a)
-        }
+ 
+       
     }
     fileprivate func sp_dealView(aplha : CGFloat){
-        if aplha >= 1 {
-            if self.topView.isHidden == true{
-                self.topView.isHidden = false
-                self.topViewTopConstat?.update(offset: 0)
-            }
-            self.backBtn.isSelected = true
-//            self.title = "商品详情"
-            self.shareBtn.isSelected = true
-            
-        }else{
-            if self.topView.isHidden == false {
-                self.topView.isHidden = true
-                self.topViewTopConstat?.update(offset: (-(SP_NAVGIT_HEIGHT + sp_getstatusBarHeight())))
-            }
-            self.backBtn.isSelected = false
-            self.shareBtn.isSelected = false
-//            self.title = ""
-        }
+        
     }
     fileprivate func sp_clickEv(){
-        self.scrollView.delegate = nil
-       
-        sp_asyncAfter(time: 0.1) {
-             self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width * 3.0, height: 0)
-            self.scrollView.contentOffset = CGPoint(x: self.scrollView.frame.size.width * 2.0, y: 0)
-            self.topView.sp_setBtnIndex(index: 2)
-        }
-        
-        self.navigationController?.navigationBar.sp_reset()
-        self.sp_dealView(aplha: 1)
-        
-        sp_asyncAfter(time: 1) {
-             self.scrollView.delegate = self
-        }
-//
+        let evVC = SPEvaluateListVC()
+        evVC.skuID =  detaileModel?.item?.item_id
+        self.navigationController?.pushViewController(evVC, animated: true)
     }
     fileprivate func sp_deal(isDetaile : Bool){
-        self.showDetaile = isDetaile
-        if isDetaile {
-            self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width * 3.0, height: 0)
-            sp_dealTopBtnClick(index: 1)
-            self.navigationController?.navigationBar.sp_reset()
-            sp_dealView(aplha: 1)
-        }else
-        {
-            sp_dealTopBtnClick(index: 0)
-            if self.topView.isHidden == true {
-                 self.scrollView.contentSize = CGSize(width:0, height: 0)
-            }
-        }
+       
     }
     
     fileprivate func sp_dealTopBtnClick(index : Int){
-        self.scrollView.contentOffset = CGPoint(x: self.scrollView.frame.size.width * CGFloat(integerLiteral: index), y: 0)
-        self.sp_dealTopView(index: index)
+//        self.scrollView.contentOffset = CGPoint(x: self.scrollView.frame.size.width * CGFloat(integerLiteral: index), y: 0)
+//        self.sp_dealTopView(index: index)
     }
     fileprivate func sp_dealTopView(index : Int){
         if index == 0 {
             self.sp_didScrollComplete(view: self.detaileView.productScrollView)
         }else{
-            self.navigationController?.navigationBar.sp_backColor(color: SPColorForHexString(hex: SP_HexColor.color_000000.rawValue))
+            self.navigationController?.navigationBar.sp_backColor(color: SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue))
             self.sp_dealView(aplha: 1)
         }
     }
@@ -405,23 +312,27 @@ extension SPProductDetaileVC {
     }
     /// 查看出价详细
     @objc fileprivate func sp_lookAuction(){
-        let request = SPRequestModel()
-        var parm = [String : Any]()
-        parm.updateValue(sp_getString(string: self.detaileModel?.item?.auctionitem_id), forKey: "auctionitem_id")
-        request.parm = parm
-        sp_showAnimation(view: self.view, title: nil)
-        SPAppRequest.sp_getAuctionPriceList(requestModel: request) { [weak self](code , list, errorModel, total) in
-            sp_hideAnimation(view: self?.view)
-            if code == SP_Request_Code_Success {
-                if sp_getArrayCount(array: list) > 0 {
-                    SPAuctionPriceList.sp_show(list: list as? [SPAuctionPrice])
-                }else{
-                    sp_showTextAlert(tips: "还没有人出价哦!")
-                }
-            }else{
-                sp_showTextAlert(tips: "获取列表数据失败")
-            }
-        }
+        let lookVC = SPLookAuctionVC()
+        lookVC.auctionitem_id = self.detaileModel?.item?.auctionitem_id
+        self.navigationController?.pushViewController(lookVC, animated: true)
+        
+//        let request = SPRequestModel()
+//        var parm = [String : Any]()
+//        parm.updateValue(sp_getString(string: self.detaileModel?.item?.auctionitem_id), forKey: "auctionitem_id")
+//        request.parm = parm
+//        sp_showAnimation(view: self.view, title: nil)
+//        SPAppRequest.sp_getAuctionPriceList(requestModel: request) { [weak self](code , list, errorModel, total) in
+//            sp_hideAnimation(view: self?.view)
+//            if code == SP_Request_Code_Success {
+//                if sp_getArrayCount(array: list) > 0 {
+//                    SPAuctionPriceList.sp_show(list: list as? [SPAuctionPrice])
+//                }else{
+//                    sp_showTextAlert(tips: "还没有人出价哦!")
+//                }
+//            }else{
+//                sp_showTextAlert(tips: "获取列表数据失败")
+//            }
+//        }
     }
     fileprivate func sp_clickBraner(index : Int){
         sp_log(message: "index \(index)")
@@ -442,6 +353,10 @@ extension SPProductDetaileVC {
         let detaileVC = SPProductDetaileVC()
         detaileVC.productModel = productModel
         self.navigationController?.pushViewController(detaileVC, animated: true)
+    }
+    fileprivate func sp_pushAuctionInfo(){
+        let auctionInfoVC = SPAuctionInfoVC()
+        self.navigationController?.pushViewController(auctionInfoVC, animated: true)
     }
 }
 // MARK: - 网络请求
@@ -465,12 +380,8 @@ extension SPProductDetaileVC {
             self.bottomView.isHidden = false
             self.detaileModel = detaileModel
             self.detaileView.detaileModel = detaileModel
-            self.evaluateVC.skuID = detaileModel?.item?.item_id
-            self.evaluateVC.sp_sendRequest()
             self.bottomView.detaileModel = detaileModel
-            self.webVC.url = URL(string: sp_getString(string: detaileModel?.item?.desc))
-            self.webVC.sp_reloadUrl()
-           
+            self.bottomView.countModel = self.countModel
         }else{
             self.bottomView.isHidden = true
 
@@ -640,8 +551,6 @@ extension SPProductDetaileVC {
             }else{
                  sp_showTextAlert(tips: msg)
             }
-           
-            
         }
     }
     fileprivate func sp_sendRecommd(){
@@ -658,6 +567,28 @@ extension SPProductDetaileVC {
                 self?.detaileView.sp_setRecomd(list: list)
             }
         }
- 
+    }
+    func sp_sendEvaluateRequest(){
+        var parm = [String : Any]()
+        if let i = self.productModel?.item_id {
+            parm.updateValue(i, forKey: "item_id")
+        }else{
+            return
+        }
+        parm.updateValue(0, forKey: "rate_type")
+        parm.updateValue(1, forKey: "page_no")
+        parm.updateValue(10, forKey: "page_size")
+        self.requestModel.parm = parm
+        SPAppRequest.sp_getEvaluate(requestModel: self.requestModel) {  [weak self](errorCode, list, errorModel, totalPage) in
+            self?.sp_dealRequest(errorCode: errorCode, list: list, errorModel: errorModel, totalPage: totalPage)
+        }
+    }
+    fileprivate func sp_dealRequest(errorCode:String,list:[Any]?,errorModel:SPRequestError?,totalPage :Int){
+        if errorCode == SP_Request_Code_Success {
+           self.detaileView.sp_setEvaluate(list: list, totalPage: totalPage)
+        }else{
+            
+        }
+        sp_dealNoData()
     }
 }

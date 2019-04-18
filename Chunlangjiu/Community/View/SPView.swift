@@ -22,4 +22,16 @@ extension UIView{
         self.layer.borderWidth = width
     }
     
+    /// 设置view的圆角 防止离屏渲染
+    /// 使用自动布局，需要在layoutsubviews 中使用
+    /// - Parameter corner: 圆角半径
+    func sp_setCornerRadius(corner : CGFloat){
+        
+        let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: [UIRectCorner.allCorners], cornerRadii: CGSize(width: corner, height: corner))
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = self.bounds
+        maskLayer.path = maskPath.cgPath
+        self.layer.mask = maskLayer
+    }
+    
 }

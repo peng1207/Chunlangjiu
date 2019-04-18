@@ -15,9 +15,10 @@ class SPRecommendProductView:  UIView{
     
     fileprivate lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.text = "推荐商品"
-        label.font = sp_getFontSize(size: 16)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.text = "猜您喜欢"
+        label.font = sp_getFontSize(size: 14)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        label.textAlignment = .center
         return label
     }()
     fileprivate lazy var lineView : UIView = {
@@ -36,7 +37,10 @@ class SPRecommendProductView:  UIView{
     fileprivate let  SP_RecommendProductCellID = "RecommendProductCellID"
     var selectBlock : SPRecommendBlock?
     var clickBlock : SPBtnClickBlock?
-    
+    fileprivate var titleHeigth : Constraint!
+    fileprivate var collectionHeigh : Constraint!
+    fileprivate var collectionBottom : Constraint!
+    fileprivate var collectionTop : Constraint!
     var dataArray : Array<SPProductModel>?{
         didSet{
             self.sp_setupData()
@@ -53,28 +57,35 @@ class SPRecommendProductView:  UIView{
     /// 赋值
     fileprivate func sp_setupData(){
         let have = sp_getArrayCount(array: self.dataArray) > 0 ? true : false
-        self.moreBtn.isHidden = !have
-        self.titleLabel.isHidden = false
+        self.titleLabel.isHidden = !have
         self.collectionView.isHidden = !have
-        self.lineView.isHidden = !have
-        sp_addConstraint(have: have)
+        if have {
+            self.titleHeigth.update(offset: 40)
+            self.collectionTop.update(offset: 10)
+            self.collectionBottom.update(offset: -10)
+        }else{
+            self.titleHeigth.update(offset: 0)
+            self.collectionTop.update(offset: 0)
+            self.collectionBottom.update(offset: 0)
+        }
         self.collectionView .reloadData()
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.titleLabel)
-        self.addSubview(self.lineView)
+ 
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        self.collectionView.backgroundColor = UIColor.white
+        self.collectionView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         self.collectionView.showsHorizontalScrollIndicator = false
         self.collectionView.register(SPRecommendProductCollectCell.self, forCellWithReuseIdentifier: SP_RecommendProductCellID)
+        self.collectionView.addObserver(self, forKeyPath: SP_KVO_KEY_CONTENTSIZE, options: NSKeyValueObservingOptions.new, context: nil)
         self.addSubview(self.collectionView)
  
-        self.addSubview(self.moreBtn)
+//        self.addSubview(self.moreBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -82,49 +93,21 @@ class SPRecommendProductView:  UIView{
         self.titleLabel.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self).offset(10)
             maker.right.equalTo(self.snp.right).offset(-10)
-//            if have {
-                 maker.height.greaterThanOrEqualTo(0)
-                  maker.top.equalTo(10)
-//            }else{
-//                maker.height.equalTo(0)
-//                maker.top.equalTo(0)
-//            }
+            self.titleHeigth = maker.height.equalTo(0).constraint
+            maker.top.equalTo(0)
         }
-        self.lineView.snp.remakeConstraints { (maker) in
-            maker.left.equalTo(self.titleLabel.snp.left).offset(0)
-            maker.right.equalTo(self.titleLabel.snp.right).offset(0)
-//            if have{
-                maker.top.equalTo(self.titleLabel.snp.bottom).offset(10)
-                maker.height.equalTo(sp_lineHeight)
-//            }else{
-//                maker.top.equalTo(self.titleLabel.snp.bottom).offset(0)
-//                maker.height.equalTo(0)
-//            }
-        }
+     
         self.collectionView.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self).offset(0)
             maker.right.equalTo(self.titleLabel.snp.right).offset(0)
-            maker.top.equalTo(self.lineView.snp.bottom).offset(0)
-            if have{
-               maker.height.equalTo(self.collectionView.snp.width).multipliedBy(SP_PRODUCT_SCALE * (1/CGFloat(3))).offset(50)
-            }else{
-                maker.height.equalTo(0)
-            }
+            self.collectionTop = maker.top.equalTo(self.titleLabel.snp.bottom).offset(0).constraint
+            self.collectionHeigh = maker.height.equalTo(10).constraint
+            self.collectionBottom = maker.bottom.equalTo(self.snp.bottom).offset(-10).constraint
         }
-        self.moreBtn.snp.remakeConstraints { (maker) in
-            maker.left.right.equalTo(self).offset(0)
-            if have{
-                maker.height.equalTo(30)
-                maker.top.equalTo(self.collectionView.snp.bottom).offset(8)
-            }else{
-                maker.height.equalTo(0)
-                maker.top.equalTo(self.collectionView.snp.bottom).offset(0)
-            }
-            maker.bottom.equalTo(self.snp.bottom).offset(0)
-        }
+ 
     }
     deinit {
-        
+        self.collectionView.removeObserver(self, forKeyPath: SP_KVO_KEY_CONTENTSIZE, context: nil)
     }
 }
 extension SPRecommendProductView : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
@@ -137,17 +120,25 @@ extension SPRecommendProductView : UICollectionViewDelegate,UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPRecommendProductCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: SP_RecommendProductCellID, for: indexPath) as! SPRecommendProductCollectCell
         if  indexPath.row < sp_getArrayCount(array: self.dataArray) {
-            cell.productModel = self.dataArray?[indexPath.row]
+             cell.productModel = self.dataArray?[indexPath.row]
         }
         
         return cell
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.frame.size.width - 30) / 3.0
-        return CGSize(width: width, height:collectionView.frame.size.height)
+        let width =  NSInteger((collectionView.frame.size.width - 25) / 2.0)
+        return  CGSize(width: CGFloat(width), height:  (CGFloat(width) * SP_PRODUCT_SCALE ) + 85 )
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 5, left: 10, bottom: 0, right: 10)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return 5
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
@@ -156,6 +147,12 @@ extension SPRecommendProductView : UICollectionViewDelegate,UICollectionViewData
     }
 }
 extension SPRecommendProductView {
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if sp_getString(string: keyPath) == SP_KVO_KEY_CONTENTSIZE {
+            self.collectionHeigh.update(offset: self.collectionView.contentSize.height)
+        }
+    }
     
     @objc fileprivate func sp_clickMore(){
         guard let block = self.clickBlock else {
