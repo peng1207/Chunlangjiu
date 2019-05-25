@@ -166,7 +166,7 @@ extension SPAuctionVC : UITableViewDelegate ,UITableViewDataSource {
             cell = SPAuctionTableCell(style: UITableViewCellStyle.default, reuseIdentifier: auctionCellID)
             cell?.contentView.backgroundColor = self.view.backgroundColor
         }
-        if indexPath.row < sp_getArrayCount(array: self.dataArray){
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             let productModel = self.dataArray?[indexPath.row]
             cell?.auctionView.productModel = productModel
             cell?.auctionView.productView.shopBlock = { [weak self](model) in
@@ -176,7 +176,7 @@ extension SPAuctionVC : UITableViewDelegate ,UITableViewDataSource {
         return cell!
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             let detaileVC = SPProductDetaileVC()
             detaileVC.productModel = self.dataArray?[indexPath.row]
             self.navigationController?.pushViewController(detaileVC, animated: true)
@@ -364,7 +364,7 @@ extension SPAuctionVC{
         }
 //       sp_log(message: "竞拍列表接收到时间")
         if sp_getArrayCount(array: self.dataArray) > 0 {
-            sp_simpleSQueues {
+//            sp_simpleSQueues {
                 var list = [SPProductModel]()
                 for model in self.dataArray! {
                     model.sp_set(second: second)
@@ -388,7 +388,7 @@ extension SPAuctionVC{
                         self.isScroll = false
                     }
                 }
-            }
+//            }
         }
     }
     @objc fileprivate func sp_editPrice(){

@@ -131,7 +131,13 @@ class SPOrderPayManager : NSObject {
         let payRequest = SPRequestModel()
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string:pay.payment_id), forKey: "payment_id")
-        parm.updateValue(sp_getString(string:selectPayModel.app_rpc_id), forKey: "pay_app_id")
+        if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.wxPay.rawValue {
+            parm.updateValue(sp_getString(string: SPPayType.wxPing.rawValue), forKey: "pay_app_id")
+        }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.aliPay.rawValue{
+            parm.updateValue(sp_getString(string: SPPayType.alipayPing.rawValue), forKey: "pay_app_id")
+        }else{
+           parm.updateValue(sp_getString(string:selectPayModel.app_rpc_id), forKey: "pay_app_id")
+        }
         if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.balance.rawValue {
             parm.updateValue(sp_getString(string: self.payPwd), forKey: "deposit_password")
         }
@@ -148,13 +154,15 @@ class SPOrderPayManager : NSObject {
                     sp_showTextAlert(tips:  sp_getString(string: msg).count > 0 ?  msg : "支付失败")
                     self.sp_dealComplete(isSuccess: false)
                 }else{
-                    if selectPayModel.app_rpc_id == SPPayType.wxPay.rawValue {
+                    if selectPayModel.app_rpc_id == SPPayType.wxPay.rawValue || selectPayModel.app_rpc_id == SPPayType.aliPay.rawValue {
                         self.bounceApp = true
-                        SPThridManager.sp_wxPay(dic: data!)
-                    }else if selectPayModel.app_rpc_id == SPPayType.aliPay.rawValue {
-                        self.bounceApp = true
-                        SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
-                    }else if selectPayModel.app_rpc_id == SPPayType.balance.rawValue{
+                        let payData = sp_dicValueString(data!)
+                        SPThridManager.sp_pingPay(data: payData, complete: { (status) in
+                            self.bounceApp = false
+                            sp_hideAnimation(view: nil)
+                               self.sp_dealComplete(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
+                        })
+                    } else if selectPayModel.app_rpc_id == SPPayType.balance.rawValue{
                         sp_hideAnimation(view: nil)
                         self.sp_dealComplete(isSuccess: true)
                     }

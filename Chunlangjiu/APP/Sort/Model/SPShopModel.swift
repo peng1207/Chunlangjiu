@@ -47,6 +47,10 @@ class SPShopModel : HandyJSON {
     var authentication : String?
     /// 商品数据
     var productArray : [SPProductModel]?
+    /// 鉴定师ID
+    var authenticate_id : String?
+    /// 鉴定师状态
+    var authenticate : String?
     required init() {}
     func mapping(mapper: HelpingMapper) {
         mapper.specify(property: &productArray, name: "items")

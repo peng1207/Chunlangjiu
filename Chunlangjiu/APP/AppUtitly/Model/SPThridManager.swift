@@ -43,6 +43,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     private var locationManager : AMapLocationManager = AMapLocationManager()
     private static let thirdManger = SPThridManager()
     private var clientCallback = false
+    private var isPingPay : Bool = false
     class func instance() -> SPThridManager {
         return thirdManger
     }
@@ -50,7 +51,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.umeng, appKey: SP_UM_APPKEY, appSecret: nil, redirectURL: nil)
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.wechateSession, appKey: SP_WX_APPID, appSecret: SP_WX_APPSECRET, redirectURL: nil)
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.qq, appKey: SP_QQ_APPID, appSecret: nil, redirectURL: nil)
-        SPShareManager.sp_registApp(platformType: SP_SharePlatformType.sina, appKey: SP_SINA_APPKEY, appSecret: SP_SINA_APPSECRET, redirectURL: nil)
+        SPShareManager.sp_registApp(platformType: SP_SharePlatformType.sina, appKey: SP_SINA_APPKEY, appSecret: SP_SINA_APPSECRET, redirectURL: "http://sns.whalecloud.com/sina2/callback")
         WXApi.registerApp(SP_WX_APPID)
         sp_log(message: "高德key\(SP_GD_APPKEY)")
         AMapServices.shared().apiKey = SP_GD_APPKEY
@@ -59,6 +60,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         UMSocialGlobal.shareInstance()?.isUsingHttpsWhenShareContent = false
         UMConfigure.initWithAppkey(SP_UM_APPKEY, channel: nil)
         MobClick.setCrashReportEnabled(true)
+        
     }
     
     class func sp_startLocation(){
@@ -89,6 +91,9 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     class func sp_isInstallWX()->Bool{
        return WXApi.isWXAppInstalled()
     }
+    class func sp_isInstallQQ()->Bool{
+        return SPShareManager.sp_isInstall(type: SP_SharePlatformType.qq)
+    }
     class func sp_beginLogPageView(pageName : String){
         MobClick.beginLogPageView(sp_getString(string: pageName))
         
@@ -102,7 +107,13 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         SPAPPManager.instance().clientId = clientId
         SPAPPManager.sp_uploadPushToken()
     }
+    func geTuiSdkDidReceivePayloadData(_ payloadData: Data!, andTaskId taskId: String!, andMsgId msgId: String!, andOffLine offLine: Bool, fromGtAppId appId: String!) {
+
+//      let payloadMsg = sp_getString(string:  String(data: payloadData, encoding: String.Encoding.utf8))
+//        sp_showTextAlert(tips: "个推透传信息:\(payloadMsg)")
+    }
     class func sp_wxPay(dic:[String:Any]){
+        instance().isPingPay = false
        let req = PayReq()
         req.openID = sp_getString(string: dic["appid"])
         req.partnerId = sp_getString(string: dic["partnerid"])
@@ -119,6 +130,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         WXApi.send(req)
     }
     class func sp_aliPay(payOrder:String){
+          instance().isPingPay = false
         AlipaySDK.defaultService().payOrder(sp_getString(string: payOrder), fromScheme: "com.chunlangjiu.app") { (data) in
             if sp_isDic(dic: data){
                 let payDic : [String :Any] = data as! [String : Any]
@@ -127,12 +139,47 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         }
         
     }
+    class func sp_pingPay(data:Any?,complete:((_ status : String)->Void)? = nil){
+        guard let d = data as? NSObject else {
+            return
+        }
+          instance().isPingPay = true
+        Pingpp.createPayment(d, appURLScheme: "com.chunlangjiu.app") { (result, error) in
+            sp_log(message: "\(result) ---- \(error?.code)")
+            var statusString = ""
+            if let e = error {
+                switch e.code{
+                case PingppErrorOption.errCancelled:
+                    statusString = SP_PAY_CANCE
+                default:
+                    statusString = SP_PAY_FAILUR
+                }
+            }else{
+                statusString = SP_PAY_SUCCESS;
+            }
+            if let block = complete {
+                block(statusString)
+            }
+            sp_showPayResult(payState: statusString)
+        }
+    }
+    
     func onResp(_ resp: BaseResp!) {
         sp_dealWXComplete(resp: resp )
     }
     class func sp_open(url:URL) -> Bool{
         var result = false
-        result = sp_dealApiPay(url: url)
+        if instance().isPingPay {
+            result = Pingpp.handleOpen(url, withCompletion: nil)
+            if result == true {
+                SPThridManager.instance().clientCallback = true
+            }
+        }
+      
+        if !result {
+             result = sp_dealApiPay(url: url)
+        }
+       
         if !result {
              result = sp_dealWX(url: url)
         }
@@ -193,7 +240,6 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
                 let isSuccess = WXApi.handleOpen(url, delegate: SPThridManager.instance())
                 return isSuccess
             }
-          
         }
         return false
     }
@@ -321,6 +367,12 @@ extension SPThridManager {
             MobClick.event(sp_getString(string: eventId))
         }
         sp_log(message: "传给友盟的事件为\(eventId) =====\(sp_getString(string: attributes))")
+    }
+    
+    class func sp_handleRemoteNotification(userInfo : [NSObject : Any]?){
+        if let info = userInfo {
+            GeTuiSdk.handleRemoteNotification(info)
+        }
     }
     
 }

@@ -47,6 +47,7 @@ class SPMineVC: SPBaseVC {
         self.sp_setupUI()
         self.sp_getData()
         sp_addNotification()
+        sp_showAnimation(view: self.view, title: nil)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -126,11 +127,13 @@ extension SPMineVC: UITableViewDelegate ,UITableViewDataSource,UIImagePickerCont
             
         }
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            let sectionModel = self.dataArray?[indexPath.row]
             cell?.countModel = self.countModel
-            cell?.sectionModel = self.dataArray?[indexPath.row]
+            cell?.sectionModel = sectionModel
             cell?.selectBlock = { [weak self] (model) in
                 self?.sp_dealSelect(mineModel: model)
             }
+            
             
         }
         return cell!
@@ -252,6 +255,10 @@ extension SPMineVC {
             sp_pushFans()
         case .shop?:
             sp_clickShop()
+        case  .appraisalReport?:
+            sp_pushAppraisalReportVC()
+        case  .gemmologist?:
+            sp_pushGemmologistVC()
         case .none:
             sp_log(message: "none")
         case .some(_):
@@ -383,6 +390,20 @@ extension SPMineVC {
         //  企业认证
         let companyVC = SPCompanyAuthenticationVC()
         self.navigationController?.pushViewController(companyVC, animated: true)
+    }
+    /// 鉴定报告
+    fileprivate func sp_pushAppraisalReportVC(){
+        self.pushVC = true
+        let vc = SPAppraisalReportVC()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 鉴定师
+    fileprivate func sp_pushGemmologistVC(){
+        if sp_getString(string: SPAPPManager.instance().memberModel?.authenticate) == "true"{
+            self.pushVC = true
+            let vc = SPAppraisalOfMineVC()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     /// 点击头像
     fileprivate func sp_clickIconAction(){
@@ -672,6 +693,7 @@ extension SPMineVC{
             sp_asyncAfter(time: 0.1) {
                 self.tableView.reloadData()
             }
+            sp_hideAnimation(view: self.view)
             return
         }
         self.sp_sendCountRequest()
@@ -716,6 +738,7 @@ extension SPMineVC{
             if code == SP_Request_Code_Success {
                 SPAPPManager.instance().memberModel = memberModel;
                 self.headerView.memberModel = SPAPPManager.instance().memberModel
+                self.tableView.reloadData()
             }
     }
     
@@ -740,6 +763,7 @@ extension SPMineVC{
         }
         group.notify(queue: DispatchQueue(label: "getAuthStatusQueue")) { [weak self] in
             sp_mainQueue {
+                sp_hideAnimation(view: self?.view)
                 self?.sp_dealHeaderView()
                 self?.sp_dealAuthAlert()
             }

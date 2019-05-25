@@ -62,6 +62,38 @@ class SPOrderDetaileVC: SPBaseVC {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
+    override func sp_clickBackAction() {
+        var isExist = false
+        
+        var index = 0
+        if self.navigationController != nil {
+            /// 要判断当前
+            let orderIndex = sp_getArrayCount(array: self.navigationController?.viewControllers) - 2
+            if orderIndex > 0 ,orderIndex < sp_getArrayCount(array: self.navigationController?.viewControllers)  {
+                if let vc = self.navigationController?.viewControllers[orderIndex] , ((vc is SPOrderHomeVC) || (vc is SPOrderVC) || (vc is SPOrderListVC)){
+                    self.navigationController?.popToViewController(vc, animated: true)
+                    return
+                }
+            }
+            for tempVC in (self.navigationController?.viewControllers)!{
+                if tempVC is SPConfirmOrderVC {
+                    isExist = true
+                    break
+                }
+                index = index + 1
+            }
+            if isExist {
+                if index - 1 < sp_getArrayCount(array: self.navigationController?.viewControllers) , index - 1 >= 0 {
+                    self.navigationController?.popToViewController((self.navigationController?.viewControllers[index - 1])!, animated: true)
+                }else{
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+                return
+            }
+        }
+        super.sp_clickBackAction()
+        
+    }
     /// 创建UI
     override func sp_setupUI() {
         self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)

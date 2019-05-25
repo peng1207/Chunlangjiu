@@ -857,6 +857,63 @@ class SPAppRequest {
             }
         }
     }
+    /// 第三方登录
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getThirdLogin(requestModel:SPRequestModel,complete:SPThirdLoginComplete?){
+        requestModel.url = SP_GET_THIRDLOGIN_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                let binded = sp_getString(string: data?["binded"])
+                if errorcode == SP_Request_Code_Success {
+                    if binded == "1"{
+                        let userModel = SPUserModel.sp_deserialize(from: data)
+                        SPAPPManager.instance().userModel = userModel
+                    }
+                   
+                }
+                
+                if let block = complete {
+                    block(errorcode,binded,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"0","登录失败",nil)
+                }
+            }
+        }
+    }
+    /// 第三方绑定
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getThirdBind(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_THIRDBIND_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                if errorcode == SP_Request_Code_Success, sp_isDic(dic: data){
+                    let userModel = SPUserModel.sp_deserialize(from: data)
+                    SPAPPManager.instance().userModel = userModel
+                }
+                if let block = complete {
+                    block(errorcode,msg,nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"绑定失败",nil)
+                }
+            }
+        }
+    }
     ///  找回密码
     ///
     /// - Parameters:
@@ -2191,6 +2248,14 @@ class SPAppRequest {
        let model = sp_dealPublicParm(requestModel: requestModel)
         SPRequestManager.sp_get(requestModel: model) { (data : Any?, error : Error?) in
             sp_simpleSQueues {
+                if let json : [String : Any] = data  as? [String : Any]{
+                    let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                    sp_log(message: "errorCode is  \(errorcode)")
+                    if errorcode == "20001"{
+                        // token 有问题
+                        SPAPPManager.sp_dealLogout()
+                    }
+                }
 //                sp_log(message: "\(data)")
             }
             if let block = complete {

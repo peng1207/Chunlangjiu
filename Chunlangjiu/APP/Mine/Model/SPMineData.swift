@@ -46,6 +46,8 @@ enum SPMineType : Int {
     case fans             = 34          // 粉丝推荐
     case set              = 35          // 设置
     case shop             = 36          // 店铺
+    case appraisalReport  = 37          // 鉴定报告
+    case gemmologist      = 38          // 鉴定师
 }
 
 class SPMineData {
@@ -150,12 +152,23 @@ class SPMineData {
 //            array.append(sp_get_fans())
 //            array.append(sp_get_set())
         }
-        array.append(sp_get_valuation())
+//        array.append(sp_get_valuation())
         array.append(self.sp_get_collect())
+        if SPAPPManager.sp_isBusiness() {
+            
+        }else{
+            array.append(sp_get_appraisalReport())
+        }
         array.append(sp_get_fans())
         array.append(sp_get_customServer())
-//
-        model.rowCount = 3
+        if SPAPPManager.sp_isBusiness() {
+            array.append(sp_get_gemmologist())
+             model.rowCount = 4
+        }else {
+             model.rowCount = 3
+        }
+        
+       
         model.dataArray = array
         return model
     }
@@ -382,6 +395,22 @@ class SPMineData {
         model.mintType = .set
         return model
     }
+    fileprivate class func sp_get_appraisalReport()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "鉴定报告"
+        model.mintType = .appraisalReport
+        model.image = UIImage(named: "public_valuation")
+        return model
+    }
+    fileprivate class func sp_get_gemmologist()->SPMineModel{
+        let model = SPMineModel()
+        model.title = "鉴定师"
+        model.mintType = .gemmologist
+        model.image = UIImage(named: "mine_gemmologist")
+        model.disableImg = UIImage(named: "mine_gemmologist_disable")
+        return model
+    }
+
     class func sp_getItemCount(mineModel:SPMineModel?,countModel:SPMineCountModel?) -> String{
         var count = ""
         if let mine = mineModel ,let cModel = countModel {

@@ -41,7 +41,7 @@ class  SPAboutVC: SPBaseVC {
         return sp_createView(title: "醇狼官方邮箱", content: "chunlang2018@sina.com")
     }()
     fileprivate lazy var telView : SPTextLabelView = {
-        return sp_createView(title: "全国热线", content: "400-788-9550")
+        return sp_createView(title: "全国热线", content: "400-189-0095")
     }()
     
     fileprivate func sp_createView(title:String,content:String)->SPTextLabelView{

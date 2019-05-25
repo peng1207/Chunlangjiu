@@ -98,7 +98,7 @@ class SPAddressSelectView:  UIView{
         
     }
 }
-fileprivate extension  SPAddressSelectView {
+extension  SPAddressSelectView {
     /// 点击回调
     @objc fileprivate func sp_clickTapAction(){
         guard let block = self.selectBlock else {

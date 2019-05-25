@@ -88,10 +88,52 @@ class SPAPPManager : NSObject{
             let tabBar : SPMainVC = tabbarController as! SPMainVC
             let nav : UINavigationController? = tabBar.viewControllers![tabBar.selectedIndex] as? UINavigationController
             if nav != nil {
-                nav?.pushViewController(SPLoginVC(), animated: true)
+//                nav?.pushViewController(SPPhoneLoginVC(), animated: true)
+                nav?.pushViewController(SPLoginMainVC(), animated: true)
             }
         }
     }
+    ///清除用户数据
+    class func sp_cleanData(){
+          SPAPPManager.instance().userModel = nil
+    }
+    /// 处理退出登录
+    class func sp_dealLogout(){
+        SPAPPManager.sp_cleanData()
+        NotificationCenter.default.post(name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
+        
+    }
+    
+    /// 处理登录成功之后的返回
+    class func sp_dealLoginPop(){
+        let appdelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let tabbarController = appdelegate.window?.rootViewController
+        if tabbarController is SPMainVC {
+            let tabBar : SPMainVC = tabbarController as! SPMainVC
+            let nav : UINavigationController? = tabBar.viewControllers![tabBar.selectedIndex] as? UINavigationController
+            if let navVC = nav {
+                var vc : UIViewController?
+                for tmpVC in navVC.viewControllers {
+                    if tmpVC is SPLoginMainVC {
+                        break
+                    }
+                    else if tmpVC is SPPhoneLoginVC {
+                        break
+                    }
+                    vc = tmpVC
+                }
+                sp_log(message: "该返回的控制器\(vc)")
+                navVC.setNavigationBarHidden(false, animated: false)
+                if let tmpvc = vc{
+                    navVC.popToViewController(tmpvc, animated: true)
+                }else{
+                    navVC.popToRootViewController(animated: true)
+                }
+                UIApplication.shared.statusBarStyle = .lightContent
+            }
+        }
+    }
+    
     class func sp_change(identity : String){
         guard let userModel = SPAPPManager.instance().userModel else {
             return
@@ -182,7 +224,7 @@ class SPAPPManager : NSObject{
             let request = SPRequestModel()
             var parm = [String:Any]()
             parm.updateValue("ios", forKey: "type")
-            parm.updateValue("igexin", forKey: "plugin")
+          
             parm.updateValue(sp_getString(string: SPAPPManager.instance().clientId), forKey: "clientid")
             request.parm = parm
             SPAppRequest.sp_getPush(requestModel: request) { (code, msg, errorModel) in

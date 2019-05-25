@@ -21,6 +21,7 @@ class SPSetVC: SPBaseVC {
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.addTarget(self, action: #selector(sp_logout), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 25)
         return btn
     }()
     
@@ -66,7 +67,7 @@ class SPSetVC: SPBaseVC {
         self.logoutBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.view).offset(10)
             maker.right.equalTo(self.view).offset(-10)
-            maker.height.equalTo(40)
+            maker.height.equalTo(50)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             } else {
@@ -134,7 +135,6 @@ extension SPSetVC : UITableViewDelegate,UITableViewDataSource {
                     sp_pushPayPwd()
                 default:
                     sp_log(message: "没有找到")
-                    
                 }
             }
         }
@@ -151,9 +151,7 @@ extension SPSetVC : UITableViewDelegate,UITableViewDataSource {
 extension SPSetVC {
     @objc fileprivate func sp_logout(){
         sp_logoutRequest()
-        SPAPPManager.instance().userModel = nil
-        NotificationCenter.default.post(name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
-         
+        SPAPPManager.sp_dealLogout()
         sp_mainQueue { [weak self]in
             self?.navigationController?.popToRootViewController(animated: true)
         }

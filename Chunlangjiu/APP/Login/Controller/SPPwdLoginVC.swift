@@ -16,14 +16,15 @@ class SPPwdLoginVC: SPBaseVC {
     }()
     fileprivate lazy var phoneTextFiled : SPTextFiled = {
         let textFiled = SPTextFiled()
-        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
+ 
+         textFiled.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         textFiled.sp_cornerRadius(cornerRadius: 22.5)
         textFiled.placeholder = "请输入您的账号"
         let view = UIView()
         view.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
         let imageView = UIImageView()
         imageView.image = UIImage(named: "login_phone")
-        imageView.frame = CGRect(x: 21, y: 15, width: 11, height: 20)
+        imageView.frame = CGRect(x: 21, y: 15, width: 16, height: 15)
         view.addSubview(imageView)
         textFiled.leftView = view
         textFiled.leftViewMode = UITextFieldViewMode.always
@@ -36,14 +37,15 @@ class SPPwdLoginVC: SPBaseVC {
     }()
     fileprivate lazy var codeTextFiled : SPTextFiled = {
         let textFiled = SPTextFiled()
-        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
+ 
+         textFiled.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         textFiled.placeholder = "请输入密码"
         textFiled.sp_cornerRadius(cornerRadius: 22.5)
         textFiled.isSecureTextEntry = true
         let leftView = UIView()
         leftView.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "login_code")
+        imageView.image = UIImage(named: "login_pwd")
         imageView.frame = CGRect(x: 18, y: 14, width: 18, height: 20)
         leftView.addSubview(imageView)
         
@@ -69,14 +71,22 @@ class SPPwdLoginVC: SPBaseVC {
     }()
     fileprivate lazy var forgetPwdBtn : UIButton = {
         let btn = UIButton()
-        btn.setTitle("忘记密码", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_666666.rawValue), for: UIControlState.normal)
+        let att = NSAttributedString(string: "忘记密码", attributes: [NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
+        btn.setAttributedTitle(att, for: UIControlState.normal)
+      
         btn.addTarget(self, action: #selector(sp_clickForgetAction), for: UIControlEvents.touchUpInside)
           btn.titleLabel?.font = sp_getFontSize(size: 14)
         return btn
     }()
-    
-     fileprivate let textFiledHeight : CGFloat = 45
+    fileprivate lazy var phoneLoginBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        let att = NSAttributedString(string: "验证码登录", attributes: [NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)])
+        btn.setAttributedTitle(att, for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_clickPhoneLogin), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
+    fileprivate let textFiledHeight : CGFloat = 45
+       var clickBlock : SPBtnClickBlock?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "密码登录"
@@ -96,12 +106,12 @@ class SPPwdLoginVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.view.backgroundColor = UIColor.white
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.phoneTextFiled)
         self.scrollView.addSubview(self.codeTextFiled)
         self.scrollView.addSubview(self.forgetPwdBtn)
         self.scrollView.addSubview(self.loginBtn)
+        self.scrollView.addSubview(self.phoneLoginBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -120,7 +130,7 @@ class SPPwdLoginVC: SPBaseVC {
             maker.width.equalTo(self.scrollView.snp.width).offset(-60)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
             maker.height.equalTo(textFiledHeight)
-            maker.top.equalTo(self.scrollView).offset(60)
+            maker.top.equalTo(self.scrollView).offset(0)
         }
         self.codeTextFiled.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.phoneTextFiled).offset(0)
@@ -134,10 +144,18 @@ class SPPwdLoginVC: SPBaseVC {
         }
         self.forgetPwdBtn.snp.makeConstraints { (maker) in
             maker.right.equalTo(self.loginBtn).offset(-10)
+//            maker.left.equalTo(self.loginBtn.snp.left).offset(10)
             maker.top.equalTo(self.loginBtn.snp.bottom).offset(5)
             maker.height.equalTo(30)
             maker.width.greaterThanOrEqualTo(0)
-              maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-20)
+            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-20)
+        }
+        self.phoneLoginBtn.snp.makeConstraints { (maker) in
+//              maker.right.equalTo(self.loginBtn).offset(-10)
+            maker.left.equalTo(self.loginBtn.snp.left).offset(10)
+            maker.top.equalTo(self.loginBtn.snp.bottom).offset(5)
+            maker.height.equalTo(30)
+            maker.width.greaterThanOrEqualTo(0)
         }
     }
     deinit {
@@ -164,6 +182,12 @@ extension SPPwdLoginVC{
         let forgetVC = SPForgetPWDVC()
         self.navigationController?.pushViewController(forgetVC, animated: true)
     }
+    @objc fileprivate func sp_clickPhoneLogin(){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block()
+    }
 }
 // MARK: - request
 extension SPPwdLoginVC{
@@ -181,7 +205,8 @@ extension SPPwdLoginVC{
         SPAppRequest.sp_getPWDLogin(requestModel: self.requestModel) { [weak self](code, msg , errorModel) in
             if code == SP_Request_Code_Success {
                 NotificationCenter.default.post(name: NSNotification.Name(SP_LOGIN_NOTIFICATION), object: nil)
-                self?.navigationController?.popToRootViewController(animated: true)
+                 SPAPPManager.sp_dealLoginPop()
+//                self?.navigationController?.popToRootViewController(animated: true)
             }else{
                 sp_showTextAlert(tips: msg.count > 0 ? msg : "登录失败")
             }

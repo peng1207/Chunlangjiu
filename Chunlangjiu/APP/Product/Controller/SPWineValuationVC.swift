@@ -39,9 +39,10 @@ class SPWineValuationVC: SPBaseVC {
         return btn
     }()
      fileprivate var tempAddView : SPAddImageView?
+    var authenticate_id : String?
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "估价"
+        self.navigationItem.title = "名酒鉴定"
         self.sp_setupUI()
         self.sp_addNotification()
     }
@@ -106,7 +107,7 @@ extension SPWineValuationVC {
             return
         }
         guard sp_getString(string: self.baseView.placeView.textFiled.text).count > 0 else {
-            sp_showTextAlert(tips: "请输入品牌产地")
+            sp_showTextAlert(tips: "请输入年份")
             return
         }
         guard sp_getString(string: self.baseView.seriesView.textFiled.text).count > 0  else {
@@ -191,8 +192,10 @@ extension SPWineValuationVC {
     fileprivate func sp_send(imagePaths:[String]?){
         var parm = [String : Any]()
         parm.updateValue(sp_getString(string: self.baseView.titleView.textFiled.text), forKey: "title")
-        parm.updateValue(sp_getString(string: self.baseView.placeView.textFiled.text), forKey: "name")
+        parm.updateValue(sp_getString(string: self.baseView.placeView.textFiled.text), forKey: "year")
         parm.updateValue(sp_getString(string: self.baseView.seriesView.textFiled.text), forKey: "series")
+        parm.updateValue(sp_getString(string: self.baseView.explainView.textView.textView.text), forKey: "content")
+        parm.updateValue(sp_getString(string: self.authenticate_id), forKey: "authenticate_id")
         if sp_isArray(array: imagePaths) {
             parm.updateValue( sp_getString(string: imagePaths?.joined(separator: ",")), forKey: "img")
         }

@@ -59,9 +59,9 @@ class SPRechargeTableCell: UITableViewCell {
     /// 赋值
     fileprivate func sp_setupData(){
         self.titleLabel.text = sp_getString(string: model?.app_display_name)
-        if sp_getString(string: model?.app_rpc_id) == SPPayType.wxPay.rawValue {
+        if sp_getString(string: model?.app_rpc_id) == SPPayType.wxPay.rawValue || sp_getString(string: model?.app_rpc_id) == SPPayType.wxPing.rawValue{
             self.typeImgView.image = UIImage(named: "public_pay_wx")
-        }else if sp_getString(string: model?.app_rpc_id) == SPPayType.aliPay.rawValue{
+        }else if sp_getString(string: model?.app_rpc_id) == SPPayType.aliPay.rawValue || sp_getString(string: model?.app_rpc_id) == SPPayType.alipayPing.rawValue{
             self.typeImgView.image = UIImage(named: "public_pay_ailpy")
         }else{
             self.typeImgView.image = UIImage(named: "public_pay_balance")

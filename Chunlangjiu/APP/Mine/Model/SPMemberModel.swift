@@ -34,4 +34,8 @@ class SPMemberModel : SPBaseModel {
     var area  : String?
     /// 联系方式
     var phone  : String?
+    /// 是否鉴定师 true 是鉴定师 false 不是鉴定师
+    var authenticate : String?
+    /// 鉴定师ID
+    var authenticate_id : String?
 }

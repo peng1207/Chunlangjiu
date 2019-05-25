@@ -27,7 +27,8 @@ class SPProductExplainView:  UIView{
             
         })
         view.textView.font = sp_getFontSize(size: 16)
-//        view.minHeight = 84
+         view.textView.isScrollEnabled = false
+        view.minHeight = 75
         return view
     }()
     
@@ -56,7 +57,7 @@ class SPProductExplainView:  UIView{
         self.textView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.titleLabel.snp.right).offset(16)
             maker.top.equalTo(self.titleLabel.snp.top).offset(-5)
-            maker.height.equalTo(84)
+            maker.height.greaterThanOrEqualTo(0)
             maker.right.equalTo(self.snp.right).offset(-10)
             maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }

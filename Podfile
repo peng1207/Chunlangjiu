@@ -9,7 +9,7 @@ target 'Chunlangjiu' do
   # Pods for Chunlangjiu
 	pod 'Alamofire'
 	pod 'Kingfisher'
-    pod 'HandyJSON','~> 4.2.0'
+    pod 'HandyJSON','~> 5.0.0-beta.1'
     pod 'SnapKit'
     pod 'ESPullToRefresh'
     pod 'UMCShare/UI'
@@ -26,11 +26,15 @@ target 'Chunlangjiu' do
     pod 'AMapLocation-NO-IDFA'
     pod 'GTSDK','2.2.0.0-noidfa'
     pod 'CryptoSwift'
-    pod 'RealmSwift','~> 3.10.0'
-    pod 'NVActivityIndicatorView'
+    pod 'RealmSwift','~> 3.14.1'
+#    pod 'NVActivityIndicatorView'
     pod 'MBProgressHUD', '~> 1.1.0'
     pod 'ReachabilitySwift'
      pod 'CryptoSwift'
+#    pod 'Pingpp'
+     pod 'Pingpp/Alipay'
+     pod 'Pingpp/Wx'
+     pod 'Pingpp/UnionPay'
 #    pod 'JKWKWebViewHandler'
 #    target 'NotificationService' do
 #        platform :ios, "10.0"

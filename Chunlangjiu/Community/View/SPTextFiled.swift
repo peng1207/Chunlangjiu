@@ -13,6 +13,8 @@ class SPTextFiled : UITextField {
         super.init(frame: frame)
         self.clearButtonMode = .whileEditing
         self.tintColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+//        self.setValue(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), forKey: "_placeholderLabel.textColor")
+        //  _placeholderLabel.font
     }
     
     required init?(coder aDecoder: NSCoder) {

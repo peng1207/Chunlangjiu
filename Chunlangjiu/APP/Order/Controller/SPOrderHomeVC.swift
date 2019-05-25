@@ -49,7 +49,29 @@ class SPOrderHomeVC: SPBaseVC {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
-    
+    override func sp_clickBackAction() {
+        var isExist = false
+        var index = 0
+        if self.navigationController != nil {
+            for tempVC in (self.navigationController?.viewControllers)!{
+                if tempVC is SPConfirmOrderVC {
+                    isExist = true
+                    break
+                }
+                index = index + 1
+            }
+            if isExist {
+                if index - 1 < sp_getArrayCount(array: self.navigationController?.viewControllers) , index - 1 >= 0 {
+                self.navigationController?.popToViewController((self.navigationController?.viewControllers[index - 1])!, animated: true)
+                }else{
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+                return
+            }
+        }
+        super.sp_clickBackAction()
+        
+    }
     /// 创建UI
     override func sp_setupUI() {
         self.navigationItem.title = "订单管理"
@@ -105,7 +127,6 @@ class SPOrderHomeVC: SPBaseVC {
 extension SPOrderHomeVC {
     
     fileprivate func sp_dealClick(index : Int){
-        
         self.scrollView.setContentOffset(CGPoint(x: self.scrollView.frame.size.width * CGFloat(index), y: 0), animated: true)
     }
     

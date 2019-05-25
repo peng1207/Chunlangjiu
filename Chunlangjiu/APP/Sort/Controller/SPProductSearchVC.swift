@@ -128,7 +128,11 @@ extension SPProductSearchVC : UICollectionViewDelegate ,UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.row < sp_getArrayCount(array: self.dataAray) {
             let model = self.dataAray?[indexPath.row]
-            return CGSize(width: CGFloat((model?.textWidth)!), height: 27)
+            if let m = model{
+                return CGSize(width: m.textWidth, height: 27)
+            }else{
+                return CGSize.zero
+            }
         }
         return CGSize.zero
     }

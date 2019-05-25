@@ -484,6 +484,7 @@ extension SPProductAddVC {
                 isRemove = false
             }
         }
+        
         self.lv3Model = lv3Model
         self.baseView.pSortView.content = sp_getString(string: self.lv3Model?.cat_name)
         if  isRemove {

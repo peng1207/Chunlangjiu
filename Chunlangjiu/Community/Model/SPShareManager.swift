@@ -197,8 +197,22 @@ class SPShareManager {
         }
         return shareObject!
     }
+    /// 第三方登录
+    ///
+    /// - Parameters:
+    ///   - viewController: 当前控制器
+    ///   - shareType: 登录平台
+    ///   - complete: 回调
     class func sp_thridLogin(viewController : UIViewController,shareType : SP_SharePlatformType,complete : SPThridLoginComplete?){
-        UMSocialManager.default()?.auth(with: UMSocialPlatformType.wechatSession, currentViewController: viewController, completion: { (result, error) in
+        var platformType = UMSocialPlatformType.wechatSession
+        if shareType == .qq {
+            platformType = .QQ
+        }else if shareType == .wechateSession {
+            platformType = .wechatSession
+        }else if shareType == .sina {
+            platformType = .sina
+        }
+        UMSocialManager.default()?.auth(with: platformType, currentViewController: viewController, completion: { (result, error) in
             sp_log(message: error);
             if error != nil {
                 if let block = complete {
@@ -206,7 +220,6 @@ class SPShareManager {
                 }
             }else {
                 if let model : UMSocialAuthResponse = result as? UMSocialAuthResponse {
-                  
                     let loginModel = SPThridLoginCompleteModel()
                     loginModel.uid = model.uid
                     loginModel.openid = model.openid
@@ -216,6 +229,7 @@ class SPShareManager {
                     loginModel.unionId = model.unionId
                     loginModel.usid = model.usid
                     loginModel.originalResponse = model.originalResponse
+                    sp_log(message: model.originalResponse)
                     if let block = complete {
                         block(loginModel,error)
                     }
@@ -233,7 +247,23 @@ class SPShareManager {
         }
         return false 
     }
-    
+    class func sp_isInstall(type : SP_SharePlatformType)->Bool{
+        var isInstall = true
+        if type == .sina {
+            if let result = UMSocialManager.default()?.isInstall(UMSocialPlatformType.sina){
+                isInstall = result
+            }
+        }else if type == .qq{
+            if let result = UMSocialManager.default()?.isInstall(UMSocialPlatformType.QQ){
+                isInstall = result
+            }
+        }else if type == .wechateSession{
+            if let result = UMSocialManager.default()?.isInstall(UMSocialPlatformType.wechatSession){
+                isInstall = result
+            }
+        }
+        return isInstall
+    }
 }
 
 

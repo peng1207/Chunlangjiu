@@ -14,6 +14,8 @@ class SPTextView:  UIView{
     lazy var textView : UITextView = {
         let view = UITextView()
         view.tintColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        view.font = sp_getFontSize(size: 15)
+        view.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         view.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
 
         }, doneBlock: {
@@ -55,7 +57,7 @@ class SPTextView:  UIView{
     fileprivate func sp_setupUI(){
         self.addSubview(self.textView)
         self.addSubview(self.placeholderLabel)
-        self.placeholderLabel.preferredMaxLayoutWidth = sp_getScreenWidth()
+//        self.placeholderLabel.preferredMaxLayoutWidth = sp_getScreenWidth()
         self.sp_addConstraint()
  
         NotificationCenter.default.addObserver(self, selector: #selector(sp_textViewChange), name: NSNotification.Name.UITextViewTextDidChange, object: nil)
@@ -71,7 +73,7 @@ class SPTextView:  UIView{
         self.placeholderLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self).offset(3)
             maker.right.equalTo(self).offset(-3)
-            maker.top.equalTo(self).offset(8)
+            maker.top.equalTo(self).offset(6)
             maker.height.greaterThanOrEqualTo(0)
             
             
@@ -82,7 +84,7 @@ class SPTextView:  UIView{
     }
 }
 fileprivate extension SPTextView{
-    @objc fileprivate func sp_textViewChange(){
+    @objc func sp_textViewChange(){
         if self.textView.text.count > 0  {
             self.placeholderLabel.isHidden = true
         }else{
@@ -97,7 +99,7 @@ fileprivate extension SPTextView{
         self.heightConstraint.update(offset: size.height)
         
     }
-    @objc fileprivate func sp_textDidBenin(){
+    @objc func sp_textDidBenin(){
 //        self.placeholderLabel.isHidden = true
     }
     

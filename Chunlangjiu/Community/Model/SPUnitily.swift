@@ -423,6 +423,12 @@ func sp_pushSysSet(){
 /// - Parameter dic: 字典
 /// - Returns: json字符串
 func sp_dicValueString(_ dic:[String : Any]) -> String?{
+   
+    if !JSONSerialization.isValidJSONObject(dic) {
+        sp_log(message: "无法解析")
+        return ""
+    }
+   
     let data = try? JSONSerialization.data(withJSONObject: dic, options: [])
     let str = String(data: data!, encoding: String.Encoding.utf8)
     return str
@@ -457,6 +463,10 @@ func sp_stringValueArr(_ str : String) -> [Any]?{
     return nil
 }
 func sp_arrayValueString(_ array : [Any]) -> String?{
+    if !JSONSerialization.isValidJSONObject(array) {
+        sp_log(message: "无法解析")
+        return ""
+    }
     let data = try? JSONSerialization.data(withJSONObject: array, options: [])
     let str = String(data: data!, encoding: String.Encoding.utf8)
     return str

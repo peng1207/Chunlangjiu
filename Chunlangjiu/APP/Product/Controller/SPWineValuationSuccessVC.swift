@@ -23,7 +23,7 @@ class SPWineValuationSuccessVC: SPBaseVC {
     }()
     fileprivate lazy var successTipsLabel : UILabel = {
         let label = UILabel()
-        label.text = "估价申请提交成功"
+        label.text = "名酒鉴定申请提交成功"
         label.font = sp_getFontSize(size: 16)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.textAlignment = NSTextAlignment.center
@@ -38,26 +38,19 @@ class SPWineValuationSuccessVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
-    fileprivate lazy var examineBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("名酒抵押借贷", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_333333.rawValue), for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 16)
-        btn.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue), width: sp_lineHeight)
-        return btn
-    }()
+ 
     fileprivate lazy var tipsLabel : UILabel = {
         let label = UILabel()
         label.font = sp_getFontSize(size: 12)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
-        label.text = "说明：\n      您申请的估价结果，将在1-3个工作日内通过短信和信息发送给您，请注意查收。"
+        label.text = "说明：\n您申请的鉴定，将会在1-2个工作日内完成。鉴定结果查看流程【我的-买家中心-鉴定报告】"
         label.numberOfLines = 0
         return label
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "名酒估价"
+        self.title = "名酒鉴定"
         self.sp_setupUI()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -82,7 +75,7 @@ class SPWineValuationSuccessVC: SPBaseVC {
         self.contentView.addSubview(self.selectImageView)
         self.contentView.addSubview(self.successTipsLabel)
         self.contentView.addSubview(self.managerBtn)
-//        self.contentView.addSubview(self.examineBtn)
+ 
         self.scrollView.addSubview(self.tipsLabel)
         self.sp_addConstraint()
     }
@@ -122,13 +115,7 @@ class SPWineValuationSuccessVC: SPBaseVC {
             maker.centerX.equalTo(self.contentView.snp.centerX).offset(0)
             maker.bottom.equalTo(self.contentView.snp.bottom).offset(-30)
         }
-//        self.examineBtn.snp.makeConstraints { (maker) in
-//            maker.left.equalTo(self.contentView.snp.centerX).offset(10)
-//            maker.top.equalTo(self.managerBtn.snp.top).offset(0)
-//            maker.height.equalTo(self.managerBtn.snp.height).offset(0)
-//            maker.width.equalTo(self.managerBtn.snp.width).offset(0)
-//            maker.bottom.equalTo(self.contentView.snp.bottom).offset(-30)
-//        }
+ 
         self.tipsLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.scrollView.snp.left).offset(10)
             maker.right.equalTo(self.scrollView.snp.right).offset(-10)

@@ -130,6 +130,7 @@ class SPRequestManager {
                 })
             }
         }
+       
     }
     
     private class func sp_requestSuccess(dataResponse : DataResponse<Any>,requestModel : SPRequestModel ,requestBlock : SPRequestBlock?){

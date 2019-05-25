@@ -17,6 +17,7 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <UMCommon/UMCommon.h>
 #import <UMAnalytics/MobClick.h>
+//#import <UMCommon/UMCommon.h>
 // iOS10 及以上需导入 UserNotifications.framework
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
@@ -25,4 +26,5 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import <CommonCrypto/CommonCrypto.h>
 #import "SPDes.h"
+#import "Pingpp.h"
 #endif

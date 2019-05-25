@@ -136,7 +136,7 @@ extension SPAdvertVC {
         
         if let viewController = vc {
             let model =  SPAPPManager.sp_getOpenAdv()
-            SPIndexHande.sp_deal(viewController: viewController, lineType: model?.linktype,linktarget: model?.link, webparam: model?.webparam)
+            SPIndexHande.sp_deal(viewController: viewController, lineType: model?.linktype,linktarget: model?.link, webparam: model?.webparam,name: "",webview: model?.webview)
             self.sp_clickSkip()
         }
     }

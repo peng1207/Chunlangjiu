@@ -45,9 +45,48 @@ class SPConfirmOrderVC: SPBaseVC {
             self?.confirmOrder?.selectPayModel = model
             self?.sp_dealFooterView()
             self?.sp_hidePayView()
+            self?.sp_dealAuction()
         }
         return view
     }()
+    fileprivate lazy var scrollView : UIScrollView = {
+        let view = UIScrollView()
+        return view
+    }()
+    fileprivate lazy var priceView : SPConfirmAuctionPriceView = {
+        let view = SPConfirmAuctionPriceView()
+        return view
+    }()
+    fileprivate lazy var tipsView : SPConfirmAuctionTipsView = {
+        let view = SPConfirmAuctionTipsView()
+        return view
+    }()
+    fileprivate lazy var auctionAddressView : SPConfirmAuctionAddressView = {
+        let view = SPConfirmAuctionAddressView()
+        view.clickBlock = { [weak self] in
+            self?.sp_clickAddressAction()
+        }
+        return view
+    }()
+    fileprivate lazy var tipsLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 12)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
+        label.textAlignment = .left
+        label.text = "为保证竞拍成功拍品顺利送达，请确认您的收货地址"
+        label.numberOfLines = 0
+        return label
+    }()
+    fileprivate lazy var submitBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("提交定金", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.addTarget(self, action: #selector(sp_clickSubmitAction), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
+    
     var confirmOrder : SPConfirmOrderModel?
     var modelType : String = SP_MODE_TYPE_CART
     var isAuction : Bool = false
@@ -58,10 +97,19 @@ class SPConfirmOrderVC: SPBaseVC {
          self.sp_setupUI()
         self.sp_sendPayListRequest()
         self.sp_sendBalanceStatusReequest()
-       
-        self.title = "确认订单"
+        if isAuction {
+            self.navigationItem.title = "参拍交定金"
+        }else{
+            self.title = "确认订单"
+        }
+        
         self.sp_setupData()
-        self.sp_addNotification()
+        if self.isAuction {
+            
+        }else{
+            self.sp_addNotification()
+        }
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -77,46 +125,99 @@ class SPConfirmOrderVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.separatorStyle = .none
-        self.tableView.backgroundColor = self.view.backgroundColor
-        self.tableView.rowHeight = SPConfrimTableCell_Product_Width * SP_PRODUCT_SCALE + 1.0
-        self.tableView.tableFooterView = self.footerView
-        self.tableView.tableHeaderView = self.addressView
-        self.tableView.estimatedSectionFooterHeight = 30
-        self.tableView.sectionFooterHeight = UITableViewAutomaticDimension
-        self.view.addSubview(self.tableView)
-        self.view.addSubview(self.bottomView)
+        if self.isAuction {
+            self.view.addSubview(self.scrollView)
+            self.scrollView.addSubview(self.priceView)
+            self.scrollView.addSubview(self.tipsView)
+            self.scrollView.addSubview(self.auctionAddressView)
+            self.scrollView.addSubview(self.tipsLabel)
+            self.view.addSubview(self.submitBtn)
+        }else{
+            self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.separatorStyle = .none
+            self.tableView.backgroundColor = self.view.backgroundColor
+            self.tableView.rowHeight = SPConfrimTableCell_Product_Width * SP_PRODUCT_SCALE + 1.0
+            self.tableView.tableFooterView = self.footerView
+            self.tableView.tableHeaderView = self.addressView
+            self.tableView.estimatedSectionFooterHeight = 30
+            self.tableView.sectionFooterHeight = UITableViewAutomaticDimension
+            self.view.addSubview(self.tableView)
+            self.view.addSubview(self.bottomView)
+        }
+       
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.tableView.snp.makeConstraints { (maker) in
-            maker.left.top.right.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.bottomView.snp.top).offset(0)
-        }
-        self.bottomView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.view).offset(0)
-            maker.height.equalTo(49)
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
-            } else {
-                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+        if self.isAuction {
+            self.scrollView.snp.makeConstraints { (maker) in
+                maker.left.right.top.equalTo(self.view).offset(0)
+                maker.bottom.equalTo(self.submitBtn.snp.top).offset(0)
+            }
+            self.submitBtn.snp.makeConstraints { (maker) in
+                maker.left.right.equalTo(self.view).offset(0)
+                maker.height.equalTo(60)
+                if #available(iOS 11.0, *) {
+                    maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+                } else {
+                    maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+                }
+            }
+            self.priceView.snp.makeConstraints { (maker) in
+                maker.width.equalTo(self.scrollView.snp.width).offset(0)
+                maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
+                maker.top.equalTo(self.scrollView).offset(0)
+                maker.height.equalTo(175)
+            }
+            self.tipsView.snp.makeConstraints { (maker) in
+                maker.left.right.equalTo(self.priceView).offset(0)
+                maker.top.equalTo(self.priceView.snp.bottom).offset(10)
+                maker.height.greaterThanOrEqualTo(0)
+            }
+            self.auctionAddressView.snp.makeConstraints { (maker) in
+                maker.left.right.equalTo(self.tipsView).offset(0)
+                maker.top.equalTo(self.tipsView.snp.bottom).offset(10)
+                maker.height.greaterThanOrEqualTo(0)
+            }
+            self.tipsLabel.snp.makeConstraints { (maker) in
+                maker.left.equalTo(self.scrollView).offset(15)
+                maker.right.equalTo(self.scrollView.snp.right).offset(-15)
+                maker.top.equalTo(self.auctionAddressView.snp.bottom).offset(14)
+                maker.height.greaterThanOrEqualTo(0)
+                maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-14)
+            }
+        }else{
+            self.tableView.snp.makeConstraints { (maker) in
+                maker.left.top.right.equalTo(self.view).offset(0)
+                maker.bottom.equalTo(self.bottomView.snp.top).offset(0)
+            }
+            self.bottomView.snp.makeConstraints { (maker) in
+                maker.left.right.equalTo(self.view).offset(0)
+                maker.height.equalTo(49)
+                if #available(iOS 11.0, *) {
+                    maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+                } else {
+                    maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+                }
+            }
+            self.addressView.snp.makeConstraints { (maker ) in
+                maker.top.equalToSuperview()
+                maker.left.right.equalTo(view)
+                maker.centerX.equalToSuperview()
+                maker.height.greaterThanOrEqualTo(0).priority(.high)
             }
         }
-        self.addressView.snp.makeConstraints { (maker ) in
-            maker.top.equalToSuperview()
-            maker.left.right.equalTo(view)
-            maker.centerX.equalToSuperview()
-            maker.height.greaterThanOrEqualTo(0).priority(.high)
-        }
+       
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
-        self.tableView.delegate = nil
-        self.tableView.dataSource = nil
+        if self.isAuction == false {
+            self.tableView.delegate = nil
+            self.tableView.dataSource = nil
+        }
+       
     }
 }
 extension SPConfirmOrderVC:UITableViewDelegate,UITableViewDataSource{
@@ -186,29 +287,41 @@ extension SPConfirmOrderVC:UITableViewDelegate,UITableViewDataSource{
 }
 // MARK: - action data
 extension SPConfirmOrderVC {
-    fileprivate func sp_clickSubmitAction(){
+    fileprivate func sp_dealAuction(){
+        if self.isAuction {
+            //  竞拍
+            if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.balance.rawValue {
+                sp_balancePay(orderPay: nil)
+            }else{
+                sp_sendAuctionRequest(price: "")
+            }
+        }
+        
+    }
+    @objc fileprivate func sp_clickSubmitAction(){
         guard let addressModel = self.confirmOrder?.default_address else {
             sp_showTextAlert(tips: "请选择地址")
             return
         }
-        guard let pay  = self.confirmOrder?.selectPayModel else {
-            sp_showTextAlert(tips: "请选择支付方式")
-            return
-        }
         if self.isAuction {
             let shopModel = self.confirmOrder?.dataArray?.first
-            guard sp_getString(string: shopModel?.confrim_auction_price).count > 0 else{
-                sp_showTextAlert(tips: "请输入出价金额")
-                return
-            }
-            if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.balance.rawValue {
-                sp_balancePay(orderPay: nil)
-            }else{
-                 sp_sendAuctionRequest(price: sp_getString(string:shopModel?.confrim_auction_price))
-            }
+//            guard sp_getString(string: shopModel?.confrim_auction_price).count > 0 else{
+//                sp_showTextAlert(tips: "请输入出价金额")
+//                return
+//            }
+                sp_clickPayAction()
+//            if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.balance.rawValue {
+//                sp_balancePay(orderPay: nil)
+//            }else{
+//                 sp_sendAuctionRequest(price: sp_getString(string:shopModel?.confrim_auction_price))
+//            }
             
            
         }else{
+            guard let pay  = self.confirmOrder?.selectPayModel else {
+                sp_showTextAlert(tips: "请选择支付方式")
+                return
+            }
             var parm = [String:Any]()
             parm.updateValue(self.modelType, forKey: "mode")
             parm.updateValue(sp_getString(string: self.confirmOrder?.md5_cart_info), forKey: "md5_cart_info")
@@ -262,23 +375,32 @@ extension SPConfirmOrderVC {
         self.payView.removeFromSuperview()
     }
     fileprivate func sp_setupData(){
+        if self.isAuction {
+            self.priceView.confirmOrder = self.confirmOrder
+            self.tipsView.confirmOrder = self.confirmOrder
+        }
         self.sp_dealAddressView()
         sp_dealBottom()
         self.sp_dealFooterView()
     }
     /// 处理地址的数据
     fileprivate func sp_dealAddressView(){
-        self.addressView.addressModel = self.confirmOrder?.default_address
-          self.tableView.sp_layoutHeaderView()
+        if self.isAuction {
+            self.auctionAddressView.addressModel = self.confirmOrder?.default_address
+        }else{
+            self.addressView.addressModel = self.confirmOrder?.default_address
+            self.tableView.sp_layoutHeaderView()
+        }
+     
     }
     /// 处理底部按钮
     fileprivate func sp_dealBottom(){
         if isAuction {
-            self.bottomView.auctionBtn.isHidden = false
-            let att = NSMutableAttributedString()
-            att.append(NSAttributedString(string: "支付定金", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
-            att.append(NSAttributedString(string: "(\(SP_CHINE_MONEY)\(sp_getString(string: confirmOrder?.pledge)))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
-            self.bottomView.auctionBtn.setAttributedTitle(att, for: UIControlState.normal)
+//            self.bottomView.auctionBtn.isHidden = false
+//            let att = NSMutableAttributedString()
+//            att.append(NSAttributedString(string: "支付定金", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
+//            att.append(NSAttributedString(string: "(\(SP_CHINE_MONEY)\(sp_getString(string: confirmOrder?.pledge)))", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]))
+//            self.bottomView.auctionBtn.setAttributedTitle(att, for: UIControlState.normal)
 //            self.bottomView.priceLabel.text = "\(SP_CHINE_MONEY)\(sp_getString(string: confirmOrder?.pledge))"
         }else{
             self.bottomView.auctionBtn.isHidden = true
@@ -288,9 +410,14 @@ extension SPConfirmOrderVC {
     }
     /// 处理footer的数据
     fileprivate func sp_dealFooterView(){
-        self.footerView.confirmOrder = self.confirmOrder
-        self.footerView.isAuction = self.isAuction
-        self.tableView.sp_layoutFooterView()
+        if self.isAuction {
+            
+        }else{
+            self.footerView.confirmOrder = self.confirmOrder
+            self.footerView.isAuction = self.isAuction
+            self.tableView.sp_layoutFooterView()
+        }
+        
     }
     fileprivate func sp_clickAddressAction(){
         let addressVC = SPAddressVC()
@@ -311,15 +438,29 @@ extension SPConfirmOrderVC {
         if isAuction {
             NotificationCenter.default.post(name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
         }
-        let orderVC = SPOrderVC()
-        orderVC.orderType = isAuction ? .auctionType : .defaultType
-        if isAuction {
-            orderVC.orderState =  isSuccess ? .auction_ing : .paydown
+        if isAuction && isSuccess {
+//            let orderDetVC = SPOrderDetaileVC()
+//            let orderModel = SPOrderModel()
+//            orderModel.auctionitem_id = self.confirmOrder?.auctionitem_id
+//            let toolModel = SPOrderToolModel()
+//            toolModel.orderType = .auctionType
+//            orderDetVC.orderModel = orderModel
+//            orderDetVC.toolModel = toolModel
+//            self.navigationController?.pushViewController(orderDetVC, animated: true)
+            self.navigationController?.popViewController(animated: true)
         }else{
-            orderVC.orderState =  isSuccess ? .deliver : .pendPay
+            let orderVC = SPOrderVC()
+            orderVC.orderType = isAuction ? .auctionType : .defaultType
+            if isAuction {
+                orderVC.orderState =  isSuccess ? .auction_ing : .paydown
+            }else{
+                orderVC.orderState =  isSuccess ? .deliver : .pendPay
+            }
+            self.navigationController?.pushViewController(orderVC, animated: true)
         }
         
-        self.navigationController?.pushViewController(orderVC, animated: true)
+        
+       
     }
 }
 // MARK: - notification
@@ -388,15 +529,12 @@ extension SPConfirmOrderVC {
                 self?.sp_dealCreateComplete(code: code, msg: msg, orderPay: orderPay, errorModel: errorModel)
             }
         }
-        
-        
-        
     }
     fileprivate func sp_sendAuctionRequest(price : String){
         var parm = [String : Any]()
         parm.updateValue(sp_getString(string: self.confirmOrder?.auctionitem_id), forKey: "auctionitem_id")
         parm.updateValue(sp_getString(string: self.confirmOrder?.default_address?.addr_id), forKey: "addr_id")
-        parm.updateValue(sp_getString(string: price), forKey: "price")
+//        parm.updateValue(sp_getString(string: price), forKey: "price")
         self.requestModel.parm = parm
          sp_showAnimation(view: nil, title: "提交中,请勿重复提交")
         SPAppRequest.sp_getCreateAuctionOrder(requestModel: self.requestModel) {  [weak self](code , msg, orderPay, errorModel) in
@@ -494,11 +632,18 @@ extension SPConfirmOrderVC {
         let payRequest = SPRequestModel()
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string: pay.payment_id), forKey: "payment_id")
-        parm.updateValue(sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id), forKey: "pay_app_id")
+        if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue {
+              parm.updateValue(sp_getString(string: SPPayType.wxPing.rawValue), forKey: "pay_app_id")
+        }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue{
+              parm.updateValue(sp_getString(string: SPPayType.alipayPing.rawValue), forKey: "pay_app_id")
+        }else{
+              parm.updateValue(sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id), forKey: "pay_app_id")
+        }
         payRequest.parm = parm
         self.bounceApp = false
         SPAppRequest.sp_getToPay(requestModel: payRequest) { [weak self](data, errorModel) in
             if sp_isDic(dic: data) {
+              
                 let errorCode  = sp_getString(string: data?[SP_Request_Errorcod_Key])
                 if sp_getString(string: errorCode).count > 0, sp_getString(string: errorCode) != SP_Request_Code_Success {
                     self?.bounceApp = false
@@ -507,11 +652,12 @@ extension SPConfirmOrderVC {
                     self?.sp_pushOrderList(isSuccess: false)
                 }else{
                     self?.bounceApp = true
-                    if sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue{
-                        SPThridManager.sp_wxPay(dic: data!)
-                    }else if sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue {
-                        SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
-                    }
+                    let payData = sp_dicValueString(data!)
+                    SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
+                        self?.bounceApp = false
+                        sp_hideAnimation(view: nil)
+                        self?.sp_pushOrderList(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
+                    })
                 }
             }else{
                 self?.bounceApp = false

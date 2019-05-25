@@ -44,6 +44,7 @@ class SPAddAdressVC: SPBaseVC {
         view.titleLabel.text = "详细地址"
         view.backgroundColor = UIColor.white
         view.textView.placeholderLabel.text = "请输入街道、楼牌号等"
+        view.textView.textView.isScrollEnabled = false 
         return view
     }()
     fileprivate lazy var defaultView : SPAddressDefautView = {

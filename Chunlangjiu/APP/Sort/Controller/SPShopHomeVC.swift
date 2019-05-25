@@ -16,7 +16,6 @@ class SPShopHomeVC: SPBaseVC {
     }()
     fileprivate lazy var shopHomeView : SPShopHomeView = {
         let view = SPShopHomeView()
-        //        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.shopModel = shopModel
         view.authLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.nameLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
@@ -24,6 +23,9 @@ class SPShopHomeVC: SPBaseVC {
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickShopDetVC))
         view.addGestureRecognizer(tap)
         view.sp_cornerRadius(cornerRadius: 5)
+        view.appraisalBlock = { [weak self] in
+            self?.sp_pushWineVC()
+        }
         return view
     }()
     fileprivate lazy var conditionView : SPShopConditionView = {
@@ -169,8 +171,8 @@ class SPShopHomeVC: SPBaseVC {
         self.backBtn.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.view).offset(0)
             maker.top.equalTo(self.view).offset(sp_getstatusBarHeight() + 6)
-            maker.width.equalTo(30)
-            maker.height.equalTo(30)
+            maker.width.equalTo(40)
+            maker.height.equalTo(40)
         }
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.backBtn.snp.right).offset(0)
@@ -237,6 +239,11 @@ extension SPShopHomeVC {
     /// 赋值
     fileprivate func sp_setupData(){
         self.shopHomeView.shopModel = self.shopModel
+        if sp_getString(string: self.shopModel?.authenticate) == "true" {
+            self.shopHomeView.sp_appraisal(isHidden: false)
+        }else{
+            self.shopHomeView.sp_appraisal(isHidden: true)
+        }
         if sp_getString(string: self.shopModel?.grade).count == 0 || sp_getString(string: self.shopModel?.grade) == SP_GRADE_0 {
             self.backImgView.image = SPBundle.sp_img(name: "shop_bac")
         }else if sp_getString(string: self.shopModel?.grade) == SP_GRADE_1{
@@ -249,6 +256,13 @@ extension SPShopHomeVC {
         let detVC = SPShopDetVC()
         detVC.shopModel = self.shopModel
         self.navigationController?.pushViewController(detVC, animated: true)
+    }
+    fileprivate func sp_pushWineVC(){
+        if SPAPPManager.sp_isLogin(isPush: true){
+            let vc = SPWineValuationVC()
+            vc.authenticate_id = self.shopModel?.authenticate_id
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 extension SPShopHomeVC {

@@ -92,9 +92,13 @@ EOM
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_resource "${PODS_ROOT}/Pingpp/lib/Pingpp.bundle"
+  install_resource "${PODS_ROOT}/PingppAlipaySDK/AlipaySDK.bundle"
   install_resource "${PODS_ROOT}/UMCShare/UMShare/UMSocialUI/UMSocialSDKResources.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_resource "${PODS_ROOT}/Pingpp/lib/Pingpp.bundle"
+  install_resource "${PODS_ROOT}/PingppAlipaySDK/AlipaySDK.bundle"
   install_resource "${PODS_ROOT}/UMCShare/UMShare/UMSocialUI/UMSocialSDKResources.bundle"
 fi
 

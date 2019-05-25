@@ -13,9 +13,9 @@ class SPCustomerServiceVC: SPBaseVC {
     fileprivate lazy var phoneView : SPTextLabelView = {
         let view = SPTextLabelView()
         view.titleLabel.text = "全国热线"
-        view.contentLabel.text = "400-788-9550"
+        view.contentLabel.text = "400-189-0095"
         view.clickBlock = {
-           sp_openTel(text: "400-788-9550")
+           sp_openTel(text: "400-189-0095")
         }
         return view
     }()

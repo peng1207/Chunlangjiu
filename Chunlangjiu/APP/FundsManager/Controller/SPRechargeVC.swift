@@ -251,7 +251,13 @@ extension SPRechargeVC {
         let payRequest = SPRequestModel()
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string:payModel?.payment_id), forKey: "payment_id")
-        parm.updateValue(sp_getString(string:self.selectPay?.app_rpc_id), forKey: "pay_app_id")
+//        if sp_getString(string:self.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue {
+//            parm.updateValue(sp_getString(string: SPPayType.wxPing.rawValue), forKey: "pay_app_id")
+//        }else if sp_getString(string: self.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue{
+//            parm.updateValue(sp_getString(string: SPPayType.alipayPing.rawValue), forKey: "pay_app_id")
+//        }else{
+            parm.updateValue(sp_getString(string: self.selectPay?.app_rpc_id), forKey: "pay_app_id")
+//        }
         if sp_getString(string: self.selectPay?.app_rpc_id) == SPPayType.balance.rawValue{
             parm.updateValue(sp_getString(string: self.payPwd), forKey: "deposit_password")
         }
@@ -264,14 +270,24 @@ extension SPRechargeVC {
                 if sp_getString(string: errorCode).count > 0, sp_getString(string: errorCode) != SP_Request_Code_Success {
                     self?.bounceApp = false
                     sp_hideAnimation(view: nil)
-                    sp_showTextAlert(tips: "支付失败")
+                    let msg = sp_getString(string: data?["msg"])
+                    sp_showTextAlert(tips: msg.count > 0 ? msg :  "支付失败")
                     self?.sp_pushOrderList(isSuccess: false)
                 }else{
-                    self?.bounceApp = true
-                    if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue{
-                        SPThridManager.sp_wxPay(dic: data!)
-                    }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue {
-                        SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                   
+                    if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue || sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue {
+                        self?.bounceApp = true
+                        if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue{
+                             SPThridManager.sp_wxPay(dic: data!)
+                        }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue{
+                             SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                        }
+//                        let payData = sp_dicValueString(data!)
+//                        SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
+//                            self?.bounceApp = false
+//                            sp_hideAnimation(view: nil)
+//                            self?.sp_pushOrderList(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
+//                        })
                     }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.balance.rawValue {
                        self?.sp_pushOrderList(isSuccess: true)
                     }

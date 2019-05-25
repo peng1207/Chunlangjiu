@@ -14,7 +14,7 @@ class SPAddressFlexView:  UIView{
     lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.font = sp_getFontSize(size: 16)
+        label.font = sp_getFontSize(size: 15)
         return label
     }()
     lazy var textView : SPTextView = {
@@ -61,10 +61,9 @@ class SPAddressFlexView:  UIView{
         }
         self.lineView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self).offset(0)
-            maker.top.equalTo(self.textView.snp.bottom).offset(15)
+            maker.bottom.equalTo(self.textView.snp.bottom).offset(15)
             maker.height.equalTo(sp_lineHeight)
         }
-        
     }
     deinit {
         
