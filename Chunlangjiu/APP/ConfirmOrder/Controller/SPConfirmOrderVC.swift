@@ -304,7 +304,7 @@ extension SPConfirmOrderVC {
             return
         }
         if self.isAuction {
-            let shopModel = self.confirmOrder?.dataArray?.first
+//            let shopModel = self.confirmOrder?.dataArray?.first
 //            guard sp_getString(string: shopModel?.confrim_auction_price).count > 0 else{
 //                sp_showTextAlert(tips: "请输入出价金额")
 //                return
@@ -559,11 +559,14 @@ extension SPConfirmOrderVC {
                
 //                sp_balancePay(orderPay: pay)
                 sp_sendBalanceRequest(orderPay: pay, pwd: sp_getString(string: self.payPwd))
-            }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue{
+            }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue || sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPing.rawValue {
                 sp_sendWXRequest(orderPay: orderPay)
-            }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue{
+            }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue || sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.alipayPing.rawValue{
                 sp_sendWXRequest(orderPay: orderPay)
-            }else{
+            }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.upacpPing.rawValue{
+                 sp_sendWXRequest(orderPay: orderPay)
+            }
+            else{
                 sp_hideAnimation(view: nil)
             }
         }else{
@@ -632,13 +635,13 @@ extension SPConfirmOrderVC {
         let payRequest = SPRequestModel()
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string: pay.payment_id), forKey: "payment_id")
-        if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue {
-              parm.updateValue(sp_getString(string: SPPayType.wxPing.rawValue), forKey: "pay_app_id")
-        }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue{
-              parm.updateValue(sp_getString(string: SPPayType.alipayPing.rawValue), forKey: "pay_app_id")
-        }else{
-              parm.updateValue(sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id), forKey: "pay_app_id")
-        }
+//        if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue {
+//              parm.updateValue(sp_getString(string: SPPayType.wxPing.rawValue), forKey: "pay_app_id")
+//        }else if sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue{
+//              parm.updateValue(sp_getString(string: SPPayType.alipayPing.rawValue), forKey: "pay_app_id")
+//        }else{
+        parm.updateValue(sp_getString(string: self.confirmOrder?.selectPayModel?.app_rpc_id), forKey: "pay_app_id")
+//        }
         payRequest.parm = parm
         self.bounceApp = false
         SPAppRequest.sp_getToPay(requestModel: payRequest) { [weak self](data, errorModel) in
@@ -653,11 +656,17 @@ extension SPConfirmOrderVC {
                 }else{
                     self?.bounceApp = true
                     let payData = sp_dicValueString(data!)
-                    SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
-                        self?.bounceApp = false
-                        sp_hideAnimation(view: nil)
-                        self?.sp_pushOrderList(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
-                    })
+                    if sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPay.rawValue {
+                        SPThridManager.sp_wxPay(dic: data!)
+                    }else if sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue{
+                         SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                    }else if  sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPing.rawValue ||  sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.alipayPing.rawValue ||  sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.upacpPing.rawValue{
+                        SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
+                            self?.bounceApp = false
+                            sp_hideAnimation(view: nil)
+                            self?.sp_pushOrderList(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
+                        })
+                    }
                 }
             }else{
                 self?.bounceApp = false

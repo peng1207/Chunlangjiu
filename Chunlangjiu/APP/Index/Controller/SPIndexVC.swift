@@ -280,7 +280,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         if section < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0 {
             let indexModel : SPIndexGoods? = self.dataArray?[section];
             if sp_getString(string: indexModel?.type) == SP_HEADER {
-                var height : CGFloat = collectionView.frame.size.width *  0.65
+                var height : CGFloat = collectionView.frame.size.width *  200.00/375.00
                 if sp_getArrayCount(array: self.indexModel?.bannerList) == 0 {
                     height = 0.0
                 }

@@ -179,7 +179,7 @@ extension SPWineValuationVC {
 // MARK: - request
 extension SPWineValuationVC {
     fileprivate func sp_send(uploadImg:[UIImage]){
-        sp_showAnimation(view: nil, title: nil)
+        sp_showAnimation(view: nil, title: "正在上传中...")
         SPOrderHandle.sp_uploadImage(imageType: "rate", imageArray: uploadImg) { [weak self](isSuccess, imagePaths) in
             if isSuccess {
                 self?.sp_send(imagePaths: imagePaths)

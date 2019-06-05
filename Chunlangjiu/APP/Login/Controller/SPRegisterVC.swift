@@ -214,6 +214,7 @@ extension SPRegisterVC {
             sp_showTextAlert(tips: msg)
             if code == SP_Request_Code_Success {
                 self?.sp_startTimer()
+                self?.codeTextFiled.becomeFirstResponder()
             }else{
                 self?.sendCodeBtn.isEnabled = true
             }

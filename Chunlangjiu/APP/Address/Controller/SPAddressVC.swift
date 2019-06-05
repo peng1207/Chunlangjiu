@@ -156,13 +156,15 @@ extension SPAddressVC:UITableViewDelegate,UITableViewDataSource{
 }
 
 extension SPAddressVC {
-    fileprivate func sp_dealSelectComplete(model:SPAddressModel?){
+    fileprivate func sp_dealSelectComplete(model:SPAddressModel?,needPop : Bool = true){
         self.addressModel = model
         guard let block = self.selectBlock else{
             return
         }
         block(model)
-        self.navigationController?.popViewController(animated: true)
+        if needPop {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     /// 点击添加事件
@@ -216,9 +218,8 @@ extension SPAddressVC {
                     }
                 }
                 if isExist == false {
-                    self.sp_dealSelectComplete(model: nil)
+                    self.sp_dealSelectComplete(model: nil,needPop: false)
                 }
-                
             }
             
             
@@ -244,7 +245,7 @@ extension SPAddressVC {
                 sp_showTextAlert(tips: "删除成功")
                 if let selectModel = self?.addressModel {
                     if selectModel.addr_id == model.addr_id {
-                        self?.sp_dealSelectComplete(model: nil)
+                        self?.sp_dealSelectComplete(model: nil,needPop: false)
                     }
                 }
                 

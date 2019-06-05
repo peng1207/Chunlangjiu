@@ -1638,7 +1638,7 @@ class SPAppRequest {
     ///   - complete: 回调
     class func sp_getPayList(requestModel:SPRequestModel,complete:SPRequestCompletList?){
         var parm = [String:Any]()
-        parm.updateValue("v2", forKey: "v")
+        parm.updateValue("v3", forKey: "v")
         requestModel.parm = parm
  
         requestModel.url = SP_GET_PAYLIST_URL

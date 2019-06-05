@@ -50,6 +50,8 @@ enum SPPayType : String {
     case alipayPing     = "alipayPing"
     /// ping++ 微信支付
     case wxPing         = "wxPing"
+    /// ping++ 银联支付
+    case upacpPing      = "upacpPing"
 }
 /// 等待付款
 let SP_WAIT_BUYER_PAY = "WAIT_BUYER_PAY"

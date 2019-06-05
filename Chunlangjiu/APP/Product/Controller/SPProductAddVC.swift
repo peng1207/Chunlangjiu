@@ -139,6 +139,7 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
     var item_id : String?
     var successBlock : SPAddProductSuccessBlock?
     var edit : Bool! = false
+    fileprivate var canCheckRequest : Bool = true
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -148,13 +149,13 @@ class SPProductAddVC: SPBaseVC ,UIImagePickerControllerDelegate,UINavigationCont
         }else{
              self.sp_sendRequest()
         }
-       
-       
-       
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-         sp_sendCheckRequest()
+        if self.canCheckRequest {
+            sp_sendCheckRequest()
+        }
+        self.canCheckRequest = true
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -355,7 +356,7 @@ extension SPProductAddVC {
     }
     fileprivate func sp_getSelectImage(imageArray : [Any]){
         let group = DispatchGroup() //创建group
-        sp_showAnimation(view: self.view, title: nil)
+        sp_showAnimation(view: self.view, title: "正在上传中...")
         var i = 0
         var selectImage = [String]()
         if self.edit {
@@ -468,6 +469,7 @@ extension SPProductAddVC {
     /// - Parameter addView: 添加对象view
     fileprivate func sp_clickAddView(addView : SPAddImageView){
         tempAddView = addView
+        self.canCheckRequest = false
         sp_thrSelectImg(viewController: self, nav: self.navigationController) { [weak self](img) in
             if let view = self?.tempAddView {
 //                self?.showImageView.sp_update(image: img, addImageView: view)

@@ -314,7 +314,7 @@ extension SPPersonalInfoVC {
         
         self.shopNameView.contentLabel.text = sp_getString(string: SPAPPManager.instance().memberModel?.shop_name)
         self.headImgView.url = sp_getString(string: SPAPPManager.instance().memberModel?.head_portrait)
-        self.userNameView.contentLabel.text = sp_getString(string: SPAPPManager.instance().memberModel?.login_account)
+       self.userNameView.contentLabel.text = sp_getString(string: SPAPPManager.instance().memberModel?.login_account)
         self.sexView.contentLabel.text = sp_getSexString(sex: SPAPPManager.instance().memberModel?.sex)
         self.shopIntroductionView.content = sp_getString(string: SPAPPManager.instance().memberModel?.bulletin)
         self.shopAddressView.content = sp_getString(string: SPAPPManager.instance().memberModel?.area)

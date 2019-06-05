@@ -17,7 +17,7 @@ class SPAppraisalInfoCollectionCell: UICollectionViewCell {
     }()
     fileprivate lazy var nameLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 13)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
         label.textAlignment = .center
         return label

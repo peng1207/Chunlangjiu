@@ -10,8 +10,8 @@ import Foundation
 
 
 /// 域名
-//let SP_MAIN_DOMAIN_NAME  =   "http://mall.chunlangjiu.com"
-let SP_MAIN_DOMAIN_NAME  =   "http://test.chunlangjiu.com"
+let SP_MAIN_DOMAIN_NAME  =   "http://mall.chunlangjiu.com"
+//let SP_MAIN_DOMAIN_NAME  =   "http://test.chunlangjiu.com"
 /// 保存域名对应的key
 let SP_MAIN_DOMAIN_NAME_KEY = "SP_MAIN_DOMAIN_NAME_KEY"
 
