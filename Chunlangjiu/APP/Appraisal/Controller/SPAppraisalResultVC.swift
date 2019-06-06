@@ -153,11 +153,11 @@ class SPAppraisalResultVC: SPBaseVC {
     }
     fileprivate func sp_dealSubmitBtn(open : Bool){
         if open {
-              self.submitBtn.isEnabled = true
+//              self.submitBtn.isEnabled = true
                 self.submitBtn.setTitle("快速变现（\(SP_CHINE_MONEY)\(sp_getString(string: self.detModel?.price))）", for: UIControlState.normal)
             self.submitBtn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         }else{
-            self.submitBtn.isEnabled = false
+//            self.submitBtn.isEnabled = false
             self.submitBtn.setTitle("已提交变现申请（\(SP_CHINE_MONEY)\(sp_getString(string: self.detModel?.price))）", for: UIControlState.normal)
             self.submitBtn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)
         }
@@ -232,7 +232,12 @@ class SPAppraisalResultVC: SPBaseVC {
 extension SPAppraisalResultVC {
     
     @objc fileprivate func sp_clickSubmit(){
-       sp_sendSellRequest()
+        if sp_getString(string: self.detModel?.sell) == SPAPPraisalProductStatus_True  {
+            sp_pushLiquidationVC()
+        }else{
+             sp_sendSellRequest()
+        }
+      
     }
     fileprivate func sp_pushLiquidationVC(){
         let vc = SPLiquidationVC()
@@ -275,6 +280,7 @@ extension SPAppraisalResultVC {
             if code == SP_Request_Code_Success{
                 sp_showTextAlert(tips: "变现申请提交成功")
                  self?.sp_dealSubmitBtn(open: false)
+                self?.detModel?.sell = SPAPPraisalProductStatus_True
                 sp_asyncAfter(time: 2, complete: {
                     self?.sp_pushLiquidationVC()
                    
