@@ -122,7 +122,7 @@ class SPAPPManager : NSObject{
                     }
                     vc = tmpVC
                 }
-                sp_log(message: "该返回的控制器\(vc)")
+                
                 navVC.setNavigationBarHidden(false, animated: false)
                 if let tmpvc = vc{
                     navVC.popToViewController(tmpvc, animated: true)

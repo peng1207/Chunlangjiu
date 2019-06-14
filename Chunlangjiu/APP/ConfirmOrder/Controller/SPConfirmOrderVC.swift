@@ -661,6 +661,9 @@ extension SPConfirmOrderVC {
                     }else if sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.aliPay.rawValue{
                          SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
                     }else if  sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.wxPing.rawValue ||  sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.alipayPing.rawValue ||  sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.upacpPing.rawValue{
+                        if sp_getString(string: self?.confirmOrder?.selectPayModel?.app_rpc_id) == SPPayType.upacpPing.rawValue {
+                             sp_hideAnimation(view: nil)
+                        }
                         SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
                             self?.bounceApp = false
                             sp_hideAnimation(view: nil)

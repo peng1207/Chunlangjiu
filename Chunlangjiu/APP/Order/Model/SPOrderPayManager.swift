@@ -165,7 +165,11 @@ class SPOrderPayManager : NSObject {
                         self.bounceApp = true
                         SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
                     }else if selectPayModel.app_rpc_id == SPPayType.wxPing.rawValue || selectPayModel.app_rpc_id == SPPayType.alipayPing.rawValue || selectPayModel.app_rpc_id == SPPayType.upacpPing.rawValue {
+                        if  selectPayModel.app_rpc_id == SPPayType.upacpPing.rawValue {
+                             sp_hideAnimation(view: nil)
+                        }
                         self.bounceApp = true
+                     
                         let payData = sp_dicValueString(data!)
                         SPThridManager.sp_pingPay(data: payData, complete: { (status) in
                             self.bounceApp = false

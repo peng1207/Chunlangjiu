@@ -40,7 +40,6 @@ extension UIScrollView {
     /// 停止加载更多
     func sp_stopFooterRefesh(){
         self.es.stopLoadingMore()
-
     }
     /// 移除所有的刷新控件
     func sp_removeAllRefesh(){

@@ -108,9 +108,25 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         SPAPPManager.sp_uploadPushToken()
     }
     func geTuiSdkDidReceivePayloadData(_ payloadData: Data!, andTaskId taskId: String!, andMsgId msgId: String!, andOffLine offLine: Bool, fromGtAppId appId: String!) {
-
-//      let payloadMsg = sp_getString(string:  String(data: payloadData, encoding: String.Encoding.utf8))
-//        sp_showTextAlert(tips: "个推透传信息:\(payloadMsg)")
+        
+//        if UIApplication.shared.applicationState ==  UIApplicationState.active {
+//            let payloadMsg = sp_getString(string:  String(data: payloadData, encoding: String.Encoding.utf8))
+//            //        sp_showTextAlert(tips: payloadMsg)
+//            let localNotification = UILocalNotification()
+//            localNotification.timeZone = NSTimeZone.default
+//            localNotification.fireDate = Date(timeIntervalSinceNow: 5)
+//            localNotification.alertBody = payloadMsg
+//            if payloadMsg.count == 0 {
+//                localNotification.alertBody = "获取的数据为空"
+//            }
+//            if #available(iOS 8.2, *) {
+//                localNotification.alertTitle = "收到个推透传信息"
+//            } else {
+//                // Fallback on earlier versions
+//            }
+//            localNotification.userInfo = nil
+//            UIApplication.shared.presentLocalNotificationNow(localNotification)
+//        }
     }
     class func sp_wxPay(dic:[String:Any]){
         instance().isPingPay = false

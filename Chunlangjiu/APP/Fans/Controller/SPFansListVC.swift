@@ -57,6 +57,11 @@ class SPFansListVC: SPBaseVC {
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = UIView()
         self.tableView.backgroundColor = self.view.backgroundColor
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         self.tableView.sp_headerRefesh { [weak self]in
             self?.currentPage = 1
             self?.sp_sendRequest()

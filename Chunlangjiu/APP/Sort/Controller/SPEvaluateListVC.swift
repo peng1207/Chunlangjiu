@@ -42,8 +42,18 @@ class SPEvaluateListVC: SPBaseVC {
         self.tableView.dataSource = self
         self.tableView.backgroundColor = self.view.backgroundColor
         self.tableView.separatorStyle = .none
-        self.tableView.estimatedRowHeight = 67
+        
+        self.tableView.estimatedRowHeight = 90
+        self.tableView.estimatedSectionHeaderHeight = 0
+        self.tableView.estimatedSectionFooterHeight = 0
+        self.tableView.tableFooterView = UIView()
+         self.tableView.tableHeaderView = UIView()
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         self.tableView.sp_headerRefesh { [weak self]()in
             self?.currentPage = 1
             self?.sp_sendRequest()
@@ -59,6 +69,11 @@ class SPEvaluateListVC: SPBaseVC {
         self.sp_addConstraint()
     }
     override func sp_dealNoData() {
+        self.tableView.sp_stopHeaderRefesh()
+        sp_asyncAfter(time: 1) {
+           
+            self.tableView.sp_stopFooterRefesh()
+        }
         if sp_getArrayCount(array: self.dataArray) > 0  {
             self.noData.isHidden = true
         }else{
@@ -80,7 +95,9 @@ class SPEvaluateListVC: SPBaseVC {
         }
     }
     deinit {
-        
+        self.tableView.delegate = nil
+        self.tableView.dataSource = nil
+        self.tableView.sp_removeAllRefesh()
     }
 }
 extension SPEvaluateListVC : UITableViewDataSource,UITableViewDelegate{
@@ -101,6 +118,7 @@ extension SPEvaluateListVC : UITableViewDataSource,UITableViewDelegate{
         }
         return cell!
     }
+   
 }
 extension SPEvaluateListVC {
     func sp_sendRequest(){
@@ -132,8 +150,7 @@ extension SPEvaluateListVC {
                 sp_dealComplete(total: totalPage)
             }
             self.tableView.reloadData()
-            self.tableView.sp_stopFooterRefesh()
-            self.tableView.sp_stopHeaderRefesh()
+        
         }else{
             self.currentPage = self.currentPage - 1
             if self.currentPage < 1 {
