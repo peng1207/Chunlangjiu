@@ -102,6 +102,10 @@
 	<string>想获取您的位置，给您精准推荐商品</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>是否允许打开相册以供选择您选择图片更改用户头像或上传商品图片</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UIMainStoryboardFile</key>
 	<string></string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -124,6 +128,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>versionCode</key>
-	<string>2019061301</string>
+	<string>2019062002</string>
 </dict>
 </plist>

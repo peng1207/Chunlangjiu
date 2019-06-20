@@ -299,7 +299,7 @@ let SP_GET_CHECKITEM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: 
 let SP_GET_SHOPAPPRAISALLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.shop.list"
 /// 鉴定师信息
 let SP_GET_SHOPAPPRAISAINFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.shop.detail"
-
+let SP_GET_MSGCOUNT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.notice.get"
 
 /*-----------------------web-------------------------*/
 /// 获取商家销售中的商品数据

@@ -146,6 +146,33 @@ class SPAppRequest {
             }
         }
     }
+    /// 获取消息数量
+    ///
+    /// - Parameters:
+    ///   - requestModel: 请求数据
+    ///   - complete: 回调
+    class func sp_getMsgCount(requestModel:SPRequestModel,complete:SPRequestDefaultComplete?){
+        requestModel.url = SP_GET_MSGCOUNT_URL
+        sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
+            if let json = dataJson {
+                let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
+                let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
+                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                var count = ""
+                if errorcode == SP_Request_Code_Success, sp_isDic(dic: data){
+                    count = sp_getString(string: data?["count"])
+                }
+                
+                if let block = complete {
+                    block(errorcode,errorcode == SP_Request_Code_Success ? count : msg , nil)
+                }
+            }else{
+                if let block = complete {
+                    block(SP_Request_Error,"",nil)
+                }
+            }
+        }
+    }
     /// 获取活动数据
     ///
     /// - Parameters:

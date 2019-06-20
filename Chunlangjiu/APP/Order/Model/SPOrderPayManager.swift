@@ -24,6 +24,9 @@ class SPOrderPayManager : NSObject {
             self.sp_dealPaySelect(mode: model)
             self.sp_hidePayView()
         }
+        view.noPwdBlock = {
+            self.sp_clickNoPwd()
+        }
         return view
     }()
     fileprivate var payDataArray : [SPPayModel]? {
@@ -234,6 +237,21 @@ class SPOrderPayManager : NSObject {
          NotificationCenter.default.removeObserver(self)
         self.payView.removeFromSuperview()
         self.payView.selectBlock = nil
+    }
+    fileprivate func sp_clickNoPwd(){
+          sp_remove()
+        let appdelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let tabbarController = appdelegate.window?.rootViewController
+        if tabbarController is SPMainVC {
+            let tabBar : SPMainVC = tabbarController as! SPMainVC
+            let nav : UINavigationController? = tabBar.viewControllers![tabBar.selectedIndex] as? UINavigationController
+            if nav != nil {
+               let payPwdVC = SPPayPwdVC()
+                nav?.pushViewController(payPwdVC, animated: true)
+            }
+        }
+
+       
     }
     deinit {
        

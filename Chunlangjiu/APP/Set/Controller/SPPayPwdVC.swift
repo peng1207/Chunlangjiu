@@ -21,6 +21,7 @@ class SPPayPwdVC: SPBaseVC {
         let view = SPInputBtnView()
         view.titleLabel.text = "验证码"
         view.textFiled.placeholder = "请输入验证码"
+        view.textFiled.keyboardType = UIKeyboardType.numberPad
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.clickBlock = { [weak self] in
             self?.sp_clickCode()
@@ -164,6 +165,7 @@ extension SPPayPwdVC {
             sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
                 sp_showTextAlert(tips: "修改密码成功")
+                NotificationCenter.default.post(name: NSNotification.Name(SP_PAYPWD_SUCCESS_NOTIFICATION), object: nil)
                 self?.navigationController?.popViewController(animated: true)
             }else {
                 sp_showTextAlert(tips: sp_getString(string: msg))

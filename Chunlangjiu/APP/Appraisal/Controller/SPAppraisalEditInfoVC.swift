@@ -50,7 +50,7 @@ class SPAppraisalEditInfoVC: SPBaseVC {
     fileprivate lazy var rangView : SPAddressFlexView = {
         let view = SPAddressFlexView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
-        view.textView.minHeight = 33
+        view.textView.minHeight = 44
         view.titleLabel.text = "鉴定范围"
         view.textView.placeholderLabel.text = "例：鉴定茅台、五粮液、泸州老家等中国十大白酒特供品。"
         view.textView.placeholderLabel.font = sp_getFontSize(size: 15)
@@ -63,14 +63,14 @@ class SPAppraisalEditInfoVC: SPBaseVC {
         view.textView.minHeight = 55
         view.titleLabel.text = "鉴定要求"
         view.textView.placeholderLabel.text = "例：拍摄物品图清晰、商品标签完整，标签正反面拍摄，地方老酒注意拍摄物品的特点等。"
-          view.textView.placeholderLabel.font = sp_getFontSize(size: 15)
+        view.textView.placeholderLabel.font = sp_getFontSize(size: 15)
         view.textView.textView.isScrollEnabled = false
         return view
     }()
     fileprivate lazy var tipsView : SPAddressFlexView = {
         let view = SPAddressFlexView()
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
-        view.textView.minHeight = 33
+        view.textView.minHeight = 44
         view.titleLabel.text = "注意事项"
         view.textView.placeholderLabel.text = "例：按要求补图，请勿私自鉴定，拼揍图片不鉴定。      "
         view.textView.placeholderLabel.font = sp_getFontSize(size: 15)
@@ -120,10 +120,12 @@ class SPAppraisalEditInfoVC: SPBaseVC {
     fileprivate func sp_setupData(){
         self.iconImgView.sp_cache(string: sp_getString(string: self.infoModel?.authenticate_img), plImage: sp_getLogoImg())
         self.headerUrl = sp_getString(string: self.infoModel?.authenticate_img)
-        self.nameView.textFiled.text = sp_getString(string: self.infoModel?.authenticate_name)
-        self.rangView.textView.content = sp_getString(string: self.infoModel?.authenticate_scope)
-        self.requireView.textView.content = sp_getString(string: self.infoModel?.authenticate_require)
-        self.tipsView.textView.content = sp_getString(string: self.infoModel?.authenticate_content)
+        sp_asyncAfter(time: 0.3) {
+            self.nameView.textFiled.text = sp_getString(string: self.infoModel?.authenticate_name)
+            self.rangView.textView.content = sp_getString(string: self.infoModel?.authenticate_scope)
+            self.requireView.textView.content = sp_getString(string: self.infoModel?.authenticate_require)
+            self.tipsView.textView.content = sp_getString(string: self.infoModel?.authenticate_content)
+        }
     }
     /// 创建UI
     override func sp_setupUI() {

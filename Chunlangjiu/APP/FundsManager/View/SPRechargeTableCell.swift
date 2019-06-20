@@ -91,9 +91,9 @@ class SPRechargeTableCell: UITableViewCell {
         }
         self.payContentLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.payContentLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.titleLabel.snp.right).offset(4)
+//            maker.left.equalTo(self.titleLabel.snp.right).offset(4)
             maker.top.bottom.equalTo(self.contentView).offset(0)
-            maker.right.equalTo(self.selectBtn.snp.right).offset(-8)
+            maker.right.equalTo(self.selectBtn.snp.left).offset(-8)
         }
         self.selectBtn.snp.makeConstraints { (maker) in
             maker.right.equalTo(self.contentView).offset(-15)

@@ -25,7 +25,20 @@ class SPIndexTitleView:  UIView{
         btn.setImage(UIImage(named: "pubilc_msg_white"), for: UIControlState.normal)
         return btn
     }()
-
+    lazy var countLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 10)
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        label.textAlignment = .center
+        label.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        label.text = ""
+        label.isHidden = true
+        label.sp_cornerRadius(cornerRadius: 9)
+        label.adjustsFontSizeToFitWidth = true
+        label.isUserInteractionEnabled = true
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
@@ -39,6 +52,7 @@ class SPIndexTitleView:  UIView{
         self.addSubview(self.showCityView)
         self.addSubview(self.searchView)
         self.addSubview(self.msgBtn)
+        self.addSubview(self.countLabel)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -61,6 +75,12 @@ class SPIndexTitleView:  UIView{
             maker.centerY.equalTo(self.searchView.snp.centerY).offset(0)
             maker.width.equalTo(30)
             maker.height.equalTo(30)
+        }
+        self.countLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.msgBtn.snp.right).offset(-14)
+            maker.bottom.equalTo(self.msgBtn.snp.top).offset(14)
+            maker.width.equalTo(18)
+            maker.height.equalTo(18)
         }
     }
     deinit {

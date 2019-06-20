@@ -115,7 +115,9 @@ extension SPTutorialPageVC : UICollectionViewDelegate,UICollectionViewDataSource
         return collectionView.frame.size
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        sp_clickAdvert()
+        if indexPath.row == sp_getArrayCount(array: self.imgArray) - 1 {
+            sp_clickAdvert()
+        }
     }
 }
 

@@ -31,6 +31,7 @@ class SPIndexVC: SPBaseVC {
           let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickCityAction))
         view.showCityView.addGestureRecognizer(tap)
         view.msgBtn.addTarget(self, action: #selector(sp_clickMsgAction), for: UIControlEvents.touchUpInside)
+        view.countLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sp_clickMsgAction)))
         view.searchView.didClickBlock = { () -> Bool  in
             self.sp_clickSearch()
             return false
@@ -70,6 +71,14 @@ class SPIndexVC: SPBaseVC {
     fileprivate let collectHAuctionCellID = "collectHAuctionCellID"
     fileprivate let collectionHeadHeaderID = "collectionHeadHeaderID"
     fileprivate let collectionHeaderID = "collectionHeaderID"
+    fileprivate lazy var msgRequestModel : SPRequestModel = {
+        let model = SPRequestModel()
+        return model
+    }()
+    fileprivate lazy var indexRequestModel : SPRequestModel = {
+        let model = SPRequestModel()
+        return model
+    }()
     fileprivate lazy var auctionGood : SPIndexGoods = {
         return SPIndexGoods.sp_init(type: SP_AUCTION)
     }()
@@ -85,10 +94,7 @@ class SPIndexVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_showAnimation(view: self.view, title: nil)
-        self.sp_sendRequest()
-        self.sp_sendGoodRequest()
-//        self.tableView.sp_layoutHeaderView()
-        self.sp_addNotification()
+        sp_clickNoData()
         sp_netChange()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -100,6 +106,7 @@ class SPIndexVC: SPBaseVC {
             sp_sendGoodRequest()
         }
         self.isEditPrice = false
+        sp_sendMsgCountRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -143,8 +150,7 @@ class SPIndexVC: SPBaseVC {
         self.view.addSubview(self.nodataBtn)
         self.collectionView.sp_headerRefesh { [weak self]() in
             self?.currentPage = 1
-            self?.sp_sendGoodRequest()
-            self?.sp_sendRequest()
+            self?.sp_clickNoData()
         }
         self.collectionView.sp_footerRefresh { [weak self]() in
             if let page = self?.currentPage {
@@ -587,6 +593,7 @@ extension SPIndexVC{
     @objc fileprivate func sp_clickNoData(){
         self.sp_sendRequest()
         self.sp_sendGoodRequest()
+        sp_sendMsgCountRequest()
     }
     /// 点击竞拍更多
     @objc fileprivate func sp_clickMore(){
@@ -607,6 +614,7 @@ extension SPIndexVC{
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_loginout), name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
     }
     /// 定位成功通知
     @objc fileprivate func sp_locationNotification(){
@@ -652,26 +660,30 @@ extension SPIndexVC{
             // 有网络
             self.noNetHeight.update(offset: 0)
             if sp_getArrayCount(array: self.defaultGood.dataArray) <= 0 {
-                self.sp_sendRequest()
                 self.currentPage = 1
-                self.sp_sendGoodRequest()
+                self.sp_clickNoData()
             }
         }
+    }
+    /// 退出登录通知
+    @objc fileprivate func sp_loginout(){
+        sp_dealMsgCount(count: "")
     }
 }
 extension SPIndexVC{
     
     fileprivate func sp_sendRequest(){
-        let model = SPRequestModel()
+        if self.indexRequestModel.isRequest  {
+            return
+        }
         var parm = [String:Any]()
         parm.updateValue("index", forKey: "tmpl")
-        model.parm = parm
-        SPAppRequest.sp_getIndex(requestModel: model) { [weak self](code, indexModel, errorModel) in
+        self.indexRequestModel.parm = parm
+        SPAppRequest.sp_getIndex(requestModel: self.indexRequestModel) { [weak self](code, indexModel, errorModel) in
             
             if code  == SP_Request_Code_Success {
                 self?.indexModel = indexModel
                 self?.tableHeaderView.indexModel = indexModel
-//                self.tableView.sp_layoutHeaderView()
             }
             sp_hideAnimation(view: self?.view)
             self?.sp_dealDataArray()
@@ -754,7 +766,39 @@ extension SPIndexVC{
             
         }
     }
+    /// 发送获取消息数量请求
+    fileprivate func sp_sendMsgCountRequest(){
+        if SPAPPManager.sp_isLogin(isPush: false) {
+            if self.msgRequestModel.isRequest {
+                return
+            }
+            let parm = [String : Any]()
+            self.msgRequestModel.parm = parm
+            SPAppRequest.sp_getMsgCount(requestModel: self.msgRequestModel) { [weak self](code, msg, errorModel) in
+                if code == SP_Request_Code_Success{
+                    self?.sp_dealMsgCount(count: msg)
+                }
+            }
+        }else{
+            sp_dealMsgCount(count: "")
+        }
+    }
     
-    
+    fileprivate func sp_dealMsgCount(count : String){
+        if sp_getString(string: count).count > 0  {
+            if let num = Int(sp_getString(string: count)){
+                if num > 99 {
+                    self.titleView.countLabel.text = "99+"
+                }else{
+                    self.titleView.countLabel.text = sp_getString(string: count)
+                }
+                self.titleView.countLabel.isHidden = false
+                return
+            }
+        }
+        self.titleView.countLabel.isHidden = true
+        
+        
+    }
     
 }

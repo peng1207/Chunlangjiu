@@ -47,6 +47,9 @@ class SPConfirmOrderVC: SPBaseVC {
             self?.sp_hidePayView()
             self?.sp_dealAuction()
         }
+        view.noPwdBlock = { [weak self] in
+            self?.sp_clickNoPwd()
+        }
         return view
     }()
     fileprivate lazy var scrollView : UIScrollView = {
@@ -458,9 +461,11 @@ extension SPConfirmOrderVC {
             }
             self.navigationController?.pushViewController(orderVC, animated: true)
         }
-        
-        
-       
+    }
+    fileprivate func sp_clickNoPwd(){
+        sp_hidePayView()
+        let payPwdVC = SPPayPwdVC()
+        self.navigationController?.pushViewController(payPwdVC, animated: true)
     }
 }
 // MARK: - notification
@@ -470,7 +475,14 @@ extension SPConfirmOrderVC {
         NotificationCenter.default.addObserver(self, selector: #selector(sp_keyboardWillShow(obj:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_payResture(notification:)), name: NSNotification.Name(SP_PAYRESULT_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_payPwdNotification), name: NSNotification.Name(SP_PAYPWD_SUCCESS_NOTIFICATION), object: nil)
+        
     }
+    @objc private func sp_payPwdNotification(){
+        sp_showAnimation(view: self.view, title: nil)
+        self.sp_sendBalanceStatusReequest()
+    }
+    
     @objc private func sp_keyboardWillShow(obj:Notification){
         let height = sp_getKeyBoardheight(notification: obj)
         sp_updateTableLayout(height: height)

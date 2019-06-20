@@ -136,6 +136,7 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             let payModel = self.dataArray?[indexPath.row]
             cell?.model = payModel
+            cell?.payContentLabel.text = ""
             if let pay = self.selectPay , let model = cell?.model{
                 if sp_getString(string: pay.app_rpc_id) == sp_getString(string:  model.app_rpc_id) {
                     cell?.sp_isSelect(select: true)
@@ -173,6 +174,7 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
                     if let isPwd : Bool = status.password , isPwd == false{
                         sp_showTextAlert(tips: "没有设置密码")
                         tableView.reloadData()
+                        sp_clickNoPwd()
                         return
                     }
                 }
@@ -210,9 +212,14 @@ extension SPRechargeVC {
             }
             
         }else{
-            sp_sendRechargeRequest()
+           
+           sp_sendRechargeRequest()
         }
         
+    }
+    fileprivate func sp_clickNoPwd(){
+        let payPwdVC = SPPayPwdVC()
+        self.navigationController?.pushViewController(payPwdVC, animated: true)
     }
 }
 extension SPRechargeVC {
@@ -338,6 +345,11 @@ extension SPRechargeVC {
     /// 添加通知
     fileprivate func sp_addNotification(){
         NotificationCenter.default.addObserver(self, selector: #selector(sp_payResture(notification:)), name: NSNotification.Name(SP_PAYRESULT_NOTIFICATION), object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(sp_payPwdNotification), name: NSNotification.Name(SP_PAYPWD_SUCCESS_NOTIFICATION), object: nil)
+    }
+    @objc private func sp_payPwdNotification(){
+        sp_showAnimation(view: self.view, title: nil)
+        self.sp_sendBalanceStatusReequest()
     }
     /// 支付结果回调
     ///

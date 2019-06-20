@@ -24,6 +24,7 @@ class SPCashVC: SPBaseVC {
         view.titleLabel.text = "提现金额"
         view.textFiled.placeholder = "最多可提"
         view.lineView.isHidden = true
+        view.textFiled.keyboardType = UIKeyboardType.decimalPad
         return view
     }()
     fileprivate lazy var tipLabel : UILabel = {
@@ -127,7 +128,7 @@ class SPCashVC: SPBaseVC {
 }
 extension SPCashVC {
     @objc fileprivate func sp_clickSubmit(){
-        guard let model = self.bandkCardModel else {
+        guard self.bandkCardModel != nil else {
             sp_showTextAlert(tips: "请选择银行卡")
             return
         }
@@ -137,6 +138,24 @@ extension SPCashVC {
         }
         if let price = Float(sp_getString(string: self.priceView.textFiled.text)) , price <= 0 {
             sp_showTextAlert(tips: "请输入大于0的金额")
+            return
+        }
+         sp_hideKeyboard()
+        let alertVC = UIAlertController(title: "提示", message: "您好本次提现周期为1-2个工作日，具体时间以银行为准，提现记录详见“资金管理-明细”，如有疑问可致电400-189-0095，谢谢！", preferredStyle: UIAlertControllerStyle.alert)
+        alertVC.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.default, handler: { [weak self](action) in
+            self?.sp_sendRequest()
+        }))
+        alertVC.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (action) in
+            
+        }))
+        self.present(alertVC, animated: true, completion: nil)
+        
+       
+    }
+    fileprivate func sp_sendRequest(){
+       
+        guard let model = self.bandkCardModel else {
+            sp_showTextAlert(tips: "请选择银行卡")
             return
         }
         var parm = [String : Any]()
@@ -155,7 +174,6 @@ extension SPCashVC {
                 sp_showTextAlert(tips: msg)
             }
         }
-        
     }
     fileprivate func sp_clickBankCard(){
         let bankCardVC = SPBankCardVC()

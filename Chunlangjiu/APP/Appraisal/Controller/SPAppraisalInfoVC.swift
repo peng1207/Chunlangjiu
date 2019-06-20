@@ -30,10 +30,11 @@ class SPAppraisalInfoVC: SPBaseVC {
         self.sp_setupUI()
         sp_setupData()
         sp_sendRequest()
-        sp_sendInfoRequest()
+     
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+           sp_sendInfoRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

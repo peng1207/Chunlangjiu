@@ -54,11 +54,12 @@ class SPAppraisalOfMineVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
-        sp_sendInfoRequest()
+      
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
          sp_dealClick(index: self.unidentifiedVC.btnView.sp_getSelect())
+          sp_sendInfoRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
