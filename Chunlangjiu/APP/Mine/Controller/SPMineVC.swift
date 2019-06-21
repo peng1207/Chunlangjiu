@@ -403,6 +403,8 @@ extension SPMineVC {
             self.pushVC = true
             let vc = SPAppraisalOfMineVC()
             self.navigationController?.pushViewController(vc, animated: true)
+        }else {
+            self.pushVC = false
         }
     }
     /// 点击头像

@@ -96,6 +96,7 @@ class SPIndexVC: SPBaseVC {
         sp_showAnimation(view: self.view, title: nil)
         sp_clickNoData()
         sp_netChange()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -591,6 +592,7 @@ extension SPIndexVC{
     }
     /// 点击没有数据
     @objc fileprivate func sp_clickNoData(){
+        self.currentPage = 1
         self.sp_sendRequest()
         self.sp_sendGoodRequest()
         sp_sendMsgCountRequest()
