@@ -60,20 +60,25 @@ class SPRechargeVC: SPBaseVC {
         if SPThridManager.sp_isInstallWX() {
              let wxModel = SPPayModel()
             wxModel.app_display_name = "微信"
-            wxModel.app_rpc_id = SPPayType.wxPay.rawValue
+              wxModel.app_rpc_id = SPPayType.wxPing.rawValue
             data.append(wxModel)
         }
        
         let aliPayModel = SPPayModel()
         aliPayModel.app_display_name = "支付宝"
-        aliPayModel.app_rpc_id = SPPayType.aliPay.rawValue
+      aliPayModel.app_rpc_id = SPPayType.alipayPing.rawValue
         data.append(aliPayModel)
+        
+//        let unpacpModel = SPPayModel()
+//        unpacpModel.app_display_name = "银联"
+//        unpacpModel.app_rpc_id = SPPayType.upacpPing.rawValue
+//        data.append(unpacpModel)
         
         if isBond {
             let blanceModel = SPPayModel()
             blanceModel.app_display_name = "余额"
             blanceModel.app_rpc_id = SPPayType.balance.rawValue
-            data.append(blanceModel)
+            data.insert(blanceModel, at: 0)
             sp_showAnimation(view: self.view, title: nil)
             sp_sendBalanceStatusReequest()
         }
@@ -229,6 +234,7 @@ extension SPRechargeVC {
         var parm = [String : Any]()
         parm.updateValue(sp_getString(string: self.headerView.priceView.textFiled.text), forKey: "money")
         self.requestModel.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
         SPFundsRequest.sp_getRechargeCreate(requestModel: self.requestModel) {  [weak self](code, msg, payModel, errorModel) in
              self?.sp_dealBondrequest(code: code, msg: msg, payModel: payModel, errorModel: errorModel)
         }
@@ -289,12 +295,17 @@ extension SPRechargeVC {
                         }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue{
                              SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
                         }
-//                        let payData = sp_dicValueString(data!)
-//                        SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
-//                            self?.bounceApp = false
-//                            sp_hideAnimation(view: nil)
-//                            self?.sp_pushOrderList(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
-//                        })
+
+                    }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPing.rawValue || sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.alipayPing.rawValue || sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.upacpPing.rawValue {
+                        let payData = sp_dicValueString(data!)
+                        if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.upacpPing.rawValue {
+                            sp_hideAnimation(view: nil)
+                        }
+                        SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
+                            self?.bounceApp = false
+                            sp_hideAnimation(view: nil)
+                            self?.sp_pushOrderList(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
+                        })
                     }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.balance.rawValue {
                        self?.sp_pushOrderList(isSuccess: true)
                     }

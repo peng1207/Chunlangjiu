@@ -63,6 +63,8 @@ class SPRechargeTableCell: UITableViewCell {
             self.typeImgView.image = UIImage(named: "public_pay_wx")
         }else if sp_getString(string: model?.app_rpc_id) == SPPayType.aliPay.rawValue || sp_getString(string: model?.app_rpc_id) == SPPayType.alipayPing.rawValue{
             self.typeImgView.image = UIImage(named: "public_pay_ailpy")
+        }else if sp_getString(string: model?.app_rpc_id) == SPPayType.upacpPing.rawValue {
+            self.typeImgView.image = UIImage(named: "upacpPing")
         }else{
             self.typeImgView.image = UIImage(named: "public_pay_balance")
         }
