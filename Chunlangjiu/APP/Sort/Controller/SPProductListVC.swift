@@ -231,7 +231,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if isH {
             var productModel : SPProductModel?
-            if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+            if indexPath.row < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0 {
                 productModel = self.dataArray?[indexPath.row]
             }
             
@@ -273,7 +273,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if isH {
             var height : CGFloat = 150.00
-            if indexPath.row < sp_getArrayCount(array: self.dataArray){
+            if indexPath.row < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
                 let model = self.dataArray?[indexPath.row]
                 if let m = model ,m.isAuction == true{
                     height = 175.00
@@ -308,7 +308,7 @@ extension SPProductListVC : UICollectionViewDataSource,UICollectionViewDelegate,
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let productDetaileVC = SPProductDetaileVC()
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0  {
             productDetaileVC.productModel = self.dataArray?[indexPath.row]
         }
         self.navigationController?.pushViewController(productDetaileVC, animated: true)

@@ -12,9 +12,18 @@ class SPForgetPWDVC : SPBaseVC{
         let view = UIScrollView()
         return view
     }()
+    fileprivate lazy var titleLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_getFontSize(size: 18)
+        label.text = "忘记密码"
+        label.textColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+        label.textAlignment = .left
+        return label
+    }()
     fileprivate lazy var phoneTextFiled : SPTextFiled = {
         let textFiled = SPTextFiled()
-        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
+//        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
+         textFiled.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         textFiled.sp_cornerRadius(cornerRadius: 22.5)
         textFiled.keyboardType = UIKeyboardType.numberPad 
         textFiled.placeholder = "请输入您的手机号码"
@@ -22,7 +31,7 @@ class SPForgetPWDVC : SPBaseVC{
         view.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
         let imageView = UIImageView()
         imageView.image = UIImage(named: "login_phone")
-        imageView.frame = CGRect(x: 21, y: 15, width: 11, height: 20)
+        imageView.frame = CGRect(x: 21, y: 15, width: 16, height: 15)
         view.addSubview(imageView)
         textFiled.leftView = view
         textFiled.leftViewMode = UITextFieldViewMode.always
@@ -35,14 +44,15 @@ class SPForgetPWDVC : SPBaseVC{
     }()
     fileprivate lazy var codeTextFiled : SPTextFiled = {
         let textFiled = SPTextFiled()
-        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
+//        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
+         textFiled.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         textFiled.placeholder = "请输入验证码"
         textFiled.sp_cornerRadius(cornerRadius: 22.5)
         let leftView = UIView()
         leftView.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
         let imageView = UIImageView()
         imageView.image = UIImage(named: "login_code")
-        imageView.frame = CGRect(x: 18, y: 14, width: 18, height: 20)
+        imageView.frame = CGRect(x: 18, y: 14, width: 14, height: 15)
         leftView.addSubview(imageView)
         
         textFiled.leftView = leftView
@@ -61,18 +71,18 @@ class SPForgetPWDVC : SPBaseVC{
     }()
     fileprivate lazy var sendCodeBtn : UIButton = {
         let btn = UIButton()
-        btn.sp_cornerRadius(cornerRadius: 13.5)
+ 
         btn.frame = CGRect(x: 10, y: 9, width: 90, height: 27)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
-        btn.setTitle("获取验证码", for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 14)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControlState.normal)
+        let att = NSMutableAttributedString(string: "获取验证码")
+        att.addAttributes([NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)], range: NSRange(location: 0, length: att.length))
+        btn.setAttributedTitle(att, for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickSendCodeAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
     fileprivate lazy var pwdextFiled : SPTextFiled = {
         let textFiled = SPTextFiled()
-        textFiled.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_dddddd.rawValue), width: sp_lineHeight)
+ 
+         textFiled.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         textFiled.placeholder = "请输入密码"
         textFiled.font = sp_getFontSize(size: 14)
         textFiled.sp_cornerRadius(cornerRadius: 22.5)
@@ -80,8 +90,8 @@ class SPForgetPWDVC : SPBaseVC{
         let leftView = UIView()
         leftView.frame = CGRect(x: 0, y: 0, width: 44, height: textFiledHeight)
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "login_code")
-        imageView.frame = CGRect(x: 18, y: 14, width: 18, height: 20)
+        imageView.image = UIImage(named: "login_pwd")
+        imageView.frame = CGRect(x: 18, y: 14, width: 15, height: 15)
         leftView.addSubview(imageView)
         
         textFiled.leftView = leftView
@@ -103,7 +113,12 @@ class SPForgetPWDVC : SPBaseVC{
         btn.addTarget(self, action: #selector(sp_clickDoneAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
-    
+    fileprivate lazy var backBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_leftBack"), for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     
     fileprivate let textFiledHeight : CGFloat = 45
     fileprivate var timer : Timer?
@@ -115,12 +130,14 @@ class SPForgetPWDVC : SPBaseVC{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+          self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.sp_stopTimer()
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -128,12 +145,14 @@ class SPForgetPWDVC : SPBaseVC{
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.view.backgroundColor = UIColor.white
+        
         self.view.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.titleLabel)
         self.scrollView.addSubview(self.phoneTextFiled)
         self.scrollView.addSubview(self.codeTextFiled)
         self.scrollView.addSubview(self.pwdextFiled)
         self.scrollView.addSubview(self.doneBtn)
+        self.view.addSubview(self.backBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -147,12 +166,18 @@ class SPForgetPWDVC : SPBaseVC{
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
+        self.titleLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.scrollView).offset(71)
+            maker.top.equalTo(self.scrollView).offset(sp_getstatusBarHeight() + 102)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.width.greaterThanOrEqualTo(0)
+        }
         self.phoneTextFiled.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.scrollView.snp.left).offset(30)
             maker.width.equalTo(self.scrollView.snp.width).offset(-60)
             maker.height.equalTo(self.textFiledHeight)
             maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
-            maker.top.equalTo(self.scrollView).offset(60)
+            maker.top.equalTo(self.titleLabel.snp.bottom).offset(98)
         }
         self.codeTextFiled.snp.makeConstraints { (maker) in
             maker.left.right.height.equalTo(self.phoneTextFiled).offset(0)
@@ -167,6 +192,12 @@ class SPForgetPWDVC : SPBaseVC{
             maker.top.equalTo(self.pwdextFiled.snp.bottom).offset(20)
             maker.height.equalTo(45)
             maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-20)
+        }
+        self.backBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(10)
+            maker.width.equalTo(30)
+            maker.height.equalTo(30)
+            maker.top.equalTo(self.view).offset(sp_getstatusBarHeight() +  9)
         }
     }
     deinit {
@@ -192,6 +223,7 @@ extension SPForgetPWDVC {
             sp_showTextAlert(tips: msg)
             if code == SP_Request_Code_Success {
                 self?.sp_startTimer()
+                self?.codeTextFiled.becomeFirstResponder()
             }else{
                 self?.sendCodeBtn.isEnabled = true
             }
@@ -231,7 +263,9 @@ extension SPForgetPWDVC {
         if self.timeOut <= 0 {
             self.sp_stopTimer()
         }else{
-            self.sendCodeBtn.setTitle("\(self.timeOut)s", for: UIControlState.normal)
+            let att = NSMutableAttributedString(string: "\(self.timeOut)s")
+            att.addAttributes([NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)], range: NSRange(location: 0, length: att.length))
+            self.sendCodeBtn.setAttributedTitle(att, for: UIControlState.normal)
         }
     }
     /// 停止定时器
@@ -242,7 +276,9 @@ extension SPForgetPWDVC {
             }
             self.timer = nil
         }
-        self.sendCodeBtn.setTitle("重新发送", for: UIControlState.normal)
+        let att = NSMutableAttributedString(string: "重新发送")
+        att.addAttributes([NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)], range: NSRange(location: 0, length: att.length))
+        self.sendCodeBtn.setAttributedTitle(att, for: UIControlState.normal)
         self.sendCodeBtn.isEnabled = true
     }
     

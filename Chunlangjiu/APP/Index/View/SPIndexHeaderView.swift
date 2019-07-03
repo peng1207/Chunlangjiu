@@ -92,7 +92,7 @@ class SPIndexHeaderView:  UIView{
             maker.left.top.equalTo(self).offset(0)
             maker.right.equalTo(self.snp.right).offset(0)
 //            maker.height.equalTo(200)
-            maker.height.equalTo(self.bannerView.snp.width).multipliedBy(0.65)
+            maker.height.equalTo(self.bannerView.snp.width).multipliedBy(200.00/375.00)
         }
         self.iconView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.snp.left).offset(10)

@@ -31,6 +31,7 @@ class SPIndexVC: SPBaseVC {
           let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickCityAction))
         view.showCityView.addGestureRecognizer(tap)
         view.msgBtn.addTarget(self, action: #selector(sp_clickMsgAction), for: UIControlEvents.touchUpInside)
+        view.countLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sp_clickMsgAction)))
         view.searchView.didClickBlock = { () -> Bool  in
             self.sp_clickSearch()
             return false
@@ -70,6 +71,14 @@ class SPIndexVC: SPBaseVC {
     fileprivate let collectHAuctionCellID = "collectHAuctionCellID"
     fileprivate let collectionHeadHeaderID = "collectionHeadHeaderID"
     fileprivate let collectionHeaderID = "collectionHeaderID"
+    fileprivate lazy var msgRequestModel : SPRequestModel = {
+        let model = SPRequestModel()
+        return model
+    }()
+    fileprivate lazy var indexRequestModel : SPRequestModel = {
+        let model = SPRequestModel()
+        return model
+    }()
     fileprivate lazy var auctionGood : SPIndexGoods = {
         return SPIndexGoods.sp_init(type: SP_AUCTION)
     }()
@@ -85,11 +94,9 @@ class SPIndexVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_showAnimation(view: self.view, title: nil)
-        self.sp_sendRequest()
-        self.sp_sendGoodRequest()
-//        self.tableView.sp_layoutHeaderView()
-        self.sp_addNotification()
+        sp_clickNoData()
         sp_netChange()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -100,6 +107,7 @@ class SPIndexVC: SPBaseVC {
             sp_sendGoodRequest()
         }
         self.isEditPrice = false
+        sp_sendMsgCountRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -143,8 +151,7 @@ class SPIndexVC: SPBaseVC {
         self.view.addSubview(self.nodataBtn)
         self.collectionView.sp_headerRefesh { [weak self]() in
             self?.currentPage = 1
-            self?.sp_sendGoodRequest()
-            self?.sp_sendRequest()
+            self?.sp_clickNoData()
         }
         self.collectionView.sp_footerRefresh { [weak self]() in
             if let page = self?.currentPage {
@@ -197,7 +204,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         return sp_getArrayCount(array: self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section < sp_getArrayCount(array: self.dataArray) {
+        if section < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             if let model : SPIndexGoods = self.dataArray?[section] {
                 if sp_getString(string: model.type) != SP_HEADER {
                     return sp_getArrayCount(array: model.dataArray)
@@ -209,12 +216,12 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var indexModel : SPIndexGoods?
         
-        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0 {
             indexModel = self.dataArray?[indexPath.section]
         }
         if sp_getString(string: indexModel?.type) == SP_AUCTION {
             let cell : SPProductAuctionCollectCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectHAuctionCellID, for: indexPath) as! SPProductAuctionCollectCell
-            if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray) {
+            if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray) , sp_getArrayCount(array: indexModel?.dataArray) > 0 {
                 cell.auctionView.productModel = indexModel?.dataArray?[indexPath.row]
                 cell.auctionView.productView.shopBlock = { [weak self](model) in
                     self?.sp_clickShop(model: model)
@@ -225,7 +232,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         }else{
             let cell : SPProductListVCell = collectionView.dequeueReusableCell(withReuseIdentifier: collectVCellID, for: indexPath) as! SPProductListVCell
             
-            if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray){
+            if indexPath.row < sp_getArrayCount(array: indexModel?.dataArray) , sp_getArrayCount(array: indexModel?.dataArray) > 0 {
                 cell.productView.productModel = indexModel?.dataArray?[indexPath.row]
                 cell.productView.shopBlock = { [weak self](model) in
                     self?.sp_clickShop(model: model)
@@ -238,7 +245,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         var indexModel : SPIndexGoods?
         
-        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0  {
             indexModel = self.dataArray?[indexPath.section]
         }
         if sp_getString(string: indexModel?.type) == SP_HEADER {
@@ -265,7 +272,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             let indexModel : SPIndexGoods? = self.dataArray?[indexPath.section];
             if sp_getString(string: indexModel?.type) == SP_AUCTION {
                    return  CGSize(width: collectionView.frame.size.width, height: indexPath.row == 0 ? 175 + 10 : 175 + 5)
@@ -277,10 +284,10 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         return CGSize(width: 0, height: 0)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if section < sp_getArrayCount(array: self.dataArray) {
+        if section < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0 {
             let indexModel : SPIndexGoods? = self.dataArray?[section];
             if sp_getString(string: indexModel?.type) == SP_HEADER {
-                var height : CGFloat = collectionView.frame.size.width *  0.65
+                var height : CGFloat = collectionView.frame.size.width *  200.00/375.00
                 if sp_getArrayCount(array: self.indexModel?.bannerList) == 0 {
                     height = 0.0
                 }
@@ -299,7 +306,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
     }
     // 返回cell 上下左右的间距
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        if section < sp_getArrayCount(array: self.dataArray) {
+        if section < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             let indexModel : SPIndexGoods? = self.dataArray?[section];
             if sp_getString(string: indexModel?.type) == SP_AUCTION {
                   return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -311,7 +318,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        if section < sp_getArrayCount(array: self.dataArray) {
+        if section < sp_getArrayCount(array: self.dataArray),  sp_getArrayCount(array: self.dataArray) > 0  {
             let indexModel : SPIndexGoods? = self.dataArray?[section];
             if sp_getString(string: indexModel?.type) == SP_AUCTION {
                 return 0
@@ -322,7 +329,7 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         return 0
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        if section < sp_getArrayCount(array: self.dataArray) {
+        if section < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0 {
             let indexModel : SPIndexGoods? = self.dataArray?[section];
             if sp_getString(string: indexModel?.type) == SP_AUCTION {
                 return 0
@@ -334,9 +341,9 @@ extension SPIndexVC : UICollectionViewDelegate,UICollectionViewDataSource,UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray), sp_getArrayCount(array: self.dataArray) > 0 {
             let indexGood = self.dataArray?[indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: indexGood?.dataArray){
+            if indexPath.row < sp_getArrayCount(array: indexGood?.dataArray), sp_getArrayCount(array: indexGood?.dataArray) > 0{
                 let model = indexGood?.dataArray?[indexPath.row]
                 let productDetaileVC = SPProductDetaileVC()
                 productDetaileVC.productModel = model
@@ -523,7 +530,7 @@ extension SPIndexVC{
         guard let iconModel = model else {
             return
         }
-        SPIndexHande.sp_deal(viewController: self, lineType: iconModel.linktype,linktarget: iconModel.linktarget, webparam: iconModel.webparam)
+        SPIndexHande.sp_deal(viewController: self, lineType: iconModel.linktype,linktarget: iconModel.linktarget, webparam: iconModel.webparam,name: "",webview: iconModel.webview)
         sp_dealPush(lineType: sp_getString(string: iconModel.linktype))
          SPThridManager.sp_icon(name: sp_getString(string: SPIndexHande.sp_getLintTypeName(lineType: iconModel.linktype)))
         
@@ -556,7 +563,7 @@ extension SPIndexVC{
             guard let bannerModel = model else{
                 return
             }
-            SPIndexHande.sp_deal(viewController: self, lineType: bannerModel.linktype,linktarget: bannerModel.linktarget, webparam:  bannerModel.webparam)
+            SPIndexHande.sp_deal(viewController: self, lineType: bannerModel.linktype,linktarget: bannerModel.linktarget, webparam:  bannerModel.webparam,name: "",webview: model?.webview)
             sp_dealPush(lineType: sp_getString(string: bannerModel.linktype))
         }
         
@@ -585,8 +592,10 @@ extension SPIndexVC{
     }
     /// 点击没有数据
     @objc fileprivate func sp_clickNoData(){
+        self.currentPage = 1
         self.sp_sendRequest()
         self.sp_sendGoodRequest()
+        sp_sendMsgCountRequest()
     }
     /// 点击竞拍更多
     @objc fileprivate func sp_clickMore(){
@@ -607,6 +616,7 @@ extension SPIndexVC{
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_EDITPRICEAUCTON_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_editPrice), name: NSNotification.Name(SP_SUBMITAUCTION_NOTIFICATION), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_loginout), name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
     }
     /// 定位成功通知
     @objc fileprivate func sp_locationNotification(){
@@ -652,26 +662,30 @@ extension SPIndexVC{
             // 有网络
             self.noNetHeight.update(offset: 0)
             if sp_getArrayCount(array: self.defaultGood.dataArray) <= 0 {
-                self.sp_sendRequest()
                 self.currentPage = 1
-                self.sp_sendGoodRequest()
+                self.sp_clickNoData()
             }
         }
+    }
+    /// 退出登录通知
+    @objc fileprivate func sp_loginout(){
+        sp_dealMsgCount(count: "")
     }
 }
 extension SPIndexVC{
     
     fileprivate func sp_sendRequest(){
-        let model = SPRequestModel()
+        if self.indexRequestModel.isRequest  {
+            return
+        }
         var parm = [String:Any]()
         parm.updateValue("index", forKey: "tmpl")
-        model.parm = parm
-        SPAppRequest.sp_getIndex(requestModel: model) { [weak self](code, indexModel, errorModel) in
+        self.indexRequestModel.parm = parm
+        SPAppRequest.sp_getIndex(requestModel: self.indexRequestModel) { [weak self](code, indexModel, errorModel) in
             
             if code  == SP_Request_Code_Success {
                 self?.indexModel = indexModel
                 self?.tableHeaderView.indexModel = indexModel
-//                self.tableView.sp_layoutHeaderView()
             }
             sp_hideAnimation(view: self?.view)
             self?.sp_dealDataArray()
@@ -754,7 +768,39 @@ extension SPIndexVC{
             
         }
     }
+    /// 发送获取消息数量请求
+    fileprivate func sp_sendMsgCountRequest(){
+        if SPAPPManager.sp_isLogin(isPush: false) {
+            if self.msgRequestModel.isRequest {
+                return
+            }
+            let parm = [String : Any]()
+            self.msgRequestModel.parm = parm
+            SPAppRequest.sp_getMsgCount(requestModel: self.msgRequestModel) { [weak self](code, msg, errorModel) in
+                if code == SP_Request_Code_Success{
+                    self?.sp_dealMsgCount(count: msg)
+                }
+            }
+        }else{
+            sp_dealMsgCount(count: "")
+        }
+    }
     
-    
+    fileprivate func sp_dealMsgCount(count : String){
+        if sp_getString(string: count).count > 0  {
+            if let num = Int(sp_getString(string: count)){
+                if num > 99 {
+                    self.titleView.countLabel.text = "99+"
+                }else{
+                    self.titleView.countLabel.text = sp_getString(string: count)
+                }
+                self.titleView.countLabel.isHidden = false
+                return
+            }
+        }
+        self.titleView.countLabel.isHidden = true
+        
+        
+    }
     
 }

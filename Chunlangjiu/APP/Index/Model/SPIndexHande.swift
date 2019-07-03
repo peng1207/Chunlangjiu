@@ -10,7 +10,7 @@ import Foundation
 
 class SPIndexHande : NSObject {
     
-    class func sp_deal(viewController:UIViewController,lineType : String?,linktarget : String? ,webparam :[String : Any]?,name:String? = nil){
+    class func sp_deal(viewController:UIViewController,lineType : String?,linktarget : String? ,webparam :[String : Any]?,name:String? = nil,webview:String? = nil){
         switch sp_getString(string: lineType) {
         case SPIndexType.item.rawValue:
  
@@ -21,8 +21,6 @@ class SPIndexHande : NSObject {
                     productDetaile.productModel = productModel
                     viewController.navigationController?.pushViewController(productDetaile, animated: true)
                 }
-            
-            
         case SPIndexType.shop.rawValue:
  
                 if let shopId = Int(sp_getString(string:linktarget)) {
@@ -47,24 +45,24 @@ class SPIndexHande : NSObject {
                 }
 
         case SPIndexType.winery.rawValue:
-//             sp_pushPartnerVC(viewController: viewController)
             let wineryVC = SPWineryVC()
             viewController.navigationController?.pushViewController(wineryVC, animated: true)
         case SPIndexType.evaluation.rawValue:
-            if SPAPPManager.sp_isLogin(isPush: true){
-                let valuationVC = SPWineValuationVC()
-                viewController.navigationController?.pushViewController(valuationVC, animated: true)
-            }
-           
+//            if SPAPPManager.sp_isLogin(isPush: true){
+//                let valuationVC = SPWineValuationVC()
+//                viewController.navigationController?.pushViewController(valuationVC, animated: true)
+//            }
+            let vc = SPAppraisalChoiceVC()
+            viewController.navigationController?.pushViewController(vc, animated: true)
         case SPIndexType.cart.rawValue:
             NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_TAB_SHOPCART)"])
         case SPIndexType.member.rawValue:
             NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_TAB_MINE)"])
         case SPIndexType.auction.rawValue:
-            
-               NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_ISSHOW_AUCTION ? SP_TAB_AUCTION : SP_TAB_SORT)"])
+            NotificationCenter.default.post(name: NSNotification.Name(SP_CHANGETABBAR_NOTIIFICATION), object: ["index":"\(SP_ISSHOW_AUCTION ? SP_TAB_AUCTION : SP_TAB_SORT)"])
         case SPIndexType.activity.rawValue:
             let activityVC = SPActivityVC()
+            activityVC.activity_id = sp_getString(string: webview)
             viewController.navigationController?.pushViewController(activityVC, animated: true)
         case SPIndexType.h5.rawValue:
             if sp_getString(string: linktarget).count > 0 {

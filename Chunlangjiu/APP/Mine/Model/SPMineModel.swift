@@ -13,5 +13,6 @@ class SPMineModel: NSObject {
     var title : String!
     var num : String! = ""
     var image : UIImage!
+    var disableImg : UIImage?
     var mintType : SPMineType! = .pend_pay
 }

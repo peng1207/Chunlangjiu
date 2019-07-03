@@ -29,12 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         self.registerRemoteNotification()
         SPAPPManager.sp_appVersion()
-        
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        UIApplication.shared.cancelAllLocalNotifications()
 //         let enString = SPDes.encrypt(withText: "a123456", key: "chunlang")
 //        sp_log(message: "加密后的数据\(sp_getString(string: enString))")
 //        let deString = SPDes.decrypt(withText: enString, key: "chunlang")
 //        sp_log(message: "解密后的数据 \(sp_getString(string: deString))")
-        
         
         // Override point for customization after application launch.
         return true
@@ -76,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
+ 
 
 }
 

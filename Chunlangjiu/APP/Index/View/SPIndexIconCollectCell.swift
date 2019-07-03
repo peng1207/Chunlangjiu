@@ -20,7 +20,7 @@ class SPIndexIconCollectCell: UICollectionViewCell {
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
         label.font = sp_getFontSize(size: 14)
         label.textAlignment = NSTextAlignment.center
-        
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     var iconModel : SPIndexIconModel?{

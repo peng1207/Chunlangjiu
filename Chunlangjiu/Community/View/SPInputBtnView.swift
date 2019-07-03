@@ -35,6 +35,7 @@ class SPInputBtnView : UIView{
         btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         btn.titleLabel?.font = sp_getFontSize(size: 12)
         btn.addTarget(self, action: #selector(sp_clickDoneAction), for: UIControlEvents.touchUpInside)
+        btn.sp_cornerRadius(cornerRadius: 5)
         return btn
     }()
     var clickBlock : SPBtnClickBlock?

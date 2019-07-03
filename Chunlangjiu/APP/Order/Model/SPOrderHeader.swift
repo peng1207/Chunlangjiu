@@ -46,6 +46,12 @@ enum SPPayType : String {
     case balance        = "deposit"
     /// 大额支付
     case largePayment   = "largePay"
+    /// ping++ 支付宝支付
+    case alipayPing     = "alipayPing"
+    /// ping++ 微信支付
+    case wxPing         = "wxPing"
+    /// ping++ 银联支付
+    case upacpPing      = "upacpPing"
 }
 /// 等待付款
 let SP_WAIT_BUYER_PAY = "WAIT_BUYER_PAY"

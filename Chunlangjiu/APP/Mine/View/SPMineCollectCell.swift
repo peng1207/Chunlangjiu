@@ -59,6 +59,13 @@ class SPMineCollectCell: UICollectionViewCell {
              self.numLabel.text = model.num
             self.numLabel.isHidden = false
         }
+        if model.mintType == SPMineType.gemmologist {
+            if sp_getString(string: SPAPPManager.instance().memberModel?.authenticate) != "true" {
+                self.iconImageView.image = model.disableImg
+            }
+        }
+        
+        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

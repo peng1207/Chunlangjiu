@@ -21,13 +21,13 @@ class SPPartnerModel : SPBaseModel {
     var shopname : String?
     var shoptype : String?
     var num : String? 
-    var label : String?
+    var label_one : String?
     func sp_getLabel()->[String]{
-        if sp_getString(string: self.label).count > 0 {
-            if sp_getString(string: self.label).contains("，") {
-                return sp_getString(string: self.label).components(separatedBy: "，")
+        if sp_getString(string: self.label_one).count > 0 {
+            if sp_getString(string: self.label_one).contains("，") {
+                return sp_getString(string: self.label_one).components(separatedBy: "，")
             }else{
-                return sp_getString(string: self.label).components(separatedBy: ",")
+                return sp_getString(string: self.label_one).components(separatedBy: ",")
             }
         }
         return [String]()

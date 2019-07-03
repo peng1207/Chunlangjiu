@@ -59,10 +59,12 @@ class SPRechargeTableCell: UITableViewCell {
     /// 赋值
     fileprivate func sp_setupData(){
         self.titleLabel.text = sp_getString(string: model?.app_display_name)
-        if sp_getString(string: model?.app_rpc_id) == SPPayType.wxPay.rawValue {
+        if sp_getString(string: model?.app_rpc_id) == SPPayType.wxPay.rawValue || sp_getString(string: model?.app_rpc_id) == SPPayType.wxPing.rawValue{
             self.typeImgView.image = UIImage(named: "public_pay_wx")
-        }else if sp_getString(string: model?.app_rpc_id) == SPPayType.aliPay.rawValue{
+        }else if sp_getString(string: model?.app_rpc_id) == SPPayType.aliPay.rawValue || sp_getString(string: model?.app_rpc_id) == SPPayType.alipayPing.rawValue{
             self.typeImgView.image = UIImage(named: "public_pay_ailpy")
+        }else if sp_getString(string: model?.app_rpc_id) == SPPayType.upacpPing.rawValue {
+            self.typeImgView.image = UIImage(named: "upacpPing")
         }else{
             self.typeImgView.image = UIImage(named: "public_pay_balance")
         }
@@ -91,9 +93,9 @@ class SPRechargeTableCell: UITableViewCell {
         }
         self.payContentLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: UILayoutConstraintAxis.horizontal)
         self.payContentLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.titleLabel.snp.right).offset(4)
+//            maker.left.equalTo(self.titleLabel.snp.right).offset(4)
             maker.top.bottom.equalTo(self.contentView).offset(0)
-            maker.right.equalTo(self.selectBtn.snp.right).offset(-8)
+            maker.right.equalTo(self.selectBtn.snp.left).offset(-8)
         }
         self.selectBtn.snp.makeConstraints { (maker) in
             maker.right.equalTo(self.contentView).offset(-15)

@@ -11,7 +11,7 @@ class SPEvaluateModel : SPBaseModel {
     var rate_id : Int!
     var result : String!
     var content : String!
-    var rate_pic : String!
+    var rate_pic : [String]?
     var is_reply : Int!
     var reply_content : String!
     var reply_time : String!
@@ -20,4 +20,5 @@ class SPEvaluateModel : SPBaseModel {
     var created_time : String!
     var append : String!
     var user_name : String!
+     
 }

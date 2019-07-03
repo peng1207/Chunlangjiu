@@ -61,7 +61,7 @@ class SPPayView:  UIView{
     fileprivate var tableHeight : Constraint!
     var selectPayModel : SPPayModel?
     var selectBlock : SPPaySelectComplete?
-    
+    var noPwdBlock : SPBtnClickBlock?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue).withAlphaComponent(0.5)
@@ -163,6 +163,9 @@ extension SPPayView : UITableViewDelegate,UITableViewDataSource {
             if sp_getString(string: payModel?.app_rpc_id) == SPPayType.balance.rawValue{
                 if let status = self.balanceStatus {
                     if let isPwd : Bool = status.password , isPwd == false{
+                        if let noBlock = self.noPwdBlock{
+                            noBlock()
+                        }
                         sp_showTextAlert(tips: "没有设置密码")
                         return
                     }
@@ -231,17 +234,18 @@ class SPPayTableCell: UITableViewCell {
     }
     fileprivate func sp_setPayImageName(){
         switch sp_getString(string: self.payModel?.app_rpc_id) {
-        case SPPayType.wxPay.rawValue :
-             self.payImageView.image = UIImage(named: "public_pay_wx")
-        case SPPayType.aliPay.rawValue :
+        case SPPayType.wxPay.rawValue ,SPPayType.wxPing.rawValue :
+            self.payImageView.image = UIImage(named: "public_pay_wx")
+        case SPPayType.aliPay.rawValue , SPPayType.alipayPing.rawValue:
             self.payImageView.image = UIImage(named: "public_pay_ailpy")
         case SPPayType.aliPay.rawValue:
             self.payImageView.image = UIImage(named: "public_pay_transfer")
-    
+        case SPPayType.upacpPing.rawValue:
+            self.payImageView.image = UIImage(named: "upacpPing")
         default:
             self.payImageView.image = UIImage(named: "public_pay_balance")
         }
-     
+        
     }
     
     /// 添加UI

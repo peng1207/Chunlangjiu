@@ -22,6 +22,10 @@ let SP_SHARE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_
 let SP_GET_LONGIN_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.oauthlogin"
 /// 密码登录
 let SP_GET_PWDLOGIN_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.login"
+/// 第三方登录
+let SP_GET_THIRDLOGIN_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.trust.dcloudlogin"
+/// 第三方绑定
+let SP_GET_THIRDBIND_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=user.trust.bindUser"
 ///  获取分类
 let SP_GET_CATEGORY = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=category.itemCategory"
 /// 获取商品列表
@@ -122,7 +126,7 @@ let SP_GET_AUCTIONADDPRICE_URL = "\(SPNetWorkManager.instance().sp_getDomainName
 /// 获取竞拍出价列表
 let SP_GET_AUCTIONGETPRICELIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=item.auction.get"
 /// 提交推送的ID
-let SP_GET_PUSH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=message.push.register"
+let SP_GET_PUSH_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=message.push.igexin"
 /// 获取物流信息
 let SP_GET_LOGISITICSLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=logistics.list.get"
 ///  用户 退货 填写物流信息
@@ -217,6 +221,23 @@ let SP_GET_OPENADV_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP
 let SP_GET_BALANCESTATUS_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.pay.status"
 /// 获取活动列表
 let SP_GET_ACTIVITYLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=app.open.activity"
+
+/// 提交鉴定
+let SP_GET_AUTHENTICATE_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.authenticate"
+/// 鉴定师列表
+let SP_GET_GEMMOLOGISTLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.authenticate.list"
+/// 鉴定列表
+let SP_GET_APPRAISALLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.item.list"
+/// 获取买家的鉴定列表
+let SP_GET_USERAPPRAISALLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.user.list"
+/// 鉴定详情
+let SP_GET_APPRAISALDER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.item.detail"
+/// 鉴定师信息
+let SP_GET_APPRAISAINFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.authenticate.detail"
+/// 快速变现
+let SP_GET_APPRAISASELL_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.user.sell"
+/// 更新鉴定师信息
+let SP_GET_EDITAPPRAISAINFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.authenticate.update"
 /*-----------------------商家的接口--------------------------*/
 /// 获取店铺 的分类
 let SP_GET_SHOPSORT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=category.shop.get"
@@ -274,6 +295,11 @@ let SP_GET_CANCECHECK_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key:
 let SP_GET_UPDATESHOP_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/shop/topapi?method=user.update.shop"
 /// 检查用户是否可以发布商品
 let SP_GET_CHECKITEM_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=item.check"
+/// 卖家鉴定列表
+let SP_GET_SHOPAPPRAISALLIST_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.shop.list"
+/// 鉴定师信息
+let SP_GET_SHOPAPPRAISAINFO_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=authenticate.shop.detail"
+let SP_GET_MSGCOUNT_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/topapi?method=member.notice.get"
 
 /*-----------------------web-------------------------*/
 /// 获取商家销售中的商品数据

@@ -20,6 +20,7 @@ class  SPShopHomeView:  UIView{
         let label = UILabel()
         label.font = sp_getFontSize(size: 16)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        label.numberOfLines = 2
         return label
     }()
     fileprivate lazy var typeImgView : UIImageView = {
@@ -38,12 +39,21 @@ class  SPShopHomeView:  UIView{
         label.sp_border(color: SPColorForHexString(hex: SP_HexColor.color_189cdd.rawValue), width: sp_lineHeight)
         return label
     }()
-    
+    fileprivate lazy var appraisalBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_appraisal_white"), for: UIControlState.normal)
+        btn.isHidden = true
+        btn.addTarget(self, action: #selector(sp_clickAppraisal), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     var shopModel : SPShopModel?{
         didSet{
            sp_setupData()
         }
     }
+    var appraisalBlock : SPBtnClickBlock?
+    fileprivate var btnWidth : Constraint!
+    fileprivate var btnRight : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -51,6 +61,18 @@ class  SPShopHomeView:  UIView{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func sp_appraisal(isHidden:Bool){
+        self.appraisalBtn.isHidden = isHidden
+        if isHidden {
+            self.btnRight.update(offset: -5)
+            self.btnWidth.update(offset: 0)
+        }else{
+            self.btnWidth.update(offset: 61)
+            self.btnRight.update(offset: -24)
+        }
+    }
+    
     /// 赋值
     fileprivate func sp_setupData(){
         self.shopIconImageView.sp_cache(string: sp_getString(string: shopModel?.shop_logo), plImage: sp_getLogoImg())
@@ -74,6 +96,7 @@ class  SPShopHomeView:  UIView{
         self.addSubview(self.nameLabel)
         self.addSubview(self.typeImgView)
         self.addSubview(self.authLabel)
+        self.addSubview(self.appraisalBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -87,21 +110,27 @@ class  SPShopHomeView:  UIView{
             maker.left.equalTo(self.shopIconImageView.snp.right).offset(20)
             maker.top.equalTo(self).offset(29)
             maker.height.greaterThanOrEqualTo(15)
-            maker.width.greaterThanOrEqualTo(0)
+            //            maker.width.greaterThanOrEqualTo(0)
+            maker.right.equalTo(self.appraisalBtn.snp.left).offset(-5)
         }
         self.typeImgView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.nameLabel.snp.right).offset(9)
-            maker.top.equalTo(self.nameLabel.snp.top).offset(0)
+            maker.left.equalTo(self.nameLabel).offset(0)
+            maker.top.equalTo(self.nameLabel.snp.bottom).offset(14)
             maker.width.equalTo(60)
             maker.height.equalTo(15)
-            maker.right.lessThanOrEqualTo(self.snp.right).offset(-10)
         }
         self.authLabel.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.nameLabel.snp.left).offset(0)
+            maker.left.equalTo(self.typeImgView.snp.right).offset(6)
             maker.width.greaterThanOrEqualTo(0)
             maker.height.greaterThanOrEqualTo(0)
-            maker.top.equalTo(self.nameLabel.snp.bottom).offset(14)
+            maker.top.equalTo(self.typeImgView.snp.top).offset(0)
             maker.right.lessThanOrEqualTo(self.snp.right).offset(-10)
+        }
+        self.appraisalBtn.snp.makeConstraints { (maker) in
+            btnWidth = maker.width.equalTo(0).constraint
+            maker.height.equalTo(61)
+            maker.centerY.equalTo(self.snp.centerY).offset(0)
+            btnRight = maker.right.equalTo(self.snp.right).offset(-5).constraint
         }
        
     }
@@ -111,6 +140,11 @@ class  SPShopHomeView:  UIView{
 }
 // MARK: - action
 extension SPShopHomeView {
-    
+    @objc fileprivate func sp_clickAppraisal(){
+        guard let block = self.appraisalBlock else {
+            return
+        }
+        block()
+    }
 }
 

@@ -24,6 +24,9 @@ class SPOrderPayManager : NSObject {
             self.sp_dealPaySelect(mode: model)
             self.sp_hidePayView()
         }
+        view.noPwdBlock = {
+            self.sp_clickNoPwd()
+        }
         return view
     }()
     fileprivate var payDataArray : [SPPayModel]? {
@@ -107,12 +110,16 @@ class SPOrderPayManager : NSObject {
             request.parm = parm
             SPOrderRequest.sp_getCreatePay(requestModel: request) { (code, msg, payModel, errorModel) in
                 if code == SP_Request_Code_Success {
-                    if sp_getString(string: selectPayModel.app_rpc_id ) == SPPayType.wxPay.rawValue{
+                    if sp_getString(string: selectPayModel.app_rpc_id ) == SPPayType.wxPay.rawValue || sp_getString(string: selectPayModel.app_rpc_id ) == SPPayType.wxPing.rawValue{
                         self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
-                    }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.aliPay.rawValue{
+                    }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.aliPay.rawValue || sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.alipayPing.rawValue{
                         self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
                     }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.balance.rawValue {
                         self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
+                    }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.upacpPing.rawValue{
+                        self.sp_sendWXRequest(selectPayModel: selectPayModel, payModel: payModel)
+                    }else{
+                        sp_hideAnimation(view: nil)
                     }
                     
                 }else{
@@ -131,7 +138,13 @@ class SPOrderPayManager : NSObject {
         let payRequest = SPRequestModel()
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string:pay.payment_id), forKey: "payment_id")
-        parm.updateValue(sp_getString(string:selectPayModel.app_rpc_id), forKey: "pay_app_id")
+//        if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.wxPay.rawValue {
+//            parm.updateValue(sp_getString(string: SPPayType.wxPing.rawValue), forKey: "pay_app_id")
+//        }else if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.aliPay.rawValue{
+//            parm.updateValue(sp_getString(string: SPPayType.alipayPing.rawValue), forKey: "pay_app_id")
+//        }else{
+           parm.updateValue(sp_getString(string:selectPayModel.app_rpc_id), forKey: "pay_app_id")
+//        }
         if sp_getString(string: selectPayModel.app_rpc_id) == SPPayType.balance.rawValue {
             parm.updateValue(sp_getString(string: self.payPwd), forKey: "deposit_password")
         }
@@ -148,12 +161,24 @@ class SPOrderPayManager : NSObject {
                     sp_showTextAlert(tips:  sp_getString(string: msg).count > 0 ?  msg : "支付失败")
                     self.sp_dealComplete(isSuccess: false)
                 }else{
-                    if selectPayModel.app_rpc_id == SPPayType.wxPay.rawValue {
+                    if (selectPayModel.app_rpc_id == SPPayType.wxPay.rawValue){
                         self.bounceApp = true
                         SPThridManager.sp_wxPay(dic: data!)
-                    }else if selectPayModel.app_rpc_id == SPPayType.aliPay.rawValue {
+                    }else if (selectPayModel.app_rpc_id == SPPayType.aliPay.rawValue){
                         self.bounceApp = true
                         SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                    }else if selectPayModel.app_rpc_id == SPPayType.wxPing.rawValue || selectPayModel.app_rpc_id == SPPayType.alipayPing.rawValue || selectPayModel.app_rpc_id == SPPayType.upacpPing.rawValue {
+                        if  selectPayModel.app_rpc_id == SPPayType.upacpPing.rawValue {
+                             sp_hideAnimation(view: nil)
+                        }
+                        self.bounceApp = true
+                     
+                        let payData = sp_dicValueString(data!)
+                        SPThridManager.sp_pingPay(data: payData, complete: { (status) in
+                            self.bounceApp = false
+                            sp_hideAnimation(view: nil)
+                            self.sp_dealComplete(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
+                        })
                     }else if selectPayModel.app_rpc_id == SPPayType.balance.rawValue{
                         sp_hideAnimation(view: nil)
                         self.sp_dealComplete(isSuccess: true)
@@ -212,6 +237,21 @@ class SPOrderPayManager : NSObject {
          NotificationCenter.default.removeObserver(self)
         self.payView.removeFromSuperview()
         self.payView.selectBlock = nil
+    }
+    fileprivate func sp_clickNoPwd(){
+          sp_remove()
+        let appdelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let tabbarController = appdelegate.window?.rootViewController
+        if tabbarController is SPMainVC {
+            let tabBar : SPMainVC = tabbarController as! SPMainVC
+            let nav : UINavigationController? = tabBar.viewControllers![tabBar.selectedIndex] as? UINavigationController
+            if nav != nil {
+               let payPwdVC = SPPayPwdVC()
+                nav?.pushViewController(payPwdVC, animated: true)
+            }
+        }
+
+       
     }
     deinit {
        

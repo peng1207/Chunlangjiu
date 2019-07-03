@@ -18,7 +18,7 @@ class SPTutorialPageVC : SPBaseVC{
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle("跳过", for: UIControlState.normal)
         btn.setTitleColor(UIColor.white, for: UIControlState.normal)
-        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue).withAlphaComponent(0.3)
+        btn.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_cccccc.rawValue)
         btn.sp_cornerRadius(cornerRadius: 15)
         btn.addTarget(self, action: #selector(sp_clickAdvert), for: UIControlEvents.touchUpInside)
         return btn
@@ -75,7 +75,7 @@ class SPTutorialPageVC : SPBaseVC{
         self.collectionView.isPagingEnabled = true
         self.collectionView.register(SPTutorialPageCollectCell.self, forCellWithReuseIdentifier: tutorialPageCellID)
         self.view.addSubview(self.collectionView)
-//        self.view.addSubview(self.skipBtn)
+        self.view.addSubview(self.skipBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -83,12 +83,12 @@ class SPTutorialPageVC : SPBaseVC{
         self.collectionView.snp.makeConstraints { (maker) in
             maker.left.right.top.bottom.equalTo(self.view).offset(0)
         }
-//        self.skipBtn.snp.makeConstraints { (maker) in
-//            maker.height.equalTo(30)
-//            maker.width.equalTo(60)
-//            maker.right.equalTo(self.view.snp.right).offset(-20)
-//            maker.top.equalTo(self.view.snp.top).offset(sp_getstatusBarHeight() + 20)
-//        }
+        self.skipBtn.snp.makeConstraints { (maker) in
+            maker.height.equalTo(30)
+            maker.width.equalTo(60)
+            maker.right.equalTo(self.view.snp.right).offset(-20)
+            maker.top.equalTo(self.view.snp.top).offset(sp_getstatusBarHeight() + 30)
+        }
     }
     
 }
@@ -115,7 +115,9 @@ extension SPTutorialPageVC : UICollectionViewDelegate,UICollectionViewDataSource
         return collectionView.frame.size
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        sp_clickAdvert()
+        if indexPath.row == sp_getArrayCount(array: self.imgArray) - 1 {
+            sp_clickAdvert()
+        }
     }
 }
 

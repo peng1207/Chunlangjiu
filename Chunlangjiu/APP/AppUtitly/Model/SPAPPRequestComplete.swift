@@ -71,3 +71,13 @@ typealias SPBalanceStatusComplete = (_ code : String,_ model : SPBalanceStatus?,
 typealias SPActivityListComplete = (_ code :String, _ model : SPActivityModel?,_ errorModel : SPRequestError?)->Void
 /// 获取资金明细详情
 typealias SPCapitalDetDetComplete = (_ code : String, _ model : SPCapitalDetContentModel?,_ errorModel : SPRequestError?)->Void
+/// 获取鉴定师信息
+typealias SPAppraisalInfoComplete = (_ code :String, _  model : SPAppraisalInfoModel?, _ errrorModel : SPRequestError?)->Void
+/// 获取鉴定详情
+typealias SPAppraisalDetComplete = (_ code : String, _ model : SPAppraisalProductModel? , _ errorModel : SPRequestError?)->Void
+/// 第三方登录回调
+typealias SPThirdLoginComplete = (_ code : String, _ binded : String,_ msg : String,_ errorModel : SPRequestError?)->Void
+/// 获取鉴定 商品数量
+typealias SPGetAppraisalCountComplete = (_ true_count : String,_ false_count : String)->Void
+/// 获取选择鉴定师 表头数据
+typealias SPChoiceAppraisalComplete = (_ count : String, _ content : String)->Void

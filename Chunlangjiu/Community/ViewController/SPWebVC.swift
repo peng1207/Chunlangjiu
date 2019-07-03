@@ -31,6 +31,7 @@ class SPWebVC: SPBaseVC {
         view.uiDelegate = self
         view.navigationDelegate = self
         view.scrollView.delegate = self
+        view.allowsBackForwardNavigationGestures = true
         return view
     }()
     fileprivate lazy var backBtn : UIButton = {

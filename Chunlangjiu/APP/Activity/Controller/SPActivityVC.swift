@@ -30,6 +30,7 @@ class SPActivityVC: SPBaseVC {
         return btn
     }()
      fileprivate var pushVC : Bool = false
+    var activity_id : String?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -61,7 +62,6 @@ class SPActivityVC: SPBaseVC {
             self.view.backgroundColor = SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
              self.tableView.backgroundColor = self.view.backgroundColor
         }
-      
         self.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.835)
         var top : CGFloat = 0.0
         if sp_getArrayCount(array: self.activityModel?.list) > 0 {
@@ -126,14 +126,22 @@ class SPActivityVC: SPBaseVC {
     }
     /// 处理有没数据
     override func sp_dealNoData(){
-        if self.activityModel == nil {
+        if self.activityModel == nil{
             self.noData.isHidden = false
             self.noData.text = "暂时没有活动哦!"
             self.view.bringSubview(toFront: self.noData)
             self.tableView.isHidden = true
         }else{
-            self.noData.isHidden = true
-            self.tableView.isHidden = false
+            if sp_getString(string: self.activityModel?.open).count > 0 ,let isOpen = Bool(sp_getString(string: self.activityModel?.open)), isOpen == false{
+                self.noData.isHidden = false
+                self.noData.text = "暂时没有活动哦!"
+                self.view.bringSubview(toFront: self.noData)
+                self.tableView.isHidden = true
+            }else{
+                self.noData.isHidden = true
+                self.tableView.isHidden = false
+            }
+           
         }
     }
     /// 添加约束
@@ -164,7 +172,7 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
         return sp_getArrayCount(array: self.dataArray)
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section < sp_getArrayCount(array: self.dataArray) {
+        if section < sp_getArrayCount(array: self.dataArray) ,sp_getArrayCount(array: self.dataArray) > 0  {
             let model = self.dataArray?[section]
             return sp_getArrayCount(array: model?.dataArray)
         }
@@ -174,9 +182,9 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var model : SPActivityHeaderModel?
         var productModel : SPProductModel?
-        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray),sp_getArrayCount(array: self.dataArray) > 0 {
             model = self.dataArray?[indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: model?.dataArray){
+            if indexPath.row < sp_getArrayCount(array: model?.dataArray),sp_getArrayCount(array: model?.dataArray) > 0{
                 productModel = model?.dataArray?[indexPath.row]
             }
         }
@@ -207,9 +215,9 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var model : SPActivityHeaderModel?
         var productModel : SPProductModel?
-        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) ,sp_getArrayCount(array: self.dataArray) > 0 {
             model = self.dataArray?[indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: model?.dataArray){
+            if indexPath.row < sp_getArrayCount(array: model?.dataArray),sp_getArrayCount(array: model?.dataArray) > 0 {
                 productModel = model?.dataArray?[indexPath.row]
             }
         }
@@ -232,7 +240,7 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
         if headerView == nil {
             headerView = SPActivitySectionView(reuseIdentifier: activitySectionHeaderID)
         }
-        if section < sp_getArrayCount(array: self.dataArray) {
+        if section < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             let model = self.dataArray?[section]
             headerView?.titleLabel.text = sp_getString(string:model?.title)
         }
@@ -242,9 +250,9 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var model : SPActivityHeaderModel?
         var productModel : SPProductModel?
-        if indexPath.section < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.section < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             model = self.dataArray?[indexPath.section]
-            if indexPath.row < sp_getArrayCount(array: model?.dataArray){
+            if indexPath.row < sp_getArrayCount(array: model?.dataArray) , sp_getArrayCount(array: model?.dataArray) > 0 {
                 productModel = model?.dataArray?[indexPath.row]
             }
         }
@@ -254,22 +262,21 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
             self.navigationController?.pushViewController(detVC, animated: true)
             self.pushVC = true
         }
-        
     }
-    
 }
 extension SPActivityVC {
     
     fileprivate func sp_sendRequest(){
+        var parm = [String : Any]()
+        parm.updateValue(sp_getString(string: self.activity_id), forKey: "id")
+        self.requestModel.parm = parm
         
         SPAppRequest.sp_getActivityList(requestModel: self.requestModel) { [weak self](code, model, errorModel) in
             sp_hideAnimation(view: self?.view)
             self?.activityModel = model
             self?.sp_setupData()
         }
-        
     }
-    
 }
 extension SPActivityVC {
     

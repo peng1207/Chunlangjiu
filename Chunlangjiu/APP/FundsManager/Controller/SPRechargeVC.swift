@@ -60,20 +60,25 @@ class SPRechargeVC: SPBaseVC {
         if SPThridManager.sp_isInstallWX() {
              let wxModel = SPPayModel()
             wxModel.app_display_name = "微信"
-            wxModel.app_rpc_id = SPPayType.wxPay.rawValue
+              wxModel.app_rpc_id = SPPayType.wxPing.rawValue
             data.append(wxModel)
         }
        
         let aliPayModel = SPPayModel()
         aliPayModel.app_display_name = "支付宝"
-        aliPayModel.app_rpc_id = SPPayType.aliPay.rawValue
+      aliPayModel.app_rpc_id = SPPayType.alipayPing.rawValue
         data.append(aliPayModel)
+        
+//        let unpacpModel = SPPayModel()
+//        unpacpModel.app_display_name = "银联"
+//        unpacpModel.app_rpc_id = SPPayType.upacpPing.rawValue
+//        data.append(unpacpModel)
         
         if isBond {
             let blanceModel = SPPayModel()
             blanceModel.app_display_name = "余额"
             blanceModel.app_rpc_id = SPPayType.balance.rawValue
-            data.append(blanceModel)
+            data.insert(blanceModel, at: 0)
             sp_showAnimation(view: self.view, title: nil)
             sp_sendBalanceStatusReequest()
         }
@@ -136,6 +141,7 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
             let payModel = self.dataArray?[indexPath.row]
             cell?.model = payModel
+            cell?.payContentLabel.text = ""
             if let pay = self.selectPay , let model = cell?.model{
                 if sp_getString(string: pay.app_rpc_id) == sp_getString(string:  model.app_rpc_id) {
                     cell?.sp_isSelect(select: true)
@@ -173,6 +179,7 @@ extension SPRechargeVC : UITableViewDelegate,UITableViewDataSource {
                     if let isPwd : Bool = status.password , isPwd == false{
                         sp_showTextAlert(tips: "没有设置密码")
                         tableView.reloadData()
+                        sp_clickNoPwd()
                         return
                     }
                 }
@@ -210,9 +217,14 @@ extension SPRechargeVC {
             }
             
         }else{
-            sp_sendRechargeRequest()
+           
+           sp_sendRechargeRequest()
         }
         
+    }
+    fileprivate func sp_clickNoPwd(){
+        let payPwdVC = SPPayPwdVC()
+        self.navigationController?.pushViewController(payPwdVC, animated: true)
     }
 }
 extension SPRechargeVC {
@@ -222,6 +234,7 @@ extension SPRechargeVC {
         var parm = [String : Any]()
         parm.updateValue(sp_getString(string: self.headerView.priceView.textFiled.text), forKey: "money")
         self.requestModel.parm = parm
+        sp_showAnimation(view: self.view, title: nil)
         SPFundsRequest.sp_getRechargeCreate(requestModel: self.requestModel) {  [weak self](code, msg, payModel, errorModel) in
              self?.sp_dealBondrequest(code: code, msg: msg, payModel: payModel, errorModel: errorModel)
         }
@@ -251,7 +264,13 @@ extension SPRechargeVC {
         let payRequest = SPRequestModel()
         var parm = [String:Any]()
         parm.updateValue(sp_getString(string:payModel?.payment_id), forKey: "payment_id")
-        parm.updateValue(sp_getString(string:self.selectPay?.app_rpc_id), forKey: "pay_app_id")
+//        if sp_getString(string:self.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue {
+//            parm.updateValue(sp_getString(string: SPPayType.wxPing.rawValue), forKey: "pay_app_id")
+//        }else if sp_getString(string: self.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue{
+//            parm.updateValue(sp_getString(string: SPPayType.alipayPing.rawValue), forKey: "pay_app_id")
+//        }else{
+            parm.updateValue(sp_getString(string: self.selectPay?.app_rpc_id), forKey: "pay_app_id")
+//        }
         if sp_getString(string: self.selectPay?.app_rpc_id) == SPPayType.balance.rawValue{
             parm.updateValue(sp_getString(string: self.payPwd), forKey: "deposit_password")
         }
@@ -264,14 +283,29 @@ extension SPRechargeVC {
                 if sp_getString(string: errorCode).count > 0, sp_getString(string: errorCode) != SP_Request_Code_Success {
                     self?.bounceApp = false
                     sp_hideAnimation(view: nil)
-                    sp_showTextAlert(tips: "支付失败")
+                    let msg = sp_getString(string: data?["msg"])
+                    sp_showTextAlert(tips: msg.count > 0 ? msg :  "支付失败")
                     self?.sp_pushOrderList(isSuccess: false)
                 }else{
-                    self?.bounceApp = true
-                    if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue{
-                        SPThridManager.sp_wxPay(dic: data!)
-                    }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue {
-                        SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                   
+                    if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue || sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue {
+                        self?.bounceApp = true
+                        if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPay.rawValue{
+                             SPThridManager.sp_wxPay(dic: data!)
+                        }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.aliPay.rawValue{
+                             SPThridManager.sp_aliPay(payOrder: sp_getString(string: data?["url"]))
+                        }
+
+                    }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.wxPing.rawValue || sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.alipayPing.rawValue || sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.upacpPing.rawValue {
+                        let payData = sp_dicValueString(data!)
+                        if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.upacpPing.rawValue {
+                            sp_hideAnimation(view: nil)
+                        }
+                        SPThridManager.sp_pingPay(data: payData, complete: { [weak self](status) in
+                            self?.bounceApp = false
+                            sp_hideAnimation(view: nil)
+                            self?.sp_pushOrderList(isSuccess: sp_getString(string: status) == SP_PAY_SUCCESS ? true : false)
+                        })
                     }else if sp_getString(string: self?.selectPay?.app_rpc_id) == SPPayType.balance.rawValue {
                        self?.sp_pushOrderList(isSuccess: true)
                     }
@@ -322,6 +356,11 @@ extension SPRechargeVC {
     /// 添加通知
     fileprivate func sp_addNotification(){
         NotificationCenter.default.addObserver(self, selector: #selector(sp_payResture(notification:)), name: NSNotification.Name(SP_PAYRESULT_NOTIFICATION), object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(sp_payPwdNotification), name: NSNotification.Name(SP_PAYPWD_SUCCESS_NOTIFICATION), object: nil)
+    }
+    @objc private func sp_payPwdNotification(){
+        sp_showAnimation(view: self.view, title: nil)
+        self.sp_sendBalanceStatusReequest()
     }
     /// 支付结果回调
     ///

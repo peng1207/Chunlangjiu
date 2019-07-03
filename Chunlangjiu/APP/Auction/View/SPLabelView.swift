@@ -48,7 +48,7 @@ class SPLabelView:  UIView{
                 
                 if let bColor = self.borderColor {
                     label?.sp_border(color: bColor, width: sp_lineHeight)
-                    
+                    label?.sp_cornerRadius(cornerRadius: 3)
                 }else{
                     label?.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue).withAlphaComponent(0.8)
                 }

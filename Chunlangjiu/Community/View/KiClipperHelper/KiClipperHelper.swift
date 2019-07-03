@@ -24,13 +24,15 @@ class KiClipperHelper: NSObject,UIImagePickerControllerDelegate,UINavigationCont
     public var clipperType:ClipperType = .Move //裁剪框移动类型 (move图片移动, stay裁剪框移动)
     
     public func photoWithSourceType(type:UIImagePickerControllerSourceType) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = type
-        imagePicker.allowsEditing = systemEditing
-//        imagePicker.modalTransitionStyle = .crossDissolve
-        nav?.present(imagePicker, animated: true, completion: nil)
-        imagePicker.navigationBar.tintColor = UIColor.white
+        DispatchQueue.main.async {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = type
+            imagePicker.allowsEditing = self.systemEditing
+            //        imagePicker.modalTransitionStyle = .crossDissolve
+            self.nav?.present(imagePicker, animated: true, completion: nil)
+            imagePicker.navigationBar.tintColor = UIColor.white
+        }
     }
     
     //MARK UIImagePickerControllerDelegate

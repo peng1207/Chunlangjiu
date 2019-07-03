@@ -39,7 +39,7 @@ class SPConfrimSectionHeadView:  UITableViewHeaderFooterView{
         fatalError("init(coder:) has not been implemented")
     }
     fileprivate func sp_setupData(){
-        self.logoImageView.sp_cache(string: self.shopModel?.shop_logo, plImage: sp_getDefaultImg())
+        self.logoImageView.sp_cache(string: self.shopModel?.shop_logo, plImage: sp_getLogoImg())
         self.nameLabel.text = sp_getString(string: self.shopModel?.shop_name)
     }
     /// 添加UI
