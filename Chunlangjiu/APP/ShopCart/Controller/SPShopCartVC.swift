@@ -239,7 +239,9 @@ extension SPShopCartVC{
             }
         }else{
             if sp_getArrayCount(array: self.selectCartIDs) > 0 {
-                 self.sp_sendConfirmOrderRequest()
+                if SPAPPManager.sp_isLogin(isPush: true){
+                     self.sp_sendConfirmOrderRequest()
+                }
             }else{
                 sp_showTextAlert(tips: "请选择商品")
             }
@@ -586,11 +588,15 @@ extension SPShopCartVC {
 extension SPShopCartVC {
     fileprivate func sp_addNotification(){
          NotificationCenter.default.addObserver(self, selector: #selector(sp_netChange), name: NSNotification.Name(SP_NETWORK_NOTIFICATION), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_logout), name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
     }
     @objc fileprivate func sp_netChange(){
         if SPNetWorkManager.sp_notReachable() == false {
             sp_sendRequest()
         }
+    }
+    @objc fileprivate func sp_logout(){
+        self.sp_checkIsLogin()
     }
     
 }
