@@ -60,6 +60,7 @@ class SPProductAddImageView:  UIView{
     }
     var clickAddBlock : SPClickAddProcutBlock?
     var clickAddComplete : SPClickAddImageBlock?
+    fileprivate var titleTop : Constraint!
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
@@ -79,7 +80,9 @@ class SPProductAddImageView:  UIView{
             self.isShowAdd = isShow
         }
     }
-    
+    func sp_updateTitle(top : CGFloat){
+        self.titleTop.update(offset: top)
+    }
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.titleLabel)
@@ -93,7 +96,7 @@ class SPProductAddImageView:  UIView{
     fileprivate func sp_addConstraint(){
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.snp.left).offset(10)
-            maker.top.equalTo(self.snp.top).offset(14)
+            self.titleTop = maker.top.equalTo(self.snp.top).offset(14).constraint
             maker.height.greaterThanOrEqualTo(0)
             maker.right.equalTo(self.snp.right).offset(-10)
         }
@@ -112,7 +115,7 @@ class SPProductAddImageView:  UIView{
         self.productImageView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.exampleImageView.snp.right).offset(5)
             maker.top.equalTo(self.exampleImageView.snp.top).offset(0)
-            maker.right.equalTo(self.titleLabel.snp.right).offset(0)
+            maker.right.equalTo(self.snp.right).offset(-5)
             maker.height.equalTo(self.productImageView.snp.width).offset(0)
              maker.bottom.equalTo(self.snp.bottom).offset(-5)
         }

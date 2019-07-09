@@ -25,10 +25,22 @@ class SPActivityVC: SPBaseVC {
     }()
     fileprivate lazy var backBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_back_wither"), for: UIControlState.normal)
+        btn.frame = CGRect(x: 0, y: 0, width: 40, height: 30)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: -30, bottom: 0, right: 0)
+        btn.setImage(UIImage(named: "public_leftBack"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate lazy var scrollView : UIScrollView = {
+        let view = UIScrollView()
+        view.isHidden = true
+        return view
+    }()
+    fileprivate lazy var backgroundImgView : UIImageView = {
+        let view = UIImageView()
+        return view
+    }()
+ 
      fileprivate var pushVC : Bool = false
     var activity_id : String?
     override func viewDidLoad() {
@@ -40,7 +52,9 @@ class SPActivityVC: SPBaseVC {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: self.pushVC ? true : false)
+        self.navigationController?.navigationBar.sp_backColor(color: UIColor.white)
+        UIApplication.shared.statusBarStyle = .default
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font : sp_getFontSize(size: 18),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -48,30 +62,55 @@ class SPActivityVC: SPBaseVC {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font : sp_getFontSize(size: 18),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]
+        self.navigationController?.navigationBar.sp_reset()
+        UIApplication.shared.statusBarStyle = .lightContent
+       
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
     /// 赋值
     fileprivate func sp_setupData(){
-       
-        self.headerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.top_img), plImage: sp_getDefaultImg())
-        self.footerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.bottom_img), plImage: sp_getDefaultImg())
-        if sp_getString(string: self.activityModel?.color).count > 0  {
-            self.view.backgroundColor = SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
-             self.tableView.backgroundColor = self.view.backgroundColor
+        self.navigationItem.title = sp_getString(string: self.activityModel?.title)
+        if sp_getString(string: self.navigationItem.title).count == 0 {
+            self.navigationItem.title = "活动"
         }
-        self.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.835)
+        if sp_getString(string: self.activityModel?.color).count > 0  {
+            self.view.backgroundColor =  SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
+            self.tableView.backgroundColor = self.view.backgroundColor
+        }
+        self.headerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.top_img), plImage: nil) { [weak self](image) in
+            if let i = image {
+                let scale = i.size.height / i.size.width
+                self?.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * scale)
+                self?.tableView.tableHeaderView = self?.headerView
+            }
+        }
         var top : CGFloat = 0.0
-        if sp_getArrayCount(array: self.activityModel?.list) > 0 {
+        if  sp_getArrayCount(array: self.activityModel?.item) > 0 || (SP_ISSHOW_AUCTION && sp_getArrayCount(array: self.activityModel?.auction) > 0 ){
             top = 41.0
         }
-        self.footerView.frame =  CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * 0.533 + top)
-        self.footerView.sp_updateTop(top: top)
-        self.tableView.tableHeaderView = self.headerView
-        self.tableView.tableFooterView = self.footerView
-         sp_dealData()
+        if sp_getString(string: self.activityModel?.bottom_img).count > 0 {
+           
+            self.footerView.imgView.sp_cache(string:  sp_getString(string: self.activityModel?.bottom_img), plImage: nil) { [weak self](image) in
+                if let i = image {
+                    let scale = i.size.height / i.size.width
+                    self?.footerView.frame =  CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height:  sp_getScreenWidth() * scale + top)
+                   
+                }else{
+                    self?.footerView.frame =  CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height:top)
+                }
+                self?.footerView.sp_updateTop(top: top)
+                self?.tableView.tableFooterView = self?.footerView
+            }
+        }else{
+            self.footerView.frame =  CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height:top)
+            self.footerView.sp_updateTop(top: top)
+            self.tableView.tableFooterView = self.footerView
+        }
+        
+       sp_dealData()
         
     }
     fileprivate func sp_dealData(all : Bool = true){
@@ -82,7 +121,6 @@ class SPActivityVC: SPBaseVC {
                 auctionModel.dataArray = self.activityModel?.auction
                 dataArray.append(auctionModel)
             }
-            
         }
         if sp_getArrayCount(array: self.activityModel?.item) > 0  {
             let goodModel = SPActivityHeaderModel.sp_init(type: "")
@@ -107,11 +145,13 @@ class SPActivityVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        
+        
         self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
-        self.tableView.backgroundColor = self.view.backgroundColor
+ 
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
         if #available(iOS 11.0, *) {
@@ -119,9 +159,12 @@ class SPActivityVC: SPBaseVC {
         } else {
             // Fallback on earlier versions
         }
-       
+        self.view.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.backgroundImgView)
         self.view.addSubview(self.tableView)
-        self.view.addSubview(self.backBtn)
+ 
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.backBtn)
+
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -153,13 +196,22 @@ class SPActivityVC: SPBaseVC {
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
-         
         }
-        self.backBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.view).offset(10)
-            maker.top.equalTo(self.view.snp.top).offset(sp_getstatusBarHeight()  + 2)
-            maker.width.equalTo(30)
-            maker.height.equalTo(30)
+ 
+        self.scrollView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.view).offset(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
+        self.backgroundImgView.snp.makeConstraints { (maker) in
+            maker.left.top.equalTo(self.scrollView).offset(0)
+            maker.width.equalTo(self.scrollView.snp.width).offset(0)
+            maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
+            maker.height.equalTo(0)
+            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
         }
     }
     deinit {
@@ -243,8 +295,18 @@ extension SPActivityVC : UITableViewDelegate,UITableViewDataSource {
         if section < sp_getArrayCount(array: self.dataArray) , sp_getArrayCount(array: self.dataArray) > 0 {
             let model = self.dataArray?[section]
             headerView?.titleLabel.text = sp_getString(string:model?.title)
+//            headerView?.textLabel?.textColor =  SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+            if sp_getString(string: self.activityModel?.color).count > 0  {
+                headerView?.contentView.backgroundColor = SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
+                if sp_getString(string: self.activityModel?.color) == "#ffffff"{
+                    headerView?.titleLabel.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+                }
+            }
         }
         return headerView
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return  nil
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

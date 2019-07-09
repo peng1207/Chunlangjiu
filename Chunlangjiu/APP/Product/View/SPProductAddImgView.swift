@@ -9,13 +9,12 @@
 import Foundation
 import UIKit
 import SnapKit
-
-
+// 是否只有两个事例
+let  KISTWOEXAMPLE : Bool = false
 
 class SPProductAddImgView:  UIView{
     
     let SP_ADDIMAGE_TAG = 1000
-    
     
     fileprivate lazy var firstAdd : SPProductAddImageView = {
         let view = SPProductAddImageView()
@@ -35,7 +34,44 @@ class SPProductAddImgView:  UIView{
     fileprivate lazy var secondAdd : SPProductAddImageView = {
         let view = SPProductAddImageView()
         view.tag = SP_ADDIMAGE_TAG + 1
+        view.titleLabel.text = "细节图"
         view.exampleImageView.image = UIImage(named: "product_wine_2")
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.clickAddComplete = { [weak self] (addView )in
+            self?.sp_clickAdd(view: addView)
+        }
+        return view
+    }()
+    fileprivate lazy var thirdAdd : SPProductAddImageView = {
+        let view = SPProductAddImageView()
+        view.tag = SP_ADDIMAGE_TAG + 2
+        view.titleLabel.text = ""
+        view.sp_updateTitle(top: 0)
+        view.exampleImageView.image = UIImage(named: "product_wine_3")
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.clickAddComplete = { [weak self] (addView )in
+            self?.sp_clickAdd(view: addView)
+        }
+        return view
+    }()
+    fileprivate lazy var fourAdd : SPProductAddImageView = {
+        let view = SPProductAddImageView()
+        view.tag = SP_ADDIMAGE_TAG + 3
+        view.titleLabel.text = ""
+         view.sp_updateTitle(top: 0)
+        view.exampleImageView.image = UIImage(named: "product_wine_4")
+        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        view.clickAddComplete = { [weak self] (addView )in
+            self?.sp_clickAdd(view: addView)
+        }
+        return view
+    }()
+    fileprivate lazy var fifeAdd : SPProductAddImageView = {
+        let view = SPProductAddImageView()
+        view.tag = SP_ADDIMAGE_TAG + 4
+         view.titleLabel.text = ""
+         view.sp_updateTitle(top: 0)
+        view.exampleImageView.image = UIImage(named: "product_wine_5")
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         view.clickAddComplete = { [weak self] (addView )in
             self?.sp_clickAdd(view: addView)
@@ -54,7 +90,7 @@ class SPProductAddImgView:  UIView{
         label.textAlignment = .left
         let att = NSMutableAttributedString()
         att.append(NSAttributedString(string: "商品其他标志、证明图", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 15),NSAttributedStringKey.foregroundColor :SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)]))
-        att.append(NSAttributedString(string: "（亲，还能上传8张图哦~）", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor :SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)]))
+        att.append(NSAttributedString(string: "（亲，还能上传\(self.max_count)张图哦~）", attributes: [NSAttributedStringKey.font: sp_getFontSize(size: 12),NSAttributedStringKey.foregroundColor :SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)]))
         label.attributedText = att
         return label
     }()
@@ -63,8 +99,9 @@ class SPProductAddImgView:  UIView{
     fileprivate var heightCollection: Constraint!
     fileprivate let cellID = "SP_ADDIMGCELLID"
     fileprivate let collectionKVOContentSize = "contentSize"
+ 
     var clickAddBlock : SPClickAddImageBlock?
-    var max_count : Int = 8
+    var max_count : Int = KISTWOEXAMPLE ? 8 : 4
     fileprivate var imgArray : [Any]! = [Any]()
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,6 +114,12 @@ class SPProductAddImgView:  UIView{
     fileprivate func sp_setupUI(){
         self.addSubview(self.firstAdd)
         self.addSubview(self.secondAdd)
+        if KISTWOEXAMPLE == false {
+            self.addSubview(self.thirdAdd)
+            self.addSubview(self.fourAdd)
+            self.addSubview(self.fifeAdd)
+        }
+       
         self.addSubview(self.contentView)
         self.contentView.addSubview(self.titleLabel)
         
@@ -110,9 +153,31 @@ class SPProductAddImgView:  UIView{
             maker.top.equalTo(self.firstAdd.snp.bottom).offset(10)
             maker.height.greaterThanOrEqualTo(0)
         }
+        if KISTWOEXAMPLE == false {
+            self.thirdAdd.snp.makeConstraints { (maker) in
+                maker.left.right.equalTo(self.secondAdd).offset(0)
+                maker.top.equalTo(self.secondAdd.snp.bottom).offset(10)
+                maker.height.greaterThanOrEqualTo(0)
+            }
+            self.fourAdd.snp.makeConstraints { (maker) in
+                maker.left.right.equalTo(self.thirdAdd).offset(0)
+                maker.top.equalTo(self.thirdAdd.snp.bottom).offset(10)
+                maker.height.greaterThanOrEqualTo(0)
+            }
+            self.fifeAdd.snp.makeConstraints { (maker) in
+                maker.left.right.equalTo(self.fourAdd).offset(0)
+                maker.top.equalTo(self.fourAdd.snp.bottom).offset(10)
+                maker.height.greaterThanOrEqualTo(0)
+            }
+        }
+   
         self.contentView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.secondAdd).offset(0)
-            maker.top.equalTo(self.secondAdd.snp.bottom).offset(10)
+            if KISTWOEXAMPLE {
+                maker.top.equalTo(self.secondAdd.snp.bottom).offset(10)
+            }else{
+                maker.top.equalTo(self.fifeAdd.snp.bottom).offset(10)
+            }
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.snp.bottom).offset(0)
         }
@@ -121,7 +186,6 @@ class SPProductAddImgView:  UIView{
             maker.right.equalTo(self.contentView).offset(-10)
             maker.top.equalTo(self.contentView).offset(13)
             maker.height.greaterThanOrEqualTo(0)
-            
         }
         
         self.collectionView.snp.makeConstraints { (maker) in
@@ -130,15 +194,9 @@ class SPProductAddImgView:  UIView{
             self.heightCollection = maker.height.equalTo(0).constraint
             maker.bottom.equalTo(self.contentView.snp.bottom).offset(-10)
         }
-        
-        
     }
-    
-    
     deinit {
-        
         self.collectionView.removeObserver(self, forKeyPath: self.collectionKVOContentSize)
-        
     }
 }
 extension SPProductAddImgView {
@@ -155,6 +213,12 @@ extension SPProductAddImgView {
             self.firstAdd.productImageView.sp_update(image: img)
         }else if view == self.secondAdd.productImageView {
             self.secondAdd.productImageView.sp_update(image: img)
+        }else if view == self.thirdAdd.productImageView {
+            self.thirdAdd.productImageView.sp_update(image: img)
+        }else if view == self.fourAdd.productImageView {
+            self.fourAdd.productImageView.sp_update(image: img)
+        }else if view == self.fifeAdd.productImageView {
+            self.fifeAdd.productImageView.sp_update(image: img)
         }else{
             if let i = img {
                 let tag = view.tag - SP_ADDIMAGE_TAG
@@ -186,6 +250,18 @@ extension SPProductAddImgView {
         if let img = self.secondAdd.productImageView.imageView.image {
             list.append(img)
         }
+        if KISTWOEXAMPLE == false {
+            if let img = self.thirdAdd.productImageView.imageView.image {
+                list.append(img)
+            }
+            if let img = self.fourAdd.productImageView.imageView.image {
+                list.append(img)
+            }
+            if let img = self.fifeAdd.productImageView.imageView.image {
+                list.append(img)
+            }
+        }
+       
         
         return list
     }
@@ -201,6 +277,25 @@ extension SPProductAddImgView {
         }else if let img = self.secondAdd.productImageView.imageView.image {
             list.append(img)
         }
+        if KISTWOEXAMPLE == false {
+            if sp_getString(string: self.thirdAdd.productImageView.imagePath).count > 0 {
+                list.append(sp_getString(string: self.thirdAdd.productImageView.imagePath))
+            }else if let img = self.thirdAdd.productImageView.imageView.image {
+                list.append(img)
+            }
+            if sp_getString(string: self.fourAdd.productImageView.imagePath).count > 0 {
+                list.append(sp_getString(string: self.fourAdd.productImageView.imagePath))
+            }else if let img = self.fourAdd.productImageView.imageView.image {
+                list.append(img)
+            }
+            if sp_getString(string: self.fifeAdd.productImageView.imagePath).count > 0 {
+                list.append(sp_getString(string: self.fifeAdd.productImageView.imagePath))
+            }else if let img = self.fifeAdd.productImageView.imageView.image {
+                list.append(img)
+            }
+        }
+     
+        
         return list + self.imgArray
     }
     
@@ -208,7 +303,11 @@ extension SPProductAddImgView {
         var list = [String]()
         list.append(sp_getString(string: self.firstAdd.productImageView.imagePath))
         list.append(sp_getString(string: self.secondAdd.productImageView.imagePath))
-        
+        if KISTWOEXAMPLE {
+            list.append(sp_getString(string: self.thirdAdd.productImageView.imagePath))
+            list.append(sp_getString(string: self.fourAdd.productImageView.imagePath))
+            list.append(sp_getString(string: self.fifeAdd.productImageView.imagePath))
+        }
         return list
     }
     func sp_setimg(paths:[String]?){
@@ -219,7 +318,14 @@ extension SPProductAddImgView {
                     self.firstAdd.productImageView.imagePath = imgPath
                 }else if index == 1 {
                     self.secondAdd.productImageView.imagePath = imgPath
-                }else{
+                }else if index == 2 , KISTWOEXAMPLE == false {
+                    self.thirdAdd.productImageView.imagePath = imgPath
+                }else if index == 3 , KISTWOEXAMPLE == false {
+                    self.fourAdd.productImageView.imagePath = imgPath
+                }else if index == 4 , KISTWOEXAMPLE == false {
+                    self.fifeAdd.productImageView.imagePath = imgPath
+                }
+                else{
                     self.imgArray.append(imgPath)
                 }
                 
