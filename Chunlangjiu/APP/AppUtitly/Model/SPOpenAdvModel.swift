@@ -19,6 +19,7 @@ class SPOpenAdvModel : SPBaseModel {
     ///
     /// - Returns: 路径
     func sp_getLocalPath()->String{
+        sp_log(message: "活动图片:\(imagesrc)")
         if sp_getString(string: imagesrc).count > 0 {
             let enString = sp_getString(string: imagesrc).MD5String
             let cachePath = sp_getCachePath()

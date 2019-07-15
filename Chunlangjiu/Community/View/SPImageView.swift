@@ -24,6 +24,9 @@ extension UIImageView{
             }
         }else{
             self.image = plImage
+            if let block = complete {
+                block(plImage)
+            }
         }
         
     }

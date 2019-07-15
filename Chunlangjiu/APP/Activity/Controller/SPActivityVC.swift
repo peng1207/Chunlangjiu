@@ -9,7 +9,7 @@
 import Foundation
 import SnapKit
 class SPActivityVC: SPBaseVC {
-    
+    fileprivate let pattern_single = "1"
     fileprivate var tableView : UITableView!
     fileprivate var dataArray : [SPActivityHeaderModel]?
     fileprivate var activityModel : SPActivityModel?
@@ -34,6 +34,8 @@ class SPActivityVC: SPBaseVC {
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
         view.isHidden = true
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     fileprivate lazy var backgroundImgView : UIImageView = {
@@ -76,16 +78,22 @@ class SPActivityVC: SPBaseVC {
         if sp_getString(string: self.navigationItem.title).count == 0 {
             self.navigationItem.title = "活动"
         }
-        if sp_getString(string: self.activityModel?.color).count > 0  {
-            self.view.backgroundColor =  SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
-            self.tableView.backgroundColor = self.view.backgroundColor
+        if  sp_getString(string: self.activityModel?.open).count > 0 ,let isOpen = Bool(sp_getString(string: self.activityModel?.open)), isOpen == false {
+            
+        }else{
+            if sp_getString(string: self.activityModel?.color).count > 0 {
+                self.view.backgroundColor =  SPColorForHexString(hex: sp_getString(string: self.activityModel?.color))
+                //            self.tableView.backgroundColor = self.view.backgroundColor
+            }
         }
         self.headerView.imgView.sp_cache(string: sp_getString(string: self.activityModel?.top_img), plImage: nil) { [weak self](image) in
             if let i = image {
                 let scale = i.size.height / i.size.width
                 self?.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: sp_getScreenWidth() * scale)
-                self?.tableView.tableHeaderView = self?.headerView
+            }else{
+                self?.headerView.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: 0)
             }
+            self?.tableView.tableHeaderView = self?.headerView
         }
         var top : CGFloat = 0.0
         if  sp_getArrayCount(array: self.activityModel?.item) > 0 || (SP_ISSHOW_AUCTION && sp_getArrayCount(array: self.activityModel?.auction) > 0 ){
@@ -109,6 +117,17 @@ class SPActivityVC: SPBaseVC {
             self.footerView.sp_updateTop(top: top)
             self.tableView.tableFooterView = self.footerView
         }
+        
+        
+        self.backgroundImgView.sp_cache(string: sp_getString(string: self.activityModel?.img), plImage: nil) { (image) in
+            if let i = image {
+                let scale = i.size.height / i.size.width
+                self.backgroundImgView.snp.updateConstraints({ (maker) in
+                    maker.height.equalTo(sp_getScreenWidth() * scale)
+                })
+            }
+        }
+        
         
        sp_dealData()
         
@@ -151,7 +170,7 @@ class SPActivityVC: SPBaseVC {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
- 
+        self.tableView.backgroundColor = UIColor.clear
         self.tableView.tableHeaderView = self.headerView
         self.tableView.tableFooterView = self.footerView
         if #available(iOS 11.0, *) {
@@ -174,15 +193,25 @@ class SPActivityVC: SPBaseVC {
             self.noData.text = "暂时没有活动哦!"
             self.view.bringSubview(toFront: self.noData)
             self.tableView.isHidden = true
+            self.scrollView.isHidden = true
         }else{
             if sp_getString(string: self.activityModel?.open).count > 0 ,let isOpen = Bool(sp_getString(string: self.activityModel?.open)), isOpen == false{
                 self.noData.isHidden = false
                 self.noData.text = "暂时没有活动哦!"
                 self.view.bringSubview(toFront: self.noData)
                 self.tableView.isHidden = true
+                self.scrollView.isHidden = true
             }else{
                 self.noData.isHidden = true
-                self.tableView.isHidden = false
+                if sp_getString(string: self.activityModel?.pattern) == pattern_single {
+                    // 单图
+                    self.tableView.isHidden = true
+                    self.scrollView.isHidden = false
+                }else{
+                    self.tableView.isHidden = false
+                    self.scrollView.isHidden = true
+                }
+                
             }
            
         }
