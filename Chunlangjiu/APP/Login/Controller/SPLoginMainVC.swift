@@ -59,6 +59,7 @@ class SPLoginMainVC: SPBaseVC {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setImage(UIImage(named: "public_leftBack"), for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
+        btn.isHidden = true
         return btn
     }()
     override func viewDidLoad() {

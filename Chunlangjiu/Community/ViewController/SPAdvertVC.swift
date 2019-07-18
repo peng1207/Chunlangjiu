@@ -90,6 +90,10 @@ extension SPAdvertVC {
         sp_stopTimer()
         self.view.removeFromSuperview()
         self.removeFromParentViewController()
+        if  SPAPPManager.sp_isLogin(isPush: true) {
+            sp_log(message: "已经登陆了")
+        }
+        
     }
     fileprivate func sp_startTimer(){
         if self.timer == nil {
@@ -119,6 +123,11 @@ extension SPAdvertVC {
         self.skipBtn.setAttributedTitle(att, for: UIControlState.normal)
     }
     @objc fileprivate func sp_clickImg(){
+        if SPAPPManager.sp_isLogin(isPush: false) == false {
+            sp_clickSkip()
+            return
+        }
+        
         let appdeleage = UIApplication.shared.delegate as! AppDelegate
         var vc : UIViewController? = nil
         if let window = appdeleage.window  {

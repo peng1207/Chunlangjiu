@@ -110,7 +110,6 @@ class SPRequestManager {
                     formData.append(data, withName: sp_getString(string: key))
                 }
             }
-            
             for i in 0..<sp_getArrayCount(array: requestModel.data){
                 formData.append(requestModel.data![i], withName: "image")
             }

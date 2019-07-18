@@ -32,7 +32,7 @@ class  SPAboutVC: SPBaseVC {
         return label
     }()
     fileprivate lazy var locationView : SPTextLabelView = {
-        return sp_createView(title: "平台定位", content: "二手高端酒综合服务平台")
+        return sp_createView(title: "平台定位", content: "闲置高端酒综合服务平台")
     }()
     fileprivate lazy var websiteView : SPTextLabelView = {
         return sp_createView(title: "访问醇狼官网", content: "www.chunlangjiu.com")

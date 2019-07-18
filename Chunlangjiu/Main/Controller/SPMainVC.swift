@@ -27,10 +27,13 @@ class SPMainVC: UITabBarController {
         self.sp_setTabBarLocationWithLevel(fontLevel: 0)
         self.sp_setupTabBarView()
         self.sp_setupVC()
+      
         sp_asyncAfter(time: 0.2) { [weak self] in
             self?.sp_dealOpenAdv()
+             SPAPPManager.sp_getOpenAdvRequesst()
         }
-        
+        sp_addNotification()
+       
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -125,8 +128,31 @@ extension SPMainVC {
                     maker.left.right.top.bottom.equalTo(appdelegate.window!).offset(0)
                 }
             }
+        }else {
+            if SPAPPManager.sp_isLogin(isPush: true){
+                    sp_log(message: "登录")
+            }
         }
         
+    }
+    
+}
+extension SPMainVC {
+    
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_logout), name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
+    }
+    @objc fileprivate func sp_logout(){
+        var isExist = false
+        for vc in self.childViewControllers {
+            if vc is SPAdvertVC {
+                isExist = true
+                break
+            }
+        }
+        if isExist == false {
+            SPAPPManager.sp_login()
+        }
     }
     
 }

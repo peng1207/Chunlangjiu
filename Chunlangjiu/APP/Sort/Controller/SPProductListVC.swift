@@ -578,7 +578,6 @@ extension SPProductListVC {
                 self?.numLabel.text = sp_getString(string: countModel?.number)
             }
         }
-        
     }
 }
 // MARK: - notification

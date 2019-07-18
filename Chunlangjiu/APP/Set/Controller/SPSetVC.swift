@@ -152,9 +152,9 @@ extension SPSetVC {
     @objc fileprivate func sp_logout(){
         sp_logoutRequest()
         SPAPPManager.sp_dealLogout()
-        sp_mainQueue { [weak self]in
-            self?.navigationController?.popToRootViewController(animated: true)
-        }
+//        sp_mainQueue { [weak self]in
+//            self?.navigationController?.popToRootViewController(animated: true)
+//        }
     }
     fileprivate func sp_logoutRequest(){
         let request = SPRequestModel()

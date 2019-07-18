@@ -87,10 +87,22 @@ class SPAPPManager : NSObject{
         if tabbarController is SPMainVC {
             let tabBar : SPMainVC = tabbarController as! SPMainVC
             let nav : UINavigationController? = tabBar.viewControllers![tabBar.selectedIndex] as? UINavigationController
-            if nav != nil {
-//                nav?.pushViewController(SPPhoneLoginVC(), animated: true)
-                nav?.pushViewController(SPLoginMainVC(), animated: true)
+            if let mainNav = nav {
+                var isExist = false
+//                var isExistSet = false
+                for vc in mainNav.viewControllers {
+                    if vc is SPLoginMainVC {
+                        isExist = true
+                        break
+                    }
+                }
+                if !isExist {
+                    sp_mainQueue {
+                        mainNav.pushViewController(SPLoginMainVC(), animated: true)
+                    }
+                }
             }
+            
         }
     }
     ///清除用户数据
@@ -101,7 +113,6 @@ class SPAPPManager : NSObject{
     class func sp_dealLogout(){
         SPAPPManager.sp_cleanData()
         NotificationCenter.default.post(name: NSNotification.Name(SP_LOGOUT_NOTIFICATION), object: nil)
-        
     }
     
     /// 处理登录成功之后的返回
@@ -123,9 +134,15 @@ class SPAPPManager : NSObject{
                     vc = tmpVC
                 }
                 
+                
                 navVC.setNavigationBarHidden(false, animated: false)
                 if let tmpvc = vc{
-                    navVC.popToViewController(tmpvc, animated: true)
+                    if tmpvc is SPProductDetaileVC {
+                        navVC.popToViewController(tmpvc, animated: true)
+                    }else{
+                        navVC.popToRootViewController(animated: true)
+                    }
+                  
                 }else{
                     navVC.popToRootViewController(animated: true)
                 }
