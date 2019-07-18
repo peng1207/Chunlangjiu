@@ -113,8 +113,10 @@ extension SPMainVC {
     
     /// 处理开屏广告
     fileprivate func sp_dealOpenAdv(){
+        sp_log(message: "处理广告")
         let model = SPAPPManager.sp_getOpenAdv()
         if let m = model , sp_getString(string: m.imagesrc).count > 0 {
+            sp_log(message: "展示广告")
             let file = sp_getString(string: m.sp_getLocalPath())
             
             let img = UIImage(contentsOfFile:file )
@@ -127,11 +129,12 @@ extension SPMainVC {
                 advertVC.view.snp.makeConstraints { (maker) in
                     maker.left.right.top.bottom.equalTo(appdelegate.window!).offset(0)
                 }
+                return
             }
-        }else {
-            if SPAPPManager.sp_isLogin(isPush: true){
-                    sp_log(message: "登录")
-            }
+        }
+        sp_log(message: "没有展示广告")
+        if SPAPPManager.sp_isLogin(isPush: true){
+            sp_log(message: "登录")
         }
         
     }

@@ -87,6 +87,7 @@ class SPAdvertVC : SPBaseVC{
 
 extension SPAdvertVC {
     @objc fileprivate func sp_clickSkip(){
+        sp_log(message: "开启广告移除")
         sp_stopTimer()
         self.view.removeFromSuperview()
         self.removeFromParentViewController()

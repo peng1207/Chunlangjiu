@@ -508,6 +508,7 @@ extension SPAPPManager {
         request.parm = parm
         SPAppRequest.sp_getOpenAdv(requestModel: request) { (code , model, errorModel) in
             if code  == SP_Request_Code_Success {
+                sp_log(message: "获取到广告\(model?.imagesrc)");
                 sp_saveOpenAdv(model: model)
                 sp_downImg(urlString: sp_getString(string: model?.imagesrc))
             }
