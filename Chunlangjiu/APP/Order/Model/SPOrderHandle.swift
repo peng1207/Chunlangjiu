@@ -69,6 +69,9 @@ class SPOrderHandle : NSObject {
                 }else{
                     let evaulteVC = SPProductEvaluationVC()
                     evaulteVC.orderModel = model
+                    evaulteVC.successBlock = {
+                        self.sp_dealComplete(isSuccess: true, complete: complete)
+                    }
                     vc.navigationController?.pushViewController(evaulteVC, animated: true)
                 }
             }else{

@@ -304,19 +304,55 @@ extension SPSetAuctionProductVC {
         self.darkBtn.isSelected = true
     }
     fileprivate func sp_clickStartTime(){
-        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: Date(), maxDate: nil, currentDate: self.startDate != nil ? self.startDate! : Date()) { [weak self](date) in
+        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: sp_getMinDay(date: self.endDate), maxDate: self.endDate, currentDate: self.startDate != nil ? self.startDate! : Date()) { [weak self](date) in
             self?.startDate = date
             self?.sp_dealTime()
         }
-     
     }
     fileprivate func sp_clickEndTime(){
-        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: self.startDate != nil ? self.startDate :  Date(), maxDate: nil, currentDate: self.endDate != nil ? self.endDate! :  Date()) { [weak self](date)  in
+        let minDate = self.startDate != nil ? self.startDate :  Date()
+        SPDatePicker.sp_show(datePickerMode: UIDatePicker.Mode.dateAndTime, minDate: minDate, maxDate: sp_getMaxDay(date: self.startDate), currentDate: self.endDate != nil ? self.endDate! :  Date()) { [weak self](date)  in
             self?.endDate = date
             self?.sp_dealTime()
         }
-       
     }
+    /// 获取最大的天数
+    ///
+    /// - Parameter date: 日期
+    /// - Returns: 最大的天数
+    fileprivate func sp_getMaxDay(date : Date?)->Date?{
+        if let d = date {
+            let calendar = Calendar.current
+            var dateComponent = calendar.dateComponents([Calendar.Component.year,Calendar.Component.month,Calendar.Component.day,Calendar.Component.hour,Calendar.Component.minute,Calendar.Component.second], from: d)
+            if let day = dateComponent.day {
+                 dateComponent.day = day + 15
+            }
+            return calendar.date(from: dateComponent)
+            
+        }
+        return nil
+    }
+    /// 获取最小的天数
+    ///
+    /// - Parameter date: 日期
+    /// - Returns: 最大的天数
+    fileprivate func sp_getMinDay(date:Date?)->Date?{
+        if let d = date {
+            let calendar = Calendar.current
+            var dateComponent = calendar.dateComponents([Calendar.Component.year,Calendar.Component.month,Calendar.Component.day,Calendar.Component.hour,Calendar.Component.minute,Calendar.Component.second], from: d)
+            if let day = dateComponent.day {
+                dateComponent.day = day - 15
+            }
+            if let newDate =  calendar.date(from: dateComponent){
+                if newDate.compare(Date()) != .orderedAscending {
+                    // 获取的日期大于等于当前日期
+                    return newDate
+                }
+            }
+        }
+        return Date()
+    }
+    
     fileprivate func sp_dealTime(){
         self.startTimeView.content = sp_getString(string: SPDateManager.sp_string(to: self.startDate))
         self.endTimeView.content = sp_getString(string: SPDateManager.sp_string(to: self.endDate))
@@ -344,6 +380,13 @@ extension SPSetAuctionProductVC {
             sp_showTextAlert(tips: "请输入竞拍数量")
             return
         }
+        let start = Int(SPDateManager.sp_timeInterval(to: self.startDate))
+        let end = Int(SPDateManager.sp_timeInterval(to: self.endDate))
+        if end - start > 3600 * 24 * 15 {
+            sp_showTextAlert(tips: "竞拍设置时间最长不能超过15天")
+            return
+        }
+        
         sp_sendSubmitRequest()
     }
     fileprivate func sp_dealComplete(){

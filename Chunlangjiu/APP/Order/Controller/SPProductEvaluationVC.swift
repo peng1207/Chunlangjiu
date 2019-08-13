@@ -28,6 +28,7 @@ class SPProductEvaluationVC: SPBaseVC {
         view.backgroundColor = UIColor.white
         return view
     }()
+    var successBlock : SPBtnClickBlock?
     fileprivate lazy var numLabel : UILabel = {
         let label = UILabel()
         label.text = "500字"
@@ -221,11 +222,18 @@ extension  SPProductEvaluationVC {
             sp_hideAnimation(view: self?.view)
             if code == SP_Request_Code_Success {
                 sp_showTextAlert(tips: msg.count > 0 ? msg :"评价成功")
+                self?.sp_dealSuccess()
                 self?.navigationController?.popViewController(animated: true)
             }else{
                 sp_showTextAlert(tips: msg.count > 0 ? msg : "评价失败")
             }
         }
+    }
+    fileprivate func sp_dealSuccess(){
+        guard let block = self.successBlock else {
+            return
+        }
+        block()
     }
 }
 // MARK: - delegete

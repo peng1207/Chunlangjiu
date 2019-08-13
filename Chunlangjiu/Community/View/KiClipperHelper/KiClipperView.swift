@@ -80,7 +80,7 @@ class KiClipperView: UIView {
     
     private func setClipperView() {
         let kscWidth = UIScreen.main.bounds.size.width
-        let kscHeight = UIScreen.main.bounds.size.height - 64
+        let kscHeight = UIScreen.main.bounds.size.height - sp_getstatusBarHeight() - SP_NAVGIT_HEIGHT
         var width = kscWidth
         var height = kscHeight
         if (self.resultImgSize?.width)! > ((self.resultImgSize?.height ?? 0)! / height * width) {

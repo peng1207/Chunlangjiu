@@ -15,7 +15,7 @@ class KiImageClipperViewController: UIViewController {
     public var cancelClippedHandler:cancelClippedHandlerBlock?
     public var successClippedHandler:successClippedHandlerBlock?
     public func setBaseImg(_ baseImg:UIImage,resultImgSize:CGSize,type:ClipperType) {
-        clipperView = KiClipperView(frame: CGRect(x: 0, y: sp_getstatusBarHeight() + SP_NAVGIT_HEIGHT, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - sp_getstatusBarHeight() - SP_NAVGIT_HEIGHT))
+        clipperView = KiClipperView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - sp_getstatusBarHeight() - SP_NAVGIT_HEIGHT))
         clipperView?.resultImgSize = resultImgSize
         clipperView?.baseImg = baseImg
         clipperView?.type = type

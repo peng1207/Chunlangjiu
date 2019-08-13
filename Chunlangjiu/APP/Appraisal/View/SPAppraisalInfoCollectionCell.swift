@@ -82,7 +82,7 @@ class SPAppraisalInfoCollectionCell: UICollectionViewCell {
             self.numLabel.attributedText = att
         }else{
             self.iconImgView.image = sp_getLogoImg()
-            self.nameLabel.text = "虚伪以待"
+            self.nameLabel.text = "虚位以待"
             self.tipsLabel.isHidden = false
             self.rangeLabel.text = ""
             self.requireLabel.text = ""
