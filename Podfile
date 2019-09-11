@@ -24,7 +24,7 @@ target 'Chunlangjiu' do
     pod 'UMCAnalytics'
 #    pod 'UMCSecurityPlugins'
     pod 'AMapLocation-NO-IDFA'
-    pod 'GTSDK','2.2.0.0-noidfa'
+    pod 'GTSDK','2.4.0.0-noidfa'
     pod 'CryptoSwift'
     pod 'RealmSwift','~> 3.14.1'
 #    pod 'NVActivityIndicatorView'

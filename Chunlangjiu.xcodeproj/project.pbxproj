@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -382,6 +382,11 @@
 		9EE0509921F2BE2B00C1F26F /* SPCapitalDetDetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE0509821F2BE2B00C1F26F /* SPCapitalDetDetModel.swift */; };
 		9EE7F28122067A28002C69FE /* SPActivityHeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE7F28022067A28002C69FE /* SPActivityHeaderModel.swift */; };
 		9EEC698621E2452B00C9E36C /* SPBankCardPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEC698521E2452B00C9E36C /* SPBankCardPicker.swift */; };
+		9EECDB4A2328E676008F6CBE /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB492328E676008F6CBE /* ExternalAccessory.framework */; };
+		9EECDB4C2328E68B008F6CBE /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB4B2328E68A008F6CBE /* libc++.1.tbd */; };
+		9EECDB4E2328E695008F6CBE /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB4D2328E695008F6CBE /* libc++abi.tbd */; };
+		9EECDB502328E6A7008F6CBE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB4F2328E6A7008F6CBE /* CoreLocation.framework */; };
+		9EECDB522328E6AF008F6CBE /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB512328E6AF008F6CBE /* GLKit.framework */; };
 		9EF09FDE221C588400AB9148 /* SPRevokeBondTipVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FDD221C588400AB9148 /* SPRevokeBondTipVC.swift */; };
 		9EF09FE0221C5D6700AB9148 /* SPBondSuccessVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FDF221C5D6700AB9148 /* SPBondSuccessVC.swift */; };
 		9EF09FE2221C64F100AB9148 /* SPBuyerPrivilegeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FE1221C64F100AB9148 /* SPBuyerPrivilegeVC.swift */; };
@@ -892,6 +897,11 @@
 		9EE0509821F2BE2B00C1F26F /* SPCapitalDetDetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCapitalDetDetModel.swift; sourceTree = "<group>"; };
 		9EE7F28022067A28002C69FE /* SPActivityHeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPActivityHeaderModel.swift; sourceTree = "<group>"; };
 		9EEC698521E2452B00C9E36C /* SPBankCardPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBankCardPicker.swift; sourceTree = "<group>"; };
+		9EECDB492328E676008F6CBE /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		9EECDB4B2328E68A008F6CBE /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
+		9EECDB4D2328E695008F6CBE /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
+		9EECDB4F2328E6A7008F6CBE /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		9EECDB512328E6AF008F6CBE /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		9EF09FDD221C588400AB9148 /* SPRevokeBondTipVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRevokeBondTipVC.swift; sourceTree = "<group>"; };
 		9EF09FDF221C5D6700AB9148 /* SPBondSuccessVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBondSuccessVC.swift; sourceTree = "<group>"; };
 		9EF09FE1221C64F100AB9148 /* SPBuyerPrivilegeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBuyerPrivilegeVC.swift; sourceTree = "<group>"; };
@@ -988,6 +998,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EECDB522328E6AF008F6CBE /* GLKit.framework in Frameworks */,
+				9EECDB502328E6A7008F6CBE /* CoreLocation.framework in Frameworks */,
+				9EECDB4E2328E695008F6CBE /* libc++abi.tbd in Frameworks */,
+				9EECDB4C2328E68B008F6CBE /* libc++.1.tbd in Frameworks */,
+				9EECDB4A2328E676008F6CBE /* ExternalAccessory.framework in Frameworks */,
 				9E22EADC2132D94D00B196D5 /* libz.tbd in Frameworks */,
 				9E22EAE42132F08C00B196D5 /* libWeChatSDK.a in Frameworks */,
 				9E22EADA2132D94700B196D5 /* libc++.tbd in Frameworks */,
@@ -1027,6 +1042,11 @@
 		4C40D40FD072951D38D021EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9EECDB512328E6AF008F6CBE /* GLKit.framework */,
+				9EECDB4F2328E6A7008F6CBE /* CoreLocation.framework */,
+				9EECDB4D2328E695008F6CBE /* libc++abi.tbd */,
+				9EECDB4B2328E68A008F6CBE /* libc++.1.tbd */,
+				9EECDB492328E676008F6CBE /* ExternalAccessory.framework */,
 				9E22EADB2132D94D00B196D5 /* libz.tbd */,
 				9E22EAD92132D94700B196D5 /* libc++.tbd */,
 				9E22EAD72132D91E00B196D5 /* CoreMotion.framework */,
@@ -2483,35 +2503,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/ESPullToRefresh/ESPullToRefresh.framework",
-				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ESPullToRefresh.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DF9115E8C252A1FD9668A210 /* [CP] Copy Pods Resources */ = {
@@ -2519,21 +2520,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-resources.sh",
-				"${PODS_ROOT}/Pingpp/lib/Pingpp.bundle",
-				"${PODS_ROOT}/PingppAlipaySDK/AlipaySDK.bundle",
-				"${PODS_ROOT}/UMCShare/UMShare/UMSocialUI/UMSocialSDKResources.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Pingpp.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlipaySDK.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/UMSocialSDKResources.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chunlangjiu/Pods-Chunlangjiu-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F7ACD0A3DC1459AABE9D1168 /* [CP] Check Pods Manifest.lock */ = {
@@ -3229,7 +3225,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chunlangjiu.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = ChunlangJiuAppStore;
+				PROVISIONING_PROFILE_SPECIFIER = ChunlangJiuAdhoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "Chunlangjiu/Chunlangjiu-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;

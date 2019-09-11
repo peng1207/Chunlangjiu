@@ -59,7 +59,7 @@ class SPAPPManager : NSObject{
             sp_saveUser(data: showCity, key: SP_SAVE_SHOWCITY_KEY)
         }
     }
-    var pushToken: String?
+//    var pushToken: String?
     var clientId : String?
     fileprivate var timer : Timer?
     fileprivate var lastTimeInterval : Int = 0

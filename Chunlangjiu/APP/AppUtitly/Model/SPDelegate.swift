@@ -63,11 +63,16 @@ extension AppDelegate:UNUserNotificationCenterDelegate {
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
-        let nsdataStr = NSData.init(data: deviceToken)
-        let datastr = nsdataStr.description.replacingOccurrences(of: "<", with: "").replacingOccurrences(of: ">", with: "").replacingOccurrences(of: " ", with: "")
-        sp_log(message:"deviceToken is \(datastr)")
-        SPAPPManager.instance().pushToken = datastr
-        SPThridManager.register(token: datastr)
+//        let nsdataStr = NSData.init(data: deviceToken)
+//        let datastr = nsdataStr.description.replacingOccurrences(of: "<", with: "").replacingOccurrences(of: ">", with: "").replacingOccurrences(of: " ", with: "")
+        var deviceTokenString = String()
+        let bytes = [UInt8](deviceToken)
+        for item in bytes {
+            deviceTokenString += String(format:"%02x", item&0x000000FF)
+        }
+        sp_log(message:"deviceToken is \(deviceTokenString)")
+//        SPAPPManager.instance().pushToken = datastr
+        SPThridManager.register(token: deviceTokenString)
     }
     private func sp_getMsg(userInfo :[String : Any]?)->String{
         if let info = userInfo {
