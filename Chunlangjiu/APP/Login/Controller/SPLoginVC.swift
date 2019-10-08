@@ -50,6 +50,9 @@ class SPLoginVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+           return .default
+       }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()

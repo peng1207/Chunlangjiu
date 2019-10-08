@@ -42,7 +42,9 @@ class SPActivityVC: SPBaseVC {
         let view = UIImageView()
         return view
     }()
- 
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+         return .default
+     }
      fileprivate var pushVC : Bool = false
     var activity_id : String?
     override func viewDidLoad() {
@@ -55,7 +57,6 @@ class SPActivityVC: SPBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.sp_backColor(color: UIColor.white)
-        UIApplication.shared.statusBarStyle = .default
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font : sp_getFontSize(size: 18),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)]
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -66,8 +67,6 @@ class SPActivityVC: SPBaseVC {
         super.viewWillDisappear(animated)
          self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font : sp_getFontSize(size: 18),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)]
         self.navigationController?.navigationBar.sp_reset()
-        UIApplication.shared.statusBarStyle = .lightContent
-       
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)

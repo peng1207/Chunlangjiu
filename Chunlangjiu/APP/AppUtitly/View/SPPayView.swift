@@ -31,6 +31,7 @@ class SPPayView:  UIView{
         view.dataSource = self
         view.rowHeight = 44
         view.separatorStyle = .none
+        view.backgroundColor = UIColor.white;
         return view
     }()
     fileprivate lazy var topLayer : CALayer = {

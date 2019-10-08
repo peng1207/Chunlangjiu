@@ -59,7 +59,7 @@ class SPAPPManager : NSObject{
             sp_saveUser(data: showCity, key: SP_SAVE_SHOWCITY_KEY)
         }
     }
-//    var pushToken: String?
+    var pushToken: String?
     var clientId : String?
     fileprivate var timer : Timer?
     fileprivate var lastTimeInterval : Int = 0
@@ -146,7 +146,7 @@ class SPAPPManager : NSObject{
                 }else{
                     navVC.popToRootViewController(animated: true)
                 }
-                UIApplication.shared.statusBarStyle = .lightContent
+               
             }
         }
     }
@@ -255,6 +255,7 @@ class SPAPPManager : NSObject{
     class func sp_isBusiness()->Bool{
         return sp_getString(string: SPAPPManager.instance().userModel?.identity) == SP_IS_ENTERPRISE ? true : false
     }
+    /// 获取版本信息
     class func sp_appVersion(){
         let request = SPRequestModel()
         var parm = [String : Any]()

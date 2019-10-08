@@ -24,6 +24,8 @@ class SPSearchView:  UIView{
         textFiled.sp_cornerRadius(cornerRadius: 15)
         textFiled.delegate = self
         textFiled.returnKeyType = UIReturnKeyType.search
+        textFiled.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
+        textFiled.attributedPlaceholder = NSAttributedString(string: "请输入商品关键字", attributes: [NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)])
         textFiled.inputAccessoryView = SPKeyboardTopView.sp_showView(canceBlock: {
 
         }, doneBlock: { [weak self]in
@@ -33,14 +35,15 @@ class SPSearchView:  UIView{
     }()
     
     fileprivate lazy var searchView : UIView = {
-        let view = UIView()
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         return view
     }()
-    fileprivate lazy var searchImageView : UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "public_search_gray")
-        return imageView
+    fileprivate lazy var searchBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage( UIImage(named: "public_search_gray"), for: UIControlState.normal)
+        return btn
     }()
+    
     var searchBlock : SPGetSearchBlock?
     var didClickBlock : SPTextDidClickBlock?
     override init(frame: CGRect) {
@@ -63,22 +66,19 @@ class SPSearchView:  UIView{
         self.searchTextFiled.leftView = self.searchView
        
         self.searchTextFiled.leftViewMode = UITextFieldViewMode.always
-        self.searchView.addSubview(self.searchImageView)
+        
+        self.searchView.addSubview(self.searchBtn)
+        self.searchBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.searchView).offset(5)
+            maker.right.equalTo(self.searchView).offset(-5)
+            maker.top.bottom.equalTo(self.searchView).offset(0)
+        }
+ 
         self.sp_addConstraint()
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.searchImageView.snp.makeConstraints { (maker) in
-            maker.width.equalTo(14.5)
-            maker.height.equalTo(14)
-            maker.centerX.equalTo(self.searchView.snp.centerX).offset(0)
-            maker.centerY.equalTo(self.searchView.snp.centerY).offset(0)
-        }
-//        self.searchTextFiled.snp.makeConstraints { (maker) in
-//            maker.left.right.equalTo(self).offset(0)
-//            maker.height.equalTo(30)
-//            maker.centerY.equalTo(self.snp.centerY).offset(0)
-//        }
+ 
     }
     override func layoutSubviews() {
         super.layoutSubviews()

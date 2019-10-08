@@ -107,8 +107,6 @@
 		9E22EABC2131A76E00B196D5 /* SPProductNumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E22EABB2131A76E00B196D5 /* SPProductNumView.swift */; };
 		9E22EABE2131BFA000B196D5 /* SPConfirmOrderPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E22EABD2131BFA000B196D5 /* SPConfirmOrderPrice.swift */; };
 		9E22EAC02132432600B196D5 /* SPOrderPayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E22EABF2132432600B196D5 /* SPOrderPayModel.swift */; };
-		9E22EAC52132D87D00B196D5 /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9E22EAC32132D87D00B196D5 /* AlipaySDK.bundle */; };
-		9E22EAC62132D87D00B196D5 /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E22EAC42132D87D00B196D5 /* AlipaySDK.framework */; };
 		9E22EAC82132D8F400B196D5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E22EAC72132D8F400B196D5 /* SystemConfiguration.framework */; };
 		9E22EACA2132D8F900B196D5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E22EAC92132D8F900B196D5 /* CoreTelephony.framework */; };
 		9E22EACC2132D8FD00B196D5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E22EACB2132D8FD00B196D5 /* QuartzCore.framework */; };
@@ -616,8 +614,6 @@
 		9E22EABB2131A76E00B196D5 /* SPProductNumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductNumView.swift; sourceTree = "<group>"; };
 		9E22EABD2131BFA000B196D5 /* SPConfirmOrderPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPConfirmOrderPrice.swift; sourceTree = "<group>"; };
 		9E22EABF2132432600B196D5 /* SPOrderPayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPOrderPayModel.swift; sourceTree = "<group>"; };
-		9E22EAC32132D87D00B196D5 /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
-		9E22EAC42132D87D00B196D5 /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
 		9E22EAC72132D8F400B196D5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9E22EAC92132D8F900B196D5 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9E22EACB2132D8FD00B196D5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1016,7 +1012,6 @@
 				9E22EACA2132D8F900B196D5 /* CoreTelephony.framework in Frameworks */,
 				9E22EAC82132D8F400B196D5 /* SystemConfiguration.framework in Frameworks */,
 				1BE81512BA73CE2439157F6E /* Pods_Chunlangjiu.framework in Frameworks */,
-				9E22EAC62132D87D00B196D5 /* AlipaySDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1795,18 +1790,8 @@
 			isa = PBXGroup;
 			children = (
 				9E22EADD2132F08C00B196D5 /* WechtSDK */,
-				9E22EAC22132D87D00B196D5 /* alipay */,
 			);
 			path = Lib;
-			sourceTree = "<group>";
-		};
-		9E22EAC22132D87D00B196D5 /* alipay */ = {
-			isa = PBXGroup;
-			children = (
-				9E22EAC32132D87D00B196D5 /* AlipaySDK.bundle */,
-				9E22EAC42132D87D00B196D5 /* AlipaySDK.framework */,
-			);
-			path = alipay;
 			sourceTree = "<group>";
 		};
 		9E22EADD2132F08C00B196D5 /* WechtSDK */ = {
@@ -2456,7 +2441,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E22EAC52132D87D00B196D5 /* AlipaySDK.bundle in Resources */,
 				9E22EAE32132F08C00B196D5 /* README.txt in Resources */,
 				9E0C8B2B20E637C000BD9743 /* Assets.xcassets in Resources */,
 				9E194D6E21DC68590080B72D /* Image.bundle in Resources */,

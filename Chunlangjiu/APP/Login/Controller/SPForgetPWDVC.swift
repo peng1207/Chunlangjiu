@@ -119,7 +119,9 @@ class SPForgetPWDVC : SPBaseVC{
         btn.addTarget(self, action: #selector(sp_clickBackAction), for: UIControlEvents.touchUpInside)
         return btn
     }()
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+           return .default
+       }
     fileprivate let textFiledHeight : CGFloat = 45
     fileprivate var timer : Timer?
     fileprivate var timeOut : Int = 60

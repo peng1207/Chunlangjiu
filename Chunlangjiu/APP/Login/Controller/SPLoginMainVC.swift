@@ -62,10 +62,19 @@ class SPLoginMainVC: SPBaseVC {
         btn.isHidden = true
         return btn
     }()
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        if #available(iOS 13.0, *) {
+            return .darkContent
+        } else {
+            // Fallback on earlier versions
+            return .default
+        }
+    }
     override func viewDidLoad() {
-         UIApplication.shared.statusBarStyle = .default
+        
         super.viewDidLoad()
         self.sp_setupUI()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -90,6 +99,7 @@ class SPLoginMainVC: SPBaseVC {
         self.view.addSubview(self.sinaBtn)
         self.view.addSubview(self.registerBtn)
         self.view.addSubview(self.backBtn)
+         
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -98,7 +108,6 @@ class SPLoginMainVC: SPBaseVC {
     }
     override func sp_clickBackAction() {
         super.sp_clickBackAction()
-        UIApplication.shared.statusBarStyle = .lightContent
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){

@@ -100,6 +100,9 @@ class SPThirdBindVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickBind), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+           return .default
+       }
     fileprivate let textFiledHeight : CGFloat = 50
     fileprivate var timer : Timer?
     fileprivate var timeOut : Int = 60

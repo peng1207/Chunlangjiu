@@ -85,6 +85,9 @@ class SPPwdLoginVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickPhoneLogin), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+           return .default
+       }
     fileprivate let textFiledHeight : CGFloat = 45
        var clickBlock : SPBtnClickBlock?
     override func viewDidLoad() {

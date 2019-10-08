@@ -71,7 +71,7 @@ extension AppDelegate:UNUserNotificationCenterDelegate {
             deviceTokenString += String(format:"%02x", item&0x000000FF)
         }
         sp_log(message:"deviceToken is \(deviceTokenString)")
-//        SPAPPManager.instance().pushToken = datastr
+        SPAPPManager.instance().pushToken = deviceTokenString
         SPThridManager.register(token: deviceTokenString)
     }
     private func sp_getMsg(userInfo :[String : Any]?)->String{

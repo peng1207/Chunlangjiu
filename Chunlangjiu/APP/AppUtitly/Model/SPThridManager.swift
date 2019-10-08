@@ -79,7 +79,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
             SPAPPManager.instance().locationLatitude = location?.coordinate.latitude
             SPAPPManager.instance().locationlongitude = location?.coordinate.longitude
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: SP_LOCATION_NOTIFICATION), object: nil)
-         
+
         }
     }
     /// 向个推注册token

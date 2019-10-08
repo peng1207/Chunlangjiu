@@ -53,6 +53,13 @@ class SPBaseNavVC: UINavigationController {
     @objc fileprivate func sp_clickBackAction(){
         self.popViewController(animated: true)
     }
+    /// UINavigationController
+    override var childViewControllerForStatusBarStyle: UIViewController? {
+        return self.topViewController
+    }
+    override var childViewControllerForStatusBarHidden: UIViewController? {
+        return self.topViewController
+    }
 }
 
 extension UINavigationController{
@@ -65,7 +72,7 @@ extension UINavigationController{
         navBar.shadowImage = UIImage()
        
         navBar.titleTextAttributes = [ NSAttributedStringKey.font : UIFont.systemFont(ofSize: 18), NSAttributedStringKey.foregroundColor:UIColor.white] as [NSAttributedStringKey : Any]
-        UIApplication.shared.statusBarStyle = .lightContent
+         
     }
     
 }

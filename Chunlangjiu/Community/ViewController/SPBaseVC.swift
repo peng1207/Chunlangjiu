@@ -20,8 +20,16 @@ class  SPBaseVC: UIViewController {
         return label
     }()
     var requestModel : SPRequestModel = SPRequestModel()
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+         return .lightContent
+     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 13.0, *) {
+            self.overrideUserInterfaceStyle = .light
+        } else {
+            // Fallback on earlier versions
+        }
         self.view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_f7f7f7.rawValue)
         self.edgesForExtendedLayout = []
         sp_setNoData()

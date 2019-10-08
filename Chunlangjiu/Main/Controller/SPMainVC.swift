@@ -77,7 +77,13 @@ class SPMainVC: UITabBarController {
         self.tabBar.layoutSubviews()
         
      }
-    
+    /// UITabBarController
+    override var childViewControllerForStatusBarStyle: UIViewController? {
+        return self.selectedViewController
+    }
+    override var childViewControllerForStatusBarHidden: UIViewController? {
+        return self.selectedViewController
+    }
     private func sp_setupVC(){
 
         UINavigationController.sp_initialize()

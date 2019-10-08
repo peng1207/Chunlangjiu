@@ -30,6 +30,7 @@ class KiClipperHelper: NSObject,UIImagePickerControllerDelegate,UINavigationCont
             imagePicker.sourceType = type
             imagePicker.allowsEditing = self.systemEditing
             //        imagePicker.modalTransitionStyle = .crossDissolve
+            imagePicker.modalPresentationStyle = .fullScreen
             self.nav?.present(imagePicker, animated: true, completion: nil)
             imagePicker.navigationBar.tintColor = UIColor.white
         }

@@ -45,7 +45,8 @@ class SPShareManager {
     class func sp_registApp(platformType : SP_SharePlatformType ,appKey : String?,appSecret:String?,redirectURL:String?) -> Void{
         switch platformType {
         case .umeng:
-            UMSocialManager.default().umSocialAppkey = appKey
+            UMConfigure.initWithAppkey(appKey, channel: "App Store")
+//            UMSocialManager.default().umSocialAppkey = appKey
         case .wechateSession , .wechatTimeLine:
             UMSocialManager.default().setPlaform(UMSocialPlatformType.wechatSession, appKey: appKey, appSecret: appSecret, redirectURL: redirectURL)
         case .qq , .qzone :
