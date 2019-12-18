@@ -26,6 +26,7 @@ class KiImageClipperViewController: UIViewController {
     //MARK Private
     private var clipperView:KiClipperView?
     private let TITLE_BAR_HEIGHT:Int = 44
+    private let TITLE_WIDTH:Int = 60
     private var rightBtn:UIButton?
     private var leftBtn:UIButton?
     
@@ -62,7 +63,7 @@ class KiImageClipperViewController: UIViewController {
     private func creatLeftBtnWithTitle(title:String) {
         if leftBtn == nil {
             leftBtn = UIButton(type: .custom)
-            leftBtn?.frame = CGRect(x: 20, y: 20, width: TITLE_BAR_HEIGHT, height: TITLE_BAR_HEIGHT)
+            leftBtn?.frame = CGRect(x: 20, y: 20, width: TITLE_WIDTH, height: TITLE_BAR_HEIGHT)
             leftBtn?.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             leftBtn?.contentHorizontalAlignment = .left
             leftBtn?.setTitle(title, for: .normal)
@@ -79,12 +80,15 @@ class KiImageClipperViewController: UIViewController {
             rightBtn = UIButton(type: .custom)
 //            rightBtn?.setTitleColor(UIColor.init(red: 0.118, green: 0.133, blue: 0.153, alpha: 1.0), for: .normal)
               rightBtn?.setTitleColor(UIColor.white, for: .normal)
-            rightBtn?.frame = CGRect(x: 20, y: 20, width: TITLE_BAR_HEIGHT, height: TITLE_BAR_HEIGHT)
+            rightBtn?.frame = CGRect(x: 20, y: 20, width: TITLE_WIDTH, height: TITLE_BAR_HEIGHT)
             rightBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            rightBtn?.contentHorizontalAlignment = .right
+            rightBtn?.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            rightBtn?.titleLabel?.adjustsFontSizeToFitWidth = true
             rightBtn?.addTarget(self, action: #selector(rightBtnTUI(btn:)), for: .touchUpInside)
-            rightBtn?.layer.cornerRadius = 8
+           
         }
-        rightBtn?.sizeToFit()
+//        rightBtn?.sizeToFit()
         rightBtn?.setTitle(title, for: .normal)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn!)
     }

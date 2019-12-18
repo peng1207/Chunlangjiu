@@ -1019,18 +1019,22 @@ class SPAppRequest {
                     if let block  = complete{
                         block(SP_Request_Code_Success,dataArray,nil,1)
                     }
+                    sp_areaRequest(requestModel: requestModel, complete: complete)
                 }
             }
-            return
+ 
+        }else{
+            sp_areaRequest(requestModel: requestModel, complete: complete)
         }
-        
-        
+ 
+    }
+    private class func sp_areaRequest(requestModel:SPRequestModel,complete:SPRequestCompletList?){
         requestModel.url = SP_GET_REGION_URL
         sp_unifiedSendRequest(requestModel: requestModel) { (dataJson) in
             if let json = dataJson {
                 let errorcode =  sp_getString(string: json[SP_Request_Errorcod_Key])
                 let data : [String : Any]? = json[SP_Request_Data_Key] as? [String : Any]
-//                let msg = sp_getString(string: json[SP_Request_Msg_Key])
+                //                let msg = sp_getString(string: json[SP_Request_Msg_Key])
                 sp_simpleSQueues {
                     var listArray = [SPAreaModel]()
                     if sp_isDic(dic: data), errorcode == SP_Request_Code_Success {
@@ -1054,7 +1058,7 @@ class SPAppRequest {
                         }
                     }
                 }
-               
+                
             }else{
                 if let block = complete {
                     block(SP_Request_Error,nil,nil,0)

@@ -8,6 +8,7 @@
 
 import Foundation
 import SnapKit
+import AuthenticationServices
 class SPLoginMainVC: SPBaseVC {
     fileprivate lazy var logoImgView : UIImageView = {
         let view = UIImageView()
@@ -63,12 +64,12 @@ class SPLoginMainVC: SPBaseVC {
         return btn
     }()
     override var preferredStatusBarStyle: UIStatusBarStyle{
-        if #available(iOS 13.0, *) {
-            return .darkContent
-        } else {
+//        if #available(iOS 13.0, *) {
+//            return .darkContent
+//        } else {
             // Fallback on earlier versions
             return .default
-        }
+//        }
     }
     override func viewDidLoad() {
         
@@ -99,8 +100,26 @@ class SPLoginMainVC: SPBaseVC {
         self.view.addSubview(self.sinaBtn)
         self.view.addSubview(self.registerBtn)
         self.view.addSubview(self.backBtn)
-         
+//        sp_setupAppleUI()
         self.sp_addConstraint()
+    }
+    fileprivate func sp_setupAppleUI(){
+//        if #available(iOS 13.0, *) {
+//            let appleBtn = ASAuthorizationAppleIDButton(type: ASAuthorizationAppleIDButton.ButtonType.default, style: ASAuthorizationAppleIDButton.Style.white)
+//            appleBtn.sp_cornerRadius(cornerRadius: 25)
+//            appleBtn.addTarget(self, action: #selector(sp_appleLogin), for: UIControlEvents.touchUpInside)
+//                   self.view.addSubview(appleBtn)
+//            appleBtn.snp.makeConstraints { (maker) in
+//                maker.centerX.equalTo(self.view).offset(0)
+//                maker.left.equalTo(self.view).offset(40)
+//                maker.right.equalTo(self.view).offset(-40)
+//                maker.height.equalTo(50)
+//                maker.top.equalTo(self.loginBtn.snp.bottom).offset(15)
+//            }
+//        } else {
+//            // Fallback on earlier versions
+//        }
+       
     }
     /// 处理有没数据
     override func sp_dealNoData(){
@@ -164,6 +183,7 @@ class SPLoginMainVC: SPBaseVC {
         
     }
 }
+ 
 extension SPLoginMainVC {
     /// 跳到登录界面
     @objc fileprivate func sp_login(){
@@ -193,6 +213,22 @@ extension SPLoginMainVC {
             model?.platformType = .sina
             self?.sp_dealThirdLoginComplete(model: model, error: error )
         }
+    }
+    /// 苹果登录
+    @objc fileprivate func sp_appleLogin(){
+//        if #available(iOS 13.0, *) {
+//            let appleIDProvider = ASAuthorizationAppleIDProvider()
+//            let request = appleIDProvider.createRequest()
+//            request.requestedScopes = [.fullName,.email]
+//
+//            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+//            authorizationController.delegate = self
+//            authorizationController.presentationContextProvider = self
+//            authorizationController.performRequests()
+//        } else {
+//            // Fallback on earlier versions
+//        }
+      
     }
     /// 注册
     @objc fileprivate func sp_register(){
@@ -265,3 +301,27 @@ extension SPLoginMainVC {
     }
     
 }
+//extension SPLoginMainVC : ASAuthorizationControllerDelegate , ASAuthorizationControllerPresentationContextProviding {
+//    @available(iOS 13.0, *)
+//    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+//        return self.view.window!
+//    }
+//    @available(iOS 13.0, *)
+//    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+//        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+//            let userID = appleIDCredential.user
+//            let fullName = appleIDCredential.fullName
+//            let email = appleIDCredential.email
+//
+//        }else if let passworCredential = authorization.credential as? ASPasswordCredential {
+//            let userName = passworCredential.user
+//            let password = passworCredential.password
+//        }else{
+//            sp_showTextAlert(tips: "授权失败")
+//        }
+//    }
+//    @available(iOS 13.0, *)
+//    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+//
+//    }
+//}
