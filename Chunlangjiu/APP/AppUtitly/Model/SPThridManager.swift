@@ -52,7 +52,8 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.wechateSession, appKey: SP_WX_APPID, appSecret: SP_WX_APPSECRET, redirectURL: nil)
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.qq, appKey: SP_QQ_APPID, appSecret: nil, redirectURL: nil)
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.sina, appKey: SP_SINA_APPKEY, appSecret: SP_SINA_APPSECRET, redirectURL: "http://sns.whalecloud.com/sina2/callback")
-        WXApi.registerApp(SP_WX_APPID)
+//        WXApi.registerApp(SP_WX_APPID)
+        WXApi.registerApp(SP_WX_APPID, universalLink: "")
         sp_log(message: "高德key\(SP_GD_APPKEY)")
         AMapServices.shared().apiKey = SP_GD_APPKEY
         GeTuiSdk.start(withAppId: SP_GETUI_APPID, appKey: SP_GETUI_APPKEY, appSecret: SP_GETUI_APPSECRET, delegate: instance())

@@ -4432,6 +4432,23 @@
 			};
 			name = Debug;
 		};
+		8178070724072D06F55BA5911E8B77F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 94274608DE102473C7C346FD9DA9DAB7 /* ESPullToRefresh.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ESPullToRefresh";
+				IBSC_MODULE = ESPullToRefresh;
+				INFOPLIST_FILE = "Target Support Files/ESPullToRefresh/ResourceBundle-ESPullToRefresh-ESPullToRefresh-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_NAME = ESPullToRefresh;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		88DF73B00EF01444FA3FD2DC1E09E4CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 27B927187CB3703A65EB4D13714B67D7 /* RealmSwift.xcconfig */;
@@ -4537,22 +4554,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
-		};
-		A3EC5BDBE03A812158374857DDE28841 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 94274608DE102473C7C346FD9DA9DAB7 /* ESPullToRefresh.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ESPullToRefresh";
-				INFOPLIST_FILE = "Target Support Files/ESPullToRefresh/ResourceBundle-ESPullToRefresh-ESPullToRefresh-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PRODUCT_NAME = ESPullToRefresh;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
 		};
 		A748D97B916E35096965AD695B76F2A7 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4978,12 +4979,13 @@
 			};
 			name = Release;
 		};
-		FB5C2D4F572B564CF4943FBB7247AFE1 /* Debug */ = {
+		FCC596E836E90C0C3C0ABE21F026091F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 94274608DE102473C7C346FD9DA9DAB7 /* ESPullToRefresh.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ESPullToRefresh";
+				IBSC_MODULE = ESPullToRefresh;
 				INFOPLIST_FILE = "Target Support Files/ESPullToRefresh/ResourceBundle-ESPullToRefresh-ESPullToRefresh-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = ESPullToRefresh;
@@ -5108,8 +5110,8 @@
 		5DD1AA431772DC514DC30EF8CF43AEF0 /* Build configuration list for PBXNativeTarget "ESPullToRefresh-ESPullToRefresh" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB5C2D4F572B564CF4943FBB7247AFE1 /* Debug */,
-				A3EC5BDBE03A812158374857DDE28841 /* Release */,
+				FCC596E836E90C0C3C0ABE21F026091F /* Debug */,
+				8178070724072D06F55BA5911E8B77F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -9,7 +9,8 @@ target 'Chunlangjiu' do
   # Pods for Chunlangjiu
 	pod 'Alamofire'
 	pod 'Kingfisher'
-    pod 'HandyJSON','~> 5.0.0-beta.1'
+    pod 'HandyJSON','5.0.2-beta'
+#    pod 'HandyJSON'
     pod 'SnapKit'
     pod 'ESPullToRefresh'
     pod 'UMCShare/UI'
