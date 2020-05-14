@@ -385,6 +385,7 @@
 		9EECDB4E2328E695008F6CBE /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB4D2328E695008F6CBE /* libc++abi.tbd */; };
 		9EECDB502328E6A7008F6CBE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB4F2328E6A7008F6CBE /* CoreLocation.framework */; };
 		9EECDB522328E6AF008F6CBE /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EECDB512328E6AF008F6CBE /* GLKit.framework */; };
+		9EEF75B32440CA08002AE778 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EEF75B22440CA08002AE778 /* LaunchScreen.storyboard */; };
 		9EF09FDE221C588400AB9148 /* SPRevokeBondTipVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FDD221C588400AB9148 /* SPRevokeBondTipVC.swift */; };
 		9EF09FE0221C5D6700AB9148 /* SPBondSuccessVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FDF221C5D6700AB9148 /* SPBondSuccessVC.swift */; };
 		9EF09FE2221C64F100AB9148 /* SPBuyerPrivilegeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09FE1221C64F100AB9148 /* SPBuyerPrivilegeVC.swift */; };
@@ -898,6 +899,7 @@
 		9EECDB4D2328E695008F6CBE /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		9EECDB4F2328E6A7008F6CBE /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9EECDB512328E6AF008F6CBE /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		9EEF75B22440CA08002AE778 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9EF09FDD221C588400AB9148 /* SPRevokeBondTipVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRevokeBondTipVC.swift; sourceTree = "<group>"; };
 		9EF09FDF221C5D6700AB9148 /* SPBondSuccessVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBondSuccessVC.swift; sourceTree = "<group>"; };
 		9EF09FE1221C64F100AB9148 /* SPBuyerPrivilegeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBuyerPrivilegeVC.swift; sourceTree = "<group>"; };
@@ -1289,6 +1291,7 @@
 				9E0C8B2A20E637C000BD9743 /* Assets.xcassets */,
 				9E0C8B2F20E637C000BD9743 /* Info.plist */,
 				9E05AC84210D98EA00A78001 /* Chunlangjiu-Bridging-Header.h */,
+				9EEF75B22440CA08002AE778 /* LaunchScreen.storyboard */,
 			);
 			path = Chunlangjiu;
 			sourceTree = "<group>";
@@ -2443,6 +2446,7 @@
 			files = (
 				9E22EAE32132F08C00B196D5 /* README.txt in Resources */,
 				9E0C8B2B20E637C000BD9743 /* Assets.xcassets in Resources */,
+				9EEF75B32440CA08002AE778 /* LaunchScreen.storyboard in Resources */,
 				9E194D6E21DC68590080B72D /* Image.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
