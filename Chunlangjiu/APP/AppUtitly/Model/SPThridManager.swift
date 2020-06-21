@@ -20,6 +20,7 @@ let SP_SINA_APPSECRET = "bccdf04dac982831efd444a71588daea"
 let SP_SINA_APPKEY = "1325843831"
 let SP_WX_APPID = "wx0e1869b241d7234f"
 let SP_WX_APPSECRET = "76be7f506fd8a4d51e002dffbbb30f14"
+let SP_WX_Universal_Links = "https://mall.chunlangjiu.com/"
 /// 支付结果的通知
 let SP_PAYRESULT_NOTIFICATION = "SP_PAYRESULT_NOTIFICATION"
 /// 微信支付
@@ -53,7 +54,7 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.qq, appKey: SP_QQ_APPID, appSecret: nil, redirectURL: nil)
         SPShareManager.sp_registApp(platformType: SP_SharePlatformType.sina, appKey: SP_SINA_APPKEY, appSecret: SP_SINA_APPSECRET, redirectURL: "http://sns.whalecloud.com/sina2/callback")
 //        WXApi.registerApp(SP_WX_APPID)
-        WXApi.registerApp(SP_WX_APPID, universalLink: "")
+        WXApi.registerApp(SP_WX_APPID, universalLink: SP_WX_Universal_Links)
         sp_log(message: "高德key\(SP_GD_APPKEY)")
         AMapServices.shared().apiKey = SP_GD_APPKEY
         GeTuiSdk.start(withAppId: SP_GETUI_APPID, appKey: SP_GETUI_APPKEY, appSecret: SP_GETUI_APPSECRET, delegate: instance())
@@ -64,9 +65,11 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         
     }
     
+    /// 开启定位
     class func sp_startLocation(){
         SPThridManager.instance().sp_startLocation()
     }
+    /// 开启定位
     private func sp_startLocation(){
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.locationTimeout = 2
@@ -89,20 +92,30 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     class func register(token:String){
         GeTuiSdk.registerDeviceToken(token)
     }
+    /// 是否安装维修
+    /// - Returns: yes  有安装 no 没有安装
     class func sp_isInstallWX()->Bool{
        return WXApi.isWXAppInstalled()
     }
+    /// 是否有安装qq
+    /// - Returns: yes  有安装 no 没有安装
     class func sp_isInstallQQ()->Bool{
         return SPShareManager.sp_isInstall(type: SP_SharePlatformType.qq)
     }
+    /// 开启进入页面
+    /// - Parameter pageName: 页面的名称
     class func sp_beginLogPageView(pageName : String){
         MobClick.beginLogPageView(sp_getString(string: pageName))
         
     }
+    /// 退出页面
+    /// - Parameter pageName: 页面名称
     class func sp_endLogPageView(pageName : String){
         MobClick.endLogPageView(sp_getString(string: pageName))
         
     }
+    /// 获取个推的id
+    /// - Parameter clientId: ID
     func geTuiSdkDidRegisterClient(_ clientId: String) {
         
         SPAPPManager.instance().clientId = clientId
@@ -129,6 +142,8 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
 //            UIApplication.shared.presentLocalNotificationNow(localNotification)
 //        }
     }
+    /// 微信支付
+    /// - Parameter dic: 支付参数
     class func sp_wxPay(dic:[String:Any]){
         instance().isPingPay = false
        let req = PayReq()
@@ -146,6 +161,8 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         }
         WXApi.send(req)
     }
+    /// 支付宝支付
+    /// - Parameter payOrder:   支付参数
     class func sp_aliPay(payOrder:String){
           instance().isPingPay = false
         AlipaySDK.defaultService().payOrder(sp_getString(string: payOrder), fromScheme: "com.chunlangjiu.app") { (data) in
@@ -156,6 +173,10 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         }
         
     }
+    /// 拼多多支付
+    /// - Parameters:
+    ///   - data: 支付参数
+    ///   - complete: 回调
     class func sp_pingPay(data:Any?,complete:((_ status : String)->Void)? = nil){
         guard let d = data as? NSObject else {
             return
@@ -184,6 +205,9 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
     func onResp(_ resp: BaseResp!) {
         sp_dealWXComplete(resp: resp )
     }
+    func onReq(_ req: BaseReq) {
+        
+    }
     class func sp_open(url:URL) -> Bool{
         var result = false
         if instance().isPingPay {
@@ -206,6 +230,12 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         
         return result
     }
+    class func sp_handleOpenUniversalLink(userActivity: NSUserActivity) -> Bool{
+        return WXApi.handleOpenUniversalLink(userActivity, delegate: SPThridManager.instance())
+    }
+    /// 处理支付宝回调
+    /// - Parameter url: 链接
+    /// - Returns: 是否成功
     private class func sp_dealApiPay(url :URL) ->Bool{
          var result = false
         if sp_getString(string: url.host) == "safepay" {
@@ -226,6 +256,8 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         }
         return result
     }
+    /// 处理支付宝支付结果
+    /// - Parameter resutl: 结果状态码
     private class func sp_dealApiPay(resutl:String?){
         guard let s = resutl else {
             return
@@ -260,6 +292,8 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         }
         return false
     }
+    /// 处理微信支付结果回调
+    /// - Parameter resp:结果数据
     private func sp_dealWXComplete(resp : BaseResp){
         if resp is PayResp {
             var payStatues = "";
@@ -291,6 +325,8 @@ class SPThridManager : NSObject,GeTuiSdkDelegate,WXApiDelegate {
         NotificationCenter.default.post(name: NSNotification.Name(SP_PAYRESULT_NOTIFICATION), object: userInfo)
         sp_showPayResult(payState: payState)
     }
+    /// 展示支付结果提示
+    /// - Parameter payState: 结果结果状态
     private class func sp_showPayResult(payState :String){
         var msg = ""
         if payState == SP_PAY_SUCCESS {

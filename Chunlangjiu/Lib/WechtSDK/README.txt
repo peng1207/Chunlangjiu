@@ -1,5 +1,8 @@
 重要!
 
+SDK1.8.7.1
+1. 修复Xcode11以下编译不通过
+
 SDK1.8.7
 1. 修复iPadOS，未安装微信的情况下，因为UA问题无法授权登录
 2. 修复未安装微信的情况下, 适配了UIScene的App因为UIAlertView Crash
