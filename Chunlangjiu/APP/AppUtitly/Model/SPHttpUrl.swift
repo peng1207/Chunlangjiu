@@ -329,4 +329,5 @@ let SP_GET_MSG_WEB_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP
 let SP_GET_ITECEMTER_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/app-itemCenter.html"
 /// 商品管理
 let SP_GET_EVALUATE_WEB_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/index.php/wap/app-evaluate.html"
-
+/// 隐私政策
+let SP_GET_PRIVACY_WEB_URL = "\(SPNetWorkManager.instance().sp_getDomainName(key: SP_MAIN_DOMAIN_NAME_KEY))/privacy.html"

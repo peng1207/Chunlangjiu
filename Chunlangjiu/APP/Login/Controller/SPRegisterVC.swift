@@ -93,13 +93,32 @@ class SPRegisterVC: SPBaseVC {
    
     fileprivate lazy var agreementBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
+        btn.isHidden = true
         let att = NSMutableAttributedString()
         att.append(NSAttributedString(string: "注册即表示同意", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.underlineColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)]))
          att.append(NSAttributedString(string: "用户协议", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.underlineColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
+         att.append(NSAttributedString(string: " "))
+         att.append(NSAttributedString(string: "隐私政策", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 14),NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.underlineColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)]))
         btn.setAttributedTitle(att, for: UIControlState.normal)
         btn.addTarget(self, action: #selector(sp_agreement), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    fileprivate lazy var agreementTextView : SPLinkTextView = {
+        let textView = SPLinkTextView()
+        let att = NSMutableAttributedString()
+        att.append(NSAttributedString(string: "注册即表示同意", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 16)/*,NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.underlineColor : SPColorForHexString(hex: SP_HexColor.color_999999.rawValue)*/]))
+        att.append(NSAttributedString(string: "用户协议", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.underlineColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.link : SP_GET_USER_WEB_URL]))
+        att.append(NSAttributedString(string: " "))
+        att.append(NSAttributedString(string: "隐私政策", attributes: [NSAttributedStringKey.foregroundColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.font : sp_getFontSize(size: 16),NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,NSAttributedStringKey.underlineColor : SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue),NSAttributedStringKey.link :SP_GET_PRIVACY_WEB_URL ]))
+        textView.attributedText = att
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.textAlignment = NSTextAlignment.center
+        textView.backgroundColor = self.view.backgroundColor
+        textView.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        return textView
+    }()
+    
     fileprivate lazy var backBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setImage(UIImage(named: "public_leftBack"), for: UIControlState.normal)
@@ -139,8 +158,10 @@ class SPRegisterVC: SPBaseVC {
         self.scrollView.addSubview(self.phoneTextFiled)
         self.scrollView.addSubview(self.codeTextFiled)
         self.scrollView.addSubview(self.loginBtn)
-        
+
         self.view.addSubview(self.agreementBtn)
+        self.view.addSubview(self.agreementTextView)
+        self.agreementTextView.delegate = self
         self.view.addSubview(self.backBtn)
         self.sp_addConstraint()
     }
@@ -182,6 +203,18 @@ class SPRegisterVC: SPBaseVC {
             maker.width.greaterThanOrEqualTo(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.centerX.equalTo(self.view).offset(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(-50)
+            }
+        }
+        self.agreementTextView.snp.makeConstraints { (maker) in
+//            maker.width.greaterThanOrEqualTo(0)
+//            maker.height.greaterThanOrEqualTo(0)
+//            maker.centerX.equalTo(self.view).offset(0)
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(40)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-50)
             } else {
@@ -296,6 +329,12 @@ extension SPRegisterVC {
         webVC.title = "醇狼APP用户协议"
         self.navigationController?.pushViewController(webVC, animated: true)
     }
+    fileprivate func sp_privacy (){
+        let webVC = SPWebVC()
+        webVC.url = URL(string: SP_GET_PRIVACY_WEB_URL)
+        webVC.title = "醇狼APP隐私政策"
+        self.navigationController?.pushViewController(webVC, animated: true)
+    }
 }
 extension SPRegisterVC {
     fileprivate func sp_addNotification(){
@@ -315,4 +354,16 @@ extension SPRegisterVC {
             maker.bottom.equalTo(self.agreementBtn.snp.top).offset(-10)
         }
     }
+}
+extension SPRegisterVC : UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        sp_log(message: URL.absoluteString)
+        if URL.absoluteString == SP_GET_USER_WEB_URL  {
+            self.sp_agreement()
+        }else if URL.absoluteString == SP_GET_PRIVACY_WEB_URL {
+            self.sp_privacy()
+        }
+        return false
+    }
+    
 }

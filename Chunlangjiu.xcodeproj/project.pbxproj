@@ -177,6 +177,7 @@
 		9E4AAED3214E570100336892 /* SPMineHeadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4AAED2214E570100336892 /* SPMineHeadModel.swift */; };
 		9E4AAED5214EC58C00336892 /* SPDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4AAED4214EC58C00336892 /* SPDatePicker.swift */; };
 		9E4BEB9F21F4D02800C4DCB5 /* SPProductServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4BEB9E21F4D02800C4DCB5 /* SPProductServiceView.swift */; };
+		9E56318624A252FD001675D4 /* SPLinkTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E56318524A252FD001675D4 /* SPLinkTextView.swift */; };
 		9E58EDBA21457C8100DFC3F2 /* SPAuctionPriceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58EDB921457C8100DFC3F2 /* SPAuctionPriceList.swift */; };
 		9E58EDBC2145E75700DFC3F2 /* SPLogisticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58EDBB2145E75700DFC3F2 /* SPLogisticsModel.swift */; };
 		9E5F7A9F21B9791300A9EF35 /* SPActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F7A9E21B9791300A9EF35 /* SPActivityVC.swift */; };
@@ -691,6 +692,7 @@
 		9E4AAED2214E570100336892 /* SPMineHeadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMineHeadModel.swift; sourceTree = "<group>"; };
 		9E4AAED4214EC58C00336892 /* SPDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDatePicker.swift; sourceTree = "<group>"; };
 		9E4BEB9E21F4D02800C4DCB5 /* SPProductServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPProductServiceView.swift; sourceTree = "<group>"; };
+		9E56318524A252FD001675D4 /* SPLinkTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLinkTextView.swift; sourceTree = "<group>"; };
 		9E58EDB921457C8100DFC3F2 /* SPAuctionPriceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuctionPriceList.swift; sourceTree = "<group>"; };
 		9E58EDBB2145E75700DFC3F2 /* SPLogisticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLogisticsModel.swift; sourceTree = "<group>"; };
 		9E5F7A9E21B9791300A9EF35 /* SPActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPActivityVC.swift; sourceTree = "<group>"; };
@@ -1704,6 +1706,7 @@
 				9EF4C6F920F26C75007E9909 /* SPBannerView.swift */,
 				9EF4C6FB20F26D84007E9909 /* SPBannerCollectCell.swift */,
 				9E34F6CC20FDD17500D59ABD /* SPTextView.swift */,
+				9E56318524A252FD001675D4 /* SPLinkTextView.swift */,
 				9E34F6D020FF14AD00D59ABD /* SPTextFiled.swift */,
 				9EC5142A21049702006869B3 /* SPTabBar.swift */,
 				9EC5142C2105B522006869B3 /* SPButton.swift */,
@@ -2641,6 +2644,7 @@
 				9EC5143D210AE770006869B3 /* SPWineryListHeaderView.swift in Sources */,
 				9EF4C6BC20EF431D007E9909 /* SPCityVC.swift in Sources */,
 				9ECE7C1A2228205700FE6BCD /* SPOrderReasonView.swift in Sources */,
+				9E56318624A252FD001675D4 /* SPLinkTextView.swift in Sources */,
 				9EF4C6F420F2401B007E9909 /* SPWineryListTableCell.swift in Sources */,
 				9EA86C792219BAA500088AD8 /* SPFansShareModel.swift in Sources */,
 				9E5F7AA121B9791E00A9EF35 /* SPFansVC.swift in Sources */,
